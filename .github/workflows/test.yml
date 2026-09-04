@@ -29,5 +29,8 @@ jobs:
       - name: Compile Python
         run: python -m compileall -q vehreg pages tests
 
+      - name: Run backfill regression
+        run: pytest -q tests/test_backfill_2026.py
+
       - name: Run tests
         run: pytest -q

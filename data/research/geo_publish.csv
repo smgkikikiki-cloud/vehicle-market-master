@@ -1,18 +1,16 @@
 category,category_label,label,brand,model_pattern,display_order,enabled,note
-PICKUP,Pickup,Hilux,Toyota,Hilux%,10,1,Major pickup market
-PICKUP,Pickup,D-Max,Isuzu,D-Max%,20,1,Major pickup market
-PICKUP,Pickup,Ranger,Ford,Ranger%,30,1,Major pickup market
-PICKUP,Pickup,Triton,Mitsubishi,Triton%,40,1,Major pickup market
-PICKUP,Pickup,Hilux Champ,Toyota,Hilux Champ%,50,1,Strategic light commercial model
+PICKUP,Pickup,Hilux family,Toyota,%Hilux%,10,1,Revo Travo and Champ are grouped for geographic footprint to avoid overlapping publication rows
+PICKUP,Pickup,D-Max,Isuzu,%D-Max%,20,1,Major pickup market
+PICKUP,Pickup,Ranger,Ford,%Ranger%,30,1,Major pickup market including Raptor where canonical model naming carries Ranger
+PICKUP,Pickup,Triton,Mitsubishi,%Triton%,40,1,Major pickup market
 MASS_SMALL,Mass small car,Yaris Ativ,Toyota,Yaris Ativ%,10,1,Mass passenger model
-MASS_SMALL,Mass small car,City,Honda,City%,20,1,Includes sedan nameplate rows; review if hatchback split is desired
+MASS_SMALL,Mass small car,City family,Honda,City%,20,1,Sedan and hatchback are intentionally one geographic family in the first publication set
 MASS_SMALL,Mass small car,Almera,Nissan,Almera%,30,1,Mass passenger model
 MASS_SMALL,Mass small car,Swift,Suzuki,Swift%,40,1,Mass passenger model
-MASS_EV,Mass EV / crossover,Jaecoo 5 EV,Jaecoo,%5 EV%,10,1,Mass-market EV crossover
+MASS_EV,Mass EV / crossover,Jaecoo 5 EV,Jaecoo,Jaecoo 5 EV%,10,1,Mass-market EV crossover
 MASS_EV,Mass EV / crossover,Deepal S05,Deepal,Deepal S05%,20,1,BEV and REEV remain one geographic model family here
-MASS_EV,Mass EV / crossover,Geely EX2,Geely,%EX2%,30,1,Mass-market EV
-MASS_EV,Mass EV / crossover,BYD Atto 3,BYD,%Atto 3%,40,1,Mass-market EV crossover
-MASS_EV,Mass EV / crossover,BYD Dolphin,BYD,%Dolphin%,50,1,Mass-market EV hatchback
-MASS_EV,Mass EV / crossover,Aion UT,Aion,%UT%,60,1,Mass-market EV
-MASS_EV,Mass EV / crossover,Aion V,Aion,%Aion V%,70,1,Mass-market EV crossover
-MASS_EV,Mass EV / crossover,MG S5 EV,MG,%S5 EV%,80,1,Mass-market EV crossover
+MASS_EV,Mass EV / crossover,BYD Atto 3,BYD,%Atto 3%,30,1,Mass-market EV crossover
+MASS_EV,Mass EV / crossover,BYD Dolphin,BYD,%Dolphin%,40,1,Mass-market EV hatchback
+MASS_EV,Mass EV / crossover,Aion UT,Aion,Aion UT%,50,1,Mass-market EV hatchback
+MASS_EV,Mass EV / crossover,Aion V,Aion,Aion V%,60,1,Mass-market EV crossover
+MASS_EV,Mass EV / crossover,MG S5 EV,MG,MG S5 EV%,70,1,Mass-market EV crossover

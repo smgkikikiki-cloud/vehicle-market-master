@@ -1,0 +1,8 @@
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.sqlite3
+
+# Private / licensed / manually supplied source data must stay outside public Git.
+data/private/
+data/provincial_raw/

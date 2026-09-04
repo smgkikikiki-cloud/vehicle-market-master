@@ -1,20 +1,12 @@
 """Market-facing SUV roll-up for reporting.
 
-The catalog keeps the long-standing ``BodyType`` values for compatibility, but
-reports expose a simpler reader-facing hierarchy:
+Reports expose one reader-facing umbrella with three subtypes:
 
     SUV -> CROSSOVER | PPV | OFFROAD_SUV
 
-This is a market taxonomy, not a tax or chassis taxonomy:
-
-* CROSSOVER   - road/passenger SUV (CR-V, CX-8, X5, etc.)
-* PPV         - pickup-derived mainstream SUV (Fortuner, MU-X, Everest, etc.)
-* OFFROAD_SUV - traditional/off-road-oriented SUV (FJ Cruiser, Tank 300, etc.)
-
-Legacy ``BodyType.SUV`` rows default to CROSSOVER because that old bucket was
-used for many ordinary passenger SUVs. A model that belongs in OFFROAD_SUV can
-override ``suv_type`` at model level. Legal PPV treatment or platform sharing
-never overrides the reader-facing competitive set.
+This is deliberately a market/competitive taxonomy, not a tax or chassis
+classification. Legal PPV treatment or platform sharing must not move a model
+away from the vehicles a buyer would naturally compare it with.
 """
 
 from __future__ import annotations
@@ -23,20 +15,52 @@ from .taxonomy import BodyType
 
 SUV_BODY_TYPES = frozenset({BodyType.CROSSOVER, BodyType.PPV, BodyType.SUV})
 
-SUV_TYPE_BY_BODY: dict[BodyType, str] = {
-    BodyType.CROSSOVER: "CROSSOVER",
-    BodyType.PPV: "PPV",
-    BodyType.SUV: "CROSSOVER",  # legacy SUV bucket; explicit off-road rows override
-}
+# Explicit competitive-set exceptions. The legacy catalog used PPV for some
+# ladder-frame SUVs and SUV for some ordinary road SUVs, so body_type alone is
+# not enough to produce the reader-facing split.
+OFFROAD_SUV_MODELS = frozenset({
+    "FJ Cruiser",
+    "Land Cruiser 300",
+    "Tank 300",
+    "Tank 500",
+    "Wrangler",
+    "Defender",
+})
 
 
 def body_family_for(body: BodyType | str) -> str:
-    """Return the reader-facing umbrella category."""
+    """SUV-like bodies roll up to SUV; other bodies retain their normal label."""
     parsed = BodyType.parse(body)
     return "SUV" if parsed in SUV_BODY_TYPES else parsed.value
 
 
-def suv_type_for(body: BodyType | str) -> str:
-    """Return CROSSOVER / PPV / OFFROAD_SUV, or NOT_APPLICABLE."""
+def suv_type_for(body: BodyType | str, model: str | None = None) -> str:
+    """Return CROSSOVER / PPV / OFFROAD_SUV, or NOT_APPLICABLE.
+
+    The explicit off-road list wins over the legacy body_type. Otherwise
+    CROSSOVER remains crossover, PPV remains PPV, and old generic SUV rows are
+    treated as road/passenger crossovers by default.
+    """
     parsed = BodyType.parse(body)
-    return SUV_TYPE_BY_BODY.get(parsed, "NOT_APPLICABLE")
+    if model in OFFROAD_SUV_MODELS:
+        return "OFFROAD_SUV"
+    if parsed is BodyType.PPV:
+        return "PPV"
+    if parsed in {BodyType.CROSSOVER, BodyType.SUV}:
+        return "CROSSOVER"
+    return "NOT_APPLICABLE"
+
+
+BODY_FAMILY_SQL = (
+    "CASE WHEN body_type IN ('CROSSOVER','PPV','SUV') "
+    "THEN 'SUV' ELSE body_type END"
+)
+
+_OFFROAD_SQL = ", ".join("'" + name.replace("'", "''") + "'"
+                         for name in sorted(OFFROAD_SUV_MODELS))
+SUV_TYPE_SQL = (
+    f"CASE WHEN model IN ({_OFFROAD_SQL}) THEN 'OFFROAD_SUV' "
+    "WHEN body_type = 'PPV' THEN 'PPV' "
+    "WHEN body_type IN ('CROSSOVER','SUV') THEN 'CROSSOVER' "
+    "ELSE 'NOT_APPLICABLE' END"
+)

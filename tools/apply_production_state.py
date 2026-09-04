@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from vehreg.catalog import DATA_DIR, Catalog, available_years
 from vehreg.db import connect, rebuild_dimension
 from vehreg.state_seed import load_seed_csv
 
-ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB = ROOT / "data" / "vehreg.sqlite3"
 DEFAULT_SEED = ROOT / "data" / "research" / "monthly_production_state.csv"
 

@@ -29,8 +29,11 @@ jobs:
       - name: Compile Python
         run: python -m compileall -q vehreg pages tests
 
-      - name: Run backfill regression
-        run: pytest -q tests/test_backfill_2026.py
+      - name: Validate backfill files and totals
+        run: pytest -q tests/test_backfill_2026.py::test_backfill_gzip_months_have_expected_core_totals
+
+      - name: Validate source selection
+        run: pytest -q tests/test_backfill_2026.py::test_national_source_selection_prefers_future_official_csv
 
       - name: Run tests
         run: pytest -q

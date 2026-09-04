@@ -72,7 +72,7 @@
       "generations": [
         {
           "code": "AES",
-          "segment": "C",
+          "segment": "D",
           "seats": 5,
           "launched": "2024-04-01",
           "ended": null,

@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-import os
-from pathlib import Path
-
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 
 from vehreg.db import connect
-from vehreg.market_metrics import rolling_window, ytd_window
+from vehreg.market_metrics import (
+    missing_periods,
+    rolling_window,
+    window_is_complete,
+    ytd_window,
+)
 from vehreg.provincial import (
     DEFAULT_PUBLICATION_FILE,
     available_periods,
@@ -16,13 +18,9 @@ from vehreg.provincial import (
     ensure_schema,
     geographic_profile,
     load_publication_rules,
-    reconciliation_for_period,
     regional_profile,
 )
 from vehreg.web_bootstrap import bootstrap_database, database_path
-
-ROOT = Path(__file__).resolve().parents[1]
-PROVINCIAL_XLSX = Path(os.environ.get("VEHREG_PROVINCIAL_XLSX", "")) if os.environ.get("VEHREG_PROVINCIAL_XLSX") else None
 
 st.set_page_config(page_title="Regional Market | TDR", layout="wide")
 st.title("Regional Market")
@@ -57,23 +55,21 @@ if not rules:
 if not periods:
     st.warning(
         "Regional Market พร้อมแล้ว แต่ยังไม่มี provincial facts ในฐานข้อมูล. "
-        "ให้นำเข้า DLT provincial workbook ผ่าน admin/CLI ก่อน"
-    )
-    st.code(
-        "python -m vehreg.provincial_cli ingest /path/to/provincial.xlsx",
-        language="bash",
+        "นำเข้า DLT provincial workbook ฝั่ง admin ก่อน"
     )
     conn.close()
     st.stop()
 
-category_options = []
+category_options: list[tuple[str, str]] = []
+seen_categories: set[str] = set()
 for rule in rules:
-    if rule.category not in [item[0] for item in category_options]:
+    if rule.category not in seen_categories:
         category_options.append((rule.category, rule.category_label))
+        seen_categories.add(rule.category)
 category_label_map = {code: label for code, label in category_options}
 
 period = st.sidebar.selectbox("เดือนข้อมูล", periods, index=len(periods) - 1)
-window = st.sidebar.radio("ช่วงเวลา", ["Month", "Rolling 3M", "YTD"], horizontal=False)
+window = st.sidebar.radio("ช่วงเวลา", ["Month", "Rolling 3M", "YTD"])
 category = st.sidebar.selectbox(
     "กลุ่มรถ",
     [code for code, _ in category_options],
@@ -90,9 +86,12 @@ elif window == "Rolling 3M":
 else:
     period_from, period_to = ytd_window(period)
 
-missing = [p for p in periods if period_from <= p <= period_to]
-if not missing:
-    st.warning(f"ไม่มี provincial data ในช่วง {period_from} ถึง {period_to}")
+if not window_is_complete(periods, period_from, period_to):
+    missing = ", ".join(missing_periods(periods, period_from, period_to))
+    st.warning(
+        f"ช่วง {period_from} → {period_to} ยังมีเดือนขาด ({missing}) "
+        "ระบบจึงไม่รวมยอดให้เหมือนข้อมูลครบ"
+    )
     conn.close()
     st.stop()
 
@@ -113,20 +112,27 @@ region_df = pd.DataFrame(regional_profile(profile))
 selected_total = float(province_df["units"].sum())
 nonzero = province_df[province_df["units"] > 0].copy()
 leader = nonzero.iloc[0]
+strongest_pool = nonzero[nonzero["over_index"].notna()].copy()
 strongest = (
-    nonzero[nonzero["over_index"].notna()]
-    .sort_values(["over_index", "units"], ascending=[False, False])
-    .iloc[0]
-    if not nonzero[nonzero["over_index"].notna()].empty
+    strongest_pool.sort_values(["over_index", "units"], ascending=[False, False]).iloc[0]
+    if not strongest_pool.empty
     else None
 )
 
 k1, k2, k3, k4 = st.columns(4)
 k1.metric("Registrations", f"{selected_total:,.0f}")
 k2.metric("Provinces with registrations", f"{len(nonzero):,}")
-k3.metric("Top province", str(leader["province"]), f"{leader['distribution_share']*100:.1f}% of model")
+k3.metric(
+    "Top province",
+    str(leader["province"]),
+    f"{leader['distribution_share'] * 100:.1f}% of model",
+)
 if strongest is not None:
-    k4.metric("Strongest over-index", str(strongest["province"]), f"{strongest['over_index']:.2f}x")
+    k4.metric(
+        "Strongest over-index",
+        str(strongest["province"]),
+        f"{strongest['over_index']:.2f}x",
+    )
 else:
     k4.metric("Strongest over-index", "—")
 
@@ -169,15 +175,17 @@ with right:
         hide_index=True,
         column_config={
             "units": st.column_config.NumberColumn("Registrations", format="%.0f"),
-            "distribution_share_pct": st.column_config.NumberColumn("Model mix", format="%.1f%%"),
+            "distribution_share_pct": st.column_config.NumberColumn(
+                "Model mix", format="%.1f%%"
+            ),
             "over_index": st.column_config.NumberColumn("Over-index", format="%.2fx"),
         },
     )
 
 st.subheader("Geographic over-index")
 st.caption(
-    "Over-index compares this model's share inside the selected competitive set in each province "
-    "with its share of the same set nationwide. 1.00x = national average."
+    "Over-index compares this model's share inside the selected competitive set "
+    "in each province with its share of the same set nationwide. 1.00x = national average."
 )
 index_df = nonzero[nonzero["over_index"].notna()].copy()
 index_df = index_df.sort_values(["over_index", "units"], ascending=[False, False]).head(20)
@@ -213,19 +221,18 @@ if not competition.empty:
         hide_index=True,
         column_config={
             "units": st.column_config.NumberColumn("Registrations", format="%.0f"),
-            "share_pct": st.column_config.NumberColumn("Share in selected set", format="%.1f%%"),
+            "share_pct": st.column_config.NumberColumn(
+                "Share in selected set", format="%.1f%%"
+            ),
         },
     )
 
-with st.expander("Methodology / QA"):
+with st.expander("Methodology"):
     st.markdown(
         "- Regional Market is intentionally curated; it does not expose every registered model.\n"
         "- Province is the vehicle's registration location, not proof of dealer retail-sale location.\n"
         "- Geographic over-index is relative to the curated category shown on this page, not the entire Thai vehicle market.\n"
         "- Provincial facts are stored separately from national facts to prevent double-counting."
     )
-    if period_from == period_to:
-        recon = reconciliation_for_period(conn, period)
-        st.json(recon)
 
 conn.close()

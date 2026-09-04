@@ -17,6 +17,15 @@ from .taxonomy import (  # noqa: F401
     MarketPosition, Powertrain, PowertrainGroup, RegistrationType, Segment,
     market_position_for_price, powertrain_group, registration_type_for,
 )
+from .price_taxonomy import (  # noqa: F401
+    MIXED as PRICE_BAND_MIXED,
+    ONE_TO_TWO_M,
+    TWO_M_PLUS,
+    UNDER_1M,
+    UNKNOWN as PRICE_BAND_UNKNOWN,
+    price_band_for_price,
+    price_band_for_range,
+)
 from .entities import (  # noqa: F401
     Brand, Generation, Model, ResolvedVehicle, Variant, resolve,
 )

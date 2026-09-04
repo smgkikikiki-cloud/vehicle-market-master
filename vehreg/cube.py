@@ -18,15 +18,21 @@ import sqlite3
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Optional, Sequence
 
+from .body_taxonomy import BODY_FAMILY_SQL, SUV_TYPE_SQL
 from .db import DIM_FACETS, DIM_FLAGS, DIM_NUMERIC, MIXED
 from .taxonomy import DEFAULT_SCOPES
+
+#: Reader-facing virtual facets are derived at query time, so the existing
+#: warehouse remains backwards-compatible while reports can use the simpler
+#: SUV -> Crossover / PPV / Offroad SUV hierarchy.
+VIRTUAL_FACETS: tuple[str, ...] = ("body_family", "suv_type")
 
 #: Columns a caller may group by or filter on. Anything else is rejected, which
 #: is also what keeps the generated SQL injection-free.
 GROUPABLE: frozenset[str] = frozenset(
-    DIM_FACETS + DIM_FLAGS + ("period", "province", "grain",
-                              "fact_registration_type", "unit_id", "year",
-                              "quarter", "catalog_year")
+    DIM_FACETS + DIM_FLAGS + VIRTUAL_FACETS +
+    ("period", "province", "grain", "fact_registration_type", "unit_id",
+     "year", "quarter", "catalog_year")
 )
 FILTERABLE: frozenset[str] = GROUPABLE | frozenset(DIM_NUMERIC)
 
@@ -34,6 +40,8 @@ _EXPR = {
     "year": "substr(period, 1, 4)",
     "quarter": "substr(period, 1, 4) || '-Q' || "
                "CAST((CAST(substr(period, 6, 2) AS INTEGER) + 2) / 3 AS TEXT)",
+    "body_family": BODY_FAMILY_SQL,
+    "suv_type": SUV_TYPE_SQL,
 }
 
 _OPS = {

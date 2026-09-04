@@ -25,7 +25,7 @@
       "generations": [
         {
           "code": "gen1",
-          "segment": "B",
+          "segment": "C",
           "seats": 5,
           "launched": "2025-06-01",
           "ended": null,
@@ -115,7 +115,7 @@
       "generations": [
         {
           "code": "gen1",
-          "segment": "D",
+          "segment": "C",
           "seats": 5,
           "launched": "2024-06-01",
           "ended": null,

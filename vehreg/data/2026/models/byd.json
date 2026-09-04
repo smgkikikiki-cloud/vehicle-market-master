@@ -30,7 +30,7 @@
       "generations": [
         {
           "code": "ATTO3",
-          "segment": "B",
+          "segment": "C",
           "seats": 5,
           "launched": "2022-10-01",
           "ended": null,
@@ -131,7 +131,7 @@
       "generations": [
         {
           "code": "SEAL",
-          "segment": "D",
+          "segment": "C",
           "seats": 5,
           "launched": "2023-09-01",
           "ended": null,

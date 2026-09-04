@@ -63,7 +63,7 @@ def _existing_national_source(conn, path: Path, period: str):
         (
             absolute,
             f"%/{filename}",
-            f"%\\\\{filename}",
+            f"%\\{filename}",
             f"DLT {period}",
             f"WEB {period}",
             f"BACKFILL {period}",

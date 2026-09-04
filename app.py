@@ -352,6 +352,12 @@ with TAB_EDIT:
             {"field": "import_type", "value": state.get("import_type"),
              "from": sources.get("import_type", "catalog")},
         ])
+        # Arrow requires one concrete dtype per column. This table intentionally
+        # mixes a numeric price with text country/import values, so render the
+        # reader-facing value column as text instead of relying on coercion.
+        current["value"] = current["value"].map(
+            lambda v: "" if v is None else str(v)
+        )
         st.caption(f"Effective state at {edit_month}")
         st.dataframe(current, use_container_width=True, hide_index=True)
 

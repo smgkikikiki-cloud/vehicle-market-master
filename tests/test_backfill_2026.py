@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import gzip
+import json
 from pathlib import Path
 
 from vehreg.web_bootstrap import _national_sources, _period_from_raw_path
@@ -28,6 +29,12 @@ def test_backfill_gzip_months_have_expected_core_totals():
         assert len(rows) == expected_rows
         assert {row["ประเภท"] for row in rows} <= {"RY1", "RY2", "RY3"}
         assert sum(int(float(row["จำนวน"])) for row in rows) == expected_units
+
+        meta = json.loads((RAW / f"dlt_{period}.meta.json").read_text(encoding="utf-8"))
+        assert meta["source_kind"] == "provincial_aggregate_backfill"
+        assert meta["period"] == period
+        assert meta["units_kept"] == expected_units
+        assert "TDR catalog Resolver" in meta["canonicalization"]
 
 
 def test_national_source_selection_prefers_future_official_csv(tmp_path):

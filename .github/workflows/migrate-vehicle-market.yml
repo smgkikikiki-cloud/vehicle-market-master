@@ -1,6 +1,9 @@
 name: Migrate vehicle market subsystem
 
 on:
+  push:
+    paths:
+      - .github/workflows/migrate-vehicle-market.yml
   workflow_dispatch:
 
 permissions:

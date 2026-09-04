@@ -1,34 +1,25 @@
-"""Cross-tab queries over the classified facts.
+"""Cross-tab queries over classified vehicle-registration facts.
 
-Any facet may be grouped by, filtered on, or crossed with any other - that is
-the whole point of keeping the dimensions orthogonal. Two rules the cube
-enforces on top of that:
-
-* **Honesty about grain.** A query grouped by ``powertrain`` shows a ``MIXED``
-  bucket where volume only arrived at model level for a model that sells
-  several powertrains, unless an allocation profile has been supplied.
-* **Scope is explicit.** By default only ``CORE`` models are counted - no grey
-  imports, no supercars, nothing outside the official distributor. Anything
-  left out is reported on every result rather than silently dropped.
+Reader-facing queries are period-aware: sparse monthly state changes for price,
+production country and import type are applied to the fact month before any
+filter or group-by runs. By default analytical queries count MODEL and VARIANT
+grains only; BRAND-grain residuals remain available explicitly for audit work.
 """
 
 from __future__ import annotations
 
 import sqlite3
 from dataclasses import dataclass, field
-from typing import Any, Iterable, Optional, Sequence
+from typing import Any, Optional, Sequence
 
 from .body_taxonomy import BODY_FAMILY_SQL, SUV_TYPE_SQL
 from .db import DIM_FACETS, DIM_FLAGS, DIM_NUMERIC, MIXED
+from .monthly_state import effective_source_sql, ensure_schema as ensure_monthly_schema
 from .taxonomy import DEFAULT_SCOPES
 
-#: Reader-facing virtual facets are derived at query time, so the existing
-#: warehouse remains backwards-compatible while reports can use the simpler
-#: SUV -> Crossover / PPV / Offroad SUV hierarchy.
-VIRTUAL_FACETS: tuple[str, ...] = ("body_family", "suv_type")
+VIRTUAL_FACETS: tuple[str, ...] = ("body_family", "suv_type", "price_band")
+DEFAULT_ANALYSIS_GRAINS: tuple[str, ...] = ("MODEL", "VARIANT")
 
-#: Columns a caller may group by or filter on. Anything else is rejected, which
-#: is also what keeps the generated SQL injection-free.
 GROUPABLE: frozenset[str] = frozenset(
     DIM_FACETS + DIM_FLAGS + VIRTUAL_FACETS +
     ("period", "province", "grain", "fact_registration_type", "unit_id",
@@ -100,7 +91,6 @@ class CubeResult:
         return "\n".join(lines)
 
 
-#: Pass this as ``scopes`` to count everything, grey imports included.
 ALL_SCOPES = "all"
 
 
@@ -121,8 +111,6 @@ def _build_where(filters: Optional[dict[str, Any]],
     clauses: list[str] = []
     params: list[Any] = []
     if scopes:
-        # A brand-grain row has no single scope; keep it rather than lose the
-        # volume, and let the MIXED marker say what happened.
         clauses.append(
             f"(market_scope IN ({', '.join('?' for _ in scopes)}) "
             "OR market_scope IS NULL OR market_scope = 'MIXED')")
@@ -184,11 +172,15 @@ LEFT JOIN dim_unit d
 """
 
 
-def _source_sql(allocate: bool) -> str:
+def _base_source_sql(allocate: bool) -> str:
     if not allocate:
         return "SELECT fc.*, 0 AS estimated FROM fact_classified fc"
     facets = ", ".join(f"d.{c}" for c in DIM_FACETS + DIM_NUMERIC + DIM_FLAGS)
     return ALLOCATED_SOURCE.format(facets=facets)
+
+
+def _source_sql(allocate: bool) -> str:
+    return effective_source_sql(_base_source_sql(allocate))
 
 
 def run(conn: sqlite3.Connection, group_by: Sequence[str], *,
@@ -198,6 +190,7 @@ def run(conn: sqlite3.Connection, group_by: Sequence[str], *,
         scopes: Optional[Sequence[str] | str] = None,
         allocate: bool = False, order_by: str = "units",
         descending: bool = True, limit: Optional[int] = None) -> CubeResult:
+    ensure_monthly_schema(conn)
     dims = list(group_by)
     for dim in dims:
         if dim not in GROUPABLE:
@@ -207,8 +200,10 @@ def run(conn: sqlite3.Connection, group_by: Sequence[str], *,
     if order_by not in {"units", *dims}:
         raise ValueError(f"cannot order by {order_by!r}")
 
+    effective_grains = DEFAULT_ANALYSIS_GRAINS if grains is None else grains
     kept = _normalise_scopes(scopes)
-    where, params = _build_where(filters, period_from, period_to, grains, kept)
+    where, params = _build_where(filters, period_from, period_to,
+                                 effective_grains, kept)
     select_dims = ", ".join(f"{_column(d)} AS {d}" for d in dims)
     group_expr = ", ".join(_column(d) for d in dims)
     source = _source_sql(allocate)
@@ -235,8 +230,8 @@ def run(conn: sqlite3.Connection, group_by: Sequence[str], *,
 
     excluded: dict[str, float] = {}
     if kept:
-        skip_where, skip_params = _build_where(filters, period_from, period_to,
-                                               grains, None)
+        skip_where, skip_params = _build_where(
+            filters, period_from, period_to, effective_grains, None)
         excluded = {
             r["market_scope"]: r["units"] or 0.0
             for r in conn.execute(
@@ -258,7 +253,6 @@ def run(conn: sqlite3.Connection, group_by: Sequence[str], *,
 
 def timeseries(conn: sqlite3.Connection, group_by: Sequence[str], *,
                bucket: str = "period", **kwargs: Any) -> CubeResult:
-    """Same query, with a time bucket appended as the last dimension."""
     if bucket not in {"period", "quarter", "year"}:
         raise ValueError("bucket must be period, quarter or year")
     return run(conn, [*group_by, bucket], order_by=bucket, descending=False,
@@ -267,11 +261,6 @@ def timeseries(conn: sqlite3.Connection, group_by: Sequence[str], *,
 
 def growth(conn: sqlite3.Connection, dimension: str, *, base: str, compare: str,
            **kwargs: Any) -> list[dict[str, Any]]:
-    """Volume and share change for one facet between two periods or years.
-
-    ``base``/``compare`` accept ``YYYY`` or ``YYYY-MM``; the shorter form
-    aggregates the whole year.
-    """
     def window(token: str) -> dict[str, Any]:
         if len(token) == 4:
             return {"period_from": f"{token}-01", "period_to": f"{token}-12"}
@@ -300,7 +289,6 @@ def growth(conn: sqlite3.Connection, dimension: str, *, base: str, compare: str,
 
 
 def pivot(result: CubeResult, column_dimension: str) -> tuple[list[str], list[dict]]:
-    """Reshape a cube result into rows x one column facet."""
     if column_dimension not in result.dimensions:
         raise ValueError(f"{column_dimension} is not in this result")
     row_dims = [d for d in result.dimensions if d != column_dimension]
@@ -316,7 +304,6 @@ def pivot(result: CubeResult, column_dimension: str) -> tuple[list[str], list[di
 
 
 def coverage_report(conn: sqlite3.Connection) -> dict[str, Any]:
-    """How much of the loaded volume is classified, and how deeply."""
     by_grain = {r["grain"]: r["units"] for r in conn.execute(
         "SELECT grain, SUM(units) AS units FROM fact_registration GROUP BY grain")}
     review = conn.execute(

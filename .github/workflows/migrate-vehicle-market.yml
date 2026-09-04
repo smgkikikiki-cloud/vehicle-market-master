@@ -1,0 +1,46 @@
+name: Migrate vehicle market subsystem
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch source at pinned commit
+        run: |
+          git clone https://github.com/smgkikikiki-cloud/Export-channel.git /tmp/export-channel
+          cd /tmp/export-channel
+          git checkout 5b3dfd7407fbc6e5f9919d0d4b1451e05f75b3d7
+
+      - name: Copy vehicle-market subsystem
+        run: |
+          rm -rf vehreg data docs tools tests
+          cp -a /tmp/export-channel/vehreg ./vehreg
+          cp -a /tmp/export-channel/data ./data
+          mkdir -p docs tools tests
+          cp /tmp/export-channel/docs/VEHREG.md ./docs/VEHREG.md
+          cp /tmp/export-channel/docs/VEHREG_TAXONOMY.md ./docs/VEHREG_TAXONOMY.md
+          cp /tmp/export-channel/tools/add_2026_models.py ./tools/add_2026_models.py
+          cp /tmp/export-channel/tools/seed_catalog.py ./tools/seed_catalog.py
+          cp /tmp/export-channel/tests/test_vehreg.py ./tests/test_vehreg.py
+
+      - name: Commit migration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vehreg data docs tools tests
+          if git diff --cached --quiet; then
+            echo "No migration changes to commit"
+            exit 0
+          fi
+          git commit -m "Migrate vehicle market subsystem from Export-channel"
+          git push origin HEAD:main

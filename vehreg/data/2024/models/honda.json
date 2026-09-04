@@ -1,0 +1,564 @@
+{
+  "brand": {
+    "id": "honda",
+    "name_en": "Honda",
+    "name_th": "ฮอนด้า",
+    "brand_segment": "MASS",
+    "oem_group": "Honda",
+    "brand_origin": "JP",
+    "aliases": [
+      "ฮอนด้า",
+      "honda automobile"
+    ]
+  },
+  "models": [
+    {
+      "id": "city",
+      "name_en": "City",
+      "name_th": "ซิตี้",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ซิตี้",
+        "city sedan"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "GN2",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2019-11-25",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 988,
+              "battery_kwh": null,
+              "aliases": [
+                "1.0 Turbo S+",
+                "1.0 Turbo SV"
+              ],
+              "overrides": {},
+              "price_thb": 609000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 609000,
+              "price_max_thb": 709000
+            },
+            {
+              "name": "1.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 0.7,
+              "aliases": [
+                "e:HEV SV",
+                "e:HEV RS"
+              ],
+              "overrides": {},
+              "price_thb": 839000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 839000,
+              "price_max_thb": 899000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "city_hatchback",
+      "name_en": "City Hatchback",
+      "name_th": "ซิตี้ แฮทช์แบ็ก",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "city hatchback",
+        "city hb"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "GN7",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 988,
+              "battery_kwh": null,
+              "aliases": [
+                "1.0 Turbo SV"
+              ],
+              "overrides": {},
+              "price_thb": 749000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 749000,
+              "price_max_thb": 749000
+            },
+            {
+              "name": "1.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 0.7,
+              "aliases": [
+                "e:HEV RS"
+              ],
+              "overrides": {},
+              "price_thb": 924000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 924000,
+              "price_max_thb": 924000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "civic",
+      "name_en": "Civic",
+      "name_th": "ซีวิค",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ซีวิค"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "FE",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2021-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 Turbo EL+"
+              ],
+              "overrides": {},
+              "price_thb": 1099000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1099000,
+              "price_max_thb": 1099000
+            },
+            {
+              "name": "2.0L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1993,
+              "battery_kwh": 1.1,
+              "aliases": [
+                "e:HEV RS"
+              ],
+              "overrides": {},
+              "price_thb": 1299000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1299000,
+              "price_max_thb": 1299000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "accord",
+      "name_en": "Accord",
+      "name_th": "แอคคอร์ด",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "CY",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-04-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1993,
+              "battery_kwh": 1.1,
+              "aliases": [
+                "e:HEV EL"
+              ],
+              "overrides": {},
+              "price_thb": 1749000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1749000,
+              "price_max_thb": 1749000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hrv",
+      "name_en": "HR-V",
+      "name_th": "เอชอาร์-วี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "hrv",
+        "hr v"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "RV",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L HEV (VOLUME)",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 0.7,
+              "aliases": [
+                "e:HEV E"
+              ],
+              "overrides": {},
+              "price_thb": 999000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 999000,
+              "price_max_thb": 999000
+            },
+            {
+              "name": "1.5L HEV (UPPER)",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 0.7,
+              "aliases": [
+                "e:HEV RS"
+              ],
+              "overrides": {},
+              "price_thb": 1149000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1149000,
+              "price_max_thb": 1149000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "crv",
+      "name_en": "CR-V",
+      "name_th": "ซีอาร์-วี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "crv",
+        "cr v"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "RS",
+          "segment": "C",
+          "seats": 7,
+          "launched": "2023-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L HEV AWD",
+              "powertrain": "HEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1993,
+              "battery_kwh": 1.1,
+              "aliases": [
+                "2.0 e:HEV ES 4WD"
+              ],
+              "overrides": {},
+              "price_thb": 1729000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1729000,
+              "price_max_thb": 1729000
+            },
+            {
+              "name": "2.0L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1993,
+              "battery_kwh": 1.1,
+              "aliases": [
+                "2.0 e:HEV RS"
+              ],
+              "overrides": {},
+              "price_thb": 1599000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1599000,
+              "price_max_thb": 1599000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wrv",
+      "name_en": "WR-V",
+      "name_th": "ดับเบิลยูอาร์-วี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "wrv",
+        "wr v"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "DG",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2023-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 SV",
+                "1.5 RS"
+              ],
+              "overrides": {},
+              "price_thb": 799000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 799000,
+              "price_max_thb": 869000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brv",
+      "name_en": "BR-V",
+      "name_th": "บีอาร์-วี",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "brv",
+        "br v"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "DG3",
+          "segment": "B",
+          "seats": 7,
+          "launched": "2022-04-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 EL"
+              ],
+              "overrides": {},
+              "price_thb": 973000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 973000,
+              "price_max_thb": 973000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "en1",
+      "name_en": "e:N1",
+      "name_th": "อีเอ็น1",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "en1",
+        "e n1"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "EN1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "69 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 68.8,
+              "aliases": [
+                "e:N1"
+              ],
+              "overrides": {},
+              "price_thb": 1249000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1249000,
+              "price_max_thb": 1249000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "step_wgn",
+      "name_en": "Step WGN",
+      "name_th": "สเต็ปแวกอน",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "GREY",
+      "aliases": [
+        "step wgn",
+        "stepwgn"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 7,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1993,
+              "battery_kwh": 1.1,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "grey import",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "odyssey",
+      "name_en": "Odyssey",
+      "name_th": "โอดิสซี",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "GREY",
+      "aliases": [
+        "odyssey"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1993,
+              "battery_kwh": 1.1,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "grey import",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

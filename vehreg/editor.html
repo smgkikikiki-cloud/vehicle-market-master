@@ -1,0 +1,274 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>vehreg editor</title>
+<style>
+  :root { --bg:#fff; --fg:#111; --mut:#666; --line:#ddd; --hi:#f5f7fa;
+          --warn:#b45309; --bad:#b91c1c; --ok:#15803d; --accent:#1d4ed8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#12151a; --fg:#e6e6e6; --mut:#9aa0a6; --line:#2a2f38;
+            --hi:#1b2028; --warn:#fbbf24; --bad:#f87171; --ok:#4ade80;
+            --accent:#60a5fa; }
+  }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:13px/1.45 ui-sans-serif,system-ui,"Segoe UI",sans-serif }
+  header { position:sticky; top:0; z-index:5; background:var(--bg);
+           border-bottom:1px solid var(--line); padding:10px 14px;
+           display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+  h1 { font-size:14px; margin:0 8px 0 0; font-weight:650 }
+  .mut { color:var(--mut) }
+  input, select, button { font:inherit; color:var(--fg); background:var(--bg);
+    border:1px solid var(--line); border-radius:5px; padding:3px 6px }
+  button { cursor:pointer } button:hover { background:var(--hi) }
+  button.primary { border-color:var(--accent); color:var(--accent) }
+  .tabs button.on { border-color:var(--accent); color:var(--accent) }
+  main { padding:0 14px 60px }
+  table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums }
+  th, td { border-bottom:1px solid var(--line); padding:3px 6px; text-align:left;
+           white-space:nowrap }
+  th { position:sticky; top:52px; background:var(--bg); font-weight:600;
+       cursor:pointer; z-index:2 }
+  tbody tr:hover { background:var(--hi) }
+  td.num, th.num { text-align:right }
+  td select, td input { width:100%; border-color:transparent; background:transparent }
+  td select:hover, td input:hover { border-color:var(--line) }
+  td.dirty select, td.dirty input { border-color:var(--ok) }
+  .flag { color:var(--warn) }
+  #detail { position:fixed; right:0; top:0; bottom:0; width:min(560px,92vw);
+    background:var(--bg); border-left:1px solid var(--line); overflow:auto;
+    padding:14px; display:none; z-index:10; box-shadow:-8px 0 24px #0003 }
+  #detail.on { display:block }
+  #detail h2 { font-size:14px; margin:0 0 8px }
+  #toast { position:fixed; left:14px; bottom:14px; padding:8px 12px;
+    border-radius:6px; border:1px solid var(--line); background:var(--bg);
+    max-width:60vw; display:none; z-index:20; white-space:pre-wrap }
+  .pill { border:1px solid var(--line); border-radius:99px; padding:1px 8px;
+          font-size:11px; color:var(--mut) }
+</style>
+
+<header>
+  <h1>vehreg editor</h1>
+  <label>ปี <select id="year"></select></label>
+  <span class="tabs">
+    <button id="tab-models" class="on">รุ่น</button>
+    <button id="tab-review">คิวที่จับคู่ไม่ได้</button>
+  </span>
+  <input id="q" placeholder="ค้นหา ยี่ห้อ/รุ่น" size="18">
+  <select id="scope"><option value="">ทุก scope</option></select>
+  <label class="mut"><input type="checkbox" id="onlyUnver"> เฉพาะราคายังไม่ยืนยัน</label>
+  <input id="reason" placeholder="เหตุผล (ติดไปกับทุกการแก้)" size="26">
+  <button id="rebuild" class="primary">rebuild dimension</button>
+  <span id="stat" class="mut"></span>
+</header>
+
+<main>
+  <div id="models"></div>
+  <div id="review" hidden></div>
+</main>
+
+<div id="detail"></div>
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+let VOCAB = {}, ROWS = [], SORT = {key:'units', dir:-1}, YEAR = null;
+
+const fmt = n => n == null ? '' : Number(n).toLocaleString('en-US',
+  {maximumFractionDigits:0});
+
+function toast(msg, bad) {
+  const t = $('#toast');
+  t.textContent = msg; t.style.display = 'block';
+  t.style.borderColor = bad ? 'var(--bad)' : 'var(--ok)';
+  clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', 6000);
+}
+
+async function api(path, body) {
+  const opts = body ? {method:'POST', headers:{'Content-Type':'application/json'},
+                       body: JSON.stringify(body)} : {};
+  const r = await fetch(path, opts);
+  const j = await r.json();
+  if (j.error) throw new Error(j.error);
+  return j;
+}
+
+const FIELDS = [
+  ['segment','generation'], ['body_type','model'], ['cab_type','model'],
+  ['registration_type','model'], ['market_scope','model'],
+];
+
+function sel(row, field, level) {
+  const options = VOCAB[field] || [];
+  const cur = field === 'segment' ? row.segment : row[field];
+  const many = field === 'segment' && cur.includes(',');
+  if (many) return `<span class="mut" title="หลายโฉม">${cur}</span>`;
+  const id = level === 'generation' ? row.generation_id : row.model_id;
+  if (!id) return `<span class="mut">${cur}</span>`;
+  return `<select data-target="${level}" data-id="${id}" data-field="${field}">`
+    + options.map(o => `<option${o === cur ? ' selected' : ''}>${o}</option>`).join('')
+    + '</select>';
+}
+
+function render() {
+  const q = $('#q').value.trim().toLowerCase();
+  const scope = $('#scope').value;
+  const onlyUnver = $('#onlyUnver').checked;
+  let rows = ROWS.filter(r =>
+    (!q || (r.brand + ' ' + r.model + ' ' + r.nameplate).toLowerCase().includes(q))
+    && (!scope || r.market_scope === scope)
+    && (!onlyUnver || r.unverified > 0));
+  rows.sort((a, b) => {
+    const x = a[SORT.key], y = b[SORT.key];
+    if (x === y) return 0;
+    return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y)))
+      * SORT.dir;
+  });
+
+  const cols = [['units','คัน',1],['brand','ยี่ห้อ'],['nameplate','nameplate'],
+    ['model','รุ่น'],['segment','seg'],['body_type','body'],['cab_type','cab'],
+    ['registration_type','รย.'],['market_scope','scope'],
+    ['powertrain','powertrain'],['spec_lines','specs',1],['price_min','ราคาต่ำ',1],
+    ['price_max','ราคาสูง',1],['unverified','ยังไม่ยืนยัน',1]];
+
+  $('#models').innerHTML = '<table><thead><tr>'
+    + cols.map(c => `<th class="${c[2]?'num':''}" data-key="${c[0]}">${c[1]}</th>`).join('')
+    + '</tr></thead><tbody>'
+    + rows.map(r => `<tr data-id="${r.model_id}">
+        <td class="num"><a href="#" class="open">${fmt(r.units)}</a></td>
+        <td>${r.brand}</td><td>${r.nameplate}</td><td>${r.model}</td>
+        <td>${sel(r,'segment','generation')}</td>
+        <td>${sel(r,'body_type','model')}</td>
+        <td>${sel(r,'cab_type','model')}</td>
+        <td>${sel(r,'registration_type','model')}</td>
+        <td>${sel(r,'market_scope','model')}</td>
+        <td class="mut">${r.powertrain}</td>
+        <td class="num">${r.spec_lines}</td>
+        <td class="num">${fmt(r.price_min)}</td>
+        <td class="num">${fmt(r.price_max)}</td>
+        <td class="num ${r.unverified?'flag':''}">${r.unverified||''}</td>
+      </tr>`).join('')
+    + '</tbody></table>';
+  $('#stat').textContent = `${rows.length} / ${ROWS.length} รุ่น`;
+}
+
+async function load() {
+  const st = await api('/api/state');
+  VOCAB = st.vocab; YEAR = st.year;
+  $('#year').innerHTML = st.years.map(y =>
+    `<option${y === st.year ? ' selected' : ''}>${y}</option>`).join('');
+  $('#scope').innerHTML = '<option value="">ทุก scope</option>'
+    + VOCAB.market_scope.map(s => `<option>${s}</option>`).join('');
+  ROWS = await api('/api/models');
+  render();
+}
+
+async function openDetail(modelId) {
+  const d = await api('/api/model?id=' + encodeURIComponent(modelId));
+  const price = (v, f) => `<input data-target="variant" data-id="${v.variant_id}"
+      data-field="${f}" value="${v[f] == null ? '' : v[f]}" size="9">`;
+  $('#detail').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>${d.model}</h2><button onclick="document.querySelector('#detail').classList.remove('on')">ปิด</button>
+    </div>
+    <div class="mut" style="margin-bottom:8px">${d.model_id}</div>
+    <h3 style="font-size:12px">spec line — แก้ราคาแล้ว band เปลี่ยนตาม</h3>
+    <table><thead><tr><th>โฉม</th><th>spec</th><th>powertrain</th>
+      <th class="num">ราคา</th><th class="num">ต่ำสุด</th><th class="num">สูงสุด</th>
+      <th>โน้ต</th></tr></thead><tbody>
+    ${d.spec_lines.map(v => `<tr>
+      <td class="mut">${v.generation}</td><td>${v.name}</td>
+      <td><select data-target="variant" data-id="${v.variant_id}" data-field="powertrain">
+        ${VOCAB.powertrain.map(o => `<option${o===v.powertrain?' selected':''}>${o}</option>`).join('')}
+      </select></td>
+      <td class="num">${price(v,'price_thb')}</td>
+      <td class="num">${price(v,'price_min_thb')}</td>
+      <td class="num">${price(v,'price_max_thb')}</td>
+      <td>${price(v,'price_note')}</td></tr>`).join('')}
+    </tbody></table>
+    <h3 style="font-size:12px;margin-top:16px">ฉลากจริงจาก DLT ที่ตกมาที่รุ่นนี้</h3>
+    ${d.labels.length ? `<table><thead><tr><th>ฉลาก</th><th>รย.</th>
+      <th class="num">คัน</th><th class="num">เดือน</th></tr></thead><tbody>
+      ${d.labels.map(l => `<tr><td>${l.raw_label}</td><td>${l.registration_type}</td>
+        <td class="num">${fmt(l.units)}</td><td class="num">${l.months}</td></tr>`).join('')}
+      </tbody></table>` : '<div class="mut">ยังไม่มียอดตกมาที่รุ่นนี้ในปีนี้</div>'}
+    <h3 style="font-size:12px;margin-top:16px">alias ของรุ่น</h3>
+    <div class="mut">${d.aliases.join(' · ') || '—'}</div>`;
+  $('#detail').classList.add('on');
+}
+
+async function saveField(el) {
+  const changes = {}; changes[el.dataset.field] = el.value;
+  try {
+    const r = await api('/api/edit', {target: el.dataset.target,
+      id: el.dataset.id, changes, reason: $('#reason').value});
+    if (!r.ok) { toast(r.problems.join('\n'), true); return; }
+    el.parentElement.classList.add('dirty');
+    toast(`บันทึกแล้ว: ${el.dataset.field} = ${el.value}`);
+    ROWS = await api('/api/models'); render();
+  } catch (e) { toast(String(e.message), true); }
+}
+
+async function loadReview() {
+  const rows = await api('/api/review');
+  $('#review').innerHTML = rows.length ? `<table><thead><tr>
+    <th class="num">คัน</th><th class="num">เดือน</th><th>ฉลาก</th><th>เหตุผล</th>
+    <th>ผูกกับ model_id</th><th>รย.</th><th></th></tr></thead><tbody>
+    ${rows.map((r,i) => `<tr>
+      <td class="num">${fmt(r.units)}</td><td class="num">${r.months}</td>
+      <td>${r.raw_label}</td>
+      <td class="mut">${(r.reason||'').slice(0,60)}</td>
+      <td><input id="tgt${i}" size="28" list="modelIds" placeholder="เช่น toyota.vios"></td>
+      <td><select id="reg${i}"><option>*</option><option>RY1</option>
+        <option>RY2</option><option>RY3</option></select></td>
+      <td><button onclick="teach(${i},'${r.raw_label.replace(/'/g,"\\'")}')">สอน</button></td>
+    </tr>`).join('')}</tbody></table>
+    <datalist id="modelIds">${ROWS.map(r=>`<option>${r.model_id}</option>`).join('')}</datalist>`
+    : '<p class="mut">คิวว่าง</p>';
+}
+
+async function teach(i, raw) {
+  const target = $('#tgt' + i).value.trim();
+  if (!target) { toast('ใส่ model_id ก่อน', true); return; }
+  try {
+    await api('/api/teach', {raw, target_id: target, reg: $('#reg' + i).value,
+      scope: 'model', reason: $('#reason').value});
+    toast('สอนแล้ว — ต้อง ingest ใหม่ถึงจะมีผลกับยอดเดิม');
+  } catch (e) { toast(String(e.message), true); }
+}
+
+document.addEventListener('change', e => {
+  if (e.target.dataset && e.target.dataset.target) saveField(e.target);
+});
+document.addEventListener('click', async e => {
+  if (e.target.matches('th[data-key]')) {
+    const k = e.target.dataset.key;
+    SORT = {key:k, dir: SORT.key === k ? -SORT.dir : (k === 'units' ? -1 : 1)};
+    render();
+  }
+  if (e.target.matches('a.open')) {
+    e.preventDefault();
+    openDetail(e.target.closest('tr').dataset.id);
+  }
+});
+['#q','#scope','#onlyUnver'].forEach(s =>
+  $(s).addEventListener('input', render));
+$('#year').addEventListener('change', async e => {
+  await api('/api/year', {year: Number(e.target.value)});
+  await load();
+});
+$('#rebuild').addEventListener('click', async () => {
+  try { const r = await api('/api/rebuild', {});
+    toast(`rebuild แล้ว ${r.dimension_rows} แถว`); }
+  catch (e) { toast(String(e.message), true); }
+});
+$('#tab-models').addEventListener('click', () => {
+  $('#models').hidden = false; $('#review').hidden = true;
+  $('#tab-models').classList.add('on'); $('#tab-review').classList.remove('on');
+});
+$('#tab-review').addEventListener('click', async () => {
+  $('#models').hidden = true; $('#review').hidden = false;
+  $('#tab-review').classList.add('on'); $('#tab-models').classList.remove('on');
+  await loadReview();
+});
+load();
+</script>

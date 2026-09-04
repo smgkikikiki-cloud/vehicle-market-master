@@ -1,0 +1,416 @@
+{
+  "brand": {
+    "id": "audi",
+    "name_en": "Audi",
+    "name_th": "เอาดี้",
+    "brand_segment": "PREMIUM_LUXURY",
+    "oem_group": "Volkswagen Group",
+    "brand_origin": "DE",
+    "aliases": [
+      "เอาดี้"
+    ]
+  },
+  "models": [
+    {
+      "id": "audi_q3",
+      "name_en": "Q3",
+      "name_th": "คิว3",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "q 3"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "F3",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": null,
+              "aliases": [
+                "35 TFSI S line"
+              ],
+              "overrides": {},
+              "price_thb": 2799000,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2799000,
+              "price_max_thb": 2799000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audi_q5",
+      "name_en": "Q5",
+      "name_th": "คิว5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "q 5"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "FY",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L MHEV AWD",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1984,
+              "battery_kwh": 0.5,
+              "aliases": [
+                "45 TFSI quattro S line"
+              ],
+              "overrides": {},
+              "price_thb": 3999000,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3999000,
+              "price_max_thb": 3999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a1",
+      "name_en": "A1",
+      "name_th": "เอ1",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "A1 SB"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1498,
+              "battery_kwh": 0.5,
+              "price_thb": 2290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a4",
+      "name_en": "A4",
+      "name_th": "เอ4",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "A4 AV",
+        "A4"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1984,
+              "battery_kwh": 0.5,
+              "price_thb": 3290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a5",
+      "name_en": "A5",
+      "name_th": "เอ5",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "A5 CP",
+        "A5 SB",
+        "A5 Avant",
+        "A5"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1984,
+              "battery_kwh": 0.5,
+              "price_thb": 3690000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a7",
+      "name_en": "A7",
+      "name_th": "เอ7",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "A7 SB"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2995,
+              "battery_kwh": 0.5,
+              "price_thb": 5490000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a8",
+      "name_en": "A8",
+      "name_th": "เอ8",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "A8L",
+        "A8"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2995,
+              "battery_kwh": 0.5,
+              "price_thb": 8990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "name_en": "Q8",
+      "name_th": "คิว8",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "Q8 SB",
+        "Q8 etron",
+        "Q8"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2995,
+              "battery_kwh": 0.5,
+              "price_thb": 6490000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tt",
+      "name_en": "TT",
+      "name_th": "ทีที",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "TT Coupe",
+        "TT RS",
+        "TT"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1984,
+              "battery_kwh": 0.5,
+              "price_thb": 3990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rs",
+      "name_en": "RS",
+      "name_th": "อาร์เอส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "RS 4",
+        "RS 5",
+        "RS 7",
+        "RS Q8",
+        "S3"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2894,
+              "battery_kwh": 0.5,
+              "price_thb": 8990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

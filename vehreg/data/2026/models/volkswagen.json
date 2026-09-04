@@ -1,0 +1,54 @@
+{
+  "brand": {
+    "id": "volkswagen",
+    "name_en": "Volkswagen",
+    "name_th": "โฟล์คสวาเกน",
+    "brand_segment": "MASS",
+    "oem_group": "Volkswagen Group",
+    "brand_origin": "DE",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "caravelle",
+      "name_en": "Caravelle",
+      "name_th": "คาราเวล",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY2",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "caravelle",
+        "multivan",
+        "id buzz"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 9,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1968,
+              "battery_kwh": null,
+              "price_thb": 3290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

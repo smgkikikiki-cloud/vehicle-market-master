@@ -1,0 +1,253 @@
+{
+  "brand": {
+    "id": "porsche",
+    "name_en": "Porsche",
+    "name_th": "ปอร์เช่",
+    "brand_segment": "PERFORMANCE",
+    "oem_group": "Volkswagen Group",
+    "brand_origin": "DE",
+    "aliases": [
+      "ปอร์เช่"
+    ]
+  },
+  "models": [
+    {
+      "id": "macan",
+      "name_en": "Macan",
+      "name_th": "มาคัน",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "95B",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE AWD",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 1984,
+              "battery_kwh": null,
+              "aliases": [
+                "Macan"
+              ],
+              "overrides": {},
+              "price_thb": 5300000,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "price_min_thb": 5300000,
+              "price_max_thb": 5300000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cayenne",
+      "name_en": "Cayenne",
+      "name_th": "คาเยน",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "E3",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "3.0L PHEV AWD",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2995,
+              "battery_kwh": 25.9,
+              "aliases": [
+                "Cayenne E-Hybrid"
+              ],
+              "overrides": {},
+              "price_thb": 9500000,
+              "import_type": "CBU",
+              "origin_country": "SK",
+              "price_note": "seed-unverified",
+              "price_min_thb": 9500000,
+              "price_max_thb": 9500000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "porsche_911",
+      "name_en": "911",
+      "name_th": "911",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "nine eleven"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "992",
+          "segment": "D",
+          "seats": 4,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "3.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2981,
+              "battery_kwh": null,
+              "aliases": [
+                "Carrera"
+              ],
+              "overrides": {},
+              "price_thb": 12500000,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "price_min_thb": 12500000,
+              "price_max_thb": 12500000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "panamera",
+      "name_en": "Panamera",
+      "name_th": "พานาเมร่า",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "panamera"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 4,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.9L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2894,
+              "battery_kwh": 25.9,
+              "price_thb": 9900000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "taycan",
+      "name_en": "Taycan",
+      "name_th": "ไทคานน์",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "taycan"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 4,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "89 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 89.0,
+              "price_thb": 7500000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "718",
+      "name_en": "718",
+      "name_th": "718",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "718",
+        "cayman",
+        "boxster"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 2,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "4.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 3995,
+              "battery_kwh": null,
+              "price_thb": 7900000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

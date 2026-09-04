@@ -1,0 +1,761 @@
+{
+  "brand": {
+    "id": "bmw",
+    "name_en": "BMW",
+    "name_th": "บีเอ็มดับเบิลยู",
+    "brand_segment": "PREMIUM_LUXURY",
+    "oem_group": "BMW Group",
+    "brand_origin": "DE",
+    "aliases": [
+      "บีเอ็มดับเบิลยู",
+      "bmw thailand"
+    ]
+  },
+  "models": [
+    {
+      "id": "bmw_3",
+      "name_en": "3 Series",
+      "name_th": "ซีรีส์ 3",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "320d",
+        "330e",
+        "series 3",
+        "320i",
+        "318i",
+        "320Li",
+        "330Li",
+        "M340i",
+        "M340i xDrive"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "G20",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 1998,
+              "battery_kwh": 12.0,
+              "aliases": [
+                "330e M Sport"
+              ],
+              "overrides": {},
+              "price_thb": 2799000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2799000,
+              "price_max_thb": 2799000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bmw_5",
+      "name_en": "5 Series",
+      "name_th": "ซีรีส์ 5",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "530e",
+        "series 5",
+        "520d",
+        "540i"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "G60",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 1998,
+              "battery_kwh": 19.4,
+              "aliases": [
+                "530e M Sport"
+              ],
+              "overrides": {},
+              "price_thb": 3999000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3999000,
+              "price_max_thb": 3999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bmw_x1",
+      "name_en": "X1",
+      "name_th": "เอ็กซ์1",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "x 1",
+        "X1 sDrive18i",
+        "X1 xDrive20d"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "U11",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1499,
+              "battery_kwh": null,
+              "aliases": [
+                "sDrive18i xLine"
+              ],
+              "overrides": {},
+              "price_thb": 2399000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2399000,
+              "price_max_thb": 2399000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bmw_x3",
+      "name_en": "X3",
+      "name_th": "เอ็กซ์3",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "x 3",
+        "X3 xDrive20",
+        "X3 20 xDrive"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "G45",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2024-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L MHEV AWD",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1998,
+              "battery_kwh": 0.5,
+              "aliases": [
+                "20 xDrive M Sport"
+              ],
+              "overrides": {},
+              "price_thb": 3999000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3999000,
+              "price_max_thb": 3999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bmw_ix3",
+      "name_en": "iX3",
+      "name_th": "ไอเอ็กซ์3",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ix 3",
+        "iX3 Inspiring",
+        "iX3 Impressive"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "G08",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2021-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "80 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 80.0,
+              "aliases": [
+                "Inspiring"
+              ],
+              "overrides": {},
+              "price_thb": 3399000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3399000,
+              "price_max_thb": 3399000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bmw_i4",
+      "name_en": "i4",
+      "name_th": "ไอ4",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "i 4",
+        "i4 eDrive40",
+        "i4 M50"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "G26",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2022-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "84 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 83.9,
+              "aliases": [
+                "eDrive40 M Sport"
+              ],
+              "overrides": {},
+              "price_thb": 3999000,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3999000,
+              "price_max_thb": 3999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2_series_gran_coupe",
+      "name_en": "2 Series Gran Coupe",
+      "name_th": "ซีรีส์ 2",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "220 Gran Coupe",
+        "220i Gran Coupe",
+        "218i"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "price_thb": 2390000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4_series",
+      "name_en": "4 Series",
+      "name_th": "ซีรีส์ 4",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "430i",
+        "420i",
+        "M440i",
+        "430i Coupe",
+        "430i Convertible",
+        "430i Cabrio"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "price_thb": 3690000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7_series",
+      "name_en": "7 Series",
+      "name_th": "ซีรีส์ 7",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "740d",
+        "750e",
+        "M760e",
+        "i7 xDrive60",
+        "i7 eDrive50"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2998,
+              "battery_kwh": 18.7,
+              "price_thb": 7990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "x4",
+      "name_en": "X4",
+      "name_th": "เอ็กซ์4",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "X4 xDrive20d",
+        "X4 M"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1995,
+              "battery_kwh": 0.5,
+              "price_thb": 3990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "x5",
+      "name_en": "X5",
+      "name_th": "เอ็กซ์5",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "X5 xDrive30d",
+        "X5 xDrive50e"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2998,
+              "battery_kwh": 25.7,
+              "price_thb": 5490000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "x6",
+      "name_en": "X6",
+      "name_th": "เอ็กซ์6",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "X6 xDrive40i"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2998,
+              "battery_kwh": 0.5,
+              "price_thb": 5990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "x7",
+      "name_en": "X7",
+      "name_th": "เอ็กซ์7",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "X7 xDrive40d",
+        "X7 M50d"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2993,
+              "battery_kwh": 0.5,
+              "price_thb": 6990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "i5",
+      "name_en": "i5",
+      "name_th": "ไอ5",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "i5 eDrive40",
+        "i5 M60",
+        "i5 eDrive40 Touring"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 81.2,
+              "price_thb": 4990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ix",
+      "name_en": "iX",
+      "name_th": "ไอเอ็กซ์",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "iX xDrive50",
+        "iX xDrive40"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 111.5,
+              "price_thb": 5990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ix1",
+      "name_en": "iX1",
+      "name_th": "ไอเอ็กซ์1",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "iX1 eDrive20L",
+        "iX1 xDrive30"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 66.5,
+              "price_thb": 2599000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "z4",
+      "name_en": "Z4",
+      "name_th": "แซด4",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "Z4 sDrive30i"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "price_thb": 4290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xm",
+      "name_en": "XM",
+      "name_th": "เอ็กซ์เอ็ม",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "XM 50e"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2998,
+              "battery_kwh": 25.7,
+              "price_thb": 12900000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

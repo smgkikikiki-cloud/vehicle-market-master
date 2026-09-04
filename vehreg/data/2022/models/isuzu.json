@@ -1,0 +1,277 @@
+{
+  "brand": {
+    "id": "isuzu",
+    "name_en": "Isuzu",
+    "name_th": "อีซูซุ",
+    "brand_segment": "MASS",
+    "oem_group": "Isuzu",
+    "brand_origin": "JP",
+    "aliases": [
+      "อีซูซุ",
+      "tri petch isuzu"
+    ]
+  },
+  "models": [
+    {
+      "id": "dmax_cab",
+      "name_en": "D-Max Cab",
+      "name_th": "ดีแมคซ์ ตอนเดียว/แค็บ",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "SINGLE_SMART",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "dmax cab",
+        "spark",
+        "cab4",
+        "d max spark",
+        "ดีแมคซ์ ตอนเดียว",
+        "ดีแมคซ์ แค็บ",
+        "D-Max",
+        "ดีแมคซ์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "RG",
+          "segment": "F",
+          "seats": 4,
+          "launched": "2019-10-11",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.9L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1898,
+              "battery_kwh": null,
+              "aliases": [
+                "1.9 S",
+                "1.9 Hi-Lander"
+              ],
+              "overrides": {},
+              "price_thb": 569000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 569000,
+              "price_max_thb": 829000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dmax_double_cab",
+      "name_en": "D-Max Double Cab",
+      "name_th": "ดีแมคซ์ 4 ประตู",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "dmax double cab",
+        "v-cross",
+        "vcross",
+        "ดีแมคซ์ 4 ประตู",
+        "d max 4 door",
+        "D-Max",
+        "ดีแมคซ์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "RG",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2019-10-11",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.9L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1898,
+              "battery_kwh": null,
+              "aliases": [
+                "1.9 Hi-Lander"
+              ],
+              "overrides": {},
+              "price_thb": 899000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 899000,
+              "price_max_thb": 899000
+            },
+            {
+              "name": "3.0L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2999,
+              "battery_kwh": null,
+              "aliases": [
+                "3.0 V-Cross 4x4"
+              ],
+              "overrides": {},
+              "price_thb": 1329000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1329000,
+              "price_max_thb": 1329000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mux",
+      "name_en": "MU-X",
+      "name_th": "มิว-เอ็กซ์",
+      "nameplate": "",
+      "body_type": "PPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mux",
+        "mu x",
+        "มิวเอ็กซ์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "RJ",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2020-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.9L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1898,
+              "battery_kwh": null,
+              "aliases": [
+                "1.9 Active"
+              ],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            },
+            {
+              "name": "3.0L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2999,
+              "battery_kwh": null,
+              "aliases": [
+                "3.0 Ultimate 4x4"
+              ],
+              "overrides": {},
+              "price_thb": 1699000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1699000,
+              "price_max_thb": 1699000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "isuzu_elf",
+      "name_en": "Isuzu Elf",
+      "name_th": "อีซูซุ เอลฟ์",
+      "nameplate": "",
+      "body_type": "TRUCK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "NLR",
+        "NPR",
+        "NMR",
+        "NKR",
+        "elf"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 3,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "3.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2999,
+              "battery_kwh": null,
+              "price_thb": 1050000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "isuzu_f_series",
+      "name_en": "Isuzu F-Series",
+      "name_th": "อีซูซุ เอฟ-ซีรีส์",
+      "nameplate": "",
+      "body_type": "TRUCK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "FTR",
+        "FVZ",
+        "FRR",
+        "FXZ",
+        "FVM",
+        "GVR"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 3,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "7.8L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 7790,
+              "battery_kwh": null,
+              "price_thb": 2500000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

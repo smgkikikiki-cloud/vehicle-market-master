@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "nextem",
+    "name_en": "Nextem",
+    "name_th": "เน็กซ์เท็ม",
+    "brand_segment": "BUDGET",
+    "oem_group": "Nextem",
+    "brand_origin": "TH",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "nextem_orca",
+      "name_en": "Nextem Orca",
+      "name_th": "Nextem Orca",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY3",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "Orca"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 2,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 60.0,
+              "price_thb": 1290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

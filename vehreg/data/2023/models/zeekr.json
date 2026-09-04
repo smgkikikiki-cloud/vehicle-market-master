@@ -1,0 +1,100 @@
+{
+  "brand": {
+    "id": "zeekr",
+    "name_en": "Zeekr",
+    "name_th": "ซีเคอร์",
+    "brand_segment": "PREMIUM_TECH",
+    "oem_group": "Geely",
+    "brand_origin": "CN",
+    "aliases": [
+      "ซีเคอร์"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "zeekr_x",
+      "name_en": "Zeekr X",
+      "name_th": "ซีเคอร์ เอ็กซ์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "zeekr x"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "ZX",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "66 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 66.0,
+              "aliases": [
+                "Long Range RWD"
+              ],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zeekr_009",
+      "name_en": "Zeekr 009",
+      "name_th": "ซีเคอร์ 009",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "009"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "Z009",
+          "segment": "E",
+          "seats": 6,
+          "launched": "2024-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "116 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 116.0,
+              "aliases": [
+                "Long Range"
+              ],
+              "overrides": {},
+              "price_thb": 3999000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3999000,
+              "price_max_thb": 3999000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

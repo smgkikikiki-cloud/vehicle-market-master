@@ -1,0 +1,93 @@
+{
+  "brand": {
+    "id": "land_rover",
+    "name_en": "Land Rover",
+    "name_th": "แลนด์โรเวอร์",
+    "brand_segment": "PREMIUM_LUXURY",
+    "oem_group": "JLR",
+    "brand_origin": "GB",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "defender",
+      "name_en": "Defender",
+      "name_th": "ดีเฟนเดอร์",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "defender"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "3.0L MHEV",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2996,
+              "battery_kwh": 0.5,
+              "price_thb": 6900000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "GB",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "range_rover",
+      "name_en": "Range Rover",
+      "name_th": "เรนจ์โรเวอร์",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "range rover",
+        "evoque",
+        "velar",
+        "range rover sport"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "3.0L MHEV",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2996,
+              "battery_kwh": 0.5,
+              "price_thb": 12900000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "GB",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

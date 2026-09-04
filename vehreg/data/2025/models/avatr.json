@@ -1,0 +1,53 @@
+{
+  "brand": {
+    "id": "avatr",
+    "name_en": "Avatr",
+    "name_th": "อาวาตาร์",
+    "brand_segment": "PREMIUM_TECH",
+    "oem_group": "Changan",
+    "brand_origin": "CN",
+    "trim_detail": true,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "avatr_11",
+      "name_en": "Avatr 11",
+      "name_th": "อาวาตาร์ 11",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "avatr 11",
+        "11"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2024-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "90 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 90.4,
+              "price_thb": 2599000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

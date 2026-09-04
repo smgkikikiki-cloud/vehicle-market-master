@@ -1,0 +1,90 @@
+{
+  "brand": {
+    "id": "peugeot",
+    "name_en": "Peugeot",
+    "name_th": "เปอโยต์",
+    "brand_segment": "MASS",
+    "oem_group": "Stellantis",
+    "brand_origin": "FR",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "peugeot_2008",
+      "name_en": "Peugeot 2008",
+      "name_th": "เปอโยต์ 2008",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "2008"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.2L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1199,
+              "battery_kwh": null,
+              "price_thb": 1099000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "FR",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "peugeot_3008",
+      "name_en": "Peugeot 3008",
+      "name_th": "เปอโยต์ 3008",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "3008"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.6L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1598,
+              "battery_kwh": 13.2,
+              "price_thb": 1899000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "FR",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

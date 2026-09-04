@@ -1,0 +1,173 @@
+﻿brand,model,generation,variant,brand_th,brand_segment,oem_group,brand_origin,trim_detail,nameplate,model_th,body_type,cab_type,registration_type,market_scope,model_aliases,segment,seats,launched,ended,powertrain,drivetrain,engine_cc,battery_kwh,variant_aliases,price_thb,price_min_thb,price_max_thb,import_type,origin_country,price_note
+Deepal,Deepal S05,,51 kWh BEV,ดีพัล,MASS,Changan,CN,true,,ดีพัล เอส05,CROSSOVER,,,,s05,B,5,2025-06-01,,BEV,RWD,,51.5,,799000,,,CKD,TH,seed-unverified
+Deepal,Deepal S05,,1.5L REEV,ดีพัล,MASS,Changan,CN,true,,,,,,,,,,,,REEV,RWD,1500,28.4,,899000,,,CKD,TH,seed-unverified
+Deepal,Deepal S07,,80 kWh BEV,ดีพัล,MASS,Changan,CN,true,,ดีพัล เอส07,CROSSOVER,,,,s07,C,5,2024-03-01,,BEV,RWD,,79.9,,1359000,,,CKD,TH,seed-unverified
+Deepal,Deepal L07,,80 kWh BEV,ดีพัล,MASS,Changan,CN,true,,ดีพัล แอล07,SEDAN,,,,l07,D,5,2024-06-01,,BEV,RWD,,79.9,,1099000,,,CKD,TH,seed-unverified
+Deepal,Deepal E07,,89 kWh BEV,ดีพัล,MASS,Changan,CN,true,,ดีพัล อี07,SUV,,,,e07,D,5,2025-01-01,,BEV,AWD,,88.9,,1999000,,,CBU,CN,seed-unverified
+Deepal,Deepal Hunter K50,,1.5L PHEV,ดีพัล,MASS,Changan,CN,true,,ดีพัล ฮันเตอร์,PICKUP,DOUBLE_CAB,,,hunter k50|hunter,F,5,2025-09-01,,PHEV,AWD,1500,31.7,,1199000,,,CBU,CN,seed-unverified
+Jaecoo,Jaecoo 5 EV,,61 kWh BEV,เจคู,MASS,Chery,CN,true,,เจคู 5,CROSSOVER,,,,5 ev|jaecoo 5,B,5,2025-09-01,,BEV,FWD,,60.9,,799000,,,CKD,TH,seed-unverified
+Jaecoo,Jaecoo 6 EV,,69 kWh BEV,เจคู,MASS,Chery,CN,true,,เจคู 6,CROSSOVER,,,,6 ev|jaecoo 6,B,5,2025-11-01,,BEV,FWD,,69.0,,999000,,,CKD,TH,seed-unverified
+Jaecoo,Jaecoo 6T EV,,69 kWh BEV AWD,เจคู,MASS,Chery,CN,true,,เจคู 6ที,CROSSOVER,,,,6t ev|jaecoo 6t,C,5,2025-11-01,,BEV,AWD,,69.0,,1099000,,,CKD,TH,seed-unverified
+Jaecoo,Jaecoo 7,,1.5L PHEV,เจคู,MASS,Chery,CN,true,,เจคู 7,CROSSOVER,,,,7 shs|jaecoo 7|j7,C,5,2024-09-01,,PHEV,FWD,1500,18.3,,1099000,,,CKD,TH,seed-unverified
+Geely,Geely EX5,,60 kWh BEV,จีลี่,MASS,Geely,CN,true,,จีลี่ อีเอ็กซ์5,CROSSOVER,,,,ex5,C,5,2025-08-01,,BEV,FWD,,60.2,,949000,,,CKD,TH,seed-unverified
+Denza,Denza D9,,1.5L PHEV,เด็นซ่า,PREMIUM_LUXURY,BYD,CN,true,,เด็นซ่า ดี9,MPV,,,,d9|denza d9,E,7,2025-06-01,,PHEV,FWD,1500,18.3,,1899000,,,CBU,CN,seed-unverified
+Denza,Denza D9,,103 kWh BEV AWD,เด็นซ่า,PREMIUM_LUXURY,BYD,CN,true,,,,,,,,,,,,BEV,AWD,,103.0,,2399000,,,CBU,CN,seed-unverified
+Wuling,Wuling Bingo,,32 kWh BEV,หวูหลิง,BUDGET,SAIC-GM-Wuling,CN,true,,หวูหลิง บิงโก,HATCHBACK,,,,bingo|binguo|bingou,A,5,2024-06-01,,BEV,FWD,,31.9,,499000,,,CKD,TH,seed-unverified
+Wuling,Wuling Air EV,,27 kWh BEV,หวูหลิง,BUDGET,SAIC-GM-Wuling,CN,true,,หวูหลิง แอร์ อีวี,HATCHBACK,,,,air ev,A,4,2022-08-01,,BEV,RWD,,26.7,,399000,,,CKD,TH,seed-unverified
+Avatr,Avatr 11,,90 kWh BEV,อาวาตาร์,PREMIUM_TECH,Changan,CN,true,,อาวาตาร์ 11,CROSSOVER,,,,avatr 11|11,D,5,2024-06-01,,BEV,AWD,,90.4,,2599000,,,CBU,CN,seed-unverified
+GAC,GAC M8,,2.0L PHEV,จีเอซี,MASS,GAC,CN,true,,จีเอซี เอ็ม8,MPV,,,,m8,E,7,2025-01-01,,PHEV,FWD,1998,25.6,,2399000,,,CBU,CN,seed-unverified
+Leapmotor,Leapmotor B10,,67 kWh BEV,ลีปมอเตอร์,MASS,Leapmotor,CN,true,,ลีปมอเตอร์ บี10,CROSSOVER,,,,b10,B,5,2025-10-01,,BEV,RWD,,67.1,,899000,,,CKD,TH,seed-unverified
+Leapmotor,Leapmotor C10,,70 kWh BEV,ลีปมอเตอร์,MASS,Leapmotor,CN,true,,ลีปมอเตอร์ ซี10,CROSSOVER,,,,c10,C,5,2025-03-01,,BEV,RWD,,69.9,,1199000,,,CKD,TH,seed-unverified
+Riddara,Riddara RD6 Double Cab,,86 kWh BEV,ริดดารา,MASS,Geely,CN,true,RD6,ริดดารา อาร์ดี6,PICKUP,DOUBLE_CAB,,,rd6,F,5,2024-09-01,,BEV,RWD,,86.0,,1299000,,,CBU,CN,seed-unverified
+Riddara,Riddara Horizon Double Cab,,88 kWh BEV AWD,ริดดารา,MASS,Geely,CN,true,Horizon,ริดดารา ฮอไรซัน,PICKUP,DOUBLE_CAB,,,horizon,F,5,2025-11-01,,BEV,AWD,,88.0,,1399000,,,CBU,CN,seed-unverified
+MG,MG S5 EV,,62 kWh BEV,,,,,,,เอ็มจี เอส5,CROSSOVER,,,,s5 ev|s5,C,5,2025-06-01,,BEV,RWD,,62.0,,899000,,,CKD,TH,seed-unverified
+MG,MG IM6,,100 kWh BEV,,,,,,,เอ็มจี ไอเอ็ม6,CROSSOVER,,,,im6,D,5,2025-09-01,,BEV,RWD,,100.0,,1899000,,,CBU,CN,seed-unverified
+MG,MG EP,,50 kWh BEV,,,,,,,เอ็มจี อีพี,WAGON,,,,ep,B,5,2020-01-01,,BEV,FWD,,50.3,,799000,,,CKD,TH,seed-unverified
+MG,MG Maxus 7,,2.0L ICE,,,,,,,เอ็มจี แม็กซัส 7,MPV,,,,maxus 7,D,7,2025-01-01,,ICE,RWD,1996,,,1399000,,,CBU,CN,seed-unverified
+MG,MG Cyberster,,77 kWh BEV,,,,,,,เอ็มจี ไซเบอร์สเตอร์,COUPE,,,NICHE,cyberster,D,2,2024-11-01,,BEV,AWD,,77.0,,3599000,,,CBU,CN,seed-unverified
+Aion,Aion UT,,44 kWh BEV,,,,,,,ไอออน ยูที,HATCHBACK,,,,ut|aion ut,B,5,2025-11-01,,BEV,FWD,,44.2,,459000,,,CKD,TH,seed-unverified
+Aion,Aion UT,,53 kWh BEV,,,,,,,,,,,,,,,,,BEV,FWD,,52.9,,559000,,,CKD,TH,seed-unverified
+Aion,Hyptec HT,,77 kWh BEV,,,,,,,ไฮเทค เอชที,CROSSOVER,,,,hyptec ht|hyptec,D,5,2025-06-01,,BEV,RWD,,76.8,,1299000,,,CBU,CN,seed-unverified
+Chery,Chery V23,,60 kWh BEV,,,,,,,เชอรี่ วี23,SUV,,,,v23,B,5,2025-10-01,,BEV,RWD,,60.0,,799000,,,CKD,TH,seed-unverified
+Chery,Chery V23,,60 kWh BEV AWD,,,,,,,,,,,,,,,,,BEV,AWD,,60.0,,899000,,,CKD,TH,seed-unverified
+Changan,Changan Lumin,,33 kWh BEV,,,,,,,ฉางอาน ลูมิน,HATCHBACK,,,,lumin,A,4,2025-01-01,,BEV,FWD,,32.8,,479000,,,CKD,TH,seed-unverified
+Toyota,Hilux Travo Cab,,2.4L ICE,,,,,,Hilux,ไฮลักซ์ ทราโว่ ตอนเดียว/แค็บ,PICKUP,SINGLE_SMART,,,Hilux Travo|travo|travo cab|travo ตอนเดียว|travo แค็บ,F,4,2025-07-01,,ICE,RWD,2393,,,599000,,,CKD,TH,seed-unverified
+Toyota,Hilux Travo Double Cab,,2.4L ICE,,,,,,Hilux,ไฮลักซ์ ทราโว่ 4 ประตู,PICKUP,DOUBLE_CAB,,,Hilux Travo|travo|travo double cab|travo 4 ประตู,F,5,2025-07-01,,ICE,RWD,2393,,,799000,,,CKD,TH,seed-unverified
+Toyota,Commuter,,2.8L ICE,,,,,,,คอมมิวเตอร์,VAN,,RY2,COMMERCIAL,commuter,E,15,2019-01-01,,ICE,RWD,2755,,,1398000,,,CKD,TH,seed-unverified
+Toyota,Hiace,,2.8L ICE,,,,,,,ไฮเอซ,VAN,,RY2,COMMERCIAL,hiace,E,11,2019-01-01,,ICE,RWD,2755,,,1299000,,,CBU,JP,seed-unverified
+Toyota,Hiace Majesty,,2.8L ICE,,,,,,,ไฮเอซ มาเจสตี้,VAN,,RY2,NICHE,hiace majesty|majesty,E,9,2022-01-01,,ICE,RWD,2755,,,2299000,,,CBU,JP,seed-unverified
+Toyota,Vellfire,,2.5L HEV,,,,,,,เวลไฟร์,MPV,,,NICHE,vellfire,E,7,2023-09-01,,HEV,AWD,2487,1.0,,4299000,,,CBU,JP,seed-unverified
+Toyota,Crown,,grey import,,,,,,,คราวน์,SEDAN,,,GREY,,E,5,2023-01-01,,UNKNOWN,,,,,,,,,,"grey import, spec not tracked"
+Toyota,Harrier,,grey import,,,,,,,แฮริเออร์,CROSSOVER,,,GREY,,D,5,2023-01-01,,UNKNOWN,,,,,,,,,,"grey import, spec not tracked"
+Toyota,Voxy,,grey import,,,,,,,วอกซี่,MPV,,,GREY,,C,7,2023-01-01,,UNKNOWN,,,,,,,,,,"grey import, spec not tracked"
+Toyota,Noah,,grey import,,,,,,,โนอาห์,MPV,,,GREY,,C,7,2023-01-01,,UNKNOWN,,,,,,,,,,"grey import, spec not tracked"
+Toyota,C-HR,,grey import,,,,,,,ซี-เอชอาร์,CROSSOVER,,,GREY,,B,5,2023-01-01,,UNKNOWN,,,,,,,,,,"grey import, spec not tracked"
+Toyota,GR86,,coupe,,,,,,,จีอาร์86,COUPE,,,NICHE,GR86,D,4,2022-01-01,,ICE,RWD,2387,,,2599000,,,CBU,JP,seed-unverified
+Toyota,GR Supra,,coupe,,,,,,,จีอาร์ ซูปร้า,COUPE,,,NICHE,GRSupra,D,4,2022-01-01,,ICE,RWD,2387,,,2599000,,,CBU,JP,seed-unverified
+Isuzu,Isuzu Elf,,3.0L ICE,,,,,,,อีซูซุ เอลฟ์,TRUCK,,,COMMERCIAL,NLR|NPR|NMR|NKR|elf,UNKNOWN,3,2019-01-01,,ICE,RWD,2999,,,1050000,,,CKD,TH,seed-unverified
+Isuzu,Isuzu F-Series,,7.8L ICE,,,,,,,อีซูซุ เอฟ-ซีรีส์,TRUCK,,,COMMERCIAL,FTR|FVZ|FRR|FXZ|FVM|GVR,UNKNOWN,3,2019-01-01,,ICE,RWD,7790,,,2500000,,,CKD,TH,seed-unverified
+Suzuki,Suzuki Carry,,1.5L ICE,,,,,,,ซูซูกิ แครี่,TRUCK,,,COMMERCIAL,carry,UNKNOWN,2,2019-01-01,,ICE,RWD,1462,,,399000,,,CKD,TH,seed-unverified
+Hino,Hino Truck,,diesel,ฮีโน่,MASS,Toyota Group,JP,,,ฮีโน่ ทรัค,TRUCK,,,COMMERCIAL,XZU|FG|FM|FC|FL|FS|SG,UNKNOWN,3,2020-01-01,,ICE,RWD,5193,,,1500000,,,CKD,TH,seed-unverified
+Foton,Foton Truck,,diesel,โฟตอน,BUDGET,Foton,CN,,,โฟตอน ทรัค,TRUCK,,,COMMERCIAL,BJ,UNKNOWN,3,2020-01-01,,ICE,RWD,5193,,,1500000,,,CKD,TH,seed-unverified
+JAC,JAC Truck,,electric,เจเอซี,BUDGET,JAC,CN,,,เจเอซี ทรัค,TRUCK,,,COMMERCIAL,HFC,UNKNOWN,3,2020-01-01,,BEV,RWD,,80,,1500000,,,CKD,TH,seed-unverified
+Tata,Tata Super Ace,,diesel,ทาทา,BUDGET,Tata,IN,,,ทาทา ซูเปอร์เอซ,TRUCK,,,COMMERCIAL,super ace,UNKNOWN,3,2020-01-01,,ICE,RWD,1396,,,459000,,,CKD,TH,seed-unverified
+UD Trucks,UD Truck,,diesel,ยูดี,MASS,Volvo Group,JP,,,ยูดี ทรัค,TRUCK,,,COMMERCIAL,CWE|PKE|GKE|QKE,UNKNOWN,3,2020-01-01,,ICE,RWD,5193,,,1500000,,,CKD,TH,seed-unverified
+Nissan,Serena,,1.4L REEV,,,,,,,เซเรน่า,MPV,,,GREY,serena,C,8,2023-01-01,,REEV,FWD,1433,1.8,,,,,,,grey import
+Nissan,X-Trail,,1.5L REEV,,,,,,,เอ็กซ์-เทรล,CROSSOVER,,,,x-trail|xtrail|x trial|x-trial,C,5,2023-01-01,,REEV,FWD,1497,2.1,,1599000,,,CBU,JP,seed-unverified
+Hyundai,Santa Fe,,1.6L HEV,,,,,,,ซานตาเฟ,CROSSOVER,,,,santa fe,D,7,2024-06-01,,HEV,AWD,1598,1.5,,2299000,,,CBU,KR,seed-unverified
+Hyundai,Palisade,,2.2L ICE,,,,,,,พาลิเสด,SUV,,,,palisade,E,7,2025-06-01,,ICE,AWD,2199,,,2799000,,,CBU,KR,seed-unverified
+Hyundai,H-1,,2.5L ICE,,,,,,,เอช-1,VAN,,RY2,COMMERCIAL,h-1|h1,E,11,2018-01-01,,ICE,RWD,2497,,,1799000,,,CBU,KR,seed-unverified
+Kia,EV5,,88 kWh BEV,,,,,,,อีวี5,CROSSOVER,,,,ev5,D,5,2025-09-01,,BEV,FWD,,88.1,,1899000,,,CBU,CN,seed-unverified
+Kia,Sorento,,1.6L HEV,,,,,,,โซเรนโต,SUV,,,,sorento,D,7,2024-01-01,,HEV,AWD,1598,1.5,,2399000,,,CBU,KR,seed-unverified
+Volvo,EX40,,spec,,,,,,,อีเอ็กซ์40,CROSSOVER,,,,EX40,C,5,2024-01-01,,BEV,RWD,,78,,2190000,,,CKD,TH,seed-unverified
+Volvo,EC40,,spec,,,,,,,อีซี40,CROSSOVER,,,,EC40,C,5,2024-01-01,,BEV,RWD,,78,,2290000,,,CKD,TH,seed-unverified
+Volvo,EX90,,spec,,,,,,,อีเอ็กซ์90,SUV,,,,EX90,E,5,2024-01-01,,BEV,RWD,,111,,4990000,,,CKD,TH,seed-unverified
+Volvo,S60,,spec,,,,,,,เอส60,SEDAN,,,,S60,D,5,2024-01-01,,PHEV,AWD,1969,18.8,,2590000,,,CKD,TH,seed-unverified
+Volvo,S90,,spec,,,,,,,เอส90,SEDAN,,,,S90,E,5,2024-01-01,,PHEV,AWD,1969,18.8,,3490000,,,CKD,TH,seed-unverified
+Volvo,V60,,spec,,,,,,,วี60,WAGON,,,,V60,D,5,2024-01-01,,PHEV,AWD,1969,18.8,,2790000,,,CKD,TH,seed-unverified
+MINI,Aceman,,54 kWh BEV,,,,,,,เอซแมน,CROSSOVER,,,,aceman|jcw aceman,B,5,2024-09-01,,BEV,FWD,,54.2,,2399000,,,CBU,CN,seed-unverified
+Peugeot,Peugeot 2008,,1.2L ICE,เปอโยต์,MASS,Stellantis,FR,,,เปอโยต์ 2008,CROSSOVER,,,,2008,B,5,2021-01-01,,ICE,FWD,1199,,,1099000,,,CBU,FR,seed-unverified
+Peugeot,Peugeot 3008,,1.6L PHEV,,,,,,,เปอโยต์ 3008,CROSSOVER,,,,3008,C,5,2021-01-01,,PHEV,FWD,1598,13.2,,1899000,,,CBU,FR,seed-unverified
+Mine Mobility,Mine MTS,,30 kWh BEV,มายน์,BUDGET,EA,TH,,,มายน์ เอ็มทีเอส,MPV,,,COMMERCIAL,mts|mts-mt30,C,5,2020-01-01,,BEV,FWD,,30.0,,1190000,,,CKD,TH,seed-unverified
+Lexus,LBX,,spec,,,,,,,แอลบีเอ็กซ์,CROSSOVER,,,,LBX,B,5,2024-01-01,,HEV,FWD,1490,1.0,,2490000,,,CBU,JP,seed-unverified
+Lexus,UX,,spec,,,,,,,ยูเอ็กซ์,CROSSOVER,,,,UX,C,5,2024-01-01,,HEV,FWD,1490,1.0,,2490000,,,CBU,JP,seed-unverified
+Lexus,RZ,,spec,,,,,,,อาร์แซด,CROSSOVER,,,,RZ,D,5,2024-01-01,,HEV,FWD,1490,1.0,,2490000,,,CBU,JP,seed-unverified
+Lexus,LX,,3.4L ICE,,,,,,,แอลเอ็กซ์,PPV,,,NICHE,lx|lx600,E,7,2022-01-01,,ICE,4WD,3444,,,7990000,,,CBU,JP,seed-unverified
+Lexus,LC,,5.0L ICE,,,,,,,แอลซี,COUPE,,,NICHE,lc|lc500,E,4,2018-01-01,,ICE,RWD,4969,,,12900000,,,CBU,JP,seed-unverified
+Porsche,Panamera,,2.9L PHEV,,,,,,,พานาเมร่า,SEDAN,,,NICHE,panamera,E,4,2024-01-01,,PHEV,AWD,2894,25.9,,9900000,,,CBU,DE,seed-unverified
+Porsche,Taycan,,89 kWh BEV,,,,,,,ไทคานน์,SEDAN,,,NICHE,taycan,E,4,2020-01-01,,BEV,AWD,,89.0,,7500000,,,CBU,DE,seed-unverified
+Porsche,718,,4.0L ICE,,,,,,,718,COUPE,,,NICHE,718|cayman|boxster,D,2,2020-01-01,,ICE,RWD,3995,,,7900000,,,CBU,DE,seed-unverified
+Ferrari,296,,spec,เฟอร์รารี,PERFORMANCE,Ferrari,IT,,,296,COUPE,,,NICHE,296,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Ferrari,12Cilindri,,spec,เฟอร์รารี,PERFORMANCE,Ferrari,IT,,,12Cilindri,COUPE,,,NICHE,12Cilindri,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Ferrari,F8,,spec,เฟอร์รารี,PERFORMANCE,Ferrari,IT,,,F8,COUPE,,,NICHE,F8,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Ferrari,Roma,,spec,เฟอร์รารี,PERFORMANCE,Ferrari,IT,,,Roma,COUPE,,,NICHE,Roma,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Ferrari,SF90,,spec,เฟอร์รารี,PERFORMANCE,Ferrari,IT,,,SF90,COUPE,,,NICHE,SF90,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Lamborghini,Urus,,spec,ลัมโบร์กีนี,PERFORMANCE,Lamborghini,IT,,,Urus,COUPE,,,NICHE,Urus,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Lamborghini,Huracan,,spec,ลัมโบร์กีนี,PERFORMANCE,Lamborghini,IT,,,Huracan,COUPE,,,NICHE,Huracan,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Lamborghini,Revuelto,,spec,ลัมโบร์กีนี,PERFORMANCE,Lamborghini,IT,,,Revuelto,COUPE,,,NICHE,Revuelto,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+McLaren,GTS,,spec,แมคลาเรน,PERFORMANCE,McLaren,GB,,,GTS,COUPE,,,NICHE,GTS,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Lotus,Eletre,,spec,โลตัส,PERFORMANCE,Lotus,GB,,,Eletre,COUPE,,,NICHE,Eletre,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Lotus,Emeya,,spec,โลตัส,PERFORMANCE,Lotus,GB,,,Emeya,COUPE,,,NICHE,Emeya,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Maserati,Grecale,,spec,มาเซราติ,PERFORMANCE,Maserati,IT,,,Grecale,COUPE,,,NICHE,Grecale,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Maserati,Levante,,spec,มาเซราติ,PERFORMANCE,Maserati,IT,,,Levante,COUPE,,,NICHE,Levante,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Maserati,GranTurismo,,spec,มาเซราติ,PERFORMANCE,Maserati,IT,,,GranTurismo,COUPE,,,NICHE,GranTurismo,D,2,2022-01-01,,ICE,AWD,3990,,,25000000,,,CBU,,seed-unverified
+Bentley,Bentayga,,spec,เบนท์ลีย์,PREMIUM_LUXURY,Volkswagen Group,GB,,,Bentayga,SEDAN,,,NICHE,Bentayga,E,5,2022-01-01,,PHEV,AWD,3996,18.0,,25000000,,,CBU,,seed-unverified
+Bentley,Flying Spur,,spec,เบนท์ลีย์,PREMIUM_LUXURY,Volkswagen Group,GB,,,Flying Spur,SEDAN,,,NICHE,Flying Spur,E,5,2022-01-01,,PHEV,AWD,3996,18.0,,25000000,,,CBU,,seed-unverified
+Rolls-Royce,Ghost,,spec,โรลส์-รอยซ์,PREMIUM_LUXURY,BMW Group,GB,,,Ghost,SEDAN,,,NICHE,Ghost,E,5,2022-01-01,,PHEV,AWD,3996,18.0,,25000000,,,CBU,,seed-unverified
+Land Rover,Defender,,3.0L MHEV,แลนด์โรเวอร์,PREMIUM_LUXURY,JLR,GB,,,ดีเฟนเดอร์,SUV,,,NICHE,defender,E,5,2020-01-01,,MHEV,AWD,2996,0.5,,6900000,,,CBU,GB,seed-unverified
+Land Rover,Range Rover,,3.0L MHEV,,,,,,,เรนจ์โรเวอร์,SUV,,,NICHE,range rover|evoque|velar|range rover sport,E,5,2022-01-01,,MHEV,AWD,2996,0.5,,12900000,,,CBU,GB,seed-unverified
+Jeep,Wrangler,,2.0L ICE,จี๊ป,MASS,Stellantis,US,,,แรงเลอร์,SUV,,,NICHE,wrangler|rubicon,D,5,2020-01-01,,ICE,4WD,1995,,,4290000,,,CBU,US,seed-unverified
+Mercedes-Benz,A-Class,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,เอ-คลาส,HATCHBACK,,,CORE,A 200|A200|A 250,C,5,2023-01-01,,ICE,RWD,1332,,,2190000,,,CKD,TH,seed-unverified
+Mercedes-Benz,CLE,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,ซีแอลอี,COUPE,,,CORE,CLE 300|CLE 200|AMG CLE 53|MERCEDES-AMG CLE 53,D,5,2023-01-01,,MHEV,RWD,1999,0.9,,3990000,,,CKD,TH,seed-unverified
+Mercedes-Benz,CLS,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,ซีแอลเอส,COUPE,,,CORE,CLS 220 d|CLS 300 d|AMG CLS 53,E,5,2023-01-01,,MHEV,RWD,1993,0.9,,4290000,,,CKD,TH,seed-unverified
+Mercedes-Benz,GLB,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,จีแอลบี,CROSSOVER,,,CORE,GLB 200|GLB 220,C,5,2023-01-01,,ICE,RWD,1332,,,2790000,,,CKD,TH,seed-unverified
+Mercedes-Benz,GLE,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,จีแอลอี,SUV,,,CORE,GLE 300 d|GLE 350 de|GLE 450|AMG GLE 53|MERCEDES-AMG GLE 53,E,5,2023-01-01,,MHEV,RWD,1993,0.9,,5290000,,,CKD,TH,seed-unverified
+Mercedes-Benz,GLS,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,จีแอลเอส,SUV,,,NICHE,GLS 350 d|GLS 450 d|GLS 450,E,5,2023-01-01,,MHEV,RWD,2925,0.9,,8290000,,,CKD,TH,seed-unverified
+Mercedes-Benz,S-Class,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,เอส-คลาส,SEDAN,,,CORE,S 350 d|S 450|S 500|S 580 e|Maybach S 580 e,E,5,2023-01-01,,PHEV,RWD,2999,28.6,,8990000,,,CKD,TH,seed-unverified
+Mercedes-Benz,EQE,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,อีคิวอี,SEDAN,,,CORE,EQE 300|EQE 350|AMG EQE 53|EQE 350 4MATIC SUV,E,5,2023-01-01,,BEV,RWD,,90.6,,4290000,,,CKD,TH,seed-unverified
+Mercedes-Benz,V-Class,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,วี-คลาส,VAN,,RY2,CORE,V 300 d|V 250,E,5,2023-01-01,,ICE,RWD,1950,,,4990000,,,CKD,TH,seed-unverified
+Mercedes-Benz,Vito,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,วีโต้,VAN,,RY2,COMMERCIAL,VITO 119 CDI|VITO 119,E,5,2023-01-01,,ICE,RWD,1950,,,2790000,,,CKD,TH,seed-unverified
+Mercedes-Benz,Sprinter,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,สปรินเตอร์,VAN,,RY2,COMMERCIAL,SPRINTER 419 CDI|SPRINTER 319 CDI|SPRINTER 388,E,5,2023-01-01,,ICE,RWD,2143,,,2990000,,,CKD,TH,seed-unverified
+Mercedes-Benz,G-Class,,spec,,PREMIUM_LUXURY,Mercedes-Benz Group,DE,,,จี-คลาส,SUV,,,NICHE,G 450 D|G 450 d|G400 D|G450 D|AMG G 63,E,5,2023-01-01,,ICE,RWD,2925,,,12900000,,,CKD,TH,seed-unverified
+BMW,2 Series Gran Coupe,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,ซีรีส์ 2,SEDAN,,,CORE,220 Gran Coupe|220i Gran Coupe|218i,C,5,2023-01-01,,ICE,AWD,1998,,,2390000,,,CKD,TH,seed-unverified
+BMW,4 Series,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,ซีรีส์ 4,COUPE,,,CORE,430i|420i|M440i|430i Coupe|430i Convertible|430i Cabrio,D,5,2023-01-01,,ICE,AWD,1998,,,3690000,,,CKD,TH,seed-unverified
+BMW,7 Series,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,ซีรีส์ 7,SEDAN,,,CORE,740d|750e|M760e|i7 xDrive60|i7 eDrive50,E,5,2023-01-01,,PHEV,AWD,2998,18.7,,7990000,,,CKD,TH,seed-unverified
+BMW,X4,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,เอ็กซ์4,CROSSOVER,,,CORE,X4 xDrive20d|X4 M,D,5,2023-01-01,,MHEV,AWD,1995,0.5,,3990000,,,CKD,TH,seed-unverified
+BMW,X5,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,เอ็กซ์5,SUV,,,CORE,X5 xDrive30d|X5 xDrive50e,E,5,2023-01-01,,PHEV,AWD,2998,25.7,,5490000,,,CKD,TH,seed-unverified
+BMW,X6,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,เอ็กซ์6,SUV,,,CORE,X6 xDrive40i,E,5,2023-01-01,,MHEV,AWD,2998,0.5,,5990000,,,CKD,TH,seed-unverified
+BMW,X7,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,เอ็กซ์7,SUV,,,CORE,X7 xDrive40d|X7 M50d,E,5,2023-01-01,,MHEV,AWD,2993,0.5,,6990000,,,CKD,TH,seed-unverified
+BMW,i5,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,ไอ5,SEDAN,,,CORE,i5 eDrive40|i5 M60|i5 eDrive40 Touring,E,5,2023-01-01,,BEV,AWD,,81.2,,4990000,,,CKD,TH,seed-unverified
+BMW,iX,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,ไอเอ็กซ์,SUV,,,CORE,iX xDrive50|iX xDrive40,E,5,2023-01-01,,BEV,AWD,,111.5,,5990000,,,CKD,TH,seed-unverified
+BMW,iX1,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,ไอเอ็กซ์1,CROSSOVER,,,CORE,iX1 eDrive20L|iX1 xDrive30,C,5,2023-01-01,,BEV,AWD,,66.5,,2599000,,,CKD,TH,seed-unverified
+BMW,Z4,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,แซด4,COUPE,,,NICHE,Z4 sDrive30i,D,5,2023-01-01,,ICE,AWD,1998,,,4290000,,,CKD,TH,seed-unverified
+BMW,XM,,spec,,PREMIUM_LUXURY,BMW Group,DE,,,เอ็กซ์เอ็ม,SUV,,,NICHE,XM 50e,E,5,2023-01-01,,PHEV,AWD,2998,25.7,,12900000,,,CKD,TH,seed-unverified
+Audi,A1,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,เอ1,HATCHBACK,,,NICHE,A1 SB,B,5,2023-01-01,,MHEV,AWD,1498,0.5,,2290000,,,CBU,DE,seed-unverified
+Audi,A4,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,เอ4,SEDAN,,,NICHE,A4 AV|A4,D,5,2023-01-01,,MHEV,AWD,1984,0.5,,3290000,,,CBU,DE,seed-unverified
+Audi,A5,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,เอ5,COUPE,,,NICHE,A5 CP|A5 SB|A5 Avant|A5,D,5,2023-01-01,,MHEV,AWD,1984,0.5,,3690000,,,CBU,DE,seed-unverified
+Audi,A7,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,เอ7,SEDAN,,,NICHE,A7 SB,E,5,2023-01-01,,MHEV,AWD,2995,0.5,,5490000,,,CBU,DE,seed-unverified
+Audi,A8,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,เอ8,SEDAN,,,NICHE,A8L|A8,E,5,2023-01-01,,MHEV,AWD,2995,0.5,,8990000,,,CBU,DE,seed-unverified
+Audi,Q8,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,คิว8,SUV,,,NICHE,Q8 SB|Q8 etron|Q8,E,5,2023-01-01,,MHEV,AWD,2995,0.5,,6490000,,,CBU,DE,seed-unverified
+Audi,TT,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,ทีที,COUPE,,,NICHE,TT Coupe|TT RS|TT,C,5,2023-01-01,,MHEV,AWD,1984,0.5,,3990000,,,CBU,DE,seed-unverified
+Audi,RS,,spec,,PREMIUM_LUXURY,Volkswagen Group,DE,,,อาร์เอส,SEDAN,,,NICHE,RS 4|RS 5|RS 7|RS Q8|S3,D,5,2023-01-01,,MHEV,AWD,2894,0.5,,8990000,,,CBU,DE,seed-unverified
+Honda,Step WGN,,2.0L HEV,,,,,,,สเต็ปแวกอน,MPV,,,GREY,step wgn|stepwgn,C,7,2022-01-01,,HEV,FWD,1993,1.1,,,,,,,grey import
+Honda,Odyssey,,2.0L HEV,,,,,,,โอดิสซี,MPV,,,GREY,odyssey,D,7,2021-01-01,,HEV,FWD,1993,1.1,,,,,,,grey import
+Mazda,Mazda6,,2.5L ICE,,,,,,,มาสด้า6,SEDAN,,,NICHE,mazda 6,D,5,2018-01-01,,ICE,FWD,2488,,,1890000,,,CBU,JP,seed-unverified
+Mazda,MX-5,,2.0L ICE,,,,,,,เอ็มเอ็กซ์-5,COUPE,,,NICHE,mx-5|roadster,B,2,2019-01-01,,ICE,RWD,1998,,,2790000,,,CBU,JP,seed-unverified
+Subaru,BRZ,,2.4L ICE,,,,,,,บีอาร์แซด,COUPE,,,NICHE,brz,D,4,2022-01-01,,ICE,RWD,2387,,,2390000,,,CBU,JP,seed-unverified
+Subaru,Outback,,2.5L ICE,,,,,,,เอาท์แบ็ค,WAGON,,,NICHE,outback,D,5,2021-01-01,,ICE,AWD,2498,,,2290000,,,CBU,JP,seed-unverified
+Mitsubishi,Outlander PHEV,,2.4L PHEV,,,,,,,เอาท์แลนเดอร์,CROSSOVER,,,GREY,outlander,D,7,2022-01-01,,PHEV,AWD,2359,20.0,,,,,,,grey import
+BYD,BYD T3,,50 kWh BEV,,,,,,,บีวายดี ที3,VAN,,RY3,COMMERCIAL,t3,UNKNOWN,2,2021-01-01,,BEV,FWD,,50.3,,999000,,,CBU,CN,seed-unverified
+GWM,Poer Sahar,,2.0L HEV,,,,,,,โพเออร์ ซาฮาร์,PICKUP,DOUBLE_CAB,,,poer sahar|sahar|poer,F,5,2025-09-01,,HEV,4WD,1998,1.8,,1399000,,,CBU,CN,seed-unverified
+Volkswagen,Caravelle,,2.0L ICE,โฟล์คสวาเกน,MASS,Volkswagen Group,DE,,,คาราเวล,VAN,,RY2,COMMERCIAL,caravelle|multivan|id buzz,E,9,2020-01-01,,ICE,FWD,1968,,,3290000,,,CBU,DE,seed-unverified
+Seres,Seres 3,,spec,เซเรส,BUDGET,Seres,CN,,,Seres 3,CROSSOVER,,,CORE,3,UNKNOWN,5,2023-01-01,,BEV,FWD,,53.6,,899000,,,CBU,CN,seed-unverified
+Sokon,Sokon EC35,,spec,โซคอน,BUDGET,Sokon,CN,,,Sokon EC35,VAN,,RY3,COMMERCIAL,EC35,UNKNOWN,2,2023-01-01,,BEV,FWD,,41.9,,849000,,,CBU,CN,seed-unverified
+Farizon,Farizon SV,,spec,ฟาริซอน,BUDGET,Farizon,CN,,,Farizon SV,VAN,,RY3,COMMERCIAL,SV,UNKNOWN,3,2023-01-01,,BEV,FWD,,83.0,,1690000,,,CBU,CN,seed-unverified
+Nextem,Nextem Orca,,spec,เน็กซ์เท็ม,BUDGET,Nextem,TH,,,Nextem Orca,VAN,,RY3,COMMERCIAL,Orca,UNKNOWN,2,2023-01-01,,BEV,FWD,,60.0,,1290000,,,CBU,TH,seed-unverified
+Daihatsu,Hijet,,spec,ไดฮัทสุ,BUDGET,Daihatsu,JP,,,Hijet,VAN,,RY3,COMMERCIAL,Hijet,UNKNOWN,2,2023-01-01,,ICE,FWD,658,,,590000,,,CBU,JP,seed-unverified
+XPeng,XPeng X9,,84 kWh BEV,,,,,,,เอ็กซ์เผิง เอ็กซ์9,MPV,,,,x9|xpeng x9,E,7,2025-03-01,,BEV,RWD,,84.5,,2599000,,,CBU,CN,seed-unverified
+BMW,3 Series,,2.0L PHEV,,,,,,,,,,,,320d|320i|318i|320Li|330Li|330e|M340i|M340i xDrive,,,,,,,,,,,,,,,
+BMW,5 Series,,2.0L PHEV,,,,,,,,,,,,520d|530e|540i,,,,,,,,,,,,,,,
+BMW,X1,,1.5L ICE,,,,,,,,,,,,X1 sDrive18i|X1 xDrive20d,,,,,,,,,,,,,,,
+BMW,X3,,2.0L MHEV AWD,,,,,,,,,,,,X3 xDrive20|X3 20 xDrive,,,,,,,,,,,,,,,
+BMW,i4,,84 kWh BEV,,,,,,,,,,,,i4 eDrive40|i4 M50,,,,,,,,,,,,,,,
+BMW,iX3,,80 kWh BEV,,,,,,,,,,,,iX3 Inspiring|iX3 Impressive,,,,,,,,,,,,,,,
+Mercedes-Benz,C-Class,,2.0L PHEV,,,,,,,,,,,,C 200|C 220 d|C 250|C250|C 300|C 300 e|C 350 e,,,,,,,,,,,,,,,
+Mercedes-Benz,E-Class,,2.0L MHEV,,,,,,,,,,,,E 200|E 220 d|E 300 e|E 350 e|E 300,,,,,,,,,,,,,,,
+Mercedes-Benz,GLA,,1.3L ICE,,,,,,,,,,,,GLA 200|GLA 250,,,,,,,,,,,,,,,
+Mercedes-Benz,GLC,,2.0L PHEV AWD,,,,,,,,,,,,GLC 200|GLC 220 d|GLC 300 d|GLC 300 e,,,,,,,,,,,,,,,
+Mercedes-Benz,EQS,,108 kWh BEV AWD,,,,,,,,,,,,EQS 450|EQS 500|EQS 580,,,,,,,,,,,,,,,
+GWM,Tank 300,,2.0L HEV 4WD,,,,,,,,,,,,TANK 300 HYBRID|300 HYBRID,,,,,,,,,,,,,,,
+GWM,Tank 500,,2.0L HEV 4WD,,,,,,,,,,,,TANK 500 HYBRID|500 HYBRID,,,,,,,,,,,,,,,
+Toyota,Alphard,,2.5L HEV AWD,,,,,,,,,,,,ALPHARD HYBRID|ALPHARD 2.5 HYBRID,,,,,,,,,,,,,,,
+MG,MG ES,,62 kWh BEV,,,,,,,,,,,,ES5|MG ES5,,,,,,,,,,,,,,,
+Nissan,Kicks e-Power,,1.2L REEV,,,,,,,,,,,,KICKS e-POWER,,,,,,,,,,,,,,,
+MG,MG3,,1.5L HEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+BYD,Atto 3,,60 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+GWM,Haval H6,,1.5L HEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+Neta,Neta V,,41 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+Changan,Deepal S07,,80 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+Aion,Aion Y Plus,,63 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+Chery,Omoda C5,,61 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+Zeekr,Zeekr X,,66 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+XPeng,XPeng G6,,88 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,
+Tesla,Model 3,,60 kWh BEV,,,,,true,,,,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,215 @@
+{
+  "brand": {
+    "id": "kia",
+    "name_en": "Kia",
+    "name_th": "เกีย",
+    "brand_segment": "MASS",
+    "oem_group": "Hyundai Motor Group",
+    "brand_origin": "KR",
+    "aliases": [
+      "เกีย"
+    ]
+  },
+  "models": [
+    {
+      "id": "carnival",
+      "name_en": "Carnival",
+      "name_th": "คาร์นิวัล",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY2",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "KA4",
+          "segment": "E",
+          "seats": 11,
+          "launched": "2021-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.2L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 2151,
+              "battery_kwh": null,
+              "aliases": [
+                "2.2 D SXL"
+              ],
+              "overrides": {},
+              "price_thb": 2399000,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2399000,
+              "price_max_thb": 2399000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ev6",
+      "name_en": "EV6",
+      "name_th": "อีวี6",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ev 6"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "CV",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "77 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 77.4,
+              "aliases": [
+                "GT-Line"
+              ],
+              "overrides": {},
+              "price_thb": 2199000,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2199000,
+              "price_max_thb": 2199000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ev9",
+      "name_en": "EV9",
+      "name_th": "อีวี9",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "ev 9"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MV",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "100 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 99.8,
+              "aliases": [
+                "GT-Line AWD"
+              ],
+              "overrides": {},
+              "price_thb": 3490000,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3490000,
+              "price_max_thb": 3490000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ev5",
+      "name_en": "EV5",
+      "name_th": "อีวี5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ev5"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2025-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "88 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 88.1,
+              "price_thb": 1899000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sorento",
+      "name_en": "Sorento",
+      "name_th": "โซเรนโต",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "sorento"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.6L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1598,
+              "battery_kwh": 1.5,
+              "price_thb": 2399000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

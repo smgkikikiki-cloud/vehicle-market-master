@@ -1,0 +1,134 @@
+{
+  "brand": {
+    "id": "tesla",
+    "name_en": "Tesla",
+    "name_th": "เทสลา",
+    "brand_segment": "PREMIUM_TECH",
+    "oem_group": "Tesla",
+    "brand_origin": "US",
+    "aliases": [
+      "เทสลา"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "model3",
+      "name_en": "Model 3",
+      "name_th": "โมเดล 3",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "model 3"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "M3H",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2022-12-07",
+          "ended": null,
+          "variants": [
+            {
+              "name": "60 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 60.0,
+              "aliases": [
+                "RWD"
+              ],
+              "overrides": {},
+              "price_thb": 1599000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1599000,
+              "price_max_thb": 1599000
+            },
+            {
+              "name": "79 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 79.0,
+              "aliases": [
+                "Long Range AWD"
+              ],
+              "overrides": {},
+              "price_thb": 1899000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1899000,
+              "price_max_thb": 1899000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "modely",
+      "name_en": "Model Y",
+      "name_th": "โมเดล วาย",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "model y"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MY",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2022-12-07",
+          "ended": null,
+          "variants": [
+            {
+              "name": "60 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 60.0,
+              "aliases": [
+                "RWD"
+              ],
+              "overrides": {},
+              "price_thb": 1799000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1799000,
+              "price_max_thb": 1799000
+            },
+            {
+              "name": "79 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 79.0,
+              "aliases": [
+                "Performance"
+              ],
+              "overrides": {},
+              "price_thb": 2509000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2509000,
+              "price_max_thb": 2509000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

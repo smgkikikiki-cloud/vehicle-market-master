@@ -1,0 +1,315 @@
+{
+  "brand": {
+    "id": "nissan",
+    "name_en": "Nissan",
+    "name_th": "นิสสัน",
+    "brand_segment": "MASS",
+    "oem_group": "Nissan",
+    "brand_origin": "JP",
+    "aliases": [
+      "นิสสัน"
+    ]
+  },
+  "models": [
+    {
+      "id": "almera",
+      "name_en": "Almera",
+      "name_th": "อัลเมร่า",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "อัลเมร่า"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "N18",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2019-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 999,
+              "battery_kwh": null,
+              "aliases": [
+                "1.0 Turbo VL"
+              ],
+              "overrides": {},
+              "price_thb": 679000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 679000,
+              "price_max_thb": 679000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kicks",
+      "name_en": "Kicks e-Power",
+      "name_th": "คิกส์ อี-พาวเวอร์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "kicks",
+        "คิกส์",
+        "KICKS e-POWER"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "P15",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2020-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.2L REEV",
+              "powertrain": "REEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1198,
+              "battery_kwh": 2.1,
+              "aliases": [
+                "e-Power VL"
+              ],
+              "overrides": {},
+              "price_thb": 1029000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1029000,
+              "price_max_thb": 1029000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "navara_cab",
+      "name_en": "Navara Cab",
+      "name_th": "นาวาร่า ตอนเดียว/แค็บ",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "SINGLE_SMART",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "navara cab",
+        "king cab",
+        "นาวาร่า ตอนเดียว",
+        "นาวาร่า แค็บ",
+        "Navara",
+        "นาวาร่า"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "D23",
+          "segment": "F",
+          "seats": 4,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2488,
+              "battery_kwh": null,
+              "aliases": [
+                "2.5 S",
+                "2.5 E"
+              ],
+              "overrides": {},
+              "price_thb": 569000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 569000,
+              "price_max_thb": 729000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "navara_double_cab",
+      "name_en": "Navara Double Cab",
+      "name_th": "นาวาร่า 4 ประตู",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "navara double cab",
+        "pro-4x",
+        "pro 4x",
+        "นาวาร่า 4 ประตู",
+        "Navara",
+        "นาวาร่า"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "D23",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2488,
+              "battery_kwh": null,
+              "aliases": [
+                "2.5 Pro-4X 4WD"
+              ],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "terra",
+      "name_en": "Terra",
+      "name_th": "เทอร์ร่า",
+      "nameplate": "",
+      "body_type": "PPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "D23T",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2018-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.3L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2298,
+              "battery_kwh": null,
+              "aliases": [
+                "2.3 VL 4WD"
+              ],
+              "overrides": {},
+              "price_thb": 1599000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1599000,
+              "price_max_thb": 1599000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "serena",
+      "name_en": "Serena",
+      "name_th": "เซเรน่า",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "GREY",
+      "aliases": [
+        "serena"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 8,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.4L REEV",
+              "powertrain": "REEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1433,
+              "battery_kwh": 1.8,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "grey import",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "x_trail",
+      "name_en": "X-Trail",
+      "name_th": "เอ็กซ์-เทรล",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "x-trail",
+        "xtrail",
+        "x trial",
+        "x-trial"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L REEV",
+              "powertrain": "REEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1497,
+              "battery_kwh": 2.1,
+              "price_thb": 1599000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

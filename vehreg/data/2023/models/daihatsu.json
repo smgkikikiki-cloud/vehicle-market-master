@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "daihatsu",
+    "name_en": "Daihatsu",
+    "name_th": "ไดฮัทสุ",
+    "brand_segment": "BUDGET",
+    "oem_group": "Daihatsu",
+    "brand_origin": "JP",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "hijet",
+      "name_en": "Hijet",
+      "name_th": "Hijet",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY3",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "Hijet"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 2,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 658,
+              "battery_kwh": null,
+              "price_thb": 590000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

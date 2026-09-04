@@ -1,0 +1,102 @@
+{
+  "brand": {
+    "id": "neta",
+    "name_en": "Neta",
+    "name_th": "เนต้า",
+    "brand_segment": "BUDGET",
+    "oem_group": "Hozon",
+    "brand_origin": "CN",
+    "aliases": [
+      "เนต้า",
+      "hozon"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "neta_v",
+      "name_en": "Neta V",
+      "name_th": "เนต้า วี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "neta v",
+        "v-ii"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "NV",
+          "segment": "A",
+          "seats": 5,
+          "launched": "2022-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "41 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 40.7,
+              "aliases": [
+                "Standard"
+              ],
+              "overrides": {},
+              "price_thb": 549000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 549000,
+              "price_max_thb": 549000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neta_x",
+      "name_en": "Neta X",
+      "name_th": "เนต้า เอ็กซ์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "neta x"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "NX",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "52 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 52.5,
+              "aliases": [
+                "Smart"
+              ],
+              "overrides": {},
+              "price_thb": 799000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 799000,
+              "price_max_thb": 799000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

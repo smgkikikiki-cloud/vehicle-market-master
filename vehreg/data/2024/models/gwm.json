@@ -1,0 +1,336 @@
+{
+  "brand": {
+    "id": "gwm",
+    "name_en": "GWM",
+    "name_th": "จีดับเบิลยูเอ็ม",
+    "brand_segment": "MASS",
+    "oem_group": "Great Wall Motor",
+    "brand_origin": "CN",
+    "aliases": [
+      "great wall",
+      "great wall motor",
+      "เกรทวอลล์",
+      "haval",
+      "ora",
+      "tank"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "haval_h6",
+      "name_en": "Haval H6",
+      "name_th": "ฮาวาล เอช6",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "h6",
+        "haval h6"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "H6HEV",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2021-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1497,
+              "battery_kwh": 1.8,
+              "aliases": [
+                "HEV Ultra"
+              ],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            },
+            {
+              "name": "1.5L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1497,
+              "battery_kwh": 34.0,
+              "aliases": [
+                "PHEV Ultra"
+              ],
+              "overrides": {},
+              "price_thb": 1449000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1449000,
+              "price_max_thb": 1449000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "haval_jolion",
+      "name_en": "Haval Jolion",
+      "name_th": "ฮาวาล โจเลี่ยน",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "jolion"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "JOL",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2021-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1497,
+              "battery_kwh": 1.7,
+              "aliases": [
+                "HEV Ultra"
+              ],
+              "overrides": {},
+              "price_thb": 879000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 879000,
+              "price_max_thb": 879000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ora_good_cat",
+      "name_en": "Ora Good Cat",
+      "name_th": "โอร่า กู๊ดแคท",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "good cat",
+        "ora"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "GC",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2021-02-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "63 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 63.1,
+              "aliases": [
+                "500 Ultra"
+              ],
+              "overrides": {},
+              "price_thb": 899000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 899000,
+              "price_max_thb": 899000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ora_03",
+      "name_en": "Ora 03",
+      "name_th": "โอร่า 03",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ora 03"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "O03",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "63 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 63.1,
+              "aliases": [
+                "500 Ultra"
+              ],
+              "overrides": {},
+              "price_thb": 829000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 829000,
+              "price_max_thb": 829000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tank300",
+      "name_en": "Tank 300",
+      "name_th": "แทงค์ 300",
+      "nameplate": "",
+      "body_type": "PPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "tank 300",
+        "TANK 300 HYBRID",
+        "300 HYBRID"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "T300",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L HEV 4WD",
+              "powertrain": "HEV",
+              "drivetrain": "4WD",
+              "engine_cc": 1998,
+              "battery_kwh": 1.8,
+              "aliases": [
+                "HEV Ultra 4WD"
+              ],
+              "overrides": {},
+              "price_thb": 1749000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1749000,
+              "price_max_thb": 1749000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tank500",
+      "name_en": "Tank 500",
+      "name_th": "แทงค์ 500",
+      "nameplate": "",
+      "body_type": "PPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "tank 500",
+        "TANK 500 HYBRID",
+        "500 HYBRID"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "T500",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2024-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L HEV 4WD",
+              "powertrain": "HEV",
+              "drivetrain": "4WD",
+              "engine_cc": 1998,
+              "battery_kwh": 1.8,
+              "aliases": [
+                "HEV Ultra 4WD"
+              ],
+              "overrides": {},
+              "price_thb": 2999000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2999000,
+              "price_max_thb": 2999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "poer_sahar",
+      "name_en": "Poer Sahar",
+      "name_th": "โพเออร์ ซาฮาร์",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "poer sahar",
+        "sahar",
+        "poer"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2025-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "4WD",
+              "engine_cc": 1998,
+              "battery_kwh": 1.8,
+              "price_thb": 1399000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

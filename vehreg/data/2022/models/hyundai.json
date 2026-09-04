@@ -1,0 +1,334 @@
+{
+  "brand": {
+    "id": "hyundai",
+    "name_en": "Hyundai",
+    "name_th": "ฮุนได",
+    "brand_segment": "MASS",
+    "oem_group": "Hyundai Motor Group",
+    "brand_origin": "KR",
+    "aliases": [
+      "ฮุนได"
+    ]
+  },
+  "models": [
+    {
+      "id": "creta",
+      "name_en": "Creta",
+      "name_th": "เครต้า",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "SU2",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1497,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 SEL"
+              ],
+              "overrides": {},
+              "price_thb": 999000,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "seed-unverified",
+              "price_min_thb": 999000,
+              "price_max_thb": 999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stargazer",
+      "name_en": "Stargazer",
+      "name_th": "สตาร์เกเซอร์",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "KS",
+          "segment": "B",
+          "seats": 7,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1497,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 Smart"
+              ],
+              "overrides": {},
+              "price_thb": 799000,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "seed-unverified",
+              "price_min_thb": 799000,
+              "price_max_thb": 799000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ioniq5",
+      "name_en": "Ioniq 5",
+      "name_th": "ไอออนิค 5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ioniq 5"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "NE",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2022-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "73 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 72.6,
+              "aliases": [
+                "Exclusive"
+              ],
+              "overrides": {},
+              "price_thb": 1849000,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1849000,
+              "price_max_thb": 1849000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ioniq6",
+      "name_en": "Ioniq 6",
+      "name_th": "ไอออนิค 6",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ioniq 6"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "CE",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "77 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 77.4,
+              "aliases": [
+                "Exclusive"
+              ],
+              "overrides": {},
+              "price_thb": 2299000,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2299000,
+              "price_max_thb": 2299000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "staria",
+      "name_en": "Staria",
+      "name_th": "สตาเรีย",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY2",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "US4",
+          "segment": "E",
+          "seats": 11,
+          "launched": "2021-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.2L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 2199,
+              "battery_kwh": null,
+              "aliases": [
+                "2.2 D Premium"
+              ],
+              "overrides": {},
+              "price_thb": 1899000,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1899000,
+              "price_max_thb": 1899000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "santa_fe",
+      "name_en": "Santa Fe",
+      "name_th": "ซานตาเฟ",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "santa fe"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2024-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.6L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1598,
+              "battery_kwh": 1.5,
+              "price_thb": 2299000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "palisade",
+      "name_en": "Palisade",
+      "name_th": "พาลิเสด",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "palisade"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2025-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.2L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 2199,
+              "battery_kwh": null,
+              "price_thb": 2799000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "h_1",
+      "name_en": "H-1",
+      "name_th": "เอช-1",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY2",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "h-1",
+        "h1"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 11,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2497,
+              "battery_kwh": null,
+              "price_thb": 1799000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "KR",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

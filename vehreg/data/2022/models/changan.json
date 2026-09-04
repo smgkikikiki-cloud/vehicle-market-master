@@ -1,0 +1,142 @@
+{
+  "brand": {
+    "id": "changan",
+    "name_en": "Changan",
+    "name_th": "ฉางอาน",
+    "brand_segment": "MASS",
+    "oem_group": "Changan",
+    "brand_origin": "CN",
+    "aliases": [
+      "ฉางอาน",
+      "deepal",
+      "ดีพัล",
+      "avatr"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "deepal_s07",
+      "name_en": "Deepal S07",
+      "name_th": "ดีพัล เอส07",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "deepal s07",
+        "s07"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "S07",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "80 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 79.9,
+              "aliases": [
+                "Long Range"
+              ],
+              "overrides": {},
+              "price_thb": 1359000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1359000,
+              "price_max_thb": 1359000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deepal_l07",
+      "name_en": "Deepal L07",
+      "name_th": "ดีพัล แอล07",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "l07"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "L07",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2024-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "80 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 79.9,
+              "aliases": [
+                "Long Range"
+              ],
+              "overrides": {},
+              "price_thb": 1099000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1099000,
+              "price_max_thb": 1099000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "changan_lumin",
+      "name_en": "Changan Lumin",
+      "name_th": "ฉางอาน ลูมิน",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "lumin"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "A",
+          "seats": 4,
+          "launched": "2025-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "33 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 32.8,
+              "price_thb": 479000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

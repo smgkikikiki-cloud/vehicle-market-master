@@ -1,0 +1,377 @@
+{
+  "brand": {
+    "id": "lexus",
+    "name_en": "Lexus",
+    "name_th": "เล็กซัส",
+    "brand_segment": "PREMIUM_LUXURY",
+    "oem_group": "Toyota Group",
+    "brand_origin": "JP",
+    "aliases": [
+      "เล็กซัส"
+    ]
+  },
+  "models": [
+    {
+      "id": "lexus_es",
+      "name_en": "ES",
+      "name_th": "อีเอส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "es300h"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "XZ10",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 2487,
+              "battery_kwh": 1.0,
+              "aliases": [
+                "ES300h Grand Luxury"
+              ],
+              "overrides": {},
+              "price_thb": 3690000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3690000,
+              "price_max_thb": 3690000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lexus_nx",
+      "name_en": "NX",
+      "name_th": "เอ็นเอ็กซ์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "nx350h",
+        "nx450h"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "AZ20",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L HEV AWD",
+              "powertrain": "HEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2487,
+              "battery_kwh": 1.0,
+              "aliases": [
+                "NX350h Premium"
+              ],
+              "overrides": {},
+              "price_thb": 3690000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3690000,
+              "price_max_thb": 3690000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lexus_rx",
+      "name_en": "RX",
+      "name_th": "อาร์เอ็กซ์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "rx350h"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "AL30",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L HEV AWD",
+              "powertrain": "HEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2487,
+              "battery_kwh": 1.0,
+              "aliases": [
+                "RX350h Premium"
+              ],
+              "overrides": {},
+              "price_thb": 4790000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 4790000,
+              "price_max_thb": 4790000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lexus_lm",
+      "name_en": "LM",
+      "name_th": "แอลเอ็ม",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "lm350h",
+        "lm500h"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "AH40L",
+          "segment": "E",
+          "seats": 4,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 2487,
+              "battery_kwh": 1.0,
+              "aliases": [
+                "LM350h Executive"
+              ],
+              "overrides": {},
+              "price_thb": 7990000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 7990000,
+              "price_max_thb": 7990000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lbx",
+      "name_en": "LBX",
+      "name_th": "แอลบีเอ็กซ์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "LBX"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1490,
+              "battery_kwh": 1.0,
+              "price_thb": 2490000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ux",
+      "name_en": "UX",
+      "name_th": "ยูเอ็กซ์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "UX"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1490,
+              "battery_kwh": 1.0,
+              "price_thb": 2490000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rz",
+      "name_en": "RZ",
+      "name_th": "อาร์แซด",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "RZ"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1490,
+              "battery_kwh": 1.0,
+              "price_thb": 2490000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lx",
+      "name_en": "LX",
+      "name_th": "แอลเอ็กซ์",
+      "nameplate": "",
+      "body_type": "PPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "lx",
+        "lx600"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "3.4L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 3444,
+              "battery_kwh": null,
+              "price_thb": 7990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lc",
+      "name_en": "LC",
+      "name_th": "แอลซี",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "lc",
+        "lc500"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 4,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "5.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 4969,
+              "battery_kwh": null,
+              "price_thb": 12900000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

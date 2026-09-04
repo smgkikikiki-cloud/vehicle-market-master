@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "geely",
+    "name_en": "Geely",
+    "name_th": "จีลี่",
+    "brand_segment": "MASS",
+    "oem_group": "Geely",
+    "brand_origin": "CN",
+    "trim_detail": true,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "geely_ex5",
+      "name_en": "Geely EX5",
+      "name_th": "จีลี่ อีเอ็กซ์5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ex5"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2025-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "60 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 60.2,
+              "price_thb": 949000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

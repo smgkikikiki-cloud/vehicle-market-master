@@ -1,0 +1,97 @@
+{
+  "brand": {
+    "id": "xpeng",
+    "name_en": "XPeng",
+    "name_th": "เอ็กซ์เผิง",
+    "brand_segment": "PREMIUM_TECH",
+    "oem_group": "XPeng",
+    "brand_origin": "CN",
+    "aliases": [
+      "xpeng"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "xpeng_g6",
+      "name_en": "XPeng G6",
+      "name_th": "เอ็กซ์เผิง จี6",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "g6"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "G6",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2024-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "88 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 87.5,
+              "aliases": [
+                "Long Range"
+              ],
+              "overrides": {},
+              "price_thb": 1359000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1359000,
+              "price_max_thb": 1359000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xpeng_x9",
+      "name_en": "XPeng X9",
+      "name_th": "เอ็กซ์เผิง เอ็กซ์9",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "x9",
+        "xpeng x9"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2025-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "84 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 84.5,
+              "price_thb": 2599000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

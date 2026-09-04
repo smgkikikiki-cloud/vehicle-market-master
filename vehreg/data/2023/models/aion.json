@@ -1,0 +1,236 @@
+{
+  "brand": {
+    "id": "aion",
+    "name_en": "Aion",
+    "name_th": "ไอออน",
+    "brand_segment": "MASS",
+    "oem_group": "GAC",
+    "brand_origin": "CN",
+    "aliases": [
+      "gac aion",
+      "ไอออน"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "aion_y_plus",
+      "name_en": "Aion Y Plus",
+      "name_th": "ไอออน วาย พลัส",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "aion y",
+        "y plus"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "AYP",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2023-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "63 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 63.2,
+              "aliases": [
+                "Premium 490"
+              ],
+              "overrides": {},
+              "price_thb": 949000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 949000,
+              "price_max_thb": 949000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aion_es",
+      "name_en": "Aion ES",
+      "name_th": "ไอออน อีเอส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "aion es"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "AES",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-04-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "55 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 55.0,
+              "aliases": [
+                "Standard"
+              ],
+              "overrides": {},
+              "price_thb": 699000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 699000,
+              "price_max_thb": 699000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aion_v",
+      "name_en": "Aion V",
+      "name_th": "ไอออน วี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "aion v"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "AV",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2025-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "75 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 75.3,
+              "aliases": [
+                "Luxury"
+              ],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aion_ut",
+      "name_en": "Aion UT",
+      "name_th": "ไอออน ยูที",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ut",
+        "aion ut"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2025-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "44 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 44.2,
+              "price_thb": 459000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            },
+            {
+              "name": "53 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 52.9,
+              "price_thb": 559000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hyptec_ht",
+      "name_en": "Hyptec HT",
+      "name_th": "ไฮเทค เอชที",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "hyptec ht",
+        "hyptec"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2025-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "77 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 76.8,
+              "price_thb": 1299000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

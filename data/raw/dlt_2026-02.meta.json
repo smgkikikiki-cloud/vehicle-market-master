@@ -1,0 +1,13 @@
+{
+  "period": "2026-02",
+  "resource_id": "c54fcd06-1d8a-4c8e-baae-e516dbf529b7",
+  "resource_name": "รถจดทะเบียนครั้งแรก (รถยนต์)-จำแนกตามยี่ห้อและรุ่น กุมภาพันธ์ 2569",
+  "package_id": "59a045dc-3ec4-4908-b035-ba789101b7f5",
+  "api": "https://gdcatalog.dlt.go.th/api/3/action/datastore_search?resource_id=c54fcd06-1d8a-4c8e-baae-e516dbf529b7",
+  "fetched_at": "2026-09-03T17:12:41+00:00",
+  "rows_from_dlt": 6,
+  "rows_kept": 6,
+  "units_kept": 18,
+  "skipped_units_by_class": {},
+  "sha256": "b0668111e3d8170562b928056814daceab7f1991508ce74c314e38dbb3bf42b0"
+}

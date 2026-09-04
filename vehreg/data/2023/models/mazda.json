@@ -1,0 +1,531 @@
+{
+  "brand": {
+    "id": "mazda",
+    "name_en": "Mazda",
+    "name_th": "มาสด้า",
+    "brand_segment": "MASS",
+    "oem_group": "Mazda",
+    "brand_origin": "JP",
+    "aliases": [
+      "มาสด้า"
+    ]
+  },
+  "models": [
+    {
+      "id": "mazda2",
+      "name_en": "Mazda2",
+      "name_th": "มาสด้า2",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mazda 2",
+        "mazda2 sedan",
+        "มาสด้า 2"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "DJ",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2019-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.3L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1298,
+              "battery_kwh": null,
+              "aliases": [
+                "1.3 S",
+                "1.3 SP"
+              ],
+              "overrides": {},
+              "price_thb": 546000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 546000,
+              "price_max_thb": 749000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mazda2_hatchback",
+      "name_en": "Mazda2 Hatchback",
+      "name_th": "มาสด้า2 แฮทช์แบ็ก",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mazda 2 hatchback",
+        "mazda2 5 ประตู",
+        "มาสด้า 2 แฮทช์แบ็ก"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "DJ",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2019-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.3L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1298,
+              "battery_kwh": null,
+              "aliases": [
+                "1.3 SP"
+              ],
+              "overrides": {},
+              "price_thb": 799000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 799000,
+              "price_max_thb": 799000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mazda3",
+      "name_en": "Mazda3",
+      "name_th": "มาสด้า3",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mazda 3"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "BP",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2019-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 SP"
+              ],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mazda3_hatchback",
+      "name_en": "Mazda3 Hatchback",
+      "name_th": "มาสด้า3 แฮทช์แบ็ก",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mazda 3 hatchback",
+        "มาสด้า 3 แฮทช์แบ็ก"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "BP",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2019-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 SP"
+              ],
+              "overrides": {},
+              "price_thb": 1249000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1249000,
+              "price_max_thb": 1249000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cx3",
+      "name_en": "CX-3",
+      "name_th": "ซีเอ็กซ์-3",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "cx 3",
+        "cx3"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "DK",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 Base Plus"
+              ],
+              "overrides": {},
+              "price_thb": 799000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 799000,
+              "price_max_thb": 799000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cx30",
+      "name_en": "CX-30",
+      "name_th": "ซีเอ็กซ์-30",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "cx 30",
+        "cx30"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "DM",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2019-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 SP"
+              ],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cx5",
+      "name_en": "CX-5",
+      "name_th": "ซีเอ็กซ์-5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "cx 5",
+        "cx5"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "KF",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2017-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 SP"
+              ],
+              "overrides": {},
+              "price_thb": 1490000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1490000,
+              "price_max_thb": 1490000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cx8",
+      "name_en": "CX-8",
+      "name_th": "ซีเอ็กซ์-8",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "cx 8",
+        "cx8"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "KG",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 2488,
+              "battery_kwh": null,
+              "aliases": [
+                "2.5 SP"
+              ],
+              "overrides": {},
+              "price_thb": 1699000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1699000,
+              "price_max_thb": 1699000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bt50_cab",
+      "name_en": "BT-50 Cab",
+      "name_th": "บีที-50 ตอนเดียว/แค็บ",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "SINGLE_SMART",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "bt 50 cab",
+        "freestyle cab",
+        "bt50 ตอนเดียว",
+        "bt50 แค็บ",
+        "BT-50",
+        "บีที-50"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "TFR",
+          "segment": "F",
+          "seats": 4,
+          "launched": "2020-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.9L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1898,
+              "battery_kwh": null,
+              "aliases": [
+                "1.9 S",
+                "1.9 C"
+              ],
+              "overrides": {},
+              "price_thb": 559000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 559000,
+              "price_max_thb": 729000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bt50_double_cab",
+      "name_en": "BT-50 Double Cab",
+      "name_th": "บีที-50 4 ประตู",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "bt 50 double cab",
+        "bt50 4 ประตู",
+        "BT-50",
+        "บีที-50"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "TFR",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2020-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "3.0L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2999,
+              "battery_kwh": null,
+              "aliases": [
+                "3.0 SP 4x4"
+              ],
+              "overrides": {},
+              "price_thb": 1249000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1249000,
+              "price_max_thb": 1249000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mazda6",
+      "name_en": "Mazda6",
+      "name_th": "มาสด้า6",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "mazda 6"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 2488,
+              "battery_kwh": null,
+              "price_thb": 1890000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mx_5",
+      "name_en": "MX-5",
+      "name_th": "เอ็มเอ็กซ์-5",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "mx-5",
+        "roadster"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 2,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1998,
+              "battery_kwh": null,
+              "price_thb": 2790000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

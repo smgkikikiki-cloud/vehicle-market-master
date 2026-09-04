@@ -1,0 +1,53 @@
+{
+  "brand": {
+    "id": "mine_mobility",
+    "name_en": "Mine Mobility",
+    "name_th": "มายน์",
+    "brand_segment": "BUDGET",
+    "oem_group": "EA",
+    "brand_origin": "TH",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "mine_mts",
+      "name_en": "Mine MTS",
+      "name_th": "มายน์ เอ็มทีเอส",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "mts",
+        "mts-mt30"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "30 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 30.0,
+              "price_thb": 1190000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

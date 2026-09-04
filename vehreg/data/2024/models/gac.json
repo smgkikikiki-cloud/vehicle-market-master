@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "gac",
+    "name_en": "GAC",
+    "name_th": "จีเอซี",
+    "brand_segment": "MASS",
+    "oem_group": "GAC",
+    "brand_origin": "CN",
+    "trim_detail": true,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "gac_m8",
+      "name_en": "GAC M8",
+      "name_th": "จีเอซี เอ็ม8",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "m8"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2025-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1998,
+              "battery_kwh": 25.6,
+              "price_thb": 2399000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

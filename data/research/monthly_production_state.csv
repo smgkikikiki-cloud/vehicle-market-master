@@ -19,6 +19,7 @@ unit_id,grain,effective_month,origin_country,import_type,source_url,evidence
 "deepal.deepal_s05",MODEL,2025-05,TH,CKD,"https://www.changan.co.th/th/news/Changan-Manufacturing-Facility-in-Thailand-th/","CHANGAN Rayong factory opened May 2025 with DEEPAL S05 produced at the plant"
 "deepal.deepal_s07",MODEL,2024-01,CN,CBU,"https://www.globalchangan.com/newsroom/the-vast-ocean-plan-first-batch-of-the-deepal-handover-in-thailand.html","Initial Thai-market S07 deliveries preceded operation of the Thailand factory, so early units are imported"
 "deepal.deepal_l07",MODEL,2024-01,CN,CBU,"https://www.globalchangan.com/newsroom/the-vast-ocean-plan-first-batch-of-the-deepal-handover-in-thailand.html","Initial Thai-market L07 deliveries preceded operation of the Thailand factory, so early units are imported"
+"honda.brv",MODEL,2022-08,ID,CBU,"https://www.aseancap.org/x/result.php?slug=honda-br-v-2022","ASEAN NCAP lists Indonesia as production origin for Thailand-market second-generation BR-V"
 "honda.wrv",MODEL,2023-08,ID,CBU,,"Thai-market WR-V is imported from Indonesia; corrects seed catalog local-assembly error"
 "subaru.forester",MODEL,2022-01,TH,CKD,,"Forester was assembled in Thailand during the dataset's early years"
 "subaru.forester",MODEL,2025-01,JP,CBU,,"After Thai assembly ended, subsequent Thai-market Forester supply is imported"

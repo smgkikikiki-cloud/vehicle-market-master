@@ -1,16 +1,16 @@
 {
-  "period": "2026-02",
+  "period": "2026-07",
   "source_kind": "provincial_aggregate_backfill",
   "publisher": "DLT",
   "source_file": "รถใหม่_ยี่ห้อรถ-รุ่นรถ-จังหวัด ปี 2564 - กรกฎาคม 2569.xlsx",
   "source_file_sha256": "47409b0ee2a1fbd1feccb291a4eaba24453cbbb94f2f9f89127ad1e37f0b5a40",
   "source_scope": "sum of all registration provinces; RY1/RY2/RY3 only",
-  "rows_kept": 592,
-  "units_kept": 48847,
-  "units_by_registration_type": {"RY1": 41492, "RY2": 1307, "RY3": 6048},
+  "rows_kept": 588,
+  "units_kept": 58402,
+  "units_by_registration_type": {"RY1": 50964, "RY2": 1184, "RY3": 6254},
   "canonicalization": "Raw brand/model labels are preserved here. TDR catalog Resolver and reporting apply canonical taxonomy and fold ordinary subvariants; friend/workbook segment labels are not used.",
   "methodology_note": "Derived from a private DLT province × brand × model workbook. Province is registration location, not dealer retail-sales territory.",
-  "sha256": "6a35708c4a27a01c6f498c054a00fdcdc9b6924cfde9cc6ed7c3945175a1cf6f",
+  "sha256": "0009c8747ceba7ada8c548ad02bfea6c2b44ad13b6969f9e7a8472031b4d594d",
   "storage": "gzip",
-  "uncompressed_sha256": "7c84936107e8c9e1b6915de707d220b499bde0b2223d4480153b067ef6b8f62b"
+  "uncompressed_sha256": "075a3af74592c152b685063a1e65974d7ac892e76940abba29e83c38afff55bf"
 }

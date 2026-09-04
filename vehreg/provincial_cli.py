@@ -13,6 +13,8 @@ from .provincial import (
 )
 from .web_bootstrap import database_path
 
+DEFAULT_SOURCE_NAME = "DLT Provincial Brand-Model-Province"
+
 
 def _catalogs(conn) -> dict[int, Catalog]:
     out: dict[int, Catalog] = {}
@@ -31,7 +33,7 @@ def cmd_ingest(args: argparse.Namespace) -> int:
         conn,
         catalogs,
         Path(args.path),
-        source_name=args.source_name,
+        source_name=args.source_name or DEFAULT_SOURCE_NAME,
     )
     print(report.render())
     if not report.unchanged:
@@ -81,12 +83,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Admin utilities for TDR provincial registration data"
     )
-    parser.add_argument("--db", help="SQLite DB path; defaults to VEHREG_DB/data/vehreg.sqlite3")
+    parser.add_argument(
+        "--db", help="SQLite DB path; defaults to VEHREG_DB/data/vehreg.sqlite3"
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     ingest = sub.add_parser("ingest", help="ingest DLT brand-model-province XLSX")
     ingest.add_argument("path", help="path to the DLT provincial XLSX workbook")
-    ingest.add_argument("--source-name", default=None)
+    ingest.add_argument(
+        "--source-name",
+        default=None,
+        help=(
+            "override the stable snapshot source key; normally leave this unset so "
+            "a newer workbook replaces the prior snapshot instead of double-counting"
+        ),
+    )
     ingest.set_defaults(func=cmd_ingest)
 
     qa = sub.add_parser("qa", help="show provincial vs national reconciliation")

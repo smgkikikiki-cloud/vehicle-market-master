@@ -310,6 +310,88 @@
           ]
         }
       ]
+    },
+    {
+      "id": "march",
+      "name_en": "March",
+      "name_th": "มาร์ช",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "มาร์ช",
+        "march"
+      ],
+      "notes": "เพิ่มย้อนหลังเพื่อจับคู่ยอดจดทะเบียนปี 2565–2568 รุ่นนี้เลิกจำหน่ายแล้ว ราคายังไม่ได้กรอก",
+      "generations": [
+        {
+          "code": "K13",
+          "segment": "A",
+          "seats": 5,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1198,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "not-researched",
+              "price_min_thb": null,
+              "price_max_thb": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "note",
+      "name_en": "Note",
+      "name_th": "โน๊ต",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "โน๊ต",
+        "note"
+      ],
+      "notes": "เพิ่มย้อนหลังเพื่อจับคู่ยอดจดทะเบียนปี 2565–2568 รุ่นนี้เลิกจำหน่ายแล้ว ราคายังไม่ได้กรอก",
+      "generations": [
+        {
+          "code": "E12",
+          "segment": "B",
+          "seats": 5,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1198,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "not-researched",
+              "price_min_thb": null,
+              "price_max_thb": null
+            }
+          ]
+        }
+      ]
     }
   ]
 }

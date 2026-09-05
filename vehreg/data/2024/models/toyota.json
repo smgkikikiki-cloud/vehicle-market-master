@@ -1304,6 +1304,88 @@
           ]
         }
       ]
+    },
+    {
+      "id": "vios",
+      "name_en": "Vios",
+      "name_th": "วีออส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "วีออส",
+        "vios"
+      ],
+      "notes": "เพิ่มย้อนหลังเพื่อจับคู่ยอดจดทะเบียนปี 2565–2568 รุ่นนี้เลิกจำหน่ายแล้ว ราคายังไม่ได้กรอก",
+      "generations": [
+        {
+          "code": "XP150",
+          "segment": "B",
+          "seats": 5,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1496,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "not-researched",
+              "price_min_thb": null,
+              "price_max_thb": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sienta",
+      "name_en": "Sienta",
+      "name_th": "เซียนต้า",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "เซียนต้า",
+        "sienta"
+      ],
+      "notes": "เพิ่มย้อนหลังเพื่อจับคู่ยอดจดทะเบียนปี 2565–2568 รุ่นนี้เลิกจำหน่ายแล้ว ราคายังไม่ได้กรอก",
+      "generations": [
+        {
+          "code": "XP170",
+          "segment": "B",
+          "seats": 7,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1496,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "not-researched",
+              "price_min_thb": null,
+              "price_max_thb": null
+            }
+          ]
+        }
+      ]
     }
   ]
 }

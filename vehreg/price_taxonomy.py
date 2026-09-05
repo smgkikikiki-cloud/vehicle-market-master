@@ -78,6 +78,11 @@ def price_band_sql(outer_alias: str = "q") -> str:
     consensus of all child variant bands in ``dim_unit`` for the same catalog
     year. Thus two differently priced trims that both sit below 1M still roll up
     to UNDER_1M, while a model straddling 1M or 2M becomes MIXED.
+
+    A folded row with no variant children falls back to its own price rather
+    than reporting UNKNOWN: the price is right there on the row, and a model
+    carried at MODEL grain on purpose is the normal case in this catalog, not
+    an incomplete one. With no price either, the fallback is UNKNOWN as before.
     """
     direct = _variant_band_sql(outer_alias)
     child = _variant_band_sql("pbv")
@@ -91,7 +96,7 @@ def price_band_sql(outer_alias: str = "q") -> str:
         f"WHEN {outer_alias}.grain = 'VARIANT' THEN ({direct}) "
         f"WHEN {outer_alias}.grain IN ('MODEL', 'BRAND') THEN CASE "
         f"WHEN (SELECT COUNT(*) FROM dim_unit pbv WHERE {where}) = 0 "
-        f"THEN '{UNKNOWN}' "
+        f"THEN ({direct}) "
         f"WHEN (SELECT COUNT(DISTINCT ({child})) FROM dim_unit pbv WHERE {where}) = 1 "
         f"THEN (SELECT ({child}) FROM dim_unit pbv WHERE {where} LIMIT 1) "
         f"ELSE '{MIXED}' END "

@@ -10,10 +10,12 @@ from .catalog import DATA_DIR, Catalog, available_years
 from .db import connect, rebuild_dimension
 from .ingest import ingest_csv
 from .monthly_state import ensure_schema as ensure_monthly_schema
+from .state_seed import load_seed_csv
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB_PATH = ROOT / "data" / "vehreg.sqlite3"
 DEFAULT_RAW_DIR = ROOT / "data" / "raw"
+DEFAULT_STATE_SEED = ROOT / "data" / "research" / "monthly_production_state.csv"
 PROVINCIAL_SOURCE_NAME = "DLT Provincial Brand-Model-Province"
 
 
@@ -24,6 +26,12 @@ def database_path() -> Path:
 def bootstrap_database(db_path: Path | str | None = None,
                        raw_dir: Path | str | None = None) -> dict[str, object]:
     """Build dimensions and ingest configured DLT sources idempotently.
+
+    The committed month-effective production seed is applied on every boot.
+    Without it a fresh database reports Thailand-built volume about three
+    points low, because models such as HAVAL H6 and TANK 300 keep their
+    imported origin for the months before the seed's change-points. Re-running
+    is safe: ``load_seed_csv`` is idempotent.
 
     National monthly CSVs remain committed under ``data/raw`` as before.
     Provincial data is intentionally private: when
@@ -67,6 +75,14 @@ def bootstrap_database(db_path: Path | str | None = None,
                    colmap=dlt.column_map(), publisher="DLT")
         ingested.append(period)
 
+    seeded: dict[str, object] | None = None
+    seed_path = Path(os.environ.get("VEHREG_STATE_SEED", str(DEFAULT_STATE_SEED)))
+    if seed_path.exists():
+        report = load_seed_csv(conn, seed_path)
+        seeded = {"path": str(seed_path), "rows": report["rows"],
+                  "applied": report["applied"], "unchanged": report["unchanged"],
+                  "errors": report["errors"]}
+
     provincial_state: dict[str, object] | None = None
     provincial_env = os.environ.get("VEHREG_PROVINCIAL_XLSX", "").strip()
     if provincial_env:
@@ -102,6 +118,7 @@ def bootstrap_database(db_path: Path | str | None = None,
     return {
         "years": rebuilt,
         "ingested": ingested,
+        "state_seed": seeded,
         "provincial": provincial_state,
         "db": str(db),
     }

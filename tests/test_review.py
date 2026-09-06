@@ -278,6 +278,27 @@ class LessonTests(unittest.TestCase):
                     f"SELECT COUNT(*) AS n FROM {table}").fetchone()["n"], 0)
 
 
+class KnownModelsTests(unittest.TestCase):
+    """The context the catalog tab shows beside an unmatched label."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.dir = Path(self.temp.name)
+        written(tiny_payload(), self.dir, YEAR)
+        self.catalog = Catalog.load(self.dir, YEAR)
+
+    def test_it_lists_the_brands_models_with_their_aliases(self):
+        rows = review.known_models(self.catalog, "acme")
+        self.assertEqual([row["model"] for row in rows],
+                         sorted(row["model"] for row in rows))
+        runner = next(r for r in rows if r["id"] == "acme.runner_cab")
+        self.assertIn("Runner", str(runner["aliases"]))
+
+    def test_an_unknown_brand_lists_nothing_rather_than_raising(self):
+        self.assertEqual(review.known_models(self.catalog, "nobody"), [])
+
+
 class MigrationTests(unittest.TestCase):
     def test_a_database_built_before_reg_type_gains_the_column(self):
         temp = tempfile.TemporaryDirectory()

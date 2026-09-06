@@ -30,7 +30,10 @@
         "320Li",
         "330Li",
         "M340i",
-        "M340i xDrive"
+        "M340i xDrive",
+        "318d",
+        "328i",
+        "330i"
       ],
       "notes": "",
       "generations": [
@@ -75,7 +78,11 @@
         "530e",
         "series 5",
         "520d",
-        "540i"
+        "540i",
+        "520i",
+        "525d",
+        "528i",
+        "530i"
       ],
       "notes": "",
       "generations": [
@@ -338,7 +345,9 @@
         "M440i",
         "430i Coupe",
         "430i Convertible",
-        "430i Cabrio"
+        "430i Cabrio",
+        "420d",
+        "430d"
       ],
       "generations": [
         {
@@ -380,7 +389,13 @@
         "750e",
         "M760e",
         "i7 xDrive60",
-        "i7 eDrive50"
+        "i7 eDrive50",
+        "725Ld",
+        "730Ld",
+        "740Le",
+        "740Li",
+        "745Le",
+        "M760Li"
       ],
       "generations": [
         {

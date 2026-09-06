@@ -207,16 +207,37 @@ with tabs[1]:
     ])
     ui.download_table(flat, stem="catalog_gaps", period="all",
                       label="ดาวน์โหลดรายการที่ต้องเพิ่ม (CSV)")
+    st.caption(
+        "⚠︎ ไม่ใช่ทุกป้ายที่ต้องเพิ่มเป็น 'รุ่นใหม่' — บางอันคือรุ่นย่อยของรุ่นที่มีอยู่แล้ว "
+        "เช่น BMW 745Le คือ 7 Series ที่ยังไม่มี alias ถ้าเพิ่มเป็นรุ่นแยก 7 Series "
+        "จะแตกเป็นสิบชิ้นและตัวเลขทุกตัวหลังจากนั้นผิดหมด "
+        "กูลองเขียนกฎให้มันแยกเองแล้วมันพัง (Q7 ไปเจอ Q3, Model X ไปเจอ Model 3 "
+        "ได้คะแนนเต็มทั้งคู่) เลยเอารายชื่อที่ catalog มีอยู่มาวางไว้ข้างๆ ให้มึงตัดสินเอง"
+    )
     for gap in gaps[:12]:
         with st.expander(f"{gap['brand']} — {float(gap['units']):,.0f} คัน · "
                          f"{gap['labels']} ป้าย"):
-            st.dataframe(
+            missing, existing = st.columns(2)
+            missing.caption("**ที่ DLT มี แต่ catalog ไม่รู้จัก**")
+            missing.dataframe(
                 pd.DataFrame(gap["models"]).rename(columns={
                     "model": "รุ่นตามที่ DLT เขียน", "units": "คัน",
                     "years": "ปี", "months": "จำนวนเดือน"}),
-                width="stretch", hide_index=True,
+                width="stretch", hide_index=True, height=280,
                 column_config={"คัน": st.column_config.NumberColumn(
                     format="%.0f")})
+            existing.caption("**ที่ catalog มีอยู่แล้ว — เติม alias ตรงนี้ได้มั้ย**")
+            year = max(gap["years"]) if gap["years"] else None
+            brand_id = str(gap["brand_id"] or "")
+            if brand_id and year in catalogs():
+                existing.dataframe(
+                    pd.DataFrame(review.known_models(catalogs()[year],
+                                                     brand_id)).rename(
+                        columns={"model": "รุ่น", "id": "id",
+                                 "aliases": "alias ที่มีแล้ว"}),
+                    width="stretch", hide_index=True, height=280)
+            else:
+                existing.info("ยังจับยี่ห้อนี้เข้า catalog ไม่ได้ ต้องเพิ่มยี่ห้อก่อน")
 
 
 # ------------------------------------------------------------ better source

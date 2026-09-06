@@ -456,6 +456,24 @@ def dismiss(conn: sqlite3.Connection, items: Item | Sequence[Item]) -> int:
     return changed
 
 
+def known_models(catalog: Catalog, brand_id: str) -> list[dict[str, object]]:
+    """What the catalog already files under a brand, names and aliases.
+
+    Shown beside the unmatched labels because that is where the answer usually
+    is. "745Le xDrive M Sport" needs an alias on the 7 Series, which already
+    carries 740d and 750e; adding it as its own model would split the nameplate
+    into a dozen pieces and every 7 Series number after it would be wrong.
+    Whether a label is a new car or a trim of a car already listed is knowledge
+    about cars, not about strings - a rule that guessed it scored 1.00 for
+    Q7-against-Q3 and Model X-against-Model 3 - so the tool lays the two lists
+    side by side and the person decides.
+    """
+    return [{"model": model.name_en, "id": model.id,
+             "aliases": ", ".join(model.aliases)}
+            for model in sorted(catalog.models_of(brand_id),
+                                key=lambda m: m.name_en)]
+
+
 def catalog_gaps(items: Iterable[Item]) -> list[dict[str, object]]:
     """The labels that need a catalog entry, rolled up the way the work is done.
 
@@ -471,7 +489,9 @@ def catalog_gaps(items: Iterable[Item]) -> list[dict[str, object]]:
             continue
         brand = item.raw_brand or "(ไม่มียี่ห้อ)"
         entry = by_brand.setdefault(brand, {"brand": brand, "units": 0.0,
-                                            "labels": 0, "models": []})
+                                            "labels": 0, "models": [],
+                                            "brand_id": item.brand_id,
+                                            "years": item.years})
         entry["units"] = float(entry["units"]) + item.units
         entry["labels"] = int(entry["labels"]) + 1
         entry["models"].append(

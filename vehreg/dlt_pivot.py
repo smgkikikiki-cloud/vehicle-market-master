@@ -218,14 +218,23 @@ def find_long_header(rows: list[tuple]) -> int:
 
 
 def registration_code(value: str) -> str:
-    """``"รย.1 รถยนต์นั่งส่วนบุคคล…"`` -> ``"RY1"``."""
-    head = _text(value).split()
-    if not head:
+    """``"รย.1 รถยนต์นั่งส่วนบุคคล…"`` -> ``"RY1"``.
+
+    Also passes through a code that is already written the short way. The
+    monthly API exports say ``RY1`` where the workbook says ``รย.1``, and an
+    uploaded export was silently losing its class here — which costs the cab
+    split and sends a fifth of a month to the brand.
+    """
+    text = _text(value)
+    if not text:
         return ""
-    token = head[0]
-    if not token.startswith("รย."):
-        return ""
-    return "RY" + token[3:].strip()
+    token = text.split()[0]
+    if token.startswith("รย."):
+        return "RY" + token[3:].strip()
+    upper = token.upper()
+    if upper.startswith("RY") and upper[2:].isdigit():
+        return upper
+    return ""
 
 
 def read_long_rows(rows: list[tuple], *,

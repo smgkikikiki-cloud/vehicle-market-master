@@ -9,3 +9,7 @@ data/provincial_raw/
 
 # Local virtualenv for running the Streamlit app and tests.
 .venv/
+
+# Files handed to the upload page. The month it produced is committed under
+# data/raw_pivot; the original upload is a scratch copy.
+data/uploads/

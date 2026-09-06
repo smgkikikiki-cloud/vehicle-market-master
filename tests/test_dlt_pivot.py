@@ -194,3 +194,91 @@ class TestLongSheet:
     def test_a_sheet_without_the_long_header_is_refused(self):
         with pytest.raises(ValueError, match="long-sheet columns"):
             dlt_pivot.find_long_header([("ปี", "ยี่ห้อรถ", "รุ่นรถ")])
+
+
+class TestUploads:
+    """Reading a file the owner hands the app, without touching the warehouse."""
+
+    def test_a_dlt_export_csv_is_recognised_with_its_months(self, tmp_path):
+        from vehreg import uploads
+
+        path = tmp_path / "dlt_2026-01.csv"
+        path.write_text(
+            "เดือน,ประเภท,ยี่ห้อ,แบบรถ,จำนวน\n"
+            "2026-01,RY1,TOYOTA,Yaris,10\n"
+            "2026-01,RY3,ISUZU,D-MAX,20\n"
+            "2026-02,RY1,TOYOTA,Yaris,5\n", encoding="utf-8-sig")
+        upload = uploads.inspect(path)
+        assert upload.kind == "csv"
+        assert upload.periods == {"2026-01": 30.0, "2026-02": 5.0}
+        assert upload.total == 35.0
+
+    def test_the_short_class_spelling_survives_the_round_trip(self, tmp_path):
+        # The workbook writes รย.1 and the monthly export writes RY1. Losing
+        # the second costs the cab split and sends a fifth of a month to the
+        # brand, which is what happened before this was handled.
+        from vehreg import uploads
+
+        path = tmp_path / "dlt_2026-01.csv"
+        path.write_text(
+            "เดือน,ประเภท,ยี่ห้อ,แบบรถ,จำนวน\n"
+            "2026-01,RY3,ISUZU,D-MAX,20\n", encoding="utf-8-sig")
+        out = tmp_path / "long_2026-01.csv"
+        uploads.write_period(uploads.inspect(path), "2026-01", out)
+        assert "2026-01,RY3,ISUZU,D-MAX,20" in out.read_text(encoding="utf-8-sig")
+
+    def test_a_month_the_file_does_not_have_writes_nothing(self, tmp_path):
+        from vehreg import uploads
+
+        path = tmp_path / "dlt_2026-01.csv"
+        path.write_text("เดือน,ประเภท,ยี่ห้อ,แบบรถ,จำนวน\n"
+                        "2026-01,RY1,TOYOTA,Yaris,10\n", encoding="utf-8-sig")
+        out = tmp_path / "long_2026-05.csv"
+        assert uploads.write_period(uploads.inspect(path), "2026-05", out) == 0
+
+    def test_a_file_with_no_readable_columns_says_so(self, tmp_path):
+        from vehreg import uploads
+
+        path = tmp_path / "nonsense.csv"
+        path.write_text("alpha,beta\n1,2\n", encoding="utf-8")
+        with pytest.raises(ValueError, match="หาคอลัมน์ไม่เจอ"):
+            uploads.inspect(path)
+
+    def test_keeping_a_month_removes_the_weaker_file_for_it(self, tmp_path):
+        from vehreg import uploads
+
+        source = tmp_path / "dlt_2026-01.csv"
+        source.write_text("เดือน,ประเภท,ยี่ห้อ,แบบรถ,จำนวน\n"
+                          "2026-01,RY1,TOYOTA,Yaris,10\n", encoding="utf-8-sig")
+        target_dir = tmp_path / "raw_pivot"
+        target_dir.mkdir()
+        stale = target_dir / "pivot_2026-01.csv"
+        stale.write_text("period,registration_type,brand,model,units\n",
+                         encoding="utf-8-sig")
+
+        kept = uploads.keep(uploads.inspect(source), "2026-01", target_dir)
+        assert kept.name == "long_2026-01.csv"
+        assert not stale.exists()
+
+    def test_a_dry_run_leaves_the_warehouse_alone(self, tmp_path):
+        from vehreg import uploads
+        from vehreg.catalog import DATA_DIR
+
+        source = tmp_path / "dlt_2026-01.csv"
+        source.write_text("เดือน,ประเภท,ยี่ห้อ,แบบรถ,จำนวน\n"
+                          "2026-01,RY1,TOYOTA,Yaris,10\n", encoding="utf-8-sig")
+        report = uploads.dry_run(uploads.inspect(source), "2026-01",
+                                 data_dir=DATA_DIR)
+        assert report.units_in_file == 10.0
+        assert report.units_loaded + report.units_review >= 10.0
+        assert report.already_loaded is None       # no live db was named
+
+    def test_a_year_with_no_catalog_is_refused_before_anything_loads(self, tmp_path):
+        from vehreg import uploads
+        from vehreg.catalog import DATA_DIR
+
+        source = tmp_path / "old.csv"
+        source.write_text("เดือน,ประเภท,ยี่ห้อ,แบบรถ,จำนวน\n"
+                          "1999-01,RY1,TOYOTA,Yaris,10\n", encoding="utf-8-sig")
+        with pytest.raises(ValueError, match="catalog"):
+            uploads.dry_run(uploads.inspect(source), "1999-01", data_dir=DATA_DIR)

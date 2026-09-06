@@ -17,7 +17,7 @@ class TestLabelsSay:
         assert labels_say(["HONDA JAZZ HYBRID'12"]) == {"HEV"}
         assert labels_say(["BYD BYD SEAL 5 DM-i DYNAMIC"]) == {"PHEV"}
         assert labels_say(["MITSUBISHI XFORCE HEV"]) == {"HEV"}
-        assert labels_say(["AUDI A5 CP 40 TFSI S line"]) == {"ICE"}
+        assert labels_say(["MERCEDES BENZ S 500L MILD HYBRID"]) == {"MHEV"}
 
     def test_turbo_is_not_a_powertrain(self):
         """A Taycan Turbo is battery-electric and a Cayenne Turbo is not.
@@ -26,6 +26,22 @@ class TestLabelsSay:
         strength of its trim name.
         """
         assert labels_say(["PORSCHE TAYCAN TURBO CROSS TURISMO"]) == set()
+
+    def test_an_injection_system_is_not_a_powertrain(self):
+        """TFSI and TSI were markers for combustion until they were not.
+
+        Audi puts TFSI on mild hybrids, so the badge said nothing about
+        electrification and the list spent two of its ten findings arguing
+        with a catalog entry that was right.
+        """
+        assert labels_say(["AUDI A5 CP 40 TFSI S line"]) == set()
+        assert labels_say(["AUDI TT Coupe 45 TFSI q S line"]) == set()
+
+    def test_mild_hybrid_is_claimed_before_plain_hybrid(self):
+        """A mild hybrid is a combustion car; reading it as HEV moves it into
+        the electrified column and it does not belong there."""
+        assert labels_say(["BMW 430D CONVERTIBLE Mild-hybrid"]) == {"MHEV"}
+        assert labels_say(["TOYOTA SIENTA HYBRID Z"]) == {"HEV"}
 
     def test_a_bare_nameplate_says_nothing(self):
         assert labels_say(["TOYOTA COROLLA CROSS", "TOYOTA Corolla Cross"]) \

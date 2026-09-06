@@ -511,6 +511,49 @@
         }
       ],
       "incomplete": true
+    },
+    {
+      "id": "seal_5_dmi",
+      "name_en": "Seal 5 DM-i",
+      "name_th": "ซีล 5 ดีเอ็มไอ",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "SEAL 5 DM-i",
+        "BYD SEAL 5 DM-i",
+        "SEAL 5 DMI",
+        "SEAL 5"
+      ],
+      "incomplete": true,
+      "notes": "แยกจาก Seal เพราะเป็นปลั๊กอินไฮบริดคนละคัน ไม่ใช่ Seal ไฟฟ้าล้วน — DLT จดแยกชัด สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2025-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "DM-i",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }

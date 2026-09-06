@@ -60,29 +60,46 @@ from vehreg.web_bootstrap import database_path  # noqa: E402
 #: "TURBO" is deliberately absent. A Taycan Turbo is a battery-electric car and
 #: a Cayenne Turbo is not, so the word carries no powertrain at all - it flagged
 #: the Taycan as combustion on the first run.
+#: Order matters: a mild hybrid is a combustion car with a bigger starter and
+#: DLT writes it "MILD HYBRID", so it has to be claimed before the plain HYBRID
+#: pattern gets to it. Without that split this list called the BMW 430D
+#: Mild-hybrid and the AMG GLE 53 electrified, which they are not, and two of
+#: the ten "wrong" nameplates were the tool's own reading.
 MARKERS: tuple[tuple[str, str], ...] = (
+    ("MHEV", r"\bMILD[- ]?HYBRID\b|\bMHEV\b|\bEQ[- ]?BOOST\b"),
     ("PHEV", r"\bPHEV\b|\bPLUG[- ]?IN\b|\bDM-?I\b|\bE-HYBRID\b"),
     ("HEV",  r"\bE:?[ -]?HEV\b|\bHEV\b|\bHYBRID\b|\bHV\b"),
     ("BEV",  r"\bBEV\b|\bELECTRIC\b|\bEV\b"),
-    ("ICE",  r"\bTDI\b|\bTFSI\b|\bTSI\b|\bCRDI\b|\bBLUEHDI\b|\bDDI\b"),
 )
+
+#: There is no marker for combustion. TFSI, TSI and TDI were tried and they are
+#: injection systems, not powertrains - Audi puts TFSI on mild hybrids - so they
+#: flagged the A5 and the TT as contradicting an MHEV catalog entry that was
+#: right all along. Silence about electrification is not evidence against it.
 
 #: What the labels say about the claim.
 CONFLICT = "CONFLICT"      # they disagree with it, or with each other
 CONFIRMS = "CONFIRMS"      # they agree with it
 NO_SIGNAL = "NO-SIGNAL"    # they say nothing either way
 
-COLUMNS = ("units", "brand", "model", "unit_id", "claims", "kind",
-           "labels_say", "catalog_variants", "dlt_labels", "years", "evidence")
+COLUMNS = ("units", "disagreeing_units", "share", "brand", "model", "unit_id",
+           "claims", "kind", "labels_say", "catalog_variants", "dlt_labels",
+           "years", "evidence")
 
 
 def labels_say(labels: Iterable[str]) -> set[str]:
-    """Powertrains the raw labels name, if any."""
+    """Powertrains the raw labels name, if any.
+
+    Each label yields at most one, the first marker in ``MARKERS`` that hits,
+    so "MILD HYBRID" is read as MHEV and never also as HEV.
+    """
     found: set[str] = set()
     for label in labels:
         upper = label.upper()
-        found |= {name for name, pattern in MARKERS
-                  if re.search(pattern, upper)}
+        for name, pattern in MARKERS:
+            if re.search(pattern, upper):
+                found.add(name)
+                break
     return found
 
 
@@ -108,18 +125,31 @@ def build(conn, catalogs) -> list[dict[str, object]]:
         year = max((y for y in catalogs if unit_id in catalogs[y].models),
                    default=None)
         variants = catalogs[year].variants_of(unit_id) if year else []
-        every = [str(r["raw_label"]) for r in conn.execute(
-            "SELECT raw_label FROM fact_registration "
+        counted = [(str(r["raw_label"]), float(r["units"] or 0.0))
+                   for r in conn.execute(
+            "SELECT raw_label, SUM(units) AS units FROM fact_registration "
             "WHERE unit_id = ? AND grain = 'MODEL' GROUP BY raw_label",
             (unit_id,))]
+        every = [label for label, _ in counted]
         found = labels_say(every)
-        kind = classify(str(item["powertrain"]), found)
+        # How much volume actually wears the disagreeing label. Without this a
+        # nameplate looks as wrong as its whole month: the Honda Jazz reads
+        # "13,786 units claimed ICE, labels say hybrid" when exactly one unit
+        # says hybrid, while the Xpander Cross reads the same and every one of
+        # its 11,134 units says HEV. They are not the same finding.
+        claim = str(item["powertrain"])
+        disagreeing = sum(units for label, units in counted
+                          if labels_say([label]) - {claim})
+        kind = classify(claim, found)
         # Show the labels that carry the signal, not the biggest ones: on a
         # conflict the whole point is which label disagrees.
         shown = [(l, 0.0) for l in every if labels_say([l])][:4] \
             if found else raw_labels(conn, unit_id, 4)
         rows.append({
             "units": item["units"],
+            "disagreeing_units": round(disagreeing),
+            "share": (f"{disagreeing / float(item['units']):.0%}"
+                      if item["units"] else "-"),
             "brand": item["brand"],
             "model": item["model"],
             "unit_id": unit_id,
@@ -134,8 +164,12 @@ def build(conn, catalogs) -> list[dict[str, object]]:
                 name if not units else f"{name} ({units:,.0f})"
                 for name, units in shown),
         })
+    # Conflicts first and, inside them, by how much volume actually carries the
+    # disagreeing label rather than by nameplate size.
     order = {CONFLICT: 0, NO_SIGNAL: 1, CONFIRMS: 2}
-    rows.sort(key=lambda r: (order[str(r["kind"])], -float(r["units"])))
+    rows.sort(key=lambda r: (order[str(r["kind"])],
+                             -float(r["disagreeing_units"]),
+                             -float(r["units"])))
     return rows
 
 
@@ -177,12 +211,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  {kind:<10} {len(group):>4}  "
               f"{sum(float(r['units']) for r in group):>10,.0f}   {blurb[kind]}")
 
-    print(f"\n{'units':>9}  {'brand':<13} {'model':<24} {'now':<5} "
-          f"{'labels':<9} kind")
-    print("-" * 88)
+    print(f"\n{'units':>9} {'disagree':>9} {'sh':>5}  {'brand':<13} "
+          f"{'model':<22} {'now':<5} {'labels':<9} kind")
+    print("-" * 100)
     for row in rows[:args.limit]:
-        print(f"{float(row['units']):>9,.0f}  {str(row['brand'])[:13]:<13} "
-              f"{str(row['model'])[:24]:<24} {str(row['claims']):<5} "
+        print(f"{float(row['units']):>9,.0f} "
+              f"{float(row['disagreeing_units']):>9,.0f} "
+              f"{str(row['share']):>5}  {str(row['brand'])[:13]:<13} "
+              f"{str(row['model'])[:22]:<22} {str(row['claims']):<5} "
               f"{str(row['labels_say'])[:9]:<9} {row['kind']}")
     if len(rows) > args.limit:
         print(f"... and {len(rows) - args.limit} more (use --csv for all)")

@@ -369,6 +369,21 @@ with tab_structure:
     else:
         c.metric("Leader share", "—")
 
+    # Same question with every scope allowed, so the gap to the published month
+    # is stated rather than left for a reader to discover against a press
+    # release. A month total is only comparable when nothing else narrows it.
+    _, all_scope_total = market_rows(
+        conn, dimension, analysis_filters, selected_period, selected_period,
+        "all",
+    )
+    month_total = None
+    if not analysis_filters:
+        month_total = conn.execute(
+            "SELECT COALESCE(SUM(units),0) AS u FROM fact_registration "
+            "WHERE period = ?", (selected_period,)
+        ).fetchone()["u"]
+    st.caption(ui.scope_caption(total, all_scope_total, month_total))
+
     if table.empty:
         st.info("ไม่มีข้อมูลตาม scope นี้")
     else:

@@ -269,6 +269,27 @@ with TAB_DASH:
         c.metric("Models", f"{len(models_result.rows):,}")
         d.metric("Unmatched / review", f"{review or 0:,.0f}")
 
+        # The headline is smaller than the month DLT published, for reasons
+        # nothing on screen used to give. Rather than trust the cube's own
+        # excluded_by_scope -- which does not reconcile once the grain set is
+        # widened -- ask the same question again with every scope allowed and
+        # report the difference that actually appears.
+        all_scope = cube.run(
+            conn, [], filters=filters,
+            period_from=selected_period, period_to=selected_period,
+            scopes="all", grains=grains,
+        )
+        # A month total only compares with the figure above when nothing else
+        # is narrowing it.
+        month_total = None
+        if not filters:
+            month_total = conn.execute(
+                "SELECT COALESCE(SUM(units),0) AS u FROM fact_registration "
+                "WHERE period = ?", (selected_period,)
+            ).fetchone()["u"]
+        st.caption(ui.scope_caption(total.total_units, all_scope.total_units,
+                                    month_total))
+
         st.subheader("Automatic chart")
         dimension_labels = {
             "Brand": "brand",

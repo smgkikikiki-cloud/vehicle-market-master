@@ -113,3 +113,30 @@ def filter_bar(chosen: Mapping[str, tuple[str, str]],
     if len(active) > 1:
         st.button("ล้างตัวกรองทั้งหมด", key="clear_all_filters",
                   on_click=_reset, args=([*active, *extra], resets, on_change))
+
+
+def scope_caption(shown: float, all_scopes: float,
+                  month_total: float | None = None) -> str:
+    """Explain the gap between the number on screen and the month DLT published.
+
+    Two things shrink a headline figure and neither is visible in it. The scope
+    setting drops niche, grey-import and commercial registrations, which is the
+    right default for a market read and about 2,500 units a month. And volume
+    the matcher could not attribute to a model does not reach an analysis that
+    reads model grain. A reader comparing this screen with a DLT press release
+    finds a number that is smaller and no reason why.
+
+    ``month_total`` is only meaningful when nothing else is filtered, so the
+    caller passes None once any scope is on: comparing a filtered figure with
+    a whole month would be a worse comparison than none.
+    """
+    parts = [f"แสดง {shown:,.0f} คัน"]
+    excluded = round(all_scopes - shown)
+    if excluded > 0:
+        parts.append(f"ตัดกลุ่ม NICHE / GREY / COMMERCIAL ออก {excluded:,.0f}")
+    if month_total is not None:
+        unattributed = round(month_total - all_scopes)
+        parts.append(f"ยอดทั้งเดือนในฐานข้อมูล {month_total:,.0f}")
+        if unattributed > 0:
+            parts.append(f"ในนั้น {unattributed:,.0f} คันยังไม่ถูกจับเข้ารุ่น")
+    return " · ".join(parts)

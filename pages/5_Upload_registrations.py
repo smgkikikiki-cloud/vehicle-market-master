@@ -10,7 +10,7 @@ import streamlit as st
 import ui
 from vehreg import uploads
 from vehreg.catalog import DATA_DIR, Catalog
-from vehreg.db import connect
+from vehreg.db import clear_period, connect
 from vehreg.ingest import ingest_csv
 from vehreg.web_bootstrap import bootstrap_database, database_path, pivot_dir
 
@@ -169,11 +169,11 @@ if st.session_state.get("_dry"):
             year = int(period[:4])
             target = uploads.keep(upload, period, pivot_dir())
             if period in loaded:
-                conn.execute("DELETE FROM fact_registration WHERE period = ?",
-                             (period,))
-                conn.execute("DELETE FROM ingest_review WHERE period = ?",
-                             (period,))
-                conn.commit()
+                # Every table the old load wrote, not just the two obvious
+                # ones. Leaving fact_trim behind doubled 2026-07 in the trim
+                # ledger the first time this ran, because the replacement gets
+                # a new source_id and the ledger keys on it.
+                clear_period(conn, period)
             ingest_csv(conn, Catalog.load(DATA_DIR, year), target,
                        f"UPLOAD {period}", publisher="DLT",
                        notes=f"อัปโหลดจาก {upload.path.name}",

@@ -423,20 +423,20 @@ def ingest_csv(conn: sqlite3.Connection, catalog: Catalog, path: Path | str,
             period = period_key(row.get(mapping.period))
         except (ValueError, TypeError):
             reviews.append((source_id, None, raw_brand, raw_model, label, units,
-                            "bad-period", None, None))
+                            "bad-period", None, None, ""))
             report.reasons["bad-period"] = report.reasons.get("bad-period", 0) + 1
             report.units_review += units or 0.0
             continue
 
         if units is None:
             reviews.append((source_id, period, raw_brand, raw_model, label, None,
-                            "bad-units", None, None))
+                            "bad-units", None, None, ""))
             report.reasons["bad-units"] = report.reasons.get("bad-units", 0) + 1
             continue
 
         if int(period[:4]) not in known_years:
             reviews.append((source_id, period, raw_brand, raw_model, label, units,
-                            "no-catalog-for-year", None, None))
+                            "no-catalog-for-year", None, None, ""))
             report.reasons["no-catalog-for-year"] = report.reasons.get(
                 "no-catalog-for-year", 0) + 1
             report.units_review += units
@@ -459,7 +459,7 @@ def ingest_csv(conn: sqlite3.Connection, catalog: Catalog, path: Path | str,
 
         if unit_id is None:
             reviews.append((source_id, period, raw_brand, raw_model, label, units,
-                            reason, None, score))
+                            reason, None, score, reg))
             report.reasons[bucket] = report.reasons.get(bucket, 0) + 1
             report.units_review += units
             continue
@@ -468,7 +468,7 @@ def ingest_csv(conn: sqlite3.Connection, catalog: Catalog, path: Path | str,
             # Placed, but less deeply than the source allowed. Record the fact
             # at the grain achieved *and* flag it, so precision loss is visible.
             reviews.append((source_id, period, raw_brand, raw_model, label, units,
-                            reason, unit_id, score))
+                            reason, unit_id, score, reg))
             report.reasons[bucket] = report.reasons.get(bucket, 0) + 1
 
         province = ((row.get(mapping.province) or "ALL").strip()
@@ -498,8 +498,8 @@ def ingest_csv(conn: sqlite3.Connection, catalog: Catalog, path: Path | str,
             facts)
         conn.executemany(
             "INSERT INTO ingest_review (source_id, period, raw_brand, raw_model, "
-            "raw_label, units, reason, best_guess, score, status) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?)",
+            "raw_label, units, reason, best_guess, score, reg_type, status) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             [(*row, "ignored" if is_unmatchable(row[3]) else "open")
              for row in reviews])
     report.facts_written = len(facts)
@@ -515,11 +515,23 @@ def teach_alias(conn: sqlite3.Connection, scope: str, raw: str, target_id: str,
 
     ``reg`` limits the lesson to one DLT class, which is how "REVO" can mean the
     double cab in a รย.1 file and the smart cab in a รย.3 file.
+
+    The lesson is a rule for the *next* read of a source. It does not move any
+    volume on its own: the matching runs at ingest, so the source has to be read
+    again before the units leave review. The rows this lesson covers are marked
+    ``mapped`` to say a decision exists for them, which is what
+    ``sources_awaiting_reload`` then reports.
+
+    Only rows whose label the override would actually fire on are marked. The
+    lookup is an exact match on the folded label, so "FORD RANGER" is not a
+    decision about "FORD RANGER SUPER DUTY" - that is a different label and
+    needs its own.
     """
     if scope not in {"brand", "model", "variant"}:
         raise ValueError("scope must be brand, model or variant")
     if reg != "*":
         reg = RegistrationType.parse(reg).value
+    conn.create_function("vehreg_fold", 1, fold)
     with conn:
         conn.execute(
             "INSERT INTO alias_override (scope, raw, reg_type, target_id) "
@@ -528,5 +540,23 @@ def teach_alias(conn: sqlite3.Connection, scope: str, raw: str, target_id: str,
             (scope, fold(raw), reg, target_id))
         conn.execute(
             "UPDATE ingest_review SET status = 'mapped' "
-            "WHERE status = 'open' AND lower(raw_label) LIKE ?",
-            (f"%{raw.lower()}%",))
+            "WHERE status = 'open' AND vehreg_fold(raw_label) = ? "
+            "AND (? = '*' OR reg_type IS NULL OR reg_type = ?)",
+            (fold(raw), reg, reg))
+
+
+def sources_awaiting_reload(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    """Sources holding a taught label whose units are still sitting in review.
+
+    A lesson only becomes volume when the file is read again, so this is the
+    list of files that have to be re-ingested for the decisions already made to
+    show up in the numbers.
+    """
+    return conn.execute(
+        "SELECT r.source_id, s.name, s.file_name, "
+        "  COUNT(*) AS rows, SUM(r.units) AS units, "
+        "  MIN(r.period) AS first_period, MAX(r.period) AS last_period "
+        "FROM ingest_review r JOIN dim_source s USING (source_id) "
+        "WHERE r.status = 'mapped' GROUP BY r.source_id, s.name, s.file_name "
+        "ORDER BY units DESC"
+    ).fetchall()

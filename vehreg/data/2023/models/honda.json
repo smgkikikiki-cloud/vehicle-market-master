@@ -600,6 +600,46 @@
           ]
         }
       ]
+    },
+    {
+      "id": "mobilio",
+      "name_en": "Mobilio",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mobilio",
+        "mobilio'15"
+      ],
+      "notes": "added from DLT registrations; this model stopped being sold but is still being registered from stock. Price and spec are not researched.",
+      "incomplete": true,
+      "generations": [
+        {
+          "code": "MOBILIO",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

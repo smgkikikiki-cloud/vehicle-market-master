@@ -143,7 +143,7 @@
       "name_en": "Changan Nevo Q05",
       "name_th": "",
       "nameplate": "",
-      "body_type": "",
+      "body_type": "CROSSOVER",
       "cab_type": "NOT_APPLICABLE",
       "registration_type": "",
       "market_scope": "CORE",
@@ -151,7 +151,7 @@
         "nevo q05",
         "nevo"
       ],
-      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
       "generations": [
         {
           "code": "NEVO_Q05",
@@ -168,10 +168,12 @@
               "battery_kwh": null,
               "aliases": [],
               "overrides": {},
-              "price_thb": null,
+              "price_thb": 669900,
               "import_type": "",
               "origin_country": "",
-              "price_note": "not-researched"
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 669900,
+              "price_max_thb": 669900
             }
           ]
         }

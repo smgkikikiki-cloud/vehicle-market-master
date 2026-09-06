@@ -18,7 +18,9 @@ from vehreg.db import connect, rebuild_dimension
 #: in review before the stub was added.
 LABELS = {
     ("BYD", "BYD ATTO 2 PREMIUM"): "atto2",
-    ("BYD", "BYD ATTO 1 PREMIUM"): "atto1",
+    # Atto 1 is Dolphin Mini renamed, confirmed by the owner: an alias on
+    # the existing model rather than a model of its own.
+    ("BYD", "BYD ATTO 1 PREMIUM"): "seagull",
     ("BYD", "BYD SEALION5 DM-i PREMIUM"): "sealion5",
     ("MG", "MG URBAN"): "mg_urban",
     ("MG", "MG IM5"): "mg_im5",
@@ -34,7 +36,7 @@ LABELS = {
     ("HONDA", "e:N2"): "en2",
 }
 
-STUB_IDS = sorted(set(LABELS.values()))
+STUB_IDS = sorted(set(LABELS.values()) - {"seagull"})
 
 
 @pytest.fixture(scope="module")
@@ -106,9 +108,13 @@ class TestDeclaredIncompleteness:
 
     def test_the_stubs_are_reported_as_holes_rather_than_hidden(self, catalog):
         reported = catalog.incomplete_models()
-        assert len(reported) == len(STUB_IDS)
         for model_id in STUB_IDS:
             assert any(model_id in line for line in reported), model_id
+
+    def test_dolphin_mini_is_finished_and_not_reported(self, catalog):
+        # It has a price and a body type, so it is not a hole even though the
+        # DLT label that reaches it arrived with the 2026 stubs.
+        assert not any("seagull" in line for line in catalog.incomplete_models())
 
     def test_each_hole_names_what_is_missing(self, catalog):
         # A stub with nothing missing is a stub someone finished and forgot to
@@ -131,3 +137,63 @@ class TestDeclaredIncompleteness:
         rebuilt.build_indexes()
         assert rebuilt.models["byd.atto2"].incomplete is True
         assert rebuilt.validate() == []
+
+
+@pytest.fixture(scope="module")
+def resolver_2021(tmp_path_factory):
+    cat = Catalog.load(DATA_DIR, 2021)
+    cat.build_indexes()
+    conn = connect(tmp_path_factory.mktemp("db21") / "db.sqlite3")
+    rebuild_dimension(conn, cat)
+    return Resolver(cat, conn)
+
+
+class TestLegacyModelsAndAliases:
+    """Cars that stopped being sold but are still being registered from stock.
+
+    Every one of these labels appears in DLT through 2026, not only in the year
+    the model was current, so the fix belongs in every catalog year rather than
+    in 2021 alone.
+    """
+
+    LEGACY = {
+        ("HONDA", "MOBILIO"): "mobilio",
+        ("TOYOTA", "Avanza"): "avanza",
+        ("HYUNDAI", "GRAND STAREX"): "grand_starex",
+        ("CHEVROLET", "COLORADO C-CAB"): "colorado_c_cab",
+        ("CHEVROLET", "COLORADO X-CAB"): "colorado_x_cab",
+        ("CHEVROLET", "CAPTIVA"): "captiva",
+        ("MERCEDES BENZ", "S 560 e"): "s_class",
+        ("MINI", "Cooper S Countryman RHD"): "countryman",
+    }
+
+    @pytest.mark.parametrize("label,model_id", sorted(LEGACY.items()))
+    def test_the_label_resolves(self, resolver_2021, label, model_id):
+        brand, model = label
+        unit_id, grain, _how, _score, problem = resolver_2021.resolve(brand, model)
+        assert problem == "", f"{brand} {model} -> {problem}"
+        assert model_id in unit_id, f"{brand} {model} -> {unit_id}"
+
+    def test_the_pickup_cab_split_follows_the_registration_class(self):
+        # DLT filed C-Cab as รย.1 (passenger) and X-Cab as รย.3 (cargo), which
+        # is what decides the cab rather than anyone's reading of the name.
+        from vehreg.taxonomy import CabType, RegistrationType
+
+        cat = Catalog.load(DATA_DIR, 2021)
+        cat.build_indexes()
+        c_cab = cat.models["chevrolet.colorado_c_cab"]
+        x_cab = cat.models["chevrolet.colorado_x_cab"]
+        assert c_cab.cab_type is CabType.DOUBLE_CAB
+        assert c_cab.registration_type is RegistrationType.RY1
+        assert x_cab.cab_type is CabType.SMART_CAB
+        assert x_cab.registration_type is RegistrationType.RY3
+
+
+class TestUnmatchableLabels:
+    def test_dlts_own_placeholder_never_enters_the_open_queue(self):
+        from vehreg.ingest import is_unmatchable
+
+        assert is_unmatchable("ไม่ระบุ")
+        assert is_unmatchable("  ไม่ระบุ  ")
+        assert not is_unmatchable("D-MAX")
+        assert not is_unmatchable("")

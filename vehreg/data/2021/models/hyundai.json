@@ -329,6 +329,46 @@
           ]
         }
       ]
+    },
+    {
+      "id": "grand_starex",
+      "name_en": "Grand Starex",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "grand starex",
+        "starex"
+      ],
+      "notes": "added from DLT registrations; this model stopped being sold but is still being registered from stock. Price and spec are not researched.",
+      "incomplete": true,
+      "generations": [
+        {
+          "code": "GRAND_STAREX",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

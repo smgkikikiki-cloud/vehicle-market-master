@@ -718,7 +718,7 @@
       "name_en": "MG Urban",
       "name_th": "",
       "nameplate": "",
-      "body_type": "",
+      "body_type": "HATCHBACK",
       "cab_type": "NOT_APPLICABLE",
       "registration_type": "",
       "market_scope": "CORE",
@@ -726,7 +726,7 @@
         "urban",
         "mg urban"
       ],
-      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
       "generations": [
         {
           "code": "MG_URBAN",
@@ -743,10 +743,12 @@
               "battery_kwh": null,
               "aliases": [],
               "overrides": {},
-              "price_thb": null,
+              "price_thb": 649900,
               "import_type": "",
               "origin_country": "",
-              "price_note": "not-researched"
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 649900,
+              "price_max_thb": 649900
             }
           ]
         }
@@ -765,7 +767,7 @@
       "aliases": [
         "im5"
       ],
-      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
       "generations": [
         {
           "code": "MG_IM5",
@@ -782,10 +784,12 @@
               "battery_kwh": null,
               "aliases": [],
               "overrides": {},
-              "price_thb": null,
+              "price_thb": 1549900,
               "import_type": "",
               "origin_country": "",
-              "price_note": "not-researched"
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 1549900,
+              "price_max_thb": 1549900
             }
           ]
         }

@@ -347,6 +347,13 @@ class Catalog:
             problems += cross_check(resolved)
         return problems
 
+    #: Powertrains that must state a battery, and those that must state an
+    #: engine. A PHEV is in both.
+    _ELECTRIFIED = frozenset({Powertrain.BEV, Powertrain.PHEV, Powertrain.HEV,
+                              Powertrain.MHEV, Powertrain.REEV})
+    _COMBUSTION = frozenset({Powertrain.ICE, Powertrain.MHEV, Powertrain.HEV,
+                             Powertrain.PHEV, Powertrain.REEV})
+
     def incomplete_models(self) -> list[str]:
         """Models carrying registrations while their specification is unwritten.
 
@@ -363,10 +370,17 @@ class Catalog:
                 missing.append("body_type")
             if not self.variants_of(model.id):
                 missing.append("variants")
+            gaps = set()
             for variant in self.variants_of(model.id):
                 if variant.price_thb is None:
-                    missing.append("price")
-                    break
+                    gaps.add("price")
+                if variant.powertrain in self._ELECTRIFIED and variant.battery_kwh is None:
+                    gaps.add("battery_kwh")
+                if variant.powertrain in self._COMBUSTION and variant.engine_cc is None:
+                    gaps.add("engine_cc")
+                if variant.powertrain is Powertrain.UNKNOWN:
+                    gaps.add("powertrain")
+            missing += sorted(gaps)
             out.append(f"model {model.id}: incomplete ({', '.join(missing)})"
                        if missing else f"model {model.id}: marked incomplete "
                                        "but nothing is missing")

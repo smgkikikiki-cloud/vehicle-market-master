@@ -28,6 +28,17 @@ from .db import loaded_years, register_source
 from .normalize import MatchIndex, fold, period_key, split_brand_model
 from .taxonomy import Grain, RegistrationType
 
+#: What DLT writes when its own record does not name the model. These rows
+#: carry real registrations and are worth keeping, but no catalog entry can
+#: ever claim them, so they go straight to ``ignored`` instead of sitting in the
+#: open queue forever pretending someone might fix them.
+UNMATCHABLE_MODEL_LABELS: frozenset[str] = frozenset({"ไม่ระบุ", "ไม่ระบุรุ่น"})
+
+
+def is_unmatchable(raw_model: str) -> bool:
+    return (raw_model or "").strip() in UNMATCHABLE_MODEL_LABELS
+
+
 #: Header spellings seen in DLT and FTI exports, folded.
 HEADER_HINTS: dict[str, tuple[str, ...]] = {
     "period": ("period", "month", "yearmonth", "เดอน", "ปเดอน", "งวด", "วนท", "ป"),
@@ -487,8 +498,10 @@ def ingest_csv(conn: sqlite3.Connection, catalog: Catalog, path: Path | str,
             facts)
         conn.executemany(
             "INSERT INTO ingest_review (source_id, period, raw_brand, raw_model, "
-            "raw_label, units, reason, best_guess, score) VALUES (?,?,?,?,?,?,?,?,?)",
-            reviews)
+            "raw_label, units, reason, best_guess, score, status) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?)",
+            [(*row, "ignored" if is_unmatchable(row[3]) else "open")
+             for row in reviews])
     report.facts_written = len(facts)
     if trim_ledger:
         report.trim_rows = trimledger.record(conn, catalog, ledger_rows,

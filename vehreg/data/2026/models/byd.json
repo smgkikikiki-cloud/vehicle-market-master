@@ -357,9 +357,11 @@
       "market_scope": "CORE",
       "aliases": [
         "seagull",
-        "dolphin mini"
+        "dolphin mini",
+        "atto 1",
+        "atto1"
       ],
-      "notes": "",
+      "notes": "DLT registers this car as ATTO 1; Dolphin Mini and Seagull are the same vehicle under earlier names and have never appeared in a DLT export.",
       "generations": [
         {
           "code": "SGL",
@@ -378,12 +380,12 @@
                 "Standard"
               ],
               "overrides": {},
-              "price_thb": 569000,
+              "price_thb": 444900,
               "import_type": "CBU",
               "origin_country": "CN",
-              "price_note": "seed-unverified",
-              "price_min_thb": 569000,
-              "price_max_thb": 569000
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 444900,
+              "price_max_thb": 444900
             }
           ]
         }
@@ -439,7 +441,7 @@
       "aliases": [
         "atto 2"
       ],
-      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
       "generations": [
         {
           "code": "ATTO2",
@@ -456,49 +458,12 @@
               "battery_kwh": null,
               "aliases": [],
               "overrides": {},
-              "price_thb": null,
+              "price_thb": 644900,
               "import_type": "",
               "origin_country": "",
-              "price_note": "not-researched"
-            }
-          ]
-        }
-      ],
-      "incomplete": true
-    },
-    {
-      "id": "atto1",
-      "name_en": "Atto 1",
-      "name_th": "",
-      "nameplate": "",
-      "body_type": "HATCHBACK",
-      "cab_type": "NOT_APPLICABLE",
-      "registration_type": "",
-      "market_scope": "CORE",
-      "aliases": [
-        "atto 1"
-      ],
-      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
-      "generations": [
-        {
-          "code": "ATTO1",
-          "segment": "UNKNOWN",
-          "seats": null,
-          "launched": "2026-05-01",
-          "ended": null,
-          "variants": [
-            {
-              "name": "ยังไม่แยกรุ่นย่อย",
-              "powertrain": "UNKNOWN",
-              "drivetrain": "",
-              "engine_cc": null,
-              "battery_kwh": null,
-              "aliases": [],
-              "overrides": {},
-              "price_thb": null,
-              "import_type": "",
-              "origin_country": "",
-              "price_note": "not-researched"
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 644900,
+              "price_max_thb": 644900
             }
           ]
         }
@@ -518,7 +483,7 @@
         "sealion 5",
         "sealion5"
       ],
-      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
       "generations": [
         {
           "code": "SEALION5",
@@ -535,10 +500,12 @@
               "battery_kwh": null,
               "aliases": [],
               "overrides": {},
-              "price_thb": null,
+              "price_thb": 759900,
               "import_type": "",
               "origin_country": "",
-              "price_note": "not-researched"
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 759900,
+              "price_max_thb": 759900
             }
           ]
         }

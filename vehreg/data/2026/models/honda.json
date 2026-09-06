@@ -565,7 +565,7 @@
       "name_en": "e:N2",
       "name_th": "",
       "nameplate": "",
-      "body_type": "",
+      "body_type": "CROSSOVER",
       "cab_type": "NOT_APPLICABLE",
       "registration_type": "",
       "market_scope": "CORE",
@@ -574,13 +574,56 @@
         "en2",
         "e n2"
       ],
-      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
       "generations": [
         {
           "code": "EN2",
           "segment": "UNKNOWN",
           "seats": null,
           "launched": "2026-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": 1429000,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 1429000,
+              "price_max_thb": 1429000
+            }
+          ]
+        }
+      ],
+      "incomplete": true
+    },
+    {
+      "id": "mobilio",
+      "name_en": "Mobilio",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mobilio",
+        "mobilio'15"
+      ],
+      "notes": "added from DLT registrations; this model stopped being sold but is still being registered from stock. Price and spec are not researched.",
+      "incomplete": true,
+      "generations": [
+        {
+          "code": "MOBILIO",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
           "ended": null,
           "variants": [
             {
@@ -598,8 +641,7 @@
             }
           ]
         }
-      ],
-      "incomplete": true
+      ]
     }
   ]
 }

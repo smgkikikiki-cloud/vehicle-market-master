@@ -32,7 +32,9 @@
         "C250",
         "C 300",
         "C 300 e",
-        "C 350 e"
+        "C 350 e",
+        "AMG C43",
+        "AMG C43 4MATIC Coupe"
       ],
       "notes": "",
       "generations": [
@@ -500,7 +502,9 @@
         "S 450",
         "S 500",
         "S 580 e",
-        "Maybach S 580 e"
+        "Maybach S 580 e",
+        "S 560 e",
+        "S 560"
       ],
       "generations": [
         {

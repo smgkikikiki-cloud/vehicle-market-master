@@ -6,6 +6,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+import ui
+
 from vehreg import charting, coverage, cube
 from vehreg.catalog import DATA_DIR, available_years
 from vehreg.db import connect
@@ -178,30 +180,35 @@ if st.sidebar.button("Reload catalog / raw data"):
     bootstrap_database.clear()
     st.rerun()
 
-registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"])
+registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"], key="f_reg")
 brand_values = distinct_values(conn, "brand", selected_year)
-brand = st.sidebar.selectbox("ยี่ห้อ", ["ALL", *brand_values])
-segment = st.sidebar.selectbox("Segment", ["ALL", "A", "B", "C", "D", "E", "F"])
+brand = st.sidebar.selectbox("ยี่ห้อ", ["ALL", *brand_values], key="f_brand")
+segment = st.sidebar.selectbox("Segment", ["ALL", "A", "B", "C", "D", "E", "F"], key="f_segment")
 body_family = st.sidebar.selectbox(
     "Body family",
     ["ALL", "SUV", "SEDAN", "HATCHBACK", "MPV", "PICKUP", "COUPE",
      "WAGON", "VAN", "TRUCK", "OTHER"],
+    key="f_body",
 )
 powertrain = st.sidebar.selectbox(
     "Powertrain",
     ["ALL", "ICE", "MHEV", "HEV", "PHEV", "REEV", "BEV", "FCEV",
      "MIXED", "UNKNOWN"],
+    key="f_powertrain",
 )
 price_band = st.sidebar.selectbox(
     "Price band",
     ["ALL", "UNDER_1M", "1M_TO_2M", "2M_PLUS", "MIXED", "UNKNOWN"],
+    key="f_price",
 )
 import_type = st.sidebar.selectbox(
-    "CBU / CKD", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"]
+    "CBU / CKD", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"],
+    key="f_import",
 )
 origin_values = distinct_values(conn, "origin_country", selected_year)
-origin = st.sidebar.selectbox("ประเทศผลิต", ["ALL", *origin_values])
-include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False)
+origin = st.sidebar.selectbox("ประเทศผลิต", ["ALL", *origin_values], key="f_origin")
+include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False,
+                                          key="f_scopes")
 scopes = "all" if include_all_scopes else None
 
 filters: dict[str, object] = {}
@@ -213,6 +220,19 @@ add_filter(filters, "powertrain", powertrain)
 add_filter(filters, "price_band", price_band)
 add_filter(filters, "import_type", import_type)
 add_filter(filters, "origin_country", origin)
+
+# Every number below is scoped by controls that live in a sidebar the reader
+# may not have open. Name the ones that are on, where the numbers are.
+ui.filter_bar({
+    "f_reg": ("ประเภทรถ", registration),
+    "f_brand": ("ยี่ห้อ", brand),
+    "f_segment": ("Segment", segment),
+    "f_body": ("Body", body_family),
+    "f_powertrain": ("Powertrain", powertrain),
+    "f_price": ("Price band", price_band),
+    "f_import": ("CBU / CKD", import_type),
+    "f_origin": ("ประเทศผลิต", origin),
+}, extra=["f_scopes"], defaults={"f_scopes": False})
 
 TAB_DASH, TAB_EDIT, TAB_HISTORY = st.tabs([
     "Dashboard", "Monthly State Editor", "History / Audit",

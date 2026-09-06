@@ -3,6 +3,8 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+import ui
+
 from vehreg import charting, coverage, cube
 from vehreg.db import connect
 from vehreg.market_metrics import (
@@ -266,29 +268,57 @@ grouping_labels = {
 grouping_label = st.sidebar.selectbox("Compare / rank by", list(grouping_labels))
 dimension = grouping_labels[grouping_label]
 
-registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"])
+registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"], key="f_reg")
 brand_values = distinct_model_values(conn, "brand", selected_year)
-brand = st.sidebar.selectbox("Brand scope", ["ALL", *brand_values])
-segment = st.sidebar.selectbox("Segment scope", ["ALL", "A", "B", "C", "D", "E", "F"])
+brand = st.sidebar.selectbox("Brand scope", ["ALL", *brand_values], key="f_brand")
+segment = st.sidebar.selectbox("Segment scope", ["ALL", "A", "B", "C", "D", "E", "F"],
+                                 key="f_segment")
 body_family = st.sidebar.selectbox(
     "Body scope",
     ["ALL", "SUV", "SEDAN", "HATCHBACK", "MPV", "PICKUP", "COUPE", "WAGON", "VAN", "TRUCK", "OTHER"],
+    key="f_body",
 )
 powertrain = st.sidebar.selectbox(
     "Powertrain scope",
     ["ALL", "ICE", "MHEV", "HEV", "PHEV", "REEV", "BEV", "FCEV", "MIXED", "UNKNOWN"],
+    key="f_powertrain",
 )
 price_band = st.sidebar.selectbox(
     "Price scope",
     ["ALL", "UNDER_1M", "1M_TO_2M", "2M_PLUS", "MIXED", "UNKNOWN"],
+    key="f_price",
 )
 import_type = st.sidebar.selectbox(
-    "CBU / CKD scope", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"]
+    "CBU / CKD scope", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"],
+    key="f_import",
 )
 origin_values = distinct_model_values(conn, "origin_country", selected_year)
-origin = st.sidebar.selectbox("Production country scope", ["ALL", *origin_values])
-include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False)
+origin = st.sidebar.selectbox("Production country scope", ["ALL", *origin_values],
+                              key="f_origin")
+include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False,
+                                          key="f_scopes")
 scopes = "all" if include_all_scopes else None
+
+# This deck reports leader share and rank. A scope left on from earlier reads
+# as a fact about the whole market, so the active ones are named up here.
+ui.filter_bar({
+    "f_reg": ("ประเภทรถ", registration),
+    "f_brand": ("Brand", brand),
+    "f_segment": ("Segment", segment),
+    "f_body": ("Body", body_family),
+    "f_powertrain": ("Powertrain", powertrain),
+    "f_price": ("Price", price_band),
+    "f_import": ("CBU / CKD", import_type),
+    "f_origin": ("Production country", origin),
+}, extra=["f_scopes"], defaults={"f_scopes": False},
+   # comparison_filters() drops whatever this page is ranking by, so that a
+   # brand ranking has other brands in it. Say so on the chip rather than
+   # letting it claim a scope the numbers below do not obey.
+   ignored=[{
+       "brand": "f_brand", "segment": "f_segment", "body_family": "f_body",
+       "powertrain": "f_powertrain", "price_band": "f_price",
+       "import_type": "f_import", "origin_country": "f_origin",
+   }.get(dimension, "")])
 
 filters: dict[str, object] = {}
 add_filter(filters, "fact_registration_type", registration)

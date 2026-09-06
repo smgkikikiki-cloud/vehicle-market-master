@@ -178,7 +178,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "camry",
@@ -247,7 +248,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "corolla_cross",
@@ -271,23 +273,6 @@
           "ended": null,
           "variants": [
             {
-              "name": "1.8L ICE",
-              "powertrain": "ICE",
-              "drivetrain": "FWD",
-              "engine_cc": 1798,
-              "battery_kwh": null,
-              "aliases": [
-                "1.8 Smart"
-              ],
-              "overrides": {},
-              "price_thb": 959000,
-              "import_type": "CKD",
-              "origin_country": "TH",
-              "price_note": "seed-unverified",
-              "price_min_thb": 959000,
-              "price_max_thb": 959000
-            },
-            {
               "name": "1.8L HEV",
               "powertrain": "HEV",
               "drivetrain": "FWD",
@@ -308,7 +293,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "yaris_cross",

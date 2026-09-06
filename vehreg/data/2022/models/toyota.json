@@ -178,7 +178,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "camry",
@@ -217,6 +218,24 @@
               "price_note": "seed-unverified",
               "price_min_thb": 1749000,
               "price_max_thb": 1749000
+            },
+            {
+              "name": "2.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 2487,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "2.5G",
+                "2.5G ESport",
+                "2.0G"
+              ]
             }
           ]
         },
@@ -247,7 +266,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "corolla_cross",
@@ -308,7 +328,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "yaris_cross",

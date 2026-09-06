@@ -179,6 +179,7 @@ class Catalog:
             market_scope=_facet(MarketScope, raw.get("market_scope"),
                                 MarketScope.CORE),
             incomplete=bool(raw.get("incomplete", False)),
+            powertrain_checked=bool(raw.get("powertrain_checked", False)),
             aliases=_tuple(raw.get("aliases")),
             notes=raw.get("notes", ""),
             overrides=_overrides(raw.get("overrides")),
@@ -446,6 +447,8 @@ class Catalog:
             # the marker and the model would start reading as a finished one.
             if model.incomplete:
                 model_payload["incomplete"] = True
+            if model.powertrain_checked:
+                model_payload["powertrain_checked"] = True
             if model.notes:
                 model_payload["notes"] = model.notes
             for gen in self.generations_of(model.id):

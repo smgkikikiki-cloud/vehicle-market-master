@@ -131,7 +131,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "bmw_x1",
@@ -829,7 +830,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     }
   ]
 }

@@ -410,6 +410,23 @@ class TestAssumedPowertrain:
         conn.commit()
         assert coverage.assumed_powertrain(conn) == []
 
+    def test_a_checked_nameplate_leaves_the_work_list(self, conn):
+        """Confirming a lineup has to shrink the list or the list is useless.
+
+        The Corolla Cross really is hybrid only from 2024, and saying so makes
+        its reading correct. Without a way to record that, it stays on the
+        list looking exactly as unverified as a nameplate nobody has opened.
+        """
+        from vehreg.catalog import Catalog
+        from vehreg.entities import Model
+
+        assert [row["unit_id"] for row in coverage.assumed_powertrain(conn)] \
+            == ["a.solo"]
+        catalog = Catalog(2026)
+        catalog.models["a.solo"] = Model(
+            id="a.solo", brand_id="a", name_en="Solo", powertrain_checked=True)
+        assert coverage.assumed_powertrain(conn, {2026: catalog}) == []
+
     def test_the_split_accounts_for_every_unit(self, conn):
         """The honesty line has to add up to the warehouse or it is decoration."""
         share = coverage.observed_share(conn)

@@ -140,6 +140,14 @@ class Model:
     #: silent about what such a model is missing and reports it separately, so
     #: "the catalog is complete" keeps meaning something.
     incomplete: bool = False
+    #: Set when someone has checked that the variant list covers every
+    #: powertrain this nameplate actually sold that year. DLT never states a
+    #: powertrain, so model-grain volume inherits the consensus of the trims
+    #: the catalog happens to list; that consensus is only trustworthy when
+    #: the list is known complete. Without this flag there is no way to tell a
+    #: confirmed "hybrid only" from a nameplate nobody has looked at yet, and
+    #: both read the same on every chart.
+    powertrain_checked: bool = False
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:

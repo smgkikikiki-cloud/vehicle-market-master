@@ -26,7 +26,7 @@ import re
 import sqlite3
 from pathlib import Path
 from statistics import median
-from typing import Iterable, Mapping, Sequence
+from typing import Any, Iterable, Mapping, Sequence
 
 #: A month holding less than this share of its trailing baseline is treated as
 #: provisional. A real Thai month has never moved by anything close to this:
@@ -379,7 +379,9 @@ def coverage_notices(
 ASSUMED_UNITS_FLOOR = 1000.0
 
 
-def assumed_powertrain(conn: sqlite3.Connection) -> list[dict[str, object]]:
+def assumed_powertrain(conn: sqlite3.Connection,
+                       catalogs: Mapping[int, Any] | None = None
+                       ) -> list[dict[str, object]]:
     """Model-grain volume carrying a powertrain the source never stated.
 
     DLT publishes a nameplate, not a spec: the รุ่น cell says "TOYOTA Corolla"
@@ -399,7 +401,17 @@ def assumed_powertrain(conn: sqlite3.Connection) -> list[dict[str, object]]:
     is an assertion inherited from an incomplete variant list rather than
     something the registration data or a checked catalog says. It is a work
     list, not a verdict - most of these are genuinely single-powertrain.
+
+    Passing ``catalogs`` drops the models whose variant list someone has
+    checked and marked ``powertrain_checked``. Without that the list cannot
+    shrink: confirming that the Corolla Cross really is hybrid only makes its
+    reading correct and leaves it looking exactly as unverified as a nameplate
+    nobody has opened.
     """
+    checked: set[str] = set()
+    for catalog in (catalogs or {}).values():
+        checked.update(model.id for model in catalog.models.values()
+                       if model.powertrain_checked)
     rows = conn.execute(
         "SELECT f.unit_id, d.powertrain, d.brand, d.model, "
         "  COUNT(DISTINCT f.raw_label) AS labels, SUM(f.units) AS units, "
@@ -417,7 +429,9 @@ def assumed_powertrain(conn: sqlite3.Connection) -> list[dict[str, object]]:
          "model": row["model"], "powertrain": str(row["powertrain"]),
          "units": float(row["units"] or 0.0), "labels": int(row["labels"]),
          "periods": f"{row['first_period']}–{row['last_period']}"}
-        for row in rows if float(row["units"] or 0.0) >= ASSUMED_UNITS_FLOOR
+        for row in rows
+        if float(row["units"] or 0.0) >= ASSUMED_UNITS_FLOOR
+        and str(row["unit_id"]) not in checked
     ]
 
 

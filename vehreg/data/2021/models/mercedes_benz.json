@@ -1,0 +1,733 @@
+{
+  "brand": {
+    "id": "mercedes_benz",
+    "name_en": "Mercedes-Benz",
+    "name_th": "เมอร์เซเดส-เบนซ์",
+    "brand_segment": "PREMIUM_LUXURY",
+    "oem_group": "Mercedes-Benz Group",
+    "brand_origin": "DE",
+    "aliases": [
+      "benz",
+      "เบนซ์",
+      "mercedes"
+    ]
+  },
+  "models": [
+    {
+      "id": "mb_c_class",
+      "name_en": "C-Class",
+      "name_th": "ซี-คลาส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "c class",
+        "c220d",
+        "c350e",
+        "C 200",
+        "C 220 d",
+        "C 250",
+        "C250",
+        "C 300",
+        "C 300 e",
+        "C 350 e"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "W206",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 1999,
+              "battery_kwh": 25.4,
+              "aliases": [
+                "C350e AMG Dynamic"
+              ],
+              "overrides": {},
+              "price_thb": 3399000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3399000,
+              "price_max_thb": 3399000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mb_e_class",
+      "name_en": "E-Class",
+      "name_th": "อี-คลาส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "e class",
+        "e220d",
+        "E 200",
+        "E 220 d",
+        "E 300 e",
+        "E 350 e",
+        "E 300"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "W214",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L MHEV",
+              "powertrain": "MHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 1993,
+              "battery_kwh": 0.9,
+              "aliases": [
+                "E220d AMG Dynamic"
+              ],
+              "overrides": {},
+              "price_thb": 4290000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 4290000,
+              "price_max_thb": 4290000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mb_gla",
+      "name_en": "GLA",
+      "name_th": "จีแอลเอ",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "GLA 200",
+        "GLA 250"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "H247",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.3L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1332,
+              "battery_kwh": null,
+              "aliases": [
+                "GLA200 AMG Dynamic"
+              ],
+              "overrides": {},
+              "price_thb": 2590000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2590000,
+              "price_max_thb": 2590000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mb_glc",
+      "name_en": "GLC",
+      "name_th": "จีแอลซี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "GLC 200",
+        "GLC 220 d",
+        "GLC 300 d",
+        "GLC 300 e"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "X254",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L PHEV AWD",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1999,
+              "battery_kwh": 24.8,
+              "aliases": [
+                "GLC300e AMG Dynamic"
+              ],
+              "overrides": {},
+              "price_thb": 4290000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 4290000,
+              "price_max_thb": 4290000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mb_eqs",
+      "name_en": "EQS",
+      "name_th": "อีคิวเอส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "EQS 450",
+        "EQS 500",
+        "EQS 580"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "V297",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "108 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 107.8,
+              "aliases": [
+                "EQS500 4Matic AMG"
+              ],
+              "overrides": {},
+              "price_thb": 8090000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 8090000,
+              "price_max_thb": 8090000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a_class",
+      "name_en": "A-Class",
+      "name_th": "เอ-คลาส",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "A 200",
+        "A200",
+        "A 250"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1332,
+              "battery_kwh": null,
+              "price_thb": 2190000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cle",
+      "name_en": "CLE",
+      "name_th": "ซีแอลอี",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "CLE 300",
+        "CLE 200",
+        "AMG CLE 53",
+        "MERCEDES-AMG CLE 53"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 1999,
+              "battery_kwh": 0.9,
+              "price_thb": 3990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cls",
+      "name_en": "CLS",
+      "name_th": "ซีแอลเอส",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "CLS 220 d",
+        "CLS 300 d",
+        "AMG CLS 53"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 1993,
+              "battery_kwh": 0.9,
+              "price_thb": 4290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glb",
+      "name_en": "GLB",
+      "name_th": "จีแอลบี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "GLB 200",
+        "GLB 220"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1332,
+              "battery_kwh": null,
+              "price_thb": 2790000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gle",
+      "name_en": "GLE",
+      "name_th": "จีแอลอี",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "GLE 300 d",
+        "GLE 350 de",
+        "GLE 450",
+        "AMG GLE 53",
+        "MERCEDES-AMG GLE 53"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 1993,
+              "battery_kwh": 0.9,
+              "price_thb": 5290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gls",
+      "name_en": "GLS",
+      "name_th": "จีแอลเอส",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "GLS 350 d",
+        "GLS 450 d",
+        "GLS 450"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "MHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 2925,
+              "battery_kwh": 0.9,
+              "price_thb": 8290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s_class",
+      "name_en": "S-Class",
+      "name_th": "เอส-คลาส",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "S 350 d",
+        "S 450",
+        "S 500",
+        "S 580 e",
+        "Maybach S 580 e"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "RWD",
+              "engine_cc": 2999,
+              "battery_kwh": 28.6,
+              "price_thb": 8990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eqe",
+      "name_en": "EQE",
+      "name_th": "อีคิวอี",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "EQE 300",
+        "EQE 350",
+        "AMG EQE 53",
+        "EQE 350 4MATIC SUV"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 90.6,
+              "price_thb": 4290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "v_class",
+      "name_en": "V-Class",
+      "name_th": "วี-คลาส",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY2",
+      "market_scope": "CORE",
+      "aliases": [
+        "V 300 d",
+        "V 250"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1950,
+              "battery_kwh": null,
+              "price_thb": 4990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vito",
+      "name_en": "Vito",
+      "name_th": "วีโต้",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY2",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "VITO 119 CDI",
+        "VITO 119"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1950,
+              "battery_kwh": null,
+              "price_thb": 2790000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprinter",
+      "name_en": "Sprinter",
+      "name_th": "สปรินเตอร์",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY2",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "SPRINTER 419 CDI",
+        "SPRINTER 319 CDI",
+        "SPRINTER 388"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2143,
+              "battery_kwh": null,
+              "price_thb": 2990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "g_class",
+      "name_en": "G-Class",
+      "name_th": "จี-คลาส",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "G 450 D",
+        "G 450 d",
+        "G400 D",
+        "G450 D",
+        "AMG G 63"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2925,
+              "battery_kwh": null,
+              "price_thb": 12900000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

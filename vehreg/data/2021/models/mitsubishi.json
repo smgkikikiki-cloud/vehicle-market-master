@@ -1,0 +1,448 @@
+{
+  "brand": {
+    "id": "mitsubishi",
+    "name_en": "Mitsubishi",
+    "name_th": "มิตซูบิชิ",
+    "brand_segment": "MASS",
+    "oem_group": "Mitsubishi Motors",
+    "brand_origin": "JP",
+    "aliases": [
+      "มิตซูบิชิ",
+      "mitsubishi motors"
+    ]
+  },
+  "models": [
+    {
+      "id": "triton_cab",
+      "name_en": "Triton Cab",
+      "name_th": "ไทรทัน ตอนเดียว/แค็บ",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "SINGLE_SMART",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "triton cab",
+        "club cab",
+        "ไทรทัน ตอนเดียว",
+        "ไทรทัน แค็บ",
+        "Triton",
+        "ไทรทัน"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MV",
+          "segment": "F",
+          "seats": 4,
+          "launched": "2023-07-26",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.4L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2442,
+              "battery_kwh": null,
+              "aliases": [
+                "2.4 GL",
+                "2.4 GLX"
+              ],
+              "overrides": {},
+              "price_thb": 569000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 569000,
+              "price_max_thb": 719000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triton_double_cab",
+      "name_en": "Triton Double Cab",
+      "name_th": "ไทรทัน 4 ประตู",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "triton double cab",
+        "triton athlete",
+        "ไทรทัน 4 ประตู",
+        "Triton",
+        "ไทรทัน"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MV",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2023-07-26",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.4L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2442,
+              "battery_kwh": null,
+              "aliases": [
+                "2.4 Athlete"
+              ],
+              "overrides": {},
+              "price_thb": 999000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 999000,
+              "price_max_thb": 999000
+            },
+            {
+              "name": "2.4L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2442,
+              "battery_kwh": null,
+              "aliases": [
+                "2.4 Ultimate 4WD"
+              ],
+              "overrides": {},
+              "price_thb": 1249000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1249000,
+              "price_max_thb": 1249000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pajero_sport",
+      "name_en": "Pajero Sport",
+      "name_th": "ปาเจโร สปอร์ต",
+      "nameplate": "",
+      "body_type": "PPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "pajero",
+        "ปาเจโร"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "QF",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2019-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.4L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2442,
+              "battery_kwh": null,
+              "aliases": [
+                "2.4 GT"
+              ],
+              "overrides": {},
+              "price_thb": 1399000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1399000,
+              "price_max_thb": 1399000
+            },
+            {
+              "name": "2.4L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2442,
+              "battery_kwh": null,
+              "aliases": [
+                "2.4 GT Premium 4WD"
+              ],
+              "overrides": {},
+              "price_thb": 1729000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1729000,
+              "price_max_thb": 1729000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xpander",
+      "name_en": "Xpander",
+      "name_th": "เอ็กซ์แพนเดอร์",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "เอ็กซ์แพนเดอร์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "A1",
+          "segment": "B",
+          "seats": 7,
+          "launched": "2018-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1499,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 GT"
+              ],
+              "overrides": {},
+              "price_thb": 899000,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "seed-unverified",
+              "price_min_thb": 899000,
+              "price_max_thb": 899000
+            },
+            {
+              "name": "1.6L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1600,
+              "battery_kwh": 0.8,
+              "aliases": [
+                "1.6 HEV GT"
+              ],
+              "overrides": {},
+              "price_thb": 1099000,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1099000,
+              "price_max_thb": 1099000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xpander_cross",
+      "name_en": "Xpander Cross",
+      "name_th": "เอ็กซ์แพนเดอร์ ครอส",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "A1C",
+          "segment": "B",
+          "seats": 7,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1499,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 GT"
+              ],
+              "overrides": {},
+              "price_thb": 949000,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "seed-unverified",
+              "price_min_thb": 949000,
+              "price_max_thb": 949000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "attrage",
+      "name_en": "Attrage",
+      "name_th": "แอททราจ",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "แอททราจ"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "A10",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2019-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.2L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1193,
+              "battery_kwh": null,
+              "aliases": [
+                "1.2 GLS"
+              ],
+              "overrides": {},
+              "price_thb": 559000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 559000,
+              "price_max_thb": 559000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mirage",
+      "name_en": "Mirage",
+      "name_th": "มิราจ",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "มิราจ"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "A05",
+          "segment": "A",
+          "seats": 5,
+          "launched": "2019-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.2L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1193,
+              "battery_kwh": null,
+              "aliases": [
+                "1.2 GLS"
+              ],
+              "overrides": {},
+              "price_thb": 519000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 519000,
+              "price_max_thb": 519000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xforce",
+      "name_en": "Xforce",
+      "name_th": "เอ็กซ์ฟอร์ซ",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "XF",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1499,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 Ultimate"
+              ],
+              "overrides": {},
+              "price_thb": 949000,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "seed-unverified",
+              "price_min_thb": 949000,
+              "price_max_thb": 949000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "outlander_phev",
+      "name_en": "Outlander PHEV",
+      "name_th": "เอาท์แลนเดอร์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "GREY",
+      "aliases": [
+        "outlander"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.4L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 2359,
+              "battery_kwh": 20.0,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "grey import",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

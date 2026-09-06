@@ -1,0 +1,226 @@
+{
+  "brand": {
+    "id": "ford",
+    "name_en": "Ford",
+    "name_th": "ฟอร์ด",
+    "brand_segment": "MASS",
+    "oem_group": "Ford",
+    "brand_origin": "US",
+    "aliases": [
+      "ฟอร์ด"
+    ]
+  },
+  "models": [
+    {
+      "id": "ranger_cab",
+      "name_en": "Ranger Cab",
+      "name_th": "เรนเจอร์ ตอนเดียว/แค็บ",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "SINGLE_SMART",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ranger cab",
+        "open cab",
+        "เรนเจอร์ ตอนเดียว",
+        "เรนเจอร์ แค็บ",
+        "Ranger",
+        "เรนเจอร์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "P703",
+          "segment": "F",
+          "seats": 4,
+          "launched": "2022-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1996,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 XL",
+                "2.0 XLT"
+              ],
+              "overrides": {},
+              "price_thb": 649000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 649000,
+              "price_max_thb": 849000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ranger_double_cab",
+      "name_en": "Ranger Double Cab",
+      "name_th": "เรนเจอร์ 4 ประตู",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ranger double cab",
+        "ranger raptor",
+        "wildtrak",
+        "เรนเจอร์ 4 ประตู",
+        "Ranger",
+        "เรนเจอร์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "P703",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2022-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 1996,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 Wildtrak 4x4"
+              ],
+              "overrides": {},
+              "price_thb": 1329000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1329000,
+              "price_max_thb": 1329000
+            },
+            {
+              "name": "3.0L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2956,
+              "battery_kwh": null,
+              "aliases": [
+                "3.0 Raptor"
+              ],
+              "overrides": {},
+              "price_thb": 1999000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1999000,
+              "price_max_thb": 1999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "everest",
+      "name_en": "Everest",
+      "name_th": "เอเวอเรสต์",
+      "nameplate": "",
+      "body_type": "PPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "เอเวอเรสต์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "U704",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2022-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1996,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 Titanium+ 4x2"
+              ],
+              "overrides": {},
+              "price_thb": 1699000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1699000,
+              "price_max_thb": 1699000
+            },
+            {
+              "name": "2.0L ICE 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 1996,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 Platinum 4x4"
+              ],
+              "overrides": {},
+              "price_thb": 2199000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2199000,
+              "price_max_thb": 2199000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mustang",
+      "name_en": "Mustang",
+      "name_th": "มัสแตง",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "S650",
+          "segment": "D",
+          "seats": 4,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "5.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 5038,
+              "battery_kwh": null,
+              "aliases": [
+                "5.0 GT"
+              ],
+              "overrides": {},
+              "price_thb": 5999000,
+              "import_type": "CBU",
+              "origin_country": "US",
+              "price_note": "seed-unverified",
+              "price_min_thb": 5999000,
+              "price_max_thb": 5999000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

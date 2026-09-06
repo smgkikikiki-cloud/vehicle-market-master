@@ -1,0 +1,156 @@
+{
+  "brand": {
+    "id": "chery",
+    "name_en": "Chery",
+    "name_th": "เชอรี่",
+    "brand_segment": "MASS",
+    "oem_group": "Chery",
+    "brand_origin": "CN",
+    "aliases": [
+      "omoda",
+      "jaecoo",
+      "jetour"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "omoda_c5",
+      "name_en": "Omoda C5",
+      "name_th": "โอโมดา ซี5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "omoda c5",
+        "c5"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "OC5",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-04-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "61 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 61.0,
+              "aliases": [
+                "EV Luxury"
+              ],
+              "overrides": {},
+              "price_thb": 989000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 989000,
+              "price_max_thb": 989000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jaecoo_j7",
+      "name_en": "Jaecoo J7",
+      "name_th": "เจคู เจ7",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "jaecoo j7",
+        "j7"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "J7",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 18.3,
+              "aliases": [
+                "PHEV Luxury"
+              ],
+              "overrides": {},
+              "price_thb": 1099000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1099000,
+              "price_max_thb": 1099000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chery_v23",
+      "name_en": "Chery V23",
+      "name_th": "เชอรี่ วี23",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "v23"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2025-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "60 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 60.0,
+              "price_thb": 799000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            },
+            {
+              "name": "60 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 60.0,
+              "price_thb": 899000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

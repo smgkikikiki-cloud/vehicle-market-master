@@ -1,0 +1,412 @@
+{
+  "brand": {
+    "id": "volvo",
+    "name_en": "Volvo",
+    "name_th": "วอลโว่",
+    "brand_segment": "PREMIUM_LUXURY",
+    "oem_group": "Geely",
+    "brand_origin": "SE",
+    "aliases": [
+      "วอลโว่"
+    ]
+  },
+  "models": [
+    {
+      "id": "xc40",
+      "name_en": "XC40",
+      "name_th": "เอ็กซ์ซี40",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "xc 40",
+        "xc40 recharge"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "XC40G",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "78 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 78.0,
+              "aliases": [
+                "Recharge Pure Electric"
+              ],
+              "overrides": {},
+              "price_thb": 2590000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2590000,
+              "price_max_thb": 2590000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xc60",
+      "name_en": "XC60",
+      "name_th": "เอ็กซ์ซี60",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "xc 60"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "XC60G",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L PHEV AWD",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1969,
+              "battery_kwh": 18.8,
+              "aliases": [
+                "T8 Recharge Ultimate"
+              ],
+              "overrides": {},
+              "price_thb": 3390000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 3390000,
+              "price_max_thb": 3390000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xc90",
+      "name_en": "XC90",
+      "name_th": "เอ็กซ์ซี90",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "xc 90"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "XC90G",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2016-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L PHEV AWD",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1969,
+              "battery_kwh": 18.8,
+              "aliases": [
+                "T8 Recharge Ultimate"
+              ],
+              "overrides": {},
+              "price_thb": 4990000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 4990000,
+              "price_max_thb": 4990000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ex30",
+      "name_en": "EX30",
+      "name_th": "อีเอ็กซ์30",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ex 30"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "EX30G",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "69 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 69.0,
+              "aliases": [
+                "Ultra Single Motor"
+              ],
+              "overrides": {},
+              "price_thb": 1590000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1590000,
+              "price_max_thb": 1590000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ex40",
+      "name_en": "EX40",
+      "name_th": "อีเอ็กซ์40",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "EX40"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 78.0,
+              "price_thb": 2190000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ec40",
+      "name_en": "EC40",
+      "name_th": "อีซี40",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "EC40"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 78.0,
+              "price_thb": 2290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ex90",
+      "name_en": "EX90",
+      "name_th": "อีเอ็กซ์90",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "EX90"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 111.0,
+              "price_thb": 4990000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s60",
+      "name_en": "S60",
+      "name_th": "เอส60",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "S60"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1969,
+              "battery_kwh": 18.8,
+              "price_thb": 2590000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s90",
+      "name_en": "S90",
+      "name_th": "เอส90",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "S90"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1969,
+              "battery_kwh": 18.8,
+              "price_thb": 3490000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "v60",
+      "name_en": "V60",
+      "name_th": "วี60",
+      "nameplate": "",
+      "body_type": "WAGON",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "V60"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1969,
+              "battery_kwh": 18.8,
+              "price_thb": 2790000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

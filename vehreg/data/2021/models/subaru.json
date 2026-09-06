@@ -1,0 +1,173 @@
+{
+  "brand": {
+    "id": "subaru",
+    "name_en": "Subaru",
+    "name_th": "ซูบารุ",
+    "brand_segment": "MASS",
+    "oem_group": "Subaru",
+    "brand_origin": "JP",
+    "aliases": [
+      "ซูบารุ"
+    ]
+  },
+  "models": [
+    {
+      "id": "forester",
+      "name_en": "Forester",
+      "name_th": "ฟอเรสเตอร์",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [],
+      "notes": "",
+      "generations": [
+        {
+          "code": "SK",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE AWD",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 1995,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 i-S EyeSight"
+              ],
+              "overrides": {},
+              "price_thb": 1590000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1590000,
+              "price_max_thb": 1590000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "crosstrek",
+      "name_en": "Crosstrek",
+      "name_th": "ครอสส์เทรค",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "xv"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "GU",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2023-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L MHEV AWD",
+              "powertrain": "MHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1995,
+              "battery_kwh": 0.6,
+              "aliases": [
+                "2.0 e-Boxer"
+              ],
+              "overrides": {},
+              "price_thb": 1290000,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1290000,
+              "price_max_thb": 1290000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brz",
+      "name_en": "BRZ",
+      "name_th": "บีอาร์แซด",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "brz"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 4,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.4L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 2387,
+              "battery_kwh": null,
+              "price_thb": 2390000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "outback",
+      "name_en": "Outback",
+      "name_th": "เอาท์แบ็ค",
+      "nameplate": "",
+      "body_type": "WAGON",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "outback"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 2498,
+              "battery_kwh": null,
+              "price_thb": 2290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

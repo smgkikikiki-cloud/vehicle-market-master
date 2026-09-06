@@ -1,0 +1,53 @@
+{
+  "brand": {
+    "id": "jeep",
+    "name_en": "Jeep",
+    "name_th": "จี๊ป",
+    "brand_segment": "MASS",
+    "oem_group": "Stellantis",
+    "brand_origin": "US",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "wrangler",
+      "name_en": "Wrangler",
+      "name_th": "แรงเลอร์",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "wrangler",
+        "rubicon"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 1995,
+              "battery_kwh": null,
+              "price_thb": 4290000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "US",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

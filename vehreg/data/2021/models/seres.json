@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "seres",
+    "name_en": "Seres",
+    "name_th": "เซเรส",
+    "brand_segment": "BUDGET",
+    "oem_group": "Seres",
+    "brand_origin": "CN",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "seres_3",
+      "name_en": "Seres 3",
+      "name_th": "Seres 3",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "3"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 53.6,
+              "price_thb": 899000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "foton",
+    "name_en": "Foton",
+    "name_th": "โฟตอน",
+    "brand_segment": "BUDGET",
+    "oem_group": "Foton",
+    "brand_origin": "CN",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "foton_truck",
+      "name_en": "Foton Truck",
+      "name_th": "โฟตอน ทรัค",
+      "nameplate": "",
+      "body_type": "TRUCK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "BJ"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 3,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "diesel",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 5193,
+              "battery_kwh": null,
+              "price_thb": 1500000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

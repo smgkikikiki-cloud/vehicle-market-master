@@ -1,0 +1,92 @@
+{
+  "brand": {
+    "id": "wuling",
+    "name_en": "Wuling",
+    "name_th": "หวูหลิง",
+    "brand_segment": "BUDGET",
+    "oem_group": "SAIC-GM-Wuling",
+    "brand_origin": "CN",
+    "trim_detail": true,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "wuling_bingo",
+      "name_en": "Wuling Bingo",
+      "name_th": "หวูหลิง บิงโก",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "bingo",
+        "binguo",
+        "bingou"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "A",
+          "seats": 5,
+          "launched": "2024-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "32 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 31.9,
+              "price_thb": 499000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wuling_air_ev",
+      "name_en": "Wuling Air EV",
+      "name_th": "หวูหลิง แอร์ อีวี",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "air ev"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "A",
+          "seats": 4,
+          "launched": "2022-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "27 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 26.7,
+              "price_thb": 399000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,431 @@
+{
+  "brand": {
+    "id": "byd",
+    "name_en": "BYD",
+    "name_th": "บีวายดี",
+    "brand_segment": "MASS",
+    "oem_group": "BYD",
+    "brand_origin": "CN",
+    "aliases": [
+      "บีวายดี",
+      "rever automotive"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "atto3",
+      "name_en": "Atto 3",
+      "name_th": "แอตโต้ 3",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "atto 3",
+        "yuan plus"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "ATTO3",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2022-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "60 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 60.5,
+              "aliases": [
+                "Extended Range"
+              ],
+              "overrides": {},
+              "price_thb": 899000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 899000,
+              "price_max_thb": 899000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dolphin",
+      "name_en": "Dolphin",
+      "name_th": "ดอลฟิน",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ดอลฟิน"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "DOL",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2023-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "45 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 44.9,
+              "aliases": [
+                "Standard Range"
+              ],
+              "overrides": {},
+              "price_thb": 699000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 699000,
+              "price_max_thb": 699000
+            },
+            {
+              "name": "60 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 60.5,
+              "aliases": [
+                "Extended Range"
+              ],
+              "overrides": {},
+              "price_thb": 859000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 859000,
+              "price_max_thb": 859000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seal",
+      "name_en": "Seal",
+      "name_th": "ซีล",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ซีล"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "SEAL",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2023-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "61 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 61.4,
+              "aliases": [
+                "Dynamic"
+              ],
+              "overrides": {},
+              "price_thb": 1099000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1099000,
+              "price_max_thb": 1099000
+            },
+            {
+              "name": "82 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 82.5,
+              "aliases": [
+                "AWD Performance"
+              ],
+              "overrides": {},
+              "price_thb": 1599000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1599000,
+              "price_max_thb": 1599000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sealion6",
+      "name_en": "Sealion 6 DM-i",
+      "name_th": "ซีไลอ้อน 6",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "sealion 6",
+        "seal u"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "SL6",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 18.3,
+              "aliases": [
+                "Dynamic DM-i"
+              ],
+              "overrides": {},
+              "price_thb": 899000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 899000,
+              "price_max_thb": 899000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sealion7",
+      "name_en": "Sealion 7",
+      "name_th": "ซีไลอ้อน 7",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "sealion 7"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "SL7",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2025-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "82 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 82.5,
+              "aliases": [
+                "Premium"
+              ],
+              "overrides": {},
+              "price_thb": 1399000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1399000,
+              "price_max_thb": 1399000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "byd_m6",
+      "name_en": "BYD M6",
+      "name_th": "บีวายดี เอ็ม6",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "m6",
+        "e6"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "M6",
+          "segment": "C",
+          "seats": 7,
+          "launched": "2024-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "55 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 55.4,
+              "aliases": [
+                "Dynamic"
+              ],
+              "overrides": {},
+              "price_thb": 829000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 829000,
+              "price_max_thb": 829000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shark6",
+      "name_en": "Shark 6",
+      "name_th": "ชาร์ค 6",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "shark",
+        "shark 6",
+        "ชาร์ค"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "SHK6",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2025-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L PHEV AWD",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 1498,
+              "battery_kwh": 29.6,
+              "aliases": [
+                "Premium DMO"
+              ],
+              "overrides": {},
+              "price_thb": 1599000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1599000,
+              "price_max_thb": 1599000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seagull",
+      "name_en": "Dolphin Mini",
+      "name_th": "ดอลฟิน มินิ",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "seagull",
+        "dolphin mini"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "SGL",
+          "segment": "A",
+          "seats": 4,
+          "launched": "2024-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "38 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 38.0,
+              "aliases": [
+                "Standard"
+              ],
+              "overrides": {},
+              "price_thb": 569000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 569000,
+              "price_max_thb": 569000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "byd_t3",
+      "name_en": "BYD T3",
+      "name_th": "บีวายดี ที3",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY3",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "t3"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 2,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "50 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 50.3,
+              "price_thb": 999000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

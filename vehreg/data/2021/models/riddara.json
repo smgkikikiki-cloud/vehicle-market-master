@@ -1,0 +1,90 @@
+{
+  "brand": {
+    "id": "riddara",
+    "name_en": "Riddara",
+    "name_th": "ริดดารา",
+    "brand_segment": "MASS",
+    "oem_group": "Geely",
+    "brand_origin": "CN",
+    "trim_detail": true,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "riddara_rd6_double_cab",
+      "name_en": "Riddara RD6 Double Cab",
+      "name_th": "ริดดารา อาร์ดี6",
+      "nameplate": "RD6",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "rd6"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2024-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "86 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 86.0,
+              "price_thb": 1299000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "riddara_horizon_double_cab",
+      "name_en": "Riddara Horizon Double Cab",
+      "name_th": "ริดดารา ฮอไรซัน",
+      "nameplate": "Horizon",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "horizon"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2025-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "88 kWh BEV AWD",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 88.0,
+              "price_thb": 1399000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

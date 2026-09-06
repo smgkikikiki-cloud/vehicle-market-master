@@ -78,10 +78,9 @@
           "variants": [
             {
               "name": "1.2L REEV",
-              "powertrain": "REEV",
+              "powertrain": "HEV",
               "drivetrain": "FWD",
               "engine_cc": 1198,
-              "battery_kwh": 2.1,
               "aliases": [
                 "e-Power VL"
               ],
@@ -254,10 +253,9 @@
           "variants": [
             {
               "name": "1.4L REEV",
-              "powertrain": "REEV",
+              "powertrain": "HEV",
               "drivetrain": "FWD",
               "engine_cc": 1433,
-              "battery_kwh": 1.8,
               "price_thb": null,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -295,10 +293,9 @@
           "variants": [
             {
               "name": "1.5L REEV",
-              "powertrain": "REEV",
+              "powertrain": "HEV",
               "drivetrain": "FWD",
               "engine_cc": 1497,
-              "battery_kwh": 2.1,
               "price_thb": 1599000.0,
               "price_min_thb": null,
               "price_max_thb": null,

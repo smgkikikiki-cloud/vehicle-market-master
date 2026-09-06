@@ -47,7 +47,8 @@ from .taxonomy import (
     MarketScope, Powertrain, RegistrationType, Segment,
     check_body_segment, check_origin, check_powertrain, check_registration,
     is_electrified, is_locally_assembled, is_plug_in, market_position_for_price,
-    normalize_country, powertrain_group, registration_type_for,
+    market_powertrain, normalize_country, powertrain_group,
+    registration_type_for,
 )
 
 #: Facet -> the layer that owns it. Used for validation messages and for the
@@ -318,6 +319,7 @@ def resolve(brand: Brand, model: Model, generation: Generation, variant: Variant
     # disagree with the layer that produced their input.
     pt = facets.get("powertrain", Powertrain.UNKNOWN)
     facets["powertrain_group"] = powertrain_group(pt)
+    facets["market_powertrain"] = market_powertrain(pt)
     facets["is_electrified"] = is_electrified(pt)
     facets["is_plug_in"] = is_plug_in(pt)
     facets.setdefault("market_position", MarketPosition.UNKNOWN)

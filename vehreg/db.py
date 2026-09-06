@@ -28,7 +28,8 @@ MIXED = "MIXED"
 DIM_FACETS: tuple[str, ...] = (
     "brand", "nameplate", "model", "variant", "generation", "segment",
     "body_type", "cab_type", "market_position", "powertrain",
-    "powertrain_group", "origin_country", "import_type", "brand_segment",
+    "powertrain_group", "market_powertrain",
+    "origin_country", "import_type", "brand_segment",
     "oem_group", "brand_origin", "drivetrain", "registration_type",
     "market_scope",
 )
@@ -153,15 +154,27 @@ CREATE TABLE IF NOT EXISTS fact_trim (
     UNIQUE (period, registration_type, province, trim_id, source_id, raw_label)
 );
 CREATE INDEX IF NOT EXISTS ix_fact_trim_period ON fact_trim(period);
+"""
 
-CREATE VIEW IF NOT EXISTS trim_classified AS
+
+#: The reading views, kept out of SCHEMA and rebuilt on every connect.
+#: ``CREATE VIEW IF NOT EXISTS`` leaves an existing definition alone, so a view
+#: whose column list is generated from DIM_FACETS goes stale the moment a facet
+#: is added and every query through it fails on the missing column - which is
+#: exactly what adding market_powertrain did. Dropping first costs nothing: a
+#: view holds no data.
+VIEWS = f"""
+DROP VIEW IF EXISTS trim_classified;
+DROP VIEW IF EXISTS fact_classified;
+
+CREATE VIEW trim_classified AS
 SELECT f.period, f.registration_type, f.province, f.units, f.raw_label,
        f.source_id, t.trim_id, t.brand, t.nameplate, t.model, t.model_id,
        t.trim_label, t.grade, t.drive, t.range_km, t.battery_kwh,
        t.powertrain_hint, t.catalog_year,
        d.segment, d.body_type, d.market_position, d.powertrain,
-       d.powertrain_group, d.import_type, d.origin_country, d.brand_segment,
-       d.market_scope, d.price_thb
+       d.powertrain_group, d.market_powertrain, d.import_type,
+       d.origin_country, d.brand_segment, d.market_scope, d.price_thb
 FROM fact_trim f
 JOIN dim_trim t
   ON t.trim_id = f.trim_id
@@ -170,7 +183,7 @@ LEFT JOIN dim_unit d
   ON d.unit_id = t.model_id AND d.grain = 'MODEL'
  AND d.catalog_year = t.catalog_year;
 
-CREATE VIEW IF NOT EXISTS fact_classified AS
+CREATE VIEW fact_classified AS
 SELECT f.fact_id, f.period, f.registration_type AS fact_registration_type,
        f.province, f.grain, f.units, f.raw_label, f.source_id,
        f.match_how, f.match_score,
@@ -191,6 +204,7 @@ def connect(path: Path | str) -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
     _migrate(conn)
+    conn.executescript(VIEWS)
     return conn
 
 
@@ -201,6 +215,14 @@ def _migrate(conn: sqlite3.Connection) -> None:
     so a new column has to be added here or every warehouse built before the
     change keeps the old shape. Each step checks first and is safe to re-run.
     """
+    dim_columns = {row["name"] for row in
+                   conn.execute("PRAGMA table_info(dim_unit)")}
+    if "market_powertrain" not in dim_columns:
+        # The four buckets the site sells in. Derived, so a rebuild fills it;
+        # the column just has to exist first.
+        with conn:
+            conn.execute("ALTER TABLE dim_unit ADD COLUMN market_powertrain TEXT")
+
     columns = {row["name"] for row in
                conn.execute("PRAGMA table_info(ingest_review)")}
     if "reg_type" not in columns:

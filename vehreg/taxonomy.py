@@ -163,6 +163,60 @@ _POWERTRAIN_GROUP = {
     Powertrain.UNKNOWN: PowertrainGroup.UNKNOWN,
 }
 
+class MarketPowertrain(Facet):
+    """The four buckets a Thai showroom, and the site, actually sell in.
+
+    ``PowertrainGroup`` folds too far for a buyer - it puts a Prius and an
+    Outlander PHEV in one bucket - and ``Powertrain`` splits further than the
+    market does. MHEV is the clearest case: a mild hybrid is sold as a petrol
+    car, nobody cross-shops one against a Corolla Cross HEV, and neither layer
+    of the site has a category for it. REEV is the same problem from the other
+    side, with one occupant.
+
+    The warehouse keeps the precise code either way. This is what to group and
+    filter by when the answer is going in front of a reader.
+    """
+
+    FUEL = "FUEL"            # ICE and MHEV: a petrol or diesel car to a buyer
+    HYBRID = "HYBRID"        # HEV and REEV: electrified, no plug
+    PLUGIN = "PLUGIN"        # PHEV: a plug and an engine
+    ELECTRIC = "ELECTRIC"    # BEV and FCEV
+    MIXED = "MIXED"
+    UNKNOWN = "UNKNOWN"
+
+
+_MARKET_POWERTRAIN = {
+    Powertrain.ICE: MarketPowertrain.FUEL,
+    Powertrain.MHEV: MarketPowertrain.FUEL,
+    Powertrain.HEV: MarketPowertrain.HYBRID,
+    Powertrain.REEV: MarketPowertrain.HYBRID,
+    Powertrain.PHEV: MarketPowertrain.PLUGIN,
+    Powertrain.BEV: MarketPowertrain.ELECTRIC,
+    Powertrain.FCEV: MarketPowertrain.ELECTRIC,
+    Powertrain.UNKNOWN: MarketPowertrain.UNKNOWN,
+}
+
+#: Thai labels for the four, for anything reader-facing.
+MARKET_POWERTRAIN_TH: dict[str, str] = {
+    MarketPowertrain.FUEL.value: "น้ำมัน/ดีเซล",
+    MarketPowertrain.HYBRID.value: "ไฮบริด",
+    MarketPowertrain.PLUGIN.value: "ปลั๊กอินไฮบริด",
+    MarketPowertrain.ELECTRIC.value: "ไฟฟ้า",
+    MarketPowertrain.MIXED.value: "ปนกัน",
+    MarketPowertrain.UNKNOWN.value: "ไม่ทราบ",
+}
+
+
+def market_powertrain(pt: Powertrain) -> MarketPowertrain:
+    return _MARKET_POWERTRAIN[Powertrain.parse(pt)]
+
+
+#: Cars that can be charged from a socket. REEV is here because a range
+#: extender is charged and then burns fuel when it runs out - which is true of
+#: an i3 REx or a Li Auto and is NOT true of Nissan e-Power, whose battery is
+#: only ever charged by its own engine. Filing e-Power as REEV therefore made
+#: every one of its units read as a plug-in car; it is HEV in this catalog for
+#: that reason, which is also how Thai excise treats it.
 _PLUGGABLE = frozenset({Powertrain.PHEV, Powertrain.REEV, Powertrain.BEV})
 _ELECTRIFIED = frozenset(
     {Powertrain.MHEV, Powertrain.HEV, Powertrain.PHEV, Powertrain.REEV,

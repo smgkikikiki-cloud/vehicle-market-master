@@ -19,7 +19,7 @@ from vehreg.monthly_state import (
     history,
     set_state,
 )
-from vehreg.taxonomy import KNOWN_ORIGIN_COUNTRIES
+from vehreg.taxonomy import KNOWN_ORIGIN_COUNTRIES, MARKET_POWERTRAIN_TH
 from vehreg.web_bootstrap import bootstrap_database as shared_bootstrap
 
 ROOT = Path(__file__).resolve().parent
@@ -47,6 +47,7 @@ def open_conn():
 def distinct_values(conn, field: str, year: int) -> list[str]:
     allowed = {
         "brand", "segment", "body_type", "powertrain", "powertrain_group",
+        "market_powertrain",
         "import_type", "origin_country", "brand_origin",
     }
     if field not in allowed:
@@ -190,8 +191,16 @@ body_family = st.sidebar.selectbox(
      "WAGON", "VAN", "TRUCK", "OTHER"],
     key="f_body",
 )
+market_pt = st.sidebar.selectbox(
+    "ระบบขับเคลื่อน",
+    ["ALL", "FUEL", "HYBRID", "PLUGIN", "ELECTRIC", "MIXED", "UNKNOWN"],
+    format_func=lambda v: MARKET_POWERTRAIN_TH.get(v, v),
+    key="f_market_pt",
+    help="สี่หมวดที่หน้าเว็บใช้จริง — mild hybrid นับเป็นน้ำมัน และ e-Power "
+         "นับเป็นไฮบริด กรองแบบละเอียดอยู่ช่องถัดไป",
+)
 powertrain = st.sidebar.selectbox(
-    "Powertrain",
+    "Powertrain (ละเอียด)",
     ["ALL", "ICE", "MHEV", "HEV", "PHEV", "REEV", "BEV", "FCEV",
      "MIXED", "UNKNOWN"],
     key="f_powertrain",
@@ -216,6 +225,7 @@ add_filter(filters, "fact_registration_type", registration)
 add_filter(filters, "brand", brand)
 add_filter(filters, "segment", segment)
 add_filter(filters, "body_family", body_family)
+add_filter(filters, "market_powertrain", market_pt)
 add_filter(filters, "powertrain", powertrain)
 add_filter(filters, "price_band", price_band)
 add_filter(filters, "import_type", import_type)
@@ -228,6 +238,7 @@ ui.filter_bar({
     "f_brand": ("ยี่ห้อ", brand),
     "f_segment": ("Segment", segment),
     "f_body": ("Body", body_family),
+    "f_market_pt": ("ระบบขับเคลื่อน", market_pt),
     "f_powertrain": ("Powertrain", powertrain),
     "f_price": ("Price band", price_band),
     "f_import": ("CBU / CKD", import_type),
@@ -301,7 +312,11 @@ with TAB_DASH:
             "Segment": "segment",
             "Body family": "body_family",
             "SUV type": "suv_type",
-            "Powertrain": "powertrain",
+            # The four buckets the site sells in. Grouping by the raw
+            # powertrain puts MHEV on a chart nobody has a column for, and
+            # REEV on one with a single occupant.
+            "ระบบขับเคลื่อน (แบบที่เว็บใช้)": "market_powertrain",
+            "Powertrain (ละเอียด)": "powertrain",
             "Powertrain group": "powertrain_group",
             "Price band": "price_band",
             "CBU / CKD": "import_type",

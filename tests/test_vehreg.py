@@ -1069,3 +1069,68 @@ class AuthoringTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MarketPowertrainTests(unittest.TestCase):
+    """The four buckets the site sells in, and what they exist to hide."""
+
+    def test_a_mild_hybrid_is_a_petrol_car_to_a_buyer(self):
+        # Neither layer of the site has an MHEV column, and nobody cross-shops
+        # a mild hybrid against a Corolla Cross HEV.
+        self.assertIs(taxonomy.market_powertrain(Powertrain.MHEV),
+                      taxonomy.MarketPowertrain.FUEL)
+        self.assertIs(taxonomy.market_powertrain(Powertrain.ICE),
+                      taxonomy.MarketPowertrain.FUEL)
+
+    def test_a_range_extender_sits_with_the_hybrids(self):
+        self.assertIs(taxonomy.market_powertrain(Powertrain.REEV),
+                      taxonomy.MarketPowertrain.HYBRID)
+        self.assertIs(taxonomy.market_powertrain(Powertrain.HEV),
+                      taxonomy.MarketPowertrain.HYBRID)
+
+    def test_a_plug_keeps_its_own_bucket(self):
+        # The coarser PowertrainGroup puts a Prius and an Outlander PHEV
+        # together, which is the distinction a buyer is actually shopping.
+        self.assertIs(taxonomy.powertrain_group(Powertrain.HEV),
+                      taxonomy.powertrain_group(Powertrain.PHEV))
+        self.assertIsNot(taxonomy.market_powertrain(Powertrain.HEV),
+                         taxonomy.market_powertrain(Powertrain.PHEV))
+
+    def test_every_powertrain_has_a_bucket_and_a_thai_label(self):
+        for pt in Powertrain:
+            bucket = taxonomy.market_powertrain(pt)
+            self.assertIn(bucket.value, taxonomy.MARKET_POWERTRAIN_TH)
+
+    def test_e_power_is_not_a_plug_in_car(self):
+        """A Nissan e-Power battery is only ever charged by its own engine.
+
+        Filing it REEV made all 21,863 of its units read as plug-ins and put
+        the only occupant in a category of its own; it is HEV in this catalog.
+        """
+        self.assertFalse(taxonomy.is_plug_in(Powertrain.HEV))
+        self.assertTrue(taxonomy.is_electrified(Powertrain.HEV))
+        # REEV keeps its meaning for a car that really has a socket.
+        self.assertTrue(taxonomy.is_plug_in(Powertrain.REEV))
+
+
+class GeneratedViewTests(unittest.TestCase):
+    def test_a_new_facet_reaches_the_reading_view(self):
+        """The views are generated from DIM_FACETS and must not go stale.
+
+        ``CREATE VIEW IF NOT EXISTS`` leaves an existing definition alone, so
+        adding market_powertrain left every warehouse built before it querying
+        a view without the column - "no such column: market_powertrain" on the
+        dashboard's first chart.
+        """
+        conn = db.connect(":memory:")
+        conn.execute("DROP VIEW fact_classified")
+        conn.execute("CREATE VIEW fact_classified AS SELECT 1 AS stale")
+        conn.commit()
+        conn.close()
+
+        conn = db.connect(":memory:")
+        columns = {row["name"] for row in
+                   conn.execute("PRAGMA table_info(fact_classified)")}
+        for facet in db.DIM_FACETS:
+            with self.subTest(facet=facet):
+                self.assertIn(facet, columns)

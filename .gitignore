@@ -6,3 +6,6 @@ __pycache__/
 # Private / licensed / manually supplied source data must stay outside public Git.
 data/private/
 data/provincial_raw/
+
+# Local virtualenv for running the Streamlit app and tests.
+.venv/

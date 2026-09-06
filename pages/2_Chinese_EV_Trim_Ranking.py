@@ -3,6 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from vehreg import coverage
 from vehreg.db import connect
 from vehreg.rankings import chinese_ev_trim_ranking, model_ranking
 from vehreg.web_bootstrap import bootstrap_database, database_path
@@ -34,7 +35,19 @@ if not periods:
     conn.close()
     st.stop()
 
-period = st.sidebar.selectbox("เดือน", periods, index=len(periods) - 1)
+# Same stub-month trap as the dashboard: a trim ranking off fifteen
+# registrations reads as a ranking, not as an empty month.
+totals = coverage.period_totals(conn)
+provisional = coverage.provisional_periods(totals)
+period = st.sidebar.selectbox(
+    "เดือน", periods,
+    index=coverage.default_period_index(periods, totals, provisional),
+)
+if period in provisional:
+    st.error(
+        f"กำลังดู {period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
+        "อันดับด้านล่างยังใช้อ้างอิงไม่ได้"
+    )
 registration = st.sidebar.selectbox("DLT class", ["ALL", "RY1", "RY2", "RY3"])
 powertrain = st.sidebar.selectbox("Powertrain", ["ALL", "BEV", "PHEV", "REEV"])
 

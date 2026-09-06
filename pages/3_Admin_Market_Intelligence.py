@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from vehreg import cube
+from vehreg import coverage, cube
 from vehreg.db import connect
 from vehreg.market_metrics import (
     compare_share_rows,
@@ -15,7 +15,7 @@ from vehreg.market_metrics import (
     window_is_complete,
     ytd_window,
 )
-from vehreg.web_bootstrap import bootstrap_database, database_path
+from vehreg.web_bootstrap import bootstrap_database, database_path, raw_dir
 
 st.set_page_config(page_title="Admin Market Intelligence | TDR", layout="wide")
 st.title("Admin Market Intelligence")
@@ -166,6 +166,7 @@ def render_movement(
                 y="entity",
                 orientation="h",
                 labels={"share_change_pp": "Share change (pp)", "entity": ""},
+                height=coverage.chart_height(len(chart)),
             ),
             use_container_width=True,
         )
@@ -179,6 +180,7 @@ def render_movement(
                 y="entity",
                 orientation="h",
                 labels={"share_change_pp": "Share change (pp)", "entity": ""},
+                height=coverage.chart_height(len(chart)),
             ),
             use_container_width=True,
         )
@@ -217,8 +219,26 @@ if not periods:
     conn.close()
     st.stop()
 
-selected_period = st.sidebar.selectbox("เดือนข้อมูล", periods, index=len(periods) - 1)
+# This deck reports leader share. Opening it on a month DLT has only started
+# publishing produced "Leader share 100.00%" off fifteen registrations, which is
+# the single most misleading thing this product can put on a screen.
+totals = coverage.period_totals(conn)
+provisional = coverage.provisional_periods(totals)
+selected_period = st.sidebar.selectbox(
+    "เดือนข้อมูล", periods,
+    index=coverage.default_period_index(periods, totals, provisional),
+)
 selected_year = int(selected_period[:4])
+
+for notice in coverage.coverage_notices(
+    provisional, coverage.duplicate_payload_periods(raw_dir())
+):
+    st.warning(notice)
+if selected_period in provisional:
+    st.error(
+        f"กำลังดู {selected_period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
+        "ส่วนแบ่งตลาดและอันดับด้านล่างยังใช้อ้างอิงไม่ได้"
+    )
 
 grouping_labels = {
     "Brand": "brand",
@@ -319,6 +339,7 @@ with tab_structure:
                 y="entity",
                 orientation="h",
                 labels={"share_pct": "Market share (%)", "entity": ""},
+                height=coverage.chart_height(len(visual)),
             ),
             use_container_width=True,
         )

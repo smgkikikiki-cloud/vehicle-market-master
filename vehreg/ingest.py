@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator, Optional, Sequence
 
 from . import trimledger
+from .coverage import payload_signature
 from .catalog import Catalog
 from .db import loaded_years, register_source
 from .normalize import MatchIndex, fold, period_key, split_brand_model
@@ -325,13 +326,57 @@ def _number(raw: Any) -> Optional[float]:
         return None
 
 
+def duplicate_payload_source(conn: sqlite3.Connection, path: Path | str
+                             ) -> Optional[str]:
+    """The already-loaded source carrying this file's registrations, if any.
+
+    DLT has served the same payload under two different resource ids, and the
+    fetcher stamps the requested period onto every row, so a duplicated month
+    looks perfectly well-formed on its own. Comparing against what is already
+    loaded is the only place the collision is visible.
+    """
+    path = Path(path).resolve()
+    signature = payload_signature(path)
+    if signature[0] == 0:
+        return None
+    rows = conn.execute(
+        "SELECT name, file_name FROM dim_source WHERE file_name IS NOT NULL"
+    ).fetchall()
+    for row in rows:
+        other = Path(str(row["file_name"]))
+        if not other.is_absolute():
+            other = path.parent / other.name
+        if not other.exists() or other.resolve() == path:
+            continue
+        try:
+            if payload_signature(other) == signature:
+                return str(row["name"])
+        except OSError:
+            continue
+    return None
+
+
 def ingest_csv(conn: sqlite3.Connection, catalog: Catalog, path: Path | str,
                source_name: Optional[str] = None, *, wide: bool = False,
                colmap: Optional[ColumnMap] = None,
                default_registration_type: str = "RY1",
                url: str = "", publisher: str = "DLT",
-               notes: str = "", trim_ledger: bool = True) -> IngestReport:
+               notes: str = "", trim_ledger: bool = True,
+               allow_duplicate_payload: bool = False) -> IngestReport:
     path = Path(path)
+
+    # Loading the same registrations under a second period would double a year
+    # and silently move every share on every page. Refuse, name the source it
+    # collides with, and leave the decision to the owner.
+    if not allow_duplicate_payload:
+        clash = duplicate_payload_source(conn, path)
+        if clash:
+            raise ValueError(
+                f"{path}: these registrations are already loaded as {clash!r}. "
+                "Two DLT resources returning one payload means one of the two "
+                "months is wrong; re-fetch it, or pass "
+                "allow_duplicate_payload=True if the repeat is real."
+            )
     mapping, rows = read_rows(path, wide=wide, colmap=colmap)
     missing = mapping.missing()
     if missing:

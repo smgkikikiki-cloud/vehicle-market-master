@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from vehreg import cube, dlt
+from vehreg import coverage, cube, dlt
 from vehreg.catalog import DATA_DIR, Catalog, available_years
 from vehreg.db import connect, rebuild_dimension
 from vehreg.ingest import ingest_csv
@@ -43,6 +43,7 @@ def bootstrap_database() -> dict[str, object]:
         rebuilt.append(year)
 
     ingested: list[str] = []
+    duplicates: list[dict[str, str]] = []
     for path in sorted(RAW_DIR.glob("dlt_????-??.csv")):
         period = path.stem.removeprefix("dlt_")
         try:
@@ -62,18 +63,28 @@ def bootstrap_database() -> dict[str, object]:
         if already:
             continue
 
-        ingest_csv(
-            conn,
-            catalogs[year],
-            path,
-            f"WEB {period}",
-            colmap=dlt.column_map(),
-            publisher="DLT",
-        )
+        try:
+            ingest_csv(
+                conn,
+                catalogs[year],
+                path,
+                f"WEB {period}",
+                colmap=dlt.column_map(),
+                publisher="DLT",
+            )
+        except ValueError as exc:
+            # A month whose payload repeats one already loaded is left out
+            # rather than doubling a year's registrations. Booting has to keep
+            # working, so this is reported, not raised.
+            if "already loaded as" not in str(exc):
+                raise
+            duplicates.append({"period": period, "reason": str(exc)})
+            continue
         ingested.append(period)
 
     conn.close()
-    return {"years": rebuilt, "ingested": ingested, "db": str(DB_PATH)}
+    return {"years": rebuilt, "ingested": ingested,
+            "duplicates": duplicates, "db": str(DB_PATH)}
 
 
 def open_conn():
@@ -145,7 +156,10 @@ def composition_chart(df: pd.DataFrame, dimension: str, chart_type: str):
     if chart_type == "Pie":
         return px.pie(visual, names=dimension, values="units")
     visual = visual.sort_values("units", ascending=True)
-    return px.bar(visual, x="units", y=dimension, orientation="h")
+    return px.bar(
+        visual, x="units", y=dimension, orientation="h",
+        height=coverage.chart_height(len(visual)),
+    )
 
 
 st.set_page_config(page_title="TDR Vehicle Market", layout="wide")
@@ -165,8 +179,16 @@ periods = [r["period"] for r in conn.execute(
 st.title("TDR Vehicle Market")
 st.caption(f"Local database: {DB_PATH}")
 
-if boot.get("ingested"):
-    st.success("โหลด DLT ใหม่: " + ", ".join(boot["ingested"]))
+ingested = boot.get("ingested") or []
+if ingested:
+    # Listing fifty periods pushed the whole dashboard below the fold on every
+    # cold start. The count is the news; the list is detail.
+    st.success(f"โหลด DLT ใหม่ {len(ingested)} เดือน: {ingested[0]} ถึง {ingested[-1]}")
+    with st.expander("ดูรายเดือนที่โหลด"):
+        st.write(", ".join(ingested))
+
+for skipped in boot.get("duplicates") or []:
+    st.error(f"ข้าม {skipped['period']}: {skipped['reason']}")
 
 if not periods:
     st.warning("ยังไม่มียอดจดทะเบียนในฐานข้อมูล แต่ Monthly Editor ยังใช้ได้")
@@ -174,9 +196,24 @@ if not periods:
     fallback_year = catalog_years[-1]
     selected_period = f"{fallback_year}-01"
 else:
+    # DLT publishes the current month before it is over, so the newest period
+    # is routinely a stub. Opening on it made every metric on this page read as
+    # a broken market rather than as an incomplete file.
+    totals = coverage.period_totals(conn)
+    provisional = coverage.provisional_periods(totals)
     selected_period = st.sidebar.selectbox(
-        "เดือนข้อมูล", periods, index=len(periods) - 1,
+        "เดือนข้อมูล", periods,
+        index=coverage.default_period_index(periods, totals, provisional),
     )
+    for notice in coverage.coverage_notices(
+        provisional, coverage.duplicate_payload_periods(RAW_DIR)
+    ):
+        st.warning(notice)
+    if selected_period in provisional:
+        st.error(
+            f"กำลังดู {selected_period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
+            "ตัวเลขและส่วนแบ่งด้านล่างยังใช้อ้างอิงไม่ได้"
+        )
 
 selected_year = int(selected_period[:4])
 
@@ -305,7 +342,10 @@ with TAB_DASH:
         if not top_models.empty:
             top_models = top_models.sort_values("units", ascending=True)
             st.plotly_chart(
-                px.bar(top_models, x="units", y="model", orientation="h"),
+                px.bar(
+                    top_models, x="units", y="model", orientation="h",
+                    height=coverage.chart_height(len(top_models)),
+                ),
                 use_container_width=True,
             )
 

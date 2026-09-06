@@ -23,6 +23,15 @@ def database_path() -> Path:
     return Path(os.environ.get("VEHREG_DB", str(DEFAULT_DB_PATH)))
 
 
+def raw_dir() -> Path:
+    """Where the committed monthly DLT exports live.
+
+    Pages need this to check one month's payload against another's, which is a
+    question about the files rather than about the warehouse.
+    """
+    return Path(os.environ.get("VEHREG_RAW_DIR", str(DEFAULT_RAW_DIR)))
+
+
 def bootstrap_database(db_path: Path | str | None = None,
                        raw_dir: Path | str | None = None) -> dict[str, object]:
     """Build dimensions and ingest configured DLT sources idempotently.
@@ -54,6 +63,7 @@ def bootstrap_database(db_path: Path | str | None = None,
         rebuilt.append(year)
 
     ingested: list[str] = []
+    duplicates: list[dict[str, str]] = []
     for path in sorted(raw.glob("dlt_????-??.csv")):
         period = path.stem.removeprefix("dlt_")
         try:
@@ -71,8 +81,17 @@ def bootstrap_database(db_path: Path | str | None = None,
         ).fetchone()
         if already:
             continue
-        ingest_csv(conn, catalogs[year], path, f"WEB {period}",
-                   colmap=dlt.column_map(), publisher="DLT")
+        try:
+            ingest_csv(conn, catalogs[year], path, f"WEB {period}",
+                       colmap=dlt.column_map(), publisher="DLT")
+        except ValueError as exc:
+            # A month whose payload repeats one already loaded is left out
+            # rather than doubling a year's registrations. Booting has to keep
+            # working, so this is reported, not raised.
+            if "already loaded as" not in str(exc):
+                raise
+            duplicates.append({"period": period, "reason": str(exc)})
+            continue
         ingested.append(period)
 
     seeded: dict[str, object] | None = None
@@ -118,6 +137,7 @@ def bootstrap_database(db_path: Path | str | None = None,
     return {
         "years": rebuilt,
         "ingested": ingested,
+        "duplicates": duplicates,
         "state_seed": seeded,
         "provincial": provincial_state,
         "db": str(db),

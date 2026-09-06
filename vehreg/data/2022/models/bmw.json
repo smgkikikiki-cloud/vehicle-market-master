@@ -109,6 +109,25 @@
               "price_note": "seed-unverified",
               "price_min_thb": 3999000,
               "price_max_thb": 3999000
+            },
+            {
+              "name": "2.0L Diesel",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1995,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "520d",
+                "520d M Sport",
+                "520d M Sport Pro",
+                "520d Sport"
+              ]
             }
           ]
         }
@@ -388,8 +407,6 @@
         "740d",
         "750e",
         "M760e",
-        "i7 xDrive60",
-        "i7 eDrive50",
         "725Ld",
         "730Ld",
         "740Le",
@@ -766,6 +783,48 @@
               "import_type": "CKD",
               "origin_country": "TH",
               "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "i7",
+      "name_en": "i7",
+      "name_th": "ไอ7",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "i7 xDrive60",
+        "i7 eDrive50",
+        "i7 M70 xDrive",
+        "i 7"
+      ],
+      "notes": "แยกออกจาก 7 Series เพราะ DLT จดแยกและมันคนละคัน (BEV) เหมือนที่ iX1/iX3/i4/i5 แยกจาก X1/X3/4 Series/5 Series",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 101.7,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
               "aliases": []
             }
           ]

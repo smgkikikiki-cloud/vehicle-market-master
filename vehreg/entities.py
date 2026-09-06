@@ -133,6 +133,13 @@ class Model:
     market_scope: MarketScope = MarketScope.CORE
     aliases: tuple[str, ...] = ()
     notes: str = ""
+    #: Set when the model exists only so DLT's label has somewhere to land.
+    #: The registrations are real and worth attributing; the specification is
+    #: not researched yet, and saying so is better than either guessing a body
+    #: type or leaving the volume unattributed. ``Catalog.validate`` stays
+    #: silent about what such a model is missing and reports it separately, so
+    #: "the catalog is complete" keeps meaning something.
+    incomplete: bool = False
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:

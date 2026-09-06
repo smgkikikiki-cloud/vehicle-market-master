@@ -559,6 +559,47 @@
           ]
         }
       ]
+    },
+    {
+      "id": "en2",
+      "name_en": "e:N2",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "e:n2",
+        "en2",
+        "e n2"
+      ],
+      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "generations": [
+        {
+          "code": "EN2",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
+            }
+          ]
+        }
+      ],
+      "incomplete": true
     }
   ]
 }

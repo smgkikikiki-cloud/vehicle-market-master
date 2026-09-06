@@ -178,6 +178,7 @@ class Catalog:
                                      registration_type_for(body, cab)),
             market_scope=_facet(MarketScope, raw.get("market_scope"),
                                 MarketScope.CORE),
+            incomplete=bool(raw.get("incomplete", False)),
             aliases=_tuple(raw.get("aliases")),
             notes=raw.get("notes", ""),
             overrides=_overrides(raw.get("overrides")),
@@ -318,18 +319,58 @@ class Catalog:
     # ------------------------------------------------------------ validate
     def validate(self) -> list[str]:
         problems: list[str] = []
+        # A stub keeps the powertrain the DLT label stated, which is worth
+        # more than dropping it to UNKNOWN would be. The spec rules that hang
+        # off a powertrain -- a PHEV needs an engine and a battery -- are then
+        # unmeetable until someone researches the car, so they are reported by
+        # incomplete_models() rather than here.
+        declared = {model.id for model in self.models.values() if model.incomplete}
         for model in self.models.values():
             problems += model.validate()
+            # A model that declares itself incomplete is a known gap with a
+            # name on it, not a defect. It is reported by incomplete_models()
+            # instead, so this list stays "things nobody has looked at".
+            if model.incomplete:
+                continue
             if model.body_type is BodyType.OTHER:
                 problems.append(f"model {model.id}: body_type not set")
             if not self.variants_of(model.id):
                 problems.append(f"model {model.id}: no variants")
         for variant in self.variants.values():
+            if self.model_for_variant(variant.id).id in declared:
+                continue
             problems += variant.validate()
         problems += self.duplicate_body_warnings()
         for resolved in self.iter_resolved():
+            if self.model_for_variant(resolved.variant_id).id in declared:
+                continue
             problems += cross_check(resolved)
         return problems
+
+    def incomplete_models(self) -> list[str]:
+        """Models carrying registrations while their specification is unwritten.
+
+        Kept apart from ``validate`` so a full catalog and a catalog with
+        declared holes are not the same answer, and so the holes are countable
+        rather than buried in a list of problems.
+        """
+        out: list[str] = []
+        for model in sorted(self.models.values(), key=lambda m: m.id):
+            if not model.incomplete:
+                continue
+            missing = []
+            if model.body_type is BodyType.OTHER:
+                missing.append("body_type")
+            if not self.variants_of(model.id):
+                missing.append("variants")
+            for variant in self.variants_of(model.id):
+                if variant.price_thb is None:
+                    missing.append("price")
+                    break
+            out.append(f"model {model.id}: incomplete ({', '.join(missing)})"
+                       if missing else f"model {model.id}: marked incomplete "
+                                       "but nothing is missing")
+        return out
 
     def duplicate_body_warnings(self) -> list[str]:
         """One nameplate must not appear twice in the same body under a brand.
@@ -387,6 +428,12 @@ class Catalog:
                 "market_scope": model.market_scope.value,
                 "aliases": list(model.aliases), "generations": [],
             }
+            # Without this, saving a brand from the editor would silently clear
+            # the marker and the model would start reading as a finished one.
+            if model.incomplete:
+                model_payload["incomplete"] = True
+            if model.notes:
+                model_payload["notes"] = model.notes
             for gen in self.generations_of(model.id):
                 gen_payload: dict[str, Any] = {
                     "code": gen.code, "segment": gen.segment.value,

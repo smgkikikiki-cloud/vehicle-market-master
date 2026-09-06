@@ -426,6 +426,124 @@
           ]
         }
       ]
+    },
+    {
+      "id": "atto2",
+      "name_en": "Atto 2",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "atto 2"
+      ],
+      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "generations": [
+        {
+          "code": "ATTO2",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-04-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
+            }
+          ]
+        }
+      ],
+      "incomplete": true
+    },
+    {
+      "id": "atto1",
+      "name_en": "Atto 1",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "atto 1"
+      ],
+      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "generations": [
+        {
+          "code": "ATTO1",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
+            }
+          ]
+        }
+      ],
+      "incomplete": true
+    },
+    {
+      "id": "sealion5",
+      "name_en": "Sealion 5 DM-i",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "sealion 5",
+        "sealion5"
+      ],
+      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "generations": [
+        {
+          "code": "SEALION5",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "PHEV",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
+            }
+          ]
+        }
+      ],
+      "incomplete": true
     }
   ]
 }

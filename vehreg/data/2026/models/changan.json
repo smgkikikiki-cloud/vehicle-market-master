@@ -137,6 +137,46 @@
           ]
         }
       ]
+    },
+    {
+      "id": "nevo_q05",
+      "name_en": "Changan Nevo Q05",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "nevo q05",
+        "nevo"
+      ],
+      "notes": "stub: DLT registers this model and the catalog did not have it. Only what the DLT label states is filled in; body type, segment, seats and price are unset on purpose rather than guessed.",
+      "generations": [
+        {
+          "code": "NEVO_Q05",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
+            }
+          ]
+        }
+      ],
+      "incomplete": true
     }
   ]
 }

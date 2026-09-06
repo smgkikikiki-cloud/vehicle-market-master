@@ -288,3 +288,45 @@ class TestChartColour:
         })
         figure = rank_bar(frame, x="units", y="label", height=300)
         assert figure.layout.yaxis.automargin is True
+
+
+class TestCoarseMonths:
+    """A month whose pickups never reached a model must say so."""
+
+    def test_a_pivot_month_is_flagged_and_an_export_month_is_not(self):
+        shares = {"2026-01": 0.001, "2026-05": 0.198}
+        assert set(coverage.coarse_periods(shares)) == {"2026-05"}
+
+    def test_the_notice_names_what_is_missing_from_the_ranking(self):
+        text = coverage.coarse_notice("2026-05", 0.198)
+        assert "2026-05" in text and "20%" in text
+        assert "D-Max" in text
+
+    def test_share_is_read_off_the_grain_of_the_matched_unit(self, tmp_path):
+        from vehreg.db import connect
+
+        conn = connect(tmp_path / "db.sqlite3")
+        conn.execute("INSERT INTO dim_source (name) VALUES ('t')")
+        for unit, grain in (("u-model", "MODEL"), ("u-brand", "BRAND")):
+            conn.execute(
+                "INSERT INTO dim_unit (unit_id, catalog_year, grain, brand) "
+                "VALUES (?,?,?,?)", (unit, 2026, grain, "Isuzu"))
+        for unit, units in (("u-model", 75.0), ("u-brand", 25.0)):
+            conn.execute(
+                "INSERT INTO fact_registration "
+                "(period, registration_type, unit_id, grain, units, source_id) "
+                "VALUES ('2026-05','RY1',?,?,?,1)", (unit, "MODEL", units))
+        conn.commit()
+        assert coverage.brand_grain_share(conn)["2026-05"] == pytest.approx(0.25)
+        conn.close()
+
+    def test_a_coarse_month_is_read_at_every_grain(self):
+        # Without this the cube's default grains drop the residual and the
+        # month reports about two thirds of itself as if it were a quiet month.
+        coarse = {"2026-08": 0.25}
+        assert coverage.analysis_grains("2026-08", coarse) == coverage.FULL_GRAINS
+        assert coverage.analysis_grains("2026-01", coarse) is None
+
+    def test_the_notice_no_longer_claims_the_ranking_is_merely_incomplete(self):
+        text = coverage.coarse_notice("2026-08", 0.25)
+        assert "UNKNOWN" in text

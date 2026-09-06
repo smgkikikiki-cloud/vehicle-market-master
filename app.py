@@ -6,10 +6,9 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from vehreg import charting, coverage, cube, dlt
-from vehreg.catalog import DATA_DIR, Catalog, available_years
-from vehreg.db import connect, rebuild_dimension
-from vehreg.ingest import ingest_csv
+from vehreg import charting, coverage, cube
+from vehreg.catalog import DATA_DIR, available_years
+from vehreg.db import connect
 from vehreg.monthly_state import (
     audit_log,
     delete_change,
@@ -19,6 +18,7 @@ from vehreg.monthly_state import (
     set_state,
 )
 from vehreg.taxonomy import KNOWN_ORIGIN_COUNTRIES
+from vehreg.web_bootstrap import bootstrap_database as shared_bootstrap
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = Path(os.environ.get("VEHREG_DB", str(ROOT / "data" / "vehreg.sqlite3")))
@@ -27,63 +27,13 @@ RAW_DIR = ROOT / "data" / "raw"
 
 @st.cache_resource
 def bootstrap_database() -> dict[str, object]:
-    """Build dimensions and ingest any committed monthly DLT files once."""
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = connect(DB_PATH)
-    ensure_monthly_schema(conn)
+    """Build dimensions and ingest the committed monthly sources once.
 
-    years = available_years(DATA_DIR)
-    catalogs: dict[int, Catalog] = {}
-    rebuilt: list[int] = []
-    for year in years:
-        catalog = Catalog.load(DATA_DIR, year)
-        catalogs[year] = catalog
-        rebuild_dimension(conn, catalog)
-        rebuilt.append(year)
-
-    ingested: list[str] = []
-    duplicates: list[dict[str, str]] = []
-    for path in sorted(RAW_DIR.glob("dlt_????-??.csv")):
-        period = path.stem.removeprefix("dlt_")
-        try:
-            year = int(period[:4])
-        except ValueError:
-            continue
-        if year not in catalogs:
-            continue
-
-        absolute = str(path.resolve())
-        already = conn.execute(
-            "SELECT 1 FROM dim_source WHERE file_name = ? OR file_name LIKE ? "
-            "OR file_name LIKE ? OR name IN (?,?,?) LIMIT 1",
-            (absolute, f"%/{path.name}", f"%\\{path.name}",
-             f"DLT {period}", path.name, f"WEB {period}"),
-        ).fetchone()
-        if already:
-            continue
-
-        try:
-            ingest_csv(
-                conn,
-                catalogs[year],
-                path,
-                f"WEB {period}",
-                colmap=dlt.column_map(),
-                publisher="DLT",
-            )
-        except ValueError as exc:
-            # A month whose payload repeats one already loaded is left out
-            # rather than doubling a year's registrations. Booting has to keep
-            # working, so this is reported, not raised.
-            if "already loaded as" not in str(exc):
-                raise
-            duplicates.append({"period": period, "reason": str(exc)})
-            continue
-        ingested.append(period)
-
-    conn.close()
-    return {"years": rebuilt, "ingested": ingested,
-            "duplicates": duplicates, "db": str(DB_PATH)}
+    This page used to carry its own copy of the loop. The copies drifted the
+    moment one of them learned about a new source directory, so the shared one
+    is the only one now; this wrapper exists for the Streamlit cache.
+    """
+    return shared_bootstrap(DB_PATH, RAW_DIR)
 
 
 def open_conn():
@@ -214,6 +164,13 @@ else:
             f"กำลังดู {selected_period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
             "ตัวเลขและส่วนแบ่งด้านล่างยังใช้อ้างอิงไม่ได้"
         )
+    coarse = coverage.coarse_periods(coverage.brand_grain_share(conn))
+    if selected_period in coarse:
+        st.warning(coverage.coarse_notice(selected_period, coarse[selected_period]))
+
+# A month with unattributed volume is read at every grain, so its total is the
+# month's total rather than the part that happened to reach a model.
+grains = coverage.analysis_grains(selected_period, coarse if periods else {})
 
 selected_year = int(selected_period[:4])
 
@@ -268,17 +225,17 @@ with TAB_DASH:
         total = cube.run(
             conn, [], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         brands_result = cube.run(
             conn, ["brand"], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         models_result = cube.run(
             conn, ["model"], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         review = conn.execute(
             "SELECT COALESCE(SUM(units),0) AS u FROM ingest_review "
@@ -317,7 +274,7 @@ with TAB_DASH:
         result = cube.run(
             conn, [dimension], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         df = frame(result)
         if df.empty:
@@ -341,7 +298,7 @@ with TAB_DASH:
         top_models = frame(cube.run(
             conn, ["model"], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes, limit=20,
+            scopes=scopes, grains=grains, limit=20,
         ))
         if not top_models.empty:
             top_models = top_models.sort_values("units", ascending=True)
@@ -360,7 +317,7 @@ with TAB_DASH:
         trend = frame(cube.timeseries(
             conn, [], bucket="period", filters=filters,
             period_from=start_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         ))
         if not trend.empty:
             st.plotly_chart(

@@ -15,12 +15,24 @@ from .state_seed import load_seed_csv
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB_PATH = ROOT / "data" / "vehreg.sqlite3"
 DEFAULT_RAW_DIR = ROOT / "data" / "raw"
+DEFAULT_PIVOT_DIR = ROOT / "data" / "raw_pivot"
 DEFAULT_STATE_SEED = ROOT / "data" / "research" / "monthly_production_state.csv"
 PROVINCIAL_SOURCE_NAME = "DLT Provincial Brand-Model-Province"
 
 
 def database_path() -> Path:
     return Path(os.environ.get("VEHREG_DB", str(DEFAULT_DB_PATH)))
+
+
+def pivot_dir() -> Path:
+    """Months read from the DLT pivot workbook rather than the monthly API.
+
+    Kept in their own directory because they are a weaker source: the pivot
+    carries no registration class, so a pickup's cab split is not available and
+    that volume queues for review instead of classifying. They are loaded only
+    for months the API exports do not cover.
+    """
+    return Path(os.environ.get("VEHREG_PIVOT_DIR", str(DEFAULT_PIVOT_DIR)))
 
 
 def raw_dir() -> Path:
@@ -88,6 +100,39 @@ def bootstrap_database(db_path: Path | str | None = None,
             # A month whose payload repeats one already loaded is left out
             # rather than doubling a year's registrations. Booting has to keep
             # working, so this is reported, not raised.
+            if "already loaded as" not in str(exc):
+                raise
+            duplicates.append({"period": period, "reason": str(exc)})
+            continue
+        ingested.append(period)
+
+    # Pivot months come second and only where no export covered the period, so
+    # an export always wins on a month both sources have.
+    pivot = Path(os.environ.get("VEHREG_PIVOT_DIR", str(DEFAULT_PIVOT_DIR)))
+    covered = {p.stem.removeprefix("dlt_") for p in raw.glob("dlt_????-??.csv")}
+    for path in sorted(pivot.glob("pivot_????-??.csv")):
+        period = path.stem.removeprefix("pivot_")
+        if period in covered:
+            continue
+        try:
+            year = int(period[:4])
+        except ValueError:
+            continue
+        if year not in catalogs:
+            continue
+        already = conn.execute(
+            "SELECT 1 FROM dim_source WHERE file_name=? OR file_name LIKE ? "
+            "OR name=? LIMIT 1",
+            (str(path.resolve()), f"%/{path.name}", f"PIVOT {period}"),
+        ).fetchone()
+        if already:
+            continue
+        try:
+            ingest_csv(conn, catalogs[year], path, f"PIVOT {period}",
+                       publisher="DLT",
+                       notes="DLT pivot workbook; no registration class, so "
+                             "cab-split volume queues for review")
+        except ValueError as exc:
             if "already loaded as" not in str(exc):
                 raise
             duplicates.append({"period": period, "reason": str(exc)})

@@ -71,6 +71,7 @@ def market_rows(
         period_from=period_from,
         period_to=period_to,
         scopes=scopes,
+        grains=GRAINS,
     )
     rows: list[dict[str, object]] = []
     for raw in result.rows:
@@ -238,6 +239,13 @@ if selected_period in provisional:
         f"กำลังดู {selected_period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
         "ส่วนแบ่งตลาดและอันดับด้านล่างยังใช้อ้างอิงไม่ได้"
     )
+coarse = coverage.coarse_periods(coverage.brand_grain_share(conn))
+if selected_period in coarse:
+    st.warning(coverage.coarse_notice(selected_period, coarse[selected_period]))
+
+# Read every grain on a month that carries unattributed volume, so this deck
+# ranks the whole month rather than the part that reached a model.
+GRAINS = coverage.analysis_grains(selected_period, coarse)
 
 grouping_labels = {
     "Brand": "brand",
@@ -477,7 +485,7 @@ with tab_raw:
         filters=filters,
         period_from=trend_from,
         period_to=selected_period,
-        scopes=scopes,
+        scopes=scopes, grains=GRAINS,
     )
     trend_df = pd.DataFrame(trend.rows)
     st.caption(

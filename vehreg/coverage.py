@@ -37,6 +37,13 @@ PROVISIONAL_RATIO = 0.40
 #: Months of history the baseline is taken from.
 BASELINE_MONTHS = 6
 
+#: A month with more than this share of its units recorded at BRAND grain is
+#: called out. Months read from the DLT pivot workbook run 20-30% because that
+#: source carries no registration class, so a pickup cannot be split by cab and
+#: the volume lands on the brand instead of the model. Ordinary export months
+#: sit at 0.1%.
+BRAND_GRAIN_LIMIT = 0.05
+
 PERIOD_RE = re.compile(r"(\d{4}-\d{2})")
 
 
@@ -101,6 +108,38 @@ def latest_settled_period(
         return settled[-1]
     ordered = sorted(totals)
     return ordered[-1] if ordered else None
+
+
+def brand_grain_share(conn: sqlite3.Connection) -> dict[str, float]:
+    """Share of each period's units that never reached a model.
+
+    A model ranking for such a month is not wrong so much as incomplete: the
+    total and the brand split are right, but the biggest pickups are missing
+    from it entirely, which reads as "they sold nothing" rather than as "this
+    source could not say which cab".
+    """
+    rows = conn.execute(
+        "SELECT f.period AS period, u.grain AS grain, SUM(f.units) AS units "
+        "FROM fact_registration f JOIN dim_unit u "
+        "  ON u.unit_id = f.unit_id "
+        " AND u.catalog_year = CAST(substr(f.period, 1, 4) AS INTEGER) "
+        "GROUP BY f.period, u.grain"
+    ).fetchall()
+    totals: dict[str, float] = {}
+    brand: dict[str, float] = {}
+    for row in rows:
+        period = str(row["period"])
+        units = float(row["units"] or 0.0)
+        totals[period] = totals.get(period, 0.0) + units
+        if str(row["grain"]) == "BRAND":
+            brand[period] = brand.get(period, 0.0) + units
+    return {period: brand.get(period, 0.0) / total
+            for period, total in totals.items() if total > 0}
+
+
+def coarse_periods(shares: Mapping[str, float],
+                   limit: float = BRAND_GRAIN_LIMIT) -> dict[str, float]:
+    return {period: share for period, share in shares.items() if share > limit}
 
 
 def _normalise_cell(value: str) -> str:
@@ -269,6 +308,35 @@ def default_period_index(
         return list(periods).index(target)
     except ValueError:
         return len(periods) - 1
+
+
+#: Grains to read when a month carries volume that never reached a model.
+#: BRAND-grain rows are residuals -- volume the matcher could not attribute to a
+#: model, not a rollup of the model rows -- so adding them to the default pair
+#: completes the total instead of double counting it.
+FULL_GRAINS: tuple[str, ...] = ("MODEL", "VARIANT", "BRAND")
+
+
+def analysis_grains(period: str, coarse: Mapping[str, float]
+                    ) -> tuple[str, ...] | None:
+    """Grains a page should read for this period; None means the default.
+
+    Without this a pivot month reports 43,735 registrations where the file says
+    62,332, because the cube's default analysis grains drop the residual. The
+    missing third is not an edge case anyone would notice as missing -- it just
+    looks like a quiet month.
+    """
+    return FULL_GRAINS if period in coarse else None
+
+
+def coarse_notice(period: str, share: float) -> str:
+    return (
+        f"{period} อ่านจากไฟล์ pivot ของ DLT ซึ่งไม่มีคอลัมน์ประเภทรถ (รย.) "
+        f"กระบะจึงแยกตัวถังไม่ได้ ยอด {share * 100:.0f}% ของเดือนนี้ "
+        "(ส่วนใหญ่คือ D-Max, Hilux, Ranger, Triton) รู้แค่ยี่ห้อ ไม่รู้รุ่น "
+        "ยอดรวมและส่วนแบ่งรายยี่ห้อถูกต้องครบ แต่ในตารางแยกรายรุ่น "
+        "ยอดก้อนนี้จะไปรวมอยู่ในแถว UNKNOWN ไม่ได้กระจายเข้ารุ่นไหน"
+    )
 
 
 def coverage_notices(

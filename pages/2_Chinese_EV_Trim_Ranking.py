@@ -48,6 +48,9 @@ if period in provisional:
         f"กำลังดู {period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
         "อันดับด้านล่างยังใช้อ้างอิงไม่ได้"
     )
+_coarse = coverage.coarse_periods(coverage.brand_grain_share(conn))
+if period in _coarse:
+    st.warning(coverage.coarse_notice(period, _coarse[period]))
 registration = st.sidebar.selectbox("DLT class", ["ALL", "RY1", "RY2", "RY3"])
 powertrain = st.sidebar.selectbox("Powertrain", ["ALL", "BEV", "PHEV", "REEV"])
 

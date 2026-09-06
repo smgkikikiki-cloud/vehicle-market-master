@@ -130,3 +130,67 @@ class TestCsvOut:
         text = target.read_text(encoding="utf-8-sig")
         assert "2025-01,*,TOYOTA,Yaris,10" in text
         assert "2025-02" not in text
+
+
+LONG_HEAD = dlt_pivot.LONG_HEADER
+
+
+def long_sheet(*body: tuple) -> list[tuple]:
+    return [
+        ("สถิติการจดทะเบียนรถใหม่", *[None] * 6),
+        ("หน่วย: คัน", *[None] * 6),
+        LONG_HEAD,
+        *body,
+    ]
+
+
+class TestLongSheet:
+    def test_the_registration_class_is_read_off_the_label(self):
+        assert dlt_pivot.registration_code("รย.1 รถยนต์นั่งส่วนบุคคล") == "RY1"
+        assert dlt_pivot.registration_code("รย.3 รถยนต์บรรทุก") == "RY3"
+        assert dlt_pivot.registration_code("") == ""
+        assert dlt_pivot.registration_code("something else") == ""
+
+    def test_a_row_keeps_its_class_and_province(self):
+        rows = long_sheet(
+            ("2569", "มกราคม", "รย.3 รถยนต์บรรทุกส่วนบุคคล", "ชลบุรี",
+             "ISUZU", "D-MAX", "12"),
+        )
+        got = list(dlt_pivot.read_long_rows(rows))
+        assert len(got) == 1
+        row = got[0]
+        assert (row.period, row.registration_type, row.province) == (
+            "2026-01", "RY3", "ชลบุรี")
+        assert row.units == 12.0
+
+    def test_motorcycles_and_other_classes_are_left_out(self):
+        # The long sheet carries every class DLT publishes; motorcycles alone
+        # outnumber cars three to one and are not what this warehouse counts.
+        rows = long_sheet(
+            ("2569", "มกราคม", "รย.1 รถยนต์นั่ง", "กรุงเทพมหานคร", "HONDA", "City", "5"),
+            ("2569", "มกราคม", "รย.12 รถจักรยานยนต์", "กรุงเทพมหานคร", "HONDA", "Wave", "900"),
+        )
+        assert dlt_pivot.long_period_totals(rows) == {"2026-01": 5.0}
+
+    def test_every_class_can_be_asked_for(self):
+        rows = long_sheet(
+            ("2569", "มกราคม", "รย.1 รถยนต์นั่ง", "กรุงเทพมหานคร", "HONDA", "City", "5"),
+            ("2569", "มกราคม", "รย.12 รถจักรยานยนต์", "กรุงเทพมหานคร", "HONDA", "Wave", "900"),
+        )
+        assert dlt_pivot.long_period_totals(rows, classes=None) == {"2026-01": 905.0}
+
+    def test_provinces_are_summed_away_when_writing_a_month(self, tmp_path):
+        rows = long_sheet(
+            ("2569", "มกราคม", "รย.1 รถยนต์นั่ง", "กรุงเทพมหานคร", "HONDA", "City", "5"),
+            ("2569", "มกราคม", "รย.1 รถยนต์นั่ง", "ชลบุรี", "HONDA", "City", "7"),
+            ("2569", "กุมภาพันธ์", "รย.1 รถยนต์นั่ง", "ชลบุรี", "HONDA", "City", "3"),
+        )
+        target = tmp_path / "long_2026-01.csv"
+        assert dlt_pivot.write_long_period_csv(rows, "2026-01", target) == 1
+        text = target.read_text(encoding="utf-8-sig")
+        assert "2026-01,RY1,HONDA,City,12" in text
+        assert "2026-02" not in text
+
+    def test_a_sheet_without_the_long_header_is_refused(self):
+        with pytest.raises(ValueError, match="long-sheet columns"):
+            dlt_pivot.find_long_header([("ปี", "ยี่ห้อรถ", "รุ่นรถ")])

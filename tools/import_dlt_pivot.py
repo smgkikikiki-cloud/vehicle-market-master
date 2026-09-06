@@ -45,7 +45,13 @@ def catalog_years() -> set[int]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("workbook", type=Path)
-    parser.add_argument("--sheet", default=None)
+    parser.add_argument("--sheet", default=None,
+                        help="worksheet name; defaults to the first")
+    parser.add_argument("--long", action="store_true",
+                        help="read the row-per-registration sheet instead of "
+                             "the pivot. It carries the รย. class, so a month "
+                             "read this way classifies like an ordinary export "
+                             "instead of leaving a fifth of itself on the brand")
     parser.add_argument("--periods", nargs="*", default=None,
                         help="explicit YYYY-MM list")
     parser.add_argument("--missing", action="store_true",
@@ -55,11 +61,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, default=PIVOT_DIR)
     args = parser.parse_args(argv)
 
-    rows = dlt_pivot.load_workbook_rows(args.workbook, args.sheet)
-    totals = dlt_pivot.period_totals(rows)
-    declared = dlt_pivot.declared_period_totals(rows)
-    drift = {p: (totals[p], declared[p]) for p in declared
-             if abs(totals.get(p, 0.0) - declared[p]) > 0.5}
+    sheet = args.sheet or ("Data" if args.long else None)
+    rows = dlt_pivot.load_workbook_rows(args.workbook, sheet)
+    if args.long:
+        totals = dlt_pivot.long_period_totals(rows)
+        drift = {}
+    else:
+        totals = dlt_pivot.period_totals(rows)
+        declared = dlt_pivot.declared_period_totals(rows)
+        drift = {p: (totals[p], declared[p]) for p in declared
+                 if abs(totals.get(p, 0.0) - declared[p]) > 0.5}
     if drift:
         print("the model rows do not add up to the workbook's own subtotals; "
               "refusing to write", file=sys.stderr)
@@ -92,6 +103,10 @@ def main(argv: list[str] | None = None) -> int:
             return 1
     else:
         wanted = [p for p in sorted(totals) if p not in have_export]
+        if not args.long:
+            # never write a pivot month over a long month already on disk
+            wanted = [p for p in wanted
+                      if not (args.out / f"long_{p}.csv").exists()]
 
     skipped = [p for p in wanted if int(p[:4]) not in years]
     wanted = [p for p in wanted if int(p[:4]) in years]
@@ -100,8 +115,19 @@ def main(argv: list[str] | None = None) -> int:
               f"queue for review rather than classify")
 
     for period in wanted:
-        target = args.out / f"pivot_{period}.csv"
-        written = dlt_pivot.write_period_csv(rows, period, target)
+        if args.long:
+            target = args.out / f"long_{period}.csv"
+            written = dlt_pivot.write_long_period_csv(rows, period, target)
+            # A month that arrives with its class supersedes the same month
+            # read off the pivot, so the weaker file is removed rather than
+            # left for a later reader to wonder about.
+            weaker = args.out / f"pivot_{period}.csv"
+            if weaker.exists():
+                weaker.unlink()
+                print(f"  removed {weaker.relative_to(ROOT)} (superseded)")
+        else:
+            target = args.out / f"pivot_{period}.csv"
+            written = dlt_pivot.write_period_csv(rows, period, target)
         print(f"wrote {target.relative_to(ROOT)}  {written} rows  "
               f"{totals[period]:,.0f} units")
     if wanted:

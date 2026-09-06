@@ -106,12 +106,17 @@ def bootstrap_database(db_path: Path | str | None = None,
             continue
         ingested.append(period)
 
-    # Pivot months come second and only where no export covered the period, so
-    # an export always wins on a month both sources have.
+    # Secondary sources come after the exports, best first, and only where
+    # nothing better already covers the period. Precedence is export > long >
+    # pivot, which is the order of how much each one can say: the export and the
+    # long sheet both carry the registration class the matcher needs to split a
+    # pickup by cab, the pivot does not.
     pivot = Path(os.environ.get("VEHREG_PIVOT_DIR", str(DEFAULT_PIVOT_DIR)))
     covered = {p.stem.removeprefix("dlt_") for p in raw.glob("dlt_????-??.csv")}
-    for path in sorted(pivot.glob("pivot_????-??.csv")):
-        period = path.stem.removeprefix("pivot_")
+    secondary = (sorted(pivot.glob("long_????-??.csv"))
+                 + sorted(pivot.glob("pivot_????-??.csv")))
+    for path in secondary:
+        period = path.stem.split("_", 1)[1]
         if period in covered:
             continue
         try:
@@ -120,23 +125,28 @@ def bootstrap_database(db_path: Path | str | None = None,
             continue
         if year not in catalogs:
             continue
+        label = "LONG" if path.name.startswith("long_") else "PIVOT"
         already = conn.execute(
             "SELECT 1 FROM dim_source WHERE file_name=? OR file_name LIKE ? "
-            "OR name=? LIMIT 1",
-            (str(path.resolve()), f"%/{path.name}", f"PIVOT {period}"),
+            "OR name IN (?,?) LIMIT 1",
+            (str(path.resolve()), f"%/{path.name}",
+             f"PIVOT {period}", f"LONG {period}"),
         ).fetchone()
         if already:
             continue
+        note = ("DLT long sheet; carries the registration class"
+                if label == "LONG" else
+                "DLT pivot workbook; no registration class, so cab-split "
+                "volume stays on the brand")
         try:
-            ingest_csv(conn, catalogs[year], path, f"PIVOT {period}",
-                       publisher="DLT",
-                       notes="DLT pivot workbook; no registration class, so "
-                             "cab-split volume queues for review")
+            ingest_csv(conn, catalogs[year], path, f"{label} {period}",
+                       publisher="DLT", notes=note)
         except ValueError as exc:
             if "already loaded as" not in str(exc):
                 raise
             duplicates.append({"period": period, "reason": str(exc)})
             continue
+        covered.add(period)
         ingested.append(period)
 
     seeded: dict[str, object] | None = None

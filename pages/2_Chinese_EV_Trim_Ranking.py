@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from vehreg import coverage
+from vehreg import charting, coverage
 from vehreg.db import connect
 from vehreg.rankings import chinese_ev_trim_ranking, model_ranking
 from vehreg.web_bootstrap import bootstrap_database, database_path
@@ -95,7 +95,17 @@ with tab_trim:
 
         visual = df.copy()
         visual["label"] = visual["brand"] + " " + visual["model"] + " — " + visual["trim"]
-        st.bar_chart(visual.head(30).set_index("label")["units"], horizontal=True)
+        # st.bar_chart truncated these labels to "Aion Aion Y Plus …", which on a
+        # page whose whole point is telling trims apart removed the answer.
+        visual = visual.head(30).sort_values("units", ascending=True)
+        st.plotly_chart(
+            charting.rank_bar(
+                visual, x="units", y="label",
+                height=coverage.chart_height(len(visual)),
+                labels={"units": "คัน", "label": ""}, hover_unit="คัน",
+            ),
+            use_container_width=True,
+        )
 
         show = df[[
             "rank", "brand", "model", "trim", "powertrain", "grade", "drive",

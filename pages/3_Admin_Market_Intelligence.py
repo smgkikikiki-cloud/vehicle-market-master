@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
-from vehreg import coverage, cube
+from vehreg import charting, coverage, cube
 from vehreg.db import connect
 from vehreg.market_metrics import (
     compare_share_rows,
@@ -160,13 +159,13 @@ def render_movement(
         st.markdown("**Share gainers**")
         chart = gainers.sort_values("share_change_pp", ascending=True)
         st.plotly_chart(
-            px.bar(
+            charting.signed_bar(
                 chart,
                 x="share_change_pp",
                 y="entity",
-                orientation="h",
-                labels={"share_change_pp": "Share change (pp)", "entity": ""},
                 height=coverage.chart_height(len(chart)),
+                labels={"share_change_pp": "Share change (pp)", "entity": ""},
+                hover_unit="pp",
             ),
             use_container_width=True,
         )
@@ -174,13 +173,13 @@ def render_movement(
         st.markdown("**Share losers**")
         chart = losers.sort_values("share_change_pp", ascending=False)
         st.plotly_chart(
-            px.bar(
+            charting.signed_bar(
                 chart,
                 x="share_change_pp",
                 y="entity",
-                orientation="h",
-                labels={"share_change_pp": "Share change (pp)", "entity": ""},
                 height=coverage.chart_height(len(chart)),
+                labels={"share_change_pp": "Share change (pp)", "entity": ""},
+                hover_unit="pp",
             ),
             use_container_width=True,
         )
@@ -242,6 +241,10 @@ if selected_period in provisional:
 
 grouping_labels = {
     "Brand": "brand",
+    # Aion and GAC rank as two brands but sell through one network, as do
+    # Chery/Jaecoo, Changan/Deepal/Avatr and BYD/Denza. oem_group has always
+    # been in the warehouse; this is the first thing to offer it.
+    "OEM group": "oem_group",
     "Model": "model",
     "Segment": "segment",
     "Body family": "body_family",
@@ -333,13 +336,14 @@ with tab_structure:
     else:
         visual = table.head(30).sort_values("share_pct", ascending=True)
         st.plotly_chart(
-            px.bar(
+            charting.rank_bar(
                 visual,
                 x="share_pct",
                 y="entity",
-                orientation="h",
-                labels={"share_pct": "Market share (%)", "entity": ""},
                 height=coverage.chart_height(len(visual)),
+                value_format=",.2f",
+                labels={"share_pct": "Market share (%)", "entity": ""},
+                hover_unit="%",
             ),
             use_container_width=True,
         )
@@ -488,7 +492,8 @@ with tab_raw:
         )
         trend_df = expected.merge(trend_df[["period", "units"]], on="period", how="left")
         st.plotly_chart(
-            px.line(trend_df, x="period", y="units", markers=True),
+            charting.trend_line(trend_df, x="period", y="units",
+                                labels={"units": "คัน", "period": ""}),
             use_container_width=True,
         )
         st.dataframe(trend_df, use_container_width=True, hide_index=True)

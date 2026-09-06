@@ -235,3 +235,56 @@ class TestSignatureCatchesTheRealCollision:
             self.HEADER + "2025-02,TOYOTA,HILUX,10\n"
             + "2025-02,ISUZU,D-MAX,20\n", encoding="utf-8")
         assert coverage.duplicate_payload_periods(tmp_path) == []
+
+
+class TestChartColour:
+    """The colour rules, so a later edit cannot quietly reintroduce a rainbow."""
+
+    def test_the_biggest_value_gets_the_darkest_step(self):
+        from vehreg.charting import SEQUENTIAL_BLUE, magnitude_colors
+
+        colours = magnitude_colors([100, 50, 1])
+        assert colours[0] == SEQUENTIAL_BLUE[-1]
+        assert colours[0] != colours[-1]
+
+    def test_equal_values_get_equal_colour(self):
+        from vehreg.charting import magnitude_colors
+
+        assert len(set(magnitude_colors([7, 7, 7]))) == 1
+
+    def test_a_shade_follows_the_value_not_the_row_position(self):
+        # Dropping the leader must not repaint everyone below it.
+        from vehreg.charting import magnitude_colors
+
+        full = magnitude_colors([100, 60, 20])
+        without_a_smaller_one = magnitude_colors([100, 60])
+        assert full[:2] == without_a_smaller_one
+
+    def test_all_zero_does_not_divide_by_zero(self):
+        from vehreg.charting import magnitude_colors
+
+        assert magnitude_colors([0, 0]) and magnitude_colors([]) == []
+
+    def test_sign_picks_the_hue_on_a_movement_chart(self):
+        import pandas as pd
+
+        from vehreg.charting import NEGATIVE, NEUTRAL, POSITIVE, signed_bar
+
+        frame = pd.DataFrame({
+            "entity": ["up", "flat", "down"],
+            "change": [1.5, 0.0, -2.0],
+        })
+        figure = signed_bar(frame, x="change", y="entity", height=300)
+        assert list(figure.data[0].marker.color) == [POSITIVE, NEUTRAL, NEGATIVE]
+
+    def test_long_labels_are_never_clipped(self):
+        import pandas as pd
+
+        from vehreg.charting import rank_bar
+
+        frame = pd.DataFrame({
+            "label": ["Aion Hyptec HT — 620 PREMIUM ตัวท็อป"],
+            "units": [11],
+        })
+        figure = rank_bar(frame, x="units", y="label", height=300)
+        assert figure.layout.yaxis.automargin is True

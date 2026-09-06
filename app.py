@@ -4,10 +4,9 @@ import os
 from pathlib import Path
 
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
-from vehreg import coverage, cube, dlt
+from vehreg import charting, coverage, cube, dlt
 from vehreg.catalog import DATA_DIR, Catalog, available_years
 from vehreg.db import connect, rebuild_dimension
 from vehreg.ingest import ingest_csv
@@ -154,11 +153,12 @@ def composition_chart(df: pd.DataFrame, dimension: str, chart_type: str):
             ], ignore_index=True)
         visual = top
     if chart_type == "Pie":
-        return px.pie(visual, names=dimension, values="units")
+        return charting.composition_pie(visual, names=dimension, values="units")
     visual = visual.sort_values("units", ascending=True)
-    return px.bar(
-        visual, x="units", y=dimension, orientation="h",
+    return charting.rank_bar(
+        visual, x="units", y=dimension,
         height=coverage.chart_height(len(visual)),
+        labels={"units": "คัน", dimension: ""}, hover_unit="คัน",
     )
 
 
@@ -295,6 +295,10 @@ with TAB_DASH:
         st.subheader("Automatic chart")
         dimension_labels = {
             "Brand": "brand",
+            # Aion and GAC are separate brands to a buyer but one company and
+            # one showroom network; the warehouse has carried oem_group all
+            # along, nothing exposed it.
+            "กลุ่มบริษัท (OEM group)": "oem_group",
             "Model": "model",
             "Segment": "segment",
             "Body family": "body_family",
@@ -342,9 +346,10 @@ with TAB_DASH:
         if not top_models.empty:
             top_models = top_models.sort_values("units", ascending=True)
             st.plotly_chart(
-                px.bar(
-                    top_models, x="units", y="model", orientation="h",
+                charting.rank_bar(
+                    top_models, x="units", y="model",
                     height=coverage.chart_height(len(top_models)),
+                    labels={"units": "คัน", "model": ""}, hover_unit="คัน",
                 ),
                 use_container_width=True,
             )
@@ -359,7 +364,8 @@ with TAB_DASH:
         ))
         if not trend.empty:
             st.plotly_chart(
-                px.line(trend, x="period", y="units", markers=True),
+                charting.trend_line(trend, x="period", y="units",
+                                    labels={"units": "คัน", "period": ""}),
                 use_container_width=True,
             )
 

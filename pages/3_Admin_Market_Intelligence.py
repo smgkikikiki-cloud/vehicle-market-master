@@ -202,6 +202,8 @@ def render_movement(
             "share_change_pp": st.column_config.NumberColumn(format="%+.2f pp"),
         },
     )
+    ui.download_table(data, stem=f"movement-{title}", period=current_to,
+                      context=EXPORT_CONTEXT, key=f"dl_move_{title}")
 
 
 try:
@@ -320,6 +322,20 @@ ui.filter_bar({
        "import_type": "f_import", "origin_country": "f_origin",
    }.get(dimension, "")])
 
+# Downloaded files name what they are: a folder of "data.csv" is a folder
+# nobody can tell apart a week later.
+EXPORT_CONTEXT = {
+    "dimension": grouping_label,
+    "registration": registration,
+    "brand": brand,
+    "segment": segment,
+    "body": body_family,
+    "powertrain": powertrain,
+    "price": price_band,
+    "import": import_type,
+    "origin": origin,
+}
+
 filters: dict[str, object] = {}
 add_filter(filters, "fact_registration_type", registration)
 add_filter(filters, "brand", brand)
@@ -409,6 +425,8 @@ with tab_structure:
                 "share_pct": st.column_config.NumberColumn("Share", format="%.2f%%"),
             },
         )
+        ui.download_table(table, stem="market-structure",
+                          period=selected_period, context=EXPORT_CONTEXT)
 
 with tab_movement:
     previous_month = shift_period(selected_period, -1)
@@ -497,6 +515,8 @@ with tab_ytd:
                     "share_pct": st.column_config.NumberColumn("YTD share", format="%.2f%%"),
                 },
             )
+            ui.download_table(table, stem="ytd-position", period=ytd_to,
+                              context=EXPORT_CONTEXT)
 
         previous_ytd_from = f"{selected_year - 1:04d}-01"
         previous_ytd_to = f"{selected_year - 1:04d}-{selected_period[5:7]}"
@@ -550,5 +570,7 @@ with tab_raw:
             use_container_width=True,
         )
         st.dataframe(trend_df, use_container_width=True, hide_index=True)
+        ui.download_table(trend_df, stem="raw-trend", period=selected_period,
+                          context=EXPORT_CONTEXT)
 
 conn.close()

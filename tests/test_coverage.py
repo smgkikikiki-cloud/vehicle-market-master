@@ -330,3 +330,44 @@ class TestCoarseMonths:
     def test_the_notice_no_longer_claims_the_ranking_is_merely_incomplete(self):
         text = coverage.coarse_notice("2026-08", 0.25)
         assert "UNKNOWN" in text
+
+
+class TestDownloadShape:
+    """The file has to read like the screen it came from."""
+
+    def _frame(self):
+        import pandas as pd
+        return pd.DataFrame({
+            "entity": ["Toyota", "Honda"],
+            "units": [19468.0, 5414.0],
+            "share_pct": [32.71437933757919, 9.097783528541902],
+            "share_change_pp": [1.23456, -0.5],
+            "range_km": [620.5, 490.0],
+        })
+
+    def test_whole_counts_stop_being_floats(self):
+        from ui import _for_file
+        out = _for_file(self._frame())
+        assert list(out["units"]) == [19468, 5414]
+
+    def test_shares_are_rounded_to_what_the_page_shows(self):
+        from ui import _for_file
+        out = _for_file(self._frame())
+        assert list(out["share_pct"]) == [32.71, 9.1]
+        assert list(out["share_change_pp"]) == [1.23, -0.5]
+
+    def test_a_genuinely_fractional_column_is_left_alone(self):
+        from ui import _for_file
+        out = _for_file(self._frame())
+        assert list(out["range_km"]) == [620.5, 490.0]
+
+    def test_the_original_frame_is_not_modified(self):
+        from ui import _for_file
+        frame = self._frame()
+        _for_file(frame)
+        assert frame["units"].dtype.kind == "f"
+
+    def test_the_file_name_carries_period_and_scope(self):
+        from ui import _slug
+        assert _slug("Market structure") == "market-structure"
+        assert _slug("2026-08") == "2026-08"

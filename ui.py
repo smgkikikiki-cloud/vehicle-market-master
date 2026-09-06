@@ -140,3 +140,56 @@ def scope_caption(shown: float, all_scopes: float,
         if unattributed > 0:
             parts.append(f"ในนั้น {unattributed:,.0f} คันยังไม่ถูกจับเข้ารุ่น")
     return " · ".join(parts)
+
+
+def _slug(text: str) -> str:
+    keep = [c if (c.isalnum() or c in "-_") else "-" for c in str(text).strip()]
+    return "".join(keep).strip("-").lower() or "table"
+
+
+def _for_file(frame):
+    """Make the table read the way the screen reads it.
+
+    Two differences otherwise, and both make the file look like a different
+    dataset from the one on screen: a share renders as 32.71437933757919 where
+    the page says 32.71%, and a whole count renders as 19468.0. Percentages and
+    point changes are rounded to the two decimals the page displays; counts
+    that are whole become integers, which loses nothing.
+    """
+    out = frame.copy()
+    for column in out.columns:
+        name = str(column)
+        if out[column].dtype.kind != "f":
+            continue
+        if name.endswith("_pct") or name.endswith("_pp"):
+            out[column] = out[column].round(2)
+        elif out[column].dropna().mod(1).eq(0).all():
+            out[column] = out[column].astype("Int64")
+    return out
+
+
+def download_table(frame, *, stem: str, period: str, label: str = "ดาวน์โหลด CSV",
+                   context: Mapping[str, str] | None = None,
+                   key: str | None = None) -> None:
+    """A download button for a table on screen.
+
+    The file name carries the period and the active scope, because a folder of
+    downloads called ``data.csv`` is a folder of files nobody can tell apart a
+    week later. The CSV itself stays clean — no preamble rows — so it opens in
+    a spreadsheet and parses in a script without special handling.
+
+    ``utf-8-sig`` because Excel on Windows reads Thai as mojibake without the
+    byte-order mark, which is where these files are going.
+    """
+    if frame is None or getattr(frame, "empty", True):
+        return
+    bits = [stem, period]
+    for value in (context or {}).values():
+        if value and value != ANY:
+            bits.append(str(value))
+    name = "_".join(_slug(bit) for bit in bits if bit) + ".csv"
+    st.download_button(
+        label, data=_for_file(frame).to_csv(index=False).encode("utf-8-sig"),
+        file_name=name, mime="text/csv",
+        key=key or f"dl_{_slug(name)}", width="content",
+    )

@@ -371,3 +371,50 @@ class TestDownloadShape:
         from ui import _slug
         assert _slug("Market structure") == "market-structure"
         assert _slug("2026-08") == "2026-08"
+
+
+class TestAssumedPowertrain:
+    """Powertrain the catalog asserts rather than the source stating it."""
+
+    @pytest.fixture
+    def conn(self):
+        from vehreg import db
+        conn = db.connect(":memory:")
+        conn.executescript("""
+            INSERT INTO dim_source (source_id, name) VALUES (1, 's');
+            INSERT INTO dim_unit (unit_id, grain, catalog_year, brand, model,
+                                  powertrain)
+              VALUES ('a.solo','MODEL',2026,'A','Solo','HEV'),
+                     ('a.both','MODEL',2026,'A','Both','MIXED'),
+                     ('a.solo.v1','VARIANT',2026,'A','Solo','HEV'),
+                     ('a','BRAND',2026,'A',NULL,'MIXED');
+            INSERT INTO fact_registration
+              (period, registration_type, province, unit_id, grain, units,
+               source_id, raw_label)
+              VALUES ('2026-01','RY1','ALL','a.solo','MODEL',5000,1,'A Solo'),
+                     ('2026-01','RY1','ALL','a.both','MODEL',4000,1,'A Both'),
+                     ('2026-01','RY1','ALL','a.solo.v1','VARIANT',300,1,'A Solo 1.5'),
+                     ('2026-01','RY1','ALL','a','BRAND',50,1,'A');
+        """)
+        conn.commit()
+        return conn
+
+    def test_a_model_that_admits_it_is_mixed_is_not_an_assumption(self, conn):
+        flagged = {row["unit_id"] for row in coverage.assumed_powertrain(conn)}
+        assert "a.solo" in flagged
+        assert "a.both" not in flagged
+
+    def test_small_nameplates_stay_out_of_the_work_list(self, conn):
+        conn.execute(
+            "UPDATE fact_registration SET units = 10 WHERE unit_id = 'a.solo'")
+        conn.commit()
+        assert coverage.assumed_powertrain(conn) == []
+
+    def test_the_split_accounts_for_every_unit(self, conn):
+        """The honesty line has to add up to the warehouse or it is decoration."""
+        share = coverage.observed_share(conn)
+        assert share == {"variant": 300.0, "mixed": 4000.0,
+                         "assumed": 5000.0, "brand_only": 50.0}
+        total = conn.execute(
+            "SELECT SUM(units) AS u FROM fact_registration").fetchone()["u"]
+        assert sum(share.values()) == total

@@ -369,3 +369,81 @@ def coverage_notices(
             "ไม่ใช่ข้อมูลจริง ต้องดึงใหม่ก่อนใช้อ้างอิง"
         )
     return notices
+
+
+# --------------------------------------------------------------------------
+# Facets asserted rather than observed
+# --------------------------------------------------------------------------
+#: A nameplate this far above the noise is worth checking by hand before its
+#: powertrain is quoted anywhere. Below it the arithmetic barely moves.
+ASSUMED_UNITS_FLOOR = 1000.0
+
+
+def assumed_powertrain(conn: sqlite3.Connection) -> list[dict[str, object]]:
+    """Model-grain volume carrying a powertrain the source never stated.
+
+    DLT publishes a nameplate, not a spec: the รุ่น cell says "TOYOTA Corolla"
+    and nothing about ICE or HEV. So that volume lands at model grain and takes
+    whatever the model row says, and the model row is the consensus of the
+    variants the catalog happens to list - MIXED when they disagree, one value
+    when they do not.
+
+    That is right when the catalog lists every powertrain the nameplate sells
+    and wrong when it does not, and nothing in the data distinguishes the two.
+    The Corolla Altis lists ICE and HEV, so it reads MIXED and the honesty
+    holds. The HR-V lists only its two e:HEV trims, so every HR-V registered -
+    including the 1.5 Turbo RS - is counted HEV. The 5 Series lists only the
+    530e, so a 520d is counted a plug-in hybrid.
+
+    This returns the exposure, biggest first: the nameplates whose powertrain
+    is an assertion inherited from an incomplete variant list rather than
+    something the registration data or a checked catalog says. It is a work
+    list, not a verdict - most of these are genuinely single-powertrain.
+    """
+    rows = conn.execute(
+        "SELECT f.unit_id, d.powertrain, d.brand, d.model, "
+        "  COUNT(DISTINCT f.raw_label) AS labels, SUM(f.units) AS units, "
+        "  MIN(f.period) AS first_period, MAX(f.period) AS last_period "
+        "FROM fact_registration f JOIN dim_unit d "
+        "  ON d.unit_id = f.unit_id AND d.grain = f.grain "
+        " AND d.catalog_year = CAST(substr(f.period, 1, 4) AS INTEGER) "
+        "WHERE f.grain = 'MODEL' AND d.powertrain IS NOT NULL "
+        "  AND d.powertrain NOT IN ('MIXED', 'UNKNOWN') "
+        "GROUP BY f.unit_id, d.powertrain, d.brand, d.model "
+        "ORDER BY units DESC"
+    ).fetchall()
+    return [
+        {"unit_id": str(row["unit_id"]), "brand": row["brand"],
+         "model": row["model"], "powertrain": str(row["powertrain"]),
+         "units": float(row["units"] or 0.0), "labels": int(row["labels"]),
+         "periods": f"{row['first_period']}–{row['last_period']}"}
+        for row in rows if float(row["units"] or 0.0) >= ASSUMED_UNITS_FLOOR
+    ]
+
+
+def observed_share(conn: sqlite3.Connection) -> dict[str, float]:
+    """How much of the warehouse's powertrain reading is actually evidenced.
+
+    ``variant`` is volume DLT itself resolved to a spec line. ``mixed`` is
+    model-grain volume the catalog honestly refuses to pin down. ``assumed`` is
+    model-grain volume wearing a powertrain from a variant list that may or may
+    not be complete - the number this module exists to surface.
+    """
+    row = conn.execute(
+        "SELECT "
+        "  COALESCE(SUM(CASE WHEN f.grain = 'VARIANT' THEN f.units END), 0) "
+        "    AS variant, "
+        "  COALESCE(SUM(CASE WHEN f.grain = 'MODEL' "
+        "    AND (d.powertrain IS NULL OR d.powertrain IN ('MIXED','UNKNOWN')) "
+        "    THEN f.units END), 0) AS mixed, "
+        "  COALESCE(SUM(CASE WHEN f.grain = 'MODEL' "
+        "    AND d.powertrain NOT IN ('MIXED','UNKNOWN') "
+        "    THEN f.units END), 0) AS assumed, "
+        "  COALESCE(SUM(CASE WHEN f.grain = 'BRAND' THEN f.units END), 0) "
+        "    AS brand_only "
+        "FROM fact_registration f LEFT JOIN dim_unit d "
+        "  ON d.unit_id = f.unit_id AND d.grain = f.grain "
+        " AND d.catalog_year = CAST(substr(f.period, 1, 4) AS INTEGER)"
+    ).fetchone()
+    return {key: float(row[key] or 0.0)
+            for key in ("variant", "mixed", "assumed", "brand_only")}

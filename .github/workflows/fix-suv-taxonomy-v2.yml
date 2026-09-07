@@ -31,7 +31,7 @@ jobs:
           python -m compileall -q vehreg pages tests
           pytest -q
       - name: Validate body taxonomy
-        run: python scripts/validate_suv_taxonomy.py
+        run: PYTHONPATH=. python scripts/validate_suv_taxonomy.py
       - name: Commit generated changes
         run: |
           git config user.name "smgkikikiki-cloud"

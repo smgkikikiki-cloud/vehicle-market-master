@@ -44,7 +44,8 @@ rules.write_text(text, encoding="utf-8")
 
 
 def incomplete_hev_model(*, model_id: str, name: str, body: str,
-                         scope: str, aliases: list[str], note: str) -> dict:
+                         scope: str, aliases: list[str], note: str,
+                         variant_aliases: list[str] | None = None) -> dict:
     return {
         "id": model_id,
         "name_en": name,
@@ -76,7 +77,7 @@ def incomplete_hev_model(*, model_id: str, name: str, body: str,
                 "import_type": "UNKNOWN",
                 "origin_country": "UNKNOWN",
                 "price_note": "spec incomplete; powertrain owner-reviewed",
-                "aliases": [],
+                "aliases": variant_aliases or [],
                 "incomplete": True,
             }],
         }],
@@ -97,9 +98,13 @@ LS = incomplete_hev_model(
 )
 PRIUS = incomplete_hev_model(
     model_id="prius", name="Prius", body="HATCHBACK", scope="GREY",
-    aliases=[
-        "PRIUS", "PRIUS Z", "PRIUS Z HYBRID", "PRIUS HYBRID Z 2WD",
-        "PRIUS HYBRID X 2WD", "PRIUS 1.8L TOP OPT", "PRIUS 1.8L STD TRD",
+    # Model aliases may not introduce a powertrain word that the nameplate itself
+    # lacks.  Keep HYBRID spellings on the HEV variant instead; the model matcher
+    # still catches them by whole-token containment of "Prius", then the residual
+    # trim text resolves to the HEV variant when the source actually says HYBRID.
+    aliases=["PRIUS", "PRIUS Z", "PRIUS 1.8L TOP OPT", "PRIUS 1.8L STD TRD"],
+    variant_aliases=[
+        "PRIUS Z HYBRID", "PRIUS HYBRID Z 2WD", "PRIUS HYBRID X 2WD",
     ],
     note=("Owner-reviewed HEV. DLT volume in this warehouse is low-volume import "
           "traffic, so it is kept GREY and excluded from the default core market; "

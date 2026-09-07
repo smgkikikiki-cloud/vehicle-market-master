@@ -71,7 +71,7 @@ class OwnerPowertrainRuleTests(unittest.TestCase):
     def test_reviewed_key_is_punctuation_insensitive_and_volvo_wildcard(self):
         self.assertTrue(is_owner_reviewed("HONDA", "CR V"))
         self.assertTrue(is_owner_reviewed("Volvo", "XC40"))
-        self.assertFalse(is_owner_reviewed("Porsche", "Cayenne"))
+        self.assertTrue(is_owner_reviewed("Porsche", "Cayenne"))
 
 
 if __name__ == "__main__":

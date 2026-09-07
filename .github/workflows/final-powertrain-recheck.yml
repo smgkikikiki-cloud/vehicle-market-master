@@ -1,0 +1,74 @@
+name: Final powertrain recheck
+
+on:
+  push:
+    branches: [audit/final-powertrain-recheck]
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+      - name: Compile and test
+        run: |
+          python -m compileall -q vehreg pages tests
+          pytest -q
+      - name: Fresh warehouse audit
+        env:
+          VEHREG_DB: /tmp/final-powertrain-recheck.sqlite3
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from vehreg.web_bootstrap import bootstrap_database
+          from vehreg.db import connect
+          from vehreg import review, coverage, trimledger
+          from vehreg.powertrain_rules import RULES
+          from vehreg.cube import run
+
+          db = Path('/tmp/final-powertrain-recheck.sqlite3')
+          report = bootstrap_database(db)
+          conn = connect(db)
+
+          total = float(conn.execute('select coalesce(sum(units),0) u from fact_registration').fetchone()['u'])
+          facts = int(conn.execute('select count(*) n from fact_registration').fetchone()['n'])
+          print('BOOT', report)
+          print('FACTS', facts, 'UNITS', total)
+          assert facts == 35212, facts
+          assert total == 4064148.0, total
+
+          rec = trimledger.reconcile(conn)
+          print('TRIM_RECONCILE', len(rec))
+          assert not rec, rec[:5]
+
+          catalogs = review.load_catalogs()
+          known = set()
+          for cat in catalogs.values():
+              for model in cat.models.values():
+                  brand = cat.brands[model.brand_id].name_en
+                  known.add((brand.upper(), model.name_en.upper()))
+          misses = sorted({(r.brand, r.model) for r in RULES
+                           if r.model != '*' and (r.brand.upper(), r.model.upper()) not in known})
+          print('RULE_KEY_MISSES', len(misses), misses)
+          assert not misses, misses
+
+          wl = coverage.assumed_powertrain(conn, catalogs)
+          wl_units = round(sum(float(x['units']) for x in wl))
+          print('POWERTRAIN_WORKLIST', len(wl), 'UNITS', wl_units)
+          assert len(wl) == 0, wl[:10]
+          assert wl_units == 0, wl_units
+
+          cube = run(conn, ['powertrain'])
+          powertrain = {str(r['powertrain']): float(r['units']) for r in cube.rows}
+          print('POWERTRAIN_CUBE', powertrain)
+          assert abs(sum(powertrain.values()) - total) < 0.001, (sum(powertrain.values()), total)
+
+          conn.close()
+          print('FINAL_RECHECK_OK')
+          PY

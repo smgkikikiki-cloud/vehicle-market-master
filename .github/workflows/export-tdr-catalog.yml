@@ -1,0 +1,100 @@
+name: Export TDR catalog
+
+on:
+  push:
+    branches: [audit/final-powertrain-recheck]
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build flattened TDR import
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from vehreg.catalog import Catalog
+
+          BODY = {
+              'HATCHBACK':'Hatchback', 'SEDAN':'Sedan', 'CROSSOVER':'Crossover',
+              'SUV':'SUV (Monocoque)', 'PPV':'SUV (Ladder frame)', 'COUPE':'Coupe',
+              'MPV':'MPV', 'PICKUP':'Pickup truck', 'WAGON':'Wagon', 'VAN':'Van',
+              'TRUCK':'Truck', 'OTHER':None,
+          }
+          POS = {
+              'BUDGET':'Mass', 'MASS':'Mass', 'PREMIUM_TECH':'Premium',
+              'PERFORMANCE':'Premium', 'PREMIUM_LUXURY':'Luxury', 'UNKNOWN':None,
+          }
+          cat = Catalog.load(year=2026)
+          brands = []
+          models = []
+          for b in sorted(cat.brands.values(), key=lambda x: x.id):
+              brands.append({
+                  'slug': b.id.replace('_','-'),
+                  'name_th': b.name_th or b.name_en,
+                  'name_en': b.name_en,
+                  'country_origin': None if b.brand_origin in ('','UNKNOWN',None) else b.brand_origin,
+                  'market_position': POS.get(getattr(b.brand_segment,'value',str(b.brand_segment))),
+              })
+          for m in sorted(cat.models.values(), key=lambda x: x.id):
+              b = cat.brands[m.brand_id]
+              gens = cat.generations_of(m.id)
+              latest = sorted(gens, key=lambda g: (g.launched or '', g.code or '', g.id))[-1]
+              vs = cat.variants_of(m.id)
+              pts = sorted({v.powertrain.value for v in vs if v.powertrain.value != 'UNKNOWN'})
+              imports = sorted({v.import_type.value for v in vs if v.import_type.value != 'UNKNOWN'})
+              origins = sorted({v.origin_country for v in vs if v.origin_country not in ('','UNKNOWN',None)})
+              prices = []
+              for v in vs:
+                  for p in (v.price_thb, v.price_min_thb, v.price_max_thb):
+                      if p is not None:
+                          prices.append(int(round(float(p))))
+              seg = latest.segment.value
+              if seg in ('F','UNKNOWN'):
+                  seg = None
+              launched = latest.launched
+              launch_year = launch_month = None
+              if launched:
+                  try:
+                      parts = str(launched).split('-')
+                      launch_year = int(parts[0]) if parts and parts[0] else None
+                      launch_month = int(parts[1]) if len(parts) > 1 and parts[1] else None
+                  except Exception:
+                      pass
+              models.append({
+                  'slug': m.id.replace('.','-').replace('_','-'),
+                  'vm_model_id': m.id,
+                  'brand_slug': b.id.replace('_','-'),
+                  'name_th': m.name_th or m.name_en,
+                  'name_en': m.name_en,
+                  'generation': latest.code or None,
+                  'body_type': BODY.get(m.body_type.value),
+                  'segment': seg,
+                  'market_position': POS.get(getattr(b.brand_segment,'value',str(b.brand_segment))),
+                  'powertrains': pts,
+                  'production_type': imports[0] if len(imports) == 1 else None,
+                  'production_country': origins[0] if len(origins) == 1 else None,
+                  'launch_year': launch_year,
+                  'launch_month': launch_month,
+                  'seats': latest.seats,
+                  'retail_price_min': min(prices) if prices else None,
+                  'retail_price_max': max(prices) if prices else None,
+                  'dlt_aliases': list(m.aliases),
+                  'market_scope': m.market_scope.value,
+                  'incomplete': bool(m.incomplete),
+              })
+          out = {'year':2026,'brands':brands,'models':models}
+          assert len(models) == 325, len(models)
+          assert len(brands) == 62, len(brands)
+          Path('tdr-catalog-export.json').write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
+          print('EXPORTED', len(brands), 'brands', len(models), 'models')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tdr-catalog-export
+          path: tdr-catalog-export.json
+          if-no-files-found: error

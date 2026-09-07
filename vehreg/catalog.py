@@ -271,7 +271,23 @@ class Catalog:
     def _add_trim(self, gen_id: str, raw: dict, source: str) -> None:
         if not raw.get("name"):
             raise CatalogError(f"{source}: trim under {gen_id} is missing name")
-        trim_id = f"{gen_id}.trim.{slug(raw.get('id') or raw['name'])}"
+
+        # A MarketTrim is a real showroom SKU, not an unresolved analytical
+        # bucket. Its powertrain is part of the product identity and must be
+        # exact. UNKNOWN remains available to analytical Variants for source
+        # limitations, but it is not valid for a retail MarketTrim.
+        trim_powertrain = _facet(Powertrain, raw.get("powertrain"),
+                                 Powertrain.UNKNOWN)
+        if trim_powertrain is Powertrain.UNKNOWN:
+            raise CatalogError(
+                f"{source}: trim {raw['name']!r} under {gen_id} must declare "
+                "an exact powertrain")
+
+        # Explicit IDs stay stable. If omitted, powertrain participates in the
+        # generated identity so Premium BEV and Premium PHEV cannot collide.
+        raw_id = raw.get("id")
+        identity = raw_id or f"{raw['name']} {trim_powertrain.value}"
+        trim_id = f"{gen_id}.trim.{slug(identity)}"
         if trim_id in self.trims:
             raise CatalogError(f"{source}: duplicate trim id {trim_id!r}")
         variant_id = self._resolve_trim_variant_ref(
@@ -286,8 +302,7 @@ class Catalog:
             generation_id=gen_id,
             name=raw["name"],
             variant_id=variant_id,
-            powertrain=_facet(Powertrain, raw.get("powertrain"),
-                              Powertrain.UNKNOWN),
+            powertrain=trim_powertrain,
             price_thb=raw.get("price_thb"),
             drivetrain=_facet(Drivetrain, raw.get("drivetrain"),
                               Drivetrain.UNKNOWN),
@@ -539,6 +554,25 @@ class Catalog:
             seen[key] = model.id
         return problems
 
+    def trim_coverage(self) -> dict[str, int]:
+        """Coverage counters for retail-product fields, separate from DLT grain.
+
+        Dimensions are canonical exterior length/width/height plus wheelbase,
+        all in millimetres. Missing dimensions stay missing rather than being
+        inherited or guessed from another trim.
+        """
+        dims = ("length_mm", "width_mm", "height_mm", "wheelbase_mm")
+        return {
+            "trims": len(self.trims),
+            "exact_powertrain": sum(
+                t.powertrain is not Powertrain.UNKNOWN for t in self.trims.values()),
+            **{name: sum(getattr(t, name) is not None for t in self.trims.values())
+               for name in dims},
+            "complete_dimensions": sum(
+                all(getattr(t, name) is not None for name in dims)
+                for t in self.trims.values()),
+        }
+
     def coverage(self) -> dict[str, int]:
         scopes: dict[str, int] = {}
         for model in self.models.values():
@@ -590,7 +624,7 @@ class Catalog:
                 gen_payload: dict[str, Any] = {
                     "code": gen.code, "segment": gen.segment.value,
                     "seats": gen.seats, "launched": gen.launched,
-                    "ended": gen.ended, "variants": [],
+                    "ended": gen.ended, "variants": [], "trims": [],
                 }
                 for variant in self.variants.values():
                     if variant.generation_id != gen.id:
@@ -615,6 +649,39 @@ class Catalog:
                     if variant.incomplete:
                         variant_payload["incomplete"] = True
                     gen_payload["variants"].append(variant_payload)
+
+                # Product data must survive every editor/save round-trip.
+                # Previously brand_payload() omitted trims completely.
+                for trim in self.trims_of_generation(gen.id):
+                    trim_payload = {
+                        "id": trim.id.split(".trim.", 1)[1],
+                        "name": trim.name,
+                        "variant_id": trim.variant_id,
+                        "powertrain": trim.powertrain.value,
+                        "price_thb": trim.price_thb,
+                        "drivetrain": trim.drivetrain.value,
+                        "engine_code": trim.engine_code,
+                        "engine_cc": trim.engine_cc,
+                        "battery_kwh": trim.battery_kwh,
+                        "transmission": trim.transmission,
+                        "seats": trim.seats,
+                        "length_mm": trim.length_mm,
+                        "width_mm": trim.width_mm,
+                        "height_mm": trim.height_mm,
+                        "wheelbase_mm": trim.wheelbase_mm,
+                        "tire_front": trim.tire_front,
+                        "tire_rear": trim.tire_rear,
+                        "wheel_front": trim.wheel_front,
+                        "wheel_rear": trim.wheel_rear,
+                        "aliases": list(trim.aliases),
+                        "source_refs": {
+                            source: list(refs)
+                            for source, refs in trim.source_refs.items()
+                        },
+                    }
+                    if trim.notes:
+                        trim_payload["notes"] = trim.notes
+                    gen_payload["trims"].append(trim_payload)
                 model_payload["generations"].append(gen_payload)
             payload["models"].append(model_payload)
         return payload

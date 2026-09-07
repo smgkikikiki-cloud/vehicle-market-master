@@ -215,9 +215,7 @@
       "registration_type": "",
       "market_scope": "CORE",
       "aliases": [
-        "tank 300",
-        "TANK 300 HYBRID",
-        "300 HYBRID"
+        "tank 300"
       ],
       "notes": "",
       "generations": [
@@ -235,7 +233,9 @@
               "engine_cc": 1998,
               "battery_kwh": 1.8,
               "aliases": [
-                "HEV Ultra 4WD"
+                "HEV Ultra 4WD",
+                "HYBRID",
+                "HEV"
               ],
               "overrides": {},
               "price_thb": 1749000,
@@ -247,7 +247,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "tank500",
@@ -259,9 +260,7 @@
       "registration_type": "",
       "market_scope": "CORE",
       "aliases": [
-        "tank 500",
-        "TANK 500 HYBRID",
-        "500 HYBRID"
+        "tank 500"
       ],
       "notes": "",
       "generations": [
@@ -279,7 +278,9 @@
               "engine_cc": 1998,
               "battery_kwh": 1.8,
               "aliases": [
-                "HEV Ultra 4WD"
+                "HEV Ultra 4WD",
+                "HYBRID",
+                "HEV"
               ],
               "overrides": {},
               "price_thb": 2999000,
@@ -291,7 +292,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "poer_sahar",

@@ -215,9 +215,7 @@
       "registration_type": "",
       "market_scope": "CORE",
       "aliases": [
-        "tank 300",
-        "TANK 300 HYBRID",
-        "300 HYBRID"
+        "tank 300"
       ],
       "notes": "",
       "generations": [
@@ -235,7 +233,9 @@
               "engine_cc": 1998,
               "battery_kwh": 1.8,
               "aliases": [
-                "HEV Ultra 4WD"
+                "HEV Ultra 4WD",
+                "HYBRID",
+                "HEV"
               ],
               "overrides": {},
               "price_thb": 1749000,
@@ -244,10 +244,29 @@
               "price_note": "seed-unverified",
               "price_min_thb": 1749000,
               "price_max_thb": 1749000
+            },
+            {
+              "name": "2.4L Diesel",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2400,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "Diesel",
+                "2.4 Diesel",
+                "4WD Diesel"
+              ]
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "tank500",
@@ -259,9 +278,7 @@
       "registration_type": "",
       "market_scope": "CORE",
       "aliases": [
-        "tank 500",
-        "TANK 500 HYBRID",
-        "500 HYBRID"
+        "tank 500"
       ],
       "notes": "",
       "generations": [
@@ -279,7 +296,9 @@
               "engine_cc": 1998,
               "battery_kwh": 1.8,
               "aliases": [
-                "HEV Ultra 4WD"
+                "HEV Ultra 4WD",
+                "HYBRID",
+                "HEV"
               ],
               "overrides": {},
               "price_thb": 2999000,
@@ -288,10 +307,29 @@
               "price_note": "seed-unverified",
               "price_min_thb": 2999000,
               "price_max_thb": 2999000
+            },
+            {
+              "name": "2.4L Diesel",
+              "powertrain": "ICE",
+              "drivetrain": "4WD",
+              "engine_cc": 2400,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "Diesel",
+                "2.4 Diesel",
+                "4WD Diesel"
+              ]
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "poer_sahar",

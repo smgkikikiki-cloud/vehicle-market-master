@@ -2,6 +2,7 @@
 
 import csv
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -1390,3 +1391,52 @@ class OwnerConfirmedPowertrainTests(unittest.TestCase):
                 self.assertFalse(plugin[0].incomplete)
                 self.assertTrue(plugin[0].engine_cc)
                 self.assertTrue(plugin[0].battery_kwh)
+
+
+class AliasMustNotSwallowAPowertrainWordTests(unittest.TestCase):
+    """A model alias holding a powertrain word hides it from the trim ledger.
+
+    "TANK 300 HYBRID" was a harmless second spelling while the Tank was hybrid
+    only. Once the 2.4 diesel arrived in 2025 it became the thing that made the
+    two indistinguishable: residual_trim treats every token of every model alias
+    as part of the name, so HYBRID was stripped and the ledger recorded an empty
+    trim and no hint for all 1,374 of them. The Alphard had the same alias and
+    the same problem, live, with a hybrid and a plug-in on sale.
+
+    The rule compares against the model's own name, so a nameplate that IS its
+    powertrain - Kia EV6, MG ZS EV, MG4 Electric - is untouched.
+    """
+
+    PT_TOKEN = re.compile(
+        r"^(hybrid|hev|phev|bev|ev|reev|diesel|dmi|epower)$", re.I)
+
+    def _powertrain_tokens(self, text: str) -> set:
+        return {t for t in normalize.fold(text).split()
+                if self.PT_TOKEN.match(t)}
+
+    def test_no_alias_adds_a_powertrain_word_the_name_lacks(self):
+        from vehreg.catalog import DATA_DIR, Catalog, available_years
+
+        for year in available_years(DATA_DIR):
+            catalog = Catalog.load(DATA_DIR, year)
+            for model in catalog.models.values():
+                own = (self._powertrain_tokens(model.name_en)
+                       | self._powertrain_tokens(model.name_th)
+                       | self._powertrain_tokens(model.nameplate))
+                for alias in model.aliases:
+                    with self.subTest(year=year, model=model.id, alias=alias):
+                        self.assertEqual(
+                            self._powertrain_tokens(alias) - own, set())
+
+    def test_the_word_reaches_the_ledger_once_the_alias_is_gone(self):
+        from vehreg.catalog import DATA_DIR, Catalog
+
+        catalog = Catalog.load(DATA_DIR, 2026)
+        for model_id, label, expected in (
+                ("gwm.tank300", "GWM TANK 300 HYBRID", "HEV"),
+                ("gwm.tank300", "GWM GWM TANK 300", None),
+                ("toyota.alphard", "TOYOTA ALPHARD 2.5 HYBRID G", "HEV")):
+            with self.subTest(label=label):
+                residual = trimledger.residual_trim(catalog, model_id, label)
+                self.assertEqual(
+                    trimledger.parse_trim(residual).powertrain_hint, expected)

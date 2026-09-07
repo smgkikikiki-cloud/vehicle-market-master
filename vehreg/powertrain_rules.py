@@ -93,7 +93,6 @@ RULES: tuple[Rule, ...] = (
 
     # Nissan e-Power is HEV in the owner's taxonomy.
     R("Nissan", "Kicks e-Power", "HEV"),
-    R("Nissan", "Kicks", "HEV"),
 
     # Mitsubishi.
     R("Mitsubishi", "Outlander PHEV", "PHEV"),
@@ -102,19 +101,14 @@ RULES: tuple[Rule, ...] = (
     R("Mitsubishi", "Xpander Cross", "HEV", raw_any=("HEV",)),
     R("Mitsubishi", "Xpander Cross", "ICE"),
     R("Mitsubishi", "Xforce", "HEV"),
-    R("Mitsubishi", "XFORCE", "HEV"),
     R("Mitsubishi", "Attrage", "ICE"),
     R("Mitsubishi", "Mirage", "ICE"),
 
     # MG. New MG3 Hybrid+ launched in Thailand in 2024-08.
     R("MG", "MG HS", "PHEV", raw_any=("PHEV",)),
     R("MG", "MG HS", "ICE"),
-    R("MG", "HS", "PHEV", raw_any=("PHEV",)),
-    R("MG", "HS", "ICE"),
     R("MG", "MG3", "ICE", end="2024-07"),
     R("MG", "MG3", "HEV", start="2024-08"),
-    R("MG", "MG 3", "ICE", end="2024-07"),
-    R("MG", "MG 3", "HEV", start="2024-08"),
 
     # Lexus: explicit suffixes first; owner default for a bare family label is HEV.
     R("Lexus", "NX", "PHEV", raw_any=("450H+", "PHEV", "PLUG-IN")),
@@ -163,19 +157,15 @@ RULES: tuple[Rule, ...] = (
     # New CLA 250+ electric entered the Thai market in 2026-03.
     R("Mercedes-Benz", "CLA", "ICE", end="2026-02"),
     R("Mercedes-Benz", "CLA", "BEV", start="2026-03"),
-    R("Mercedes-Benz", "CLA-Class", "ICE", end="2026-02"),
-    R("Mercedes-Benz", "CLA-Class", "BEV", start="2026-03"),
 
     # Audi families the owner explicitly chose to keep mixed.
     R("Audi", "Q5", MIXED),
-    R("Audi", "Q7", MIXED),
-    R("Audi", "A6", MIXED),
+    R("Audi", "Audi Q7", MIXED),
+    R("Audi", "Audi A6", MIXED),
 
     # Mazda: petrol/diesel/mild-hybrid all fold to ICE in this taxonomy.
     R("Mazda", "Mazda2", "ICE"),
-    R("Mazda", "Mazda 2", "ICE"),
     R("Mazda", "Mazda3", "ICE"),
-    R("Mazda", "Mazda 3", "ICE"),
     R("Mazda", "CX-30", "ICE"),
     R("Mazda", "CX-5", "ICE"),
 )

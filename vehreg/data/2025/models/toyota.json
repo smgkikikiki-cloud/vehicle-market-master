@@ -1434,6 +1434,55 @@
           ]
         }
       ]
+    },
+    {
+      "id": "prius",
+      "name_en": "Prius",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "GREY",
+      "aliases": [
+        "PRIUS",
+        "PRIUS Z",
+        "PRIUS 1.8L TOP OPT",
+        "PRIUS 1.8L STD TRD"
+      ],
+      "incomplete": true,
+      "powertrain_checked": true,
+      "notes": "Owner-reviewed HEV. DLT volume in this warehouse is low-volume import traffic, so it is kept GREY and excluded from the default core market; specification deliberately left incomplete.",
+      "generations": [
+        {
+          "code": "unresearched",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "HEV (owner-reviewed; spec incomplete)",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "spec incomplete; powertrain owner-reviewed",
+              "aliases": [
+                "PRIUS Z HYBRID",
+                "PRIUS HYBRID Z 2WD",
+                "PRIUS HYBRID X 2WD"
+              ],
+              "incomplete": true
+            }
+          ]
+        }
+      ]
     }
   ]
 }

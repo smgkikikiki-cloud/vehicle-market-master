@@ -372,6 +372,95 @@
           ]
         }
       ]
+    },
+    {
+      "id": "lexus_is",
+      "name_en": "IS",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "IS300h",
+        "IS300H",
+        "IS300"
+      ],
+      "incomplete": true,
+      "powertrain_checked": true,
+      "notes": "Owner-reviewed HEV. Added because DLT IS300h was fuzzy-matching ES; specification deliberately left incomplete.",
+      "generations": [
+        {
+          "code": "unresearched",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "HEV (owner-reviewed; spec incomplete)",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "spec incomplete; powertrain owner-reviewed",
+              "aliases": [],
+              "incomplete": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lexus_ls",
+      "name_en": "LS",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "LS500h",
+        "LS500H",
+        "LS500",
+        "LS350"
+      ],
+      "incomplete": true,
+      "powertrain_checked": true,
+      "notes": "Owner-reviewed HEV. Added because DLT LS500h was fuzzy-matching LM and other LS labels were stranded at brand grain; spec incomplete.",
+      "generations": [
+        {
+          "code": "unresearched",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "HEV (owner-reviewed; spec incomplete)",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "spec incomplete; powertrain owner-reviewed",
+              "aliases": [],
+              "incomplete": true
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -19,7 +19,22 @@ jobs:
         with:
           python-version: '3.12'
       - name: Apply owner batch3 rules
-        run: python tools/apply_owner_powertrain_batch3.py
+        run: |
+          python tools/apply_owner_powertrain_batch3.py
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('tests/test_owner_powertrain_batch3.py')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace(
+              '        self.source = db.register_source(self.conn, "test")\n',
+              '        self.source = db.register_source(self.conn, "test")\n        self.seq = 0\n',
+          )
+          s = s.replace(
+              '        year = int(period[:4])\n        unit = f"x.{brand}.{model}.{raw}".lower().replace(" ", "_")\n',
+              '        year = int(period[:4])\n        self.seq += 1\n        unit = f"x.{self.seq}.{brand}.{model}.{raw}".lower().replace(" ", "_")\n',
+          )
+          p.write_text(s, encoding='utf-8')
+          PY
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

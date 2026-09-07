@@ -1,6 +1,11 @@
-"""The four identity layers and the facet-resolution chain.
+"""The registration identity layers and the facet-resolution chain.
 
     Brand  ->  Model  ->  Generation  ->  Variant
+
+``MarketTrim`` is a fifth, catalog-only child below Generation. It records the
+actual grades offered to buyers (price, dimensions and fitment) but is
+deliberately outside ``RESOLUTION_CHAIN``: a trim never receives or allocates
+registration volume merely because the catalog knows it exists.
 
 Each layer declares only the facets that are genuinely constant at that layer.
 A lower layer may override anything a higher layer said, except the two facets
@@ -143,8 +148,8 @@ class Model:
     incomplete: bool = False
     #: Set when someone has checked that the variant list covers every
     #: powertrain this nameplate actually sold that year. DLT never states a
-    #: powertrain, so model-grain volume inherits the consensus of the trims
-    #: the catalog happens to list; that consensus is only trustworthy when
+    #: powertrain, so model-grain volume inherits the consensus of the analytical
+    #: variants the catalog happens to list; that consensus is only trustworthy when
     #: the list is known complete. Without this flag there is no way to tell a
     #: confirmed "hybrid only" from a nameplate nobody has looked at yet, and
     #: both read the same on every chart.
@@ -199,11 +204,16 @@ class Generation:
 
 @dataclass(frozen=True, slots=True)
 class Variant:
-    """One รุ่นย่อย, priced for the catalog year it belongs to."""
+    """One analytical spec line used to classify registration volume.
+
+    This is deliberately not the retail trim list. Multiple marketed grades may
+    fold into one Variant when DLT cannot distinguish them; exact retail grades
+    live in ``MarketTrim``.
+    """
 
     id: str                                   # "toyota.yaris_ativ.mxpa10.smart"
     generation_id: str
-    name: str                                 # trim as marketed, e.g. "1.2 Smart"
+    name: str                                 # analytical line, e.g. "1.2 ICE"
     powertrain: Powertrain = Powertrain.UNKNOWN
     drivetrain: Drivetrain = Drivetrain.UNKNOWN
     engine_cc: Optional[int] = None
@@ -215,7 +225,7 @@ class Variant:
     origin_country: str = "UNKNOWN"
     price_note: str = ""
     aliases: tuple[str, ...] = ()
-    #: Set when the trim exists so a real registration has somewhere to land
+    #: Set when the analytical spec line exists so a real registration has somewhere to land
     #: and its specification has not been researched. The model-level flag says
     #: that about a whole nameplate; this says it about one half of one. The
     #: BMW X1 is the case it was written for: its petrol and diesel side is
@@ -273,6 +283,59 @@ class Variant:
                 problems.append("price_thb is outside price_min_thb..price_max_thb")
                 break
         return [f"variant {self.id}: {p}" for p in problems]
+
+
+@dataclass(frozen=True, slots=True)
+class MarketTrim:
+    """One marketed trim/grade, kept outside registration analytics.
+
+    ``Variant`` remains the analytical spec line used to classify DLT volume.
+    A MarketTrim is the retail offering beneath the generation and may point to
+    its parent analytical variant when that mapping is known. Its own exact
+    powertrain/price/specification is useful to market-offering and fitment
+    products, but ``resolve()`` and the cube never iterate trims.
+    """
+
+    id: str                                   # "toyota.alphard.ah40.trim.z_premier"
+    generation_id: str
+    name: str                                 # marketed grade, e.g. "Z Premier"
+    variant_id: Optional[str] = None           # analytical Variant, if known
+    powertrain: Powertrain = Powertrain.UNKNOWN
+    price_thb: Optional[float] = None
+    drivetrain: Drivetrain = Drivetrain.UNKNOWN
+    engine_code: str = ""
+    engine_cc: Optional[int] = None
+    battery_kwh: Optional[float] = None
+    transmission: str = ""
+    seats: Optional[int] = None
+    length_mm: Optional[int] = None
+    width_mm: Optional[int] = None
+    height_mm: Optional[int] = None
+    wheelbase_mm: Optional[int] = None
+    tire_front: str = ""
+    tire_rear: str = ""
+    wheel_front: str = ""
+    wheel_rear: str = ""
+    aliases: tuple[str, ...] = ()
+    # Source-system IDs only. Example: {"ecosticker": ("uuid",)}.
+    source_refs: dict[str, tuple[str, ...]] = field(default_factory=dict)
+    notes: str = ""
+
+    def validate(self) -> list[str]:
+        problems: list[str] = []
+        if self.price_thb is not None and self.price_thb < 0:
+            problems.append("price_thb must not be negative")
+        if self.engine_cc is not None and self.engine_cc <= 0:
+            problems.append("engine_cc must be positive")
+        if self.battery_kwh is not None and self.battery_kwh < 0:
+            problems.append("battery_kwh must not be negative")
+        if self.seats is not None and self.seats <= 0:
+            problems.append("seats must be positive")
+        for field_name in ("length_mm", "width_mm", "height_mm", "wheelbase_mm"):
+            value = getattr(self, field_name)
+            if value is not None and value <= 0:
+                problems.append(f"{field_name} must be positive")
+        return [f"trim {self.id}: {p}" for p in problems]
 
 
 @dataclass(frozen=True, slots=True)

@@ -60,6 +60,31 @@
               "price_note": "seed-unverified",
               "price_min_thb": 2799000,
               "price_max_thb": 2799000
+            },
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "320d",
+                "320i",
+                "318i",
+                "318d",
+                "328i",
+                "330i",
+                "320Li",
+                "330Li",
+                "M340i",
+                "M340i xDrive"
+              ]
             }
           ]
         }
@@ -435,6 +460,25 @@
               "origin_country": "TH",
               "price_note": "seed-unverified",
               "aliases": []
+            },
+            {
+              "name": "3.0L Diesel",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "725Ld",
+                "730Ld",
+                "740d",
+                "740Li"
+              ]
             }
           ]
         }
@@ -512,6 +556,24 @@
               "origin_country": "TH",
               "price_note": "seed-unverified",
               "aliases": []
+            },
+            {
+              "name": "3.0L Diesel",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "xDrive30d",
+                "sDrive25d",
+                "X5 xDrive30d"
+              ]
             }
           ]
         }
@@ -828,6 +890,134 @@
         }
       ],
       "powertrain_checked": true
+    },
+    {
+      "id": "ix2",
+      "name_en": "iX2",
+      "name_th": "ไอเอ็กซ์2",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "iX2",
+        "iX2 xDrive30",
+        "i X2"
+      ],
+      "incomplete": true,
+      "notes": "แยกจาก iX — คนละคันกัน iX2 เป็น crossover ฐาน X2",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2024-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "i3",
+      "name_en": "i3",
+      "name_th": "ไอ3",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "i3",
+        "i3s",
+        "i3s 94Ah",
+        "i 3"
+      ],
+      "incomplete": true,
+      "notes": "รถไฟฟ้ารุ่นแรกของ BMW สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 4,
+          "launched": "2014-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "i8",
+      "name_en": "i8",
+      "name_th": "ไอ8",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "i8",
+        "i8 Roadster",
+        "i8 Hybrid",
+        "i 8"
+      ],
+      "incomplete": true,
+      "notes": "สปอร์ตปลั๊กอินไฮบริด แยกเป็นรุ่นของตัวเองตามกฎรถตระกูล i",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 4,
+          "launched": "2015-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }

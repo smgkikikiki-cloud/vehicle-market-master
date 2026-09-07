@@ -1170,3 +1170,52 @@ class ReevIsForPlugInsTests(unittest.TestCase):
         # Anything here has to be a car that charges from a socket.
         self.assertEqual(sorted({o.split()[1] for o in offenders}),
                          ["deepal.deepal_s05", "jaecoo.jaecoo_6t_reev"])
+
+
+class BmwModelSplitTests(unittest.TestCase):
+    """The owner's rule for BMW, pinned so a later edit cannot drift off it.
+
+    One nameplate holds its combustion and plug-in halves together - a 3 Series
+    is a 3 Series whether it is a 320d or a 330e - and every i car is its own
+    model, because an i5 is not a 5 Series with a different engine.
+    """
+
+    def setUp(self):
+        from vehreg.catalog import DATA_DIR, Catalog, available_years
+        self.catalogs = {year: Catalog.load(DATA_DIR, year)
+                         for year in available_years(DATA_DIR)}
+
+    def test_every_i_car_is_its_own_model(self):
+        for year, catalog in self.catalogs.items():
+            for model in catalog.models_of("bmw"):
+                name = model.name_en.lower()
+                if not name.startswith("i") or name.startswith("ix1"):
+                    continue
+                with self.subTest(year=year, model=model.id):
+                    # An i model never shares a row with a combustion nameplate.
+                    powertrains = {v.powertrain for v in
+                                   catalog.variants_of(model.id)}
+                    self.assertTrue(
+                        powertrains <= {Powertrain.BEV, Powertrain.PHEV},
+                        f"{model.id} carries {powertrains}")
+
+    def test_an_i_badge_never_lands_on_a_combustion_nameplate(self):
+        """The iX2 sat inside the iX, and the i7 inside the 7 Series."""
+        for year, catalog in self.catalogs.items():
+            for model in catalog.models_of("bmw"):
+                if model.name_en.lower().startswith("i"):
+                    continue
+                for alias in model.aliases:
+                    with self.subTest(year=year, model=model.id, alias=alias):
+                        self.assertFalse(
+                            alias.lower().lstrip().startswith("i")
+                            and any(ch.isdigit() for ch in alias),
+                            f"{model.id} claims the i-car alias {alias!r}")
+
+    def test_a_nameplate_sold_both_ways_holds_both(self):
+        catalog = self.catalogs[max(self.catalogs)]
+        for model_id in ("bmw.bmw_3", "bmw.bmw_5", "bmw.7_series", "bmw.x5"):
+            with self.subTest(model=model_id):
+                powertrains = {v.powertrain for v in
+                               catalog.variants_of(model_id)}
+                self.assertEqual(powertrains, {Powertrain.ICE, Powertrain.PHEV})

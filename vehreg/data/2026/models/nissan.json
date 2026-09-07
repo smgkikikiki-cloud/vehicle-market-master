@@ -310,6 +310,132 @@
           ]
         }
       ]
+    },
+    {
+      "id": "sylphy",
+      "name_en": "Nissan Sylphy",
+      "name_th": "นิสสัน ซิลฟี",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "Sylphy",
+        "SYLPHY 1.6"
+      ],
+      "incomplete": true,
+      "notes": "เพิ่มให้ป้ายที่ DLT จดจริงมีที่ลง สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1598,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ],
+      "powertrain_checked": true
+    },
+    {
+      "id": "teana",
+      "name_en": "Nissan Teana",
+      "name_th": "นิสสัน เทียน่า",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "Teana"
+      ],
+      "incomplete": true,
+      "notes": "เพิ่มให้ป้ายที่ DLT จดจริงมีที่ลง สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ],
+      "powertrain_checked": true
+    },
+    {
+      "id": "gtr",
+      "name_en": "Nissan GT-R",
+      "name_th": "นิสสัน จีที-อาร์",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "GT-R",
+        "GTR",
+        "GT R"
+      ],
+      "incomplete": true,
+      "notes": "เพิ่มให้ป้ายที่ DLT จดจริงมีที่ลง สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 4,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 3799,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "JP",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ],
+      "powertrain_checked": true
     }
   ]
 }

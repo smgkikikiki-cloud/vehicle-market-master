@@ -614,6 +614,127 @@
           ]
         }
       ]
+    },
+    {
+      "id": "q7",
+      "name_en": "Audi Q7",
+      "name_th": "ออดี้ คิว7",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "Q7",
+        "Q7 45 TDI",
+        "Q7 55 TFSI"
+      ],
+      "incomplete": true,
+      "notes": "เจ้าของยืนยันว่าเป็น ICE แต่ในไฟล์มี 'Q7 60 TFSI e' 58 คัน ซึ่งท้ายด้วย e = ปลั๊กอินตามการตั้งชื่อของ Audi เลยใส่ไว้ทั้งสองฝั่ง",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "engine_cc": 2967,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            },
+            {
+              "name": "PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "60 TFSI e",
+                "Q7 60 TFSI e"
+              ],
+              "incomplete": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a6",
+      "name_en": "Audi A6",
+      "name_th": "ออดี้ เอ6",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "A6",
+        "A6 AV",
+        "A6 40 TFSI",
+        "A6 45 TFSI"
+      ],
+      "incomplete": true,
+      "notes": "เจ้าของยืนยันว่าเป็น PHEV แต่คันที่จดจริงปี 2021-2026 เป็น 40/45 TFSI เบนซิน เลยใส่ไว้ทั้งสองฝั่ง อ่านออกมาเป็น MIXED",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1984,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            },
+            {
+              "name": "PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "55 TFSI e",
+                "A6 55 TFSI e"
+              ],
+              "incomplete": true
+            }
+          ]
+        }
+      ]
     }
   ]
 }

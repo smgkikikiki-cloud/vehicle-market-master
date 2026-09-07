@@ -1,0 +1,58 @@
+{
+  "brand": {
+    "id": "fomm",
+    "name_en": "FOMM",
+    "name_th": "ฟอมม์",
+    "brand_segment": "MASS",
+    "oem_group": "FOMM",
+    "brand_origin": "TH",
+    "trim_detail": false,
+    "aliases": [
+      "ฟอมม์"
+    ]
+  },
+  "models": [
+    {
+      "id": "fomm_one",
+      "name_en": "FOMM One",
+      "name_th": "ฟอมม์ วัน",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ONE",
+        "FOMM ONE"
+      ],
+      "incomplete": true,
+      "powertrain_checked": true,
+      "notes": "รถไฟฟ้าผลิตในไทย ยี่ห้อนี้ยังไม่เคยมีใน catalog ยอดจดทะเบียนเลยค้างที่คิวรอตรวจมาตลอด สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "A",
+          "seats": 4,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

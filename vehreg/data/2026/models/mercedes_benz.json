@@ -769,6 +769,50 @@
         }
       ],
       "incomplete": true
+    },
+    {
+      "id": "eqb",
+      "name_en": "Mercedes-Benz EQB",
+      "name_th": "เมอร์เซเดส-เบนซ์ อีคิวบี",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "EQB",
+        "EQB 250",
+        "EQB 250+"
+      ],
+      "incomplete": true,
+      "notes": "เพิ่มให้ป้ายที่ DLT จดจริงมีที่ลง สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 7,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [],
+              "incomplete": true
+            }
+          ]
+        }
+      ],
+      "powertrain_checked": true
     }
   ]
 }

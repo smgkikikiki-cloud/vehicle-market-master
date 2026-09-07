@@ -1,0 +1,102 @@
+{
+  "brand": {
+    "id": "volt",
+    "name_en": "VOLT",
+    "name_th": "โวลต์",
+    "brand_segment": "MASS",
+    "oem_group": "Volt",
+    "brand_origin": "TH",
+    "trim_detail": false,
+    "aliases": [
+      "โวลต์"
+    ]
+  },
+  "models": [
+    {
+      "id": "volt_for_four",
+      "name_en": "VOLT For Four",
+      "name_th": "โวลต์ ฟอร์โฟร์",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "FOR FOUR",
+        "VOLT FOR FOUR",
+        "For 4"
+      ],
+      "incomplete": true,
+      "powertrain_checked": true,
+      "notes": "รถไฟฟ้าผลิตในไทย ยี่ห้อนี้ยังไม่เคยมีใน catalog ยอดจดทะเบียนเลยค้างที่คิวรอตรวจมาตลอด สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "A",
+          "seats": 4,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "volt_for_two",
+      "name_en": "VOLT For Two",
+      "name_th": "โวลต์ ฟอร์ทู",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "FOR TWO",
+        "VOLT FOR TWO",
+        "For 2"
+      ],
+      "incomplete": true,
+      "powertrain_checked": true,
+      "notes": "รถไฟฟ้าผลิตในไทย ยี่ห้อนี้ยังไม่เคยมีใน catalog ยอดจดทะเบียนเลยค้างที่คิวรอตรวจมาตลอด สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "A",
+          "seats": 2,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

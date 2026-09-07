@@ -45,6 +45,7 @@ def payload():
                 ],
                 "trims": [
                     {
+                        "id": "long_range",
                         "name": "Long Range",
                         "variant": "BEV",
                         "powertrain": "BEV",

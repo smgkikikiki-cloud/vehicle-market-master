@@ -144,10 +144,10 @@ class Powertrain(Facet):
     to ICE, so a source or a catalog file that spells it still loads and simply
     lands where it belongs; it cannot enter the warehouse as its own value.
 
-    REEV is reserved for a car that is charged from a socket and carries an
-    engine for when the battery runs out - a Deepal S05 REEV, a Geely EX5 REEV.
-    It is NOT Nissan e-Power, whose battery is only ever charged by its own
-    engine and which has no socket at all; that is HEV.
+    REEV is a market label, not a guess from drivetrain architecture. Use it
+    when the manufacturer markets the vehicle as REEV/EREV. Nissan e-Power
+    remains HEV in this catalog; a generic "range extender" description is
+    not enough to reclassify it as REEV.
     """
 
     ICE = "ICE"                      # petrol or diesel, mild hybrids included
@@ -177,7 +177,7 @@ _POWERTRAIN_GROUP = {
 }
 
 class MarketPowertrain(Facet):
-    """The four buckets a Thai showroom, and the site, actually sell in.
+    """Reader-facing market buckets.
 
     ``PowertrainGroup`` folds too far for a buyer - it puts a Prius and an
     Outlander PHEV in one bucket - and ``Powertrain`` splits further than the
@@ -189,8 +189,9 @@ class MarketPowertrain(Facet):
     """
 
     FUEL = "FUEL"            # ICE, mild hybrids included
-    HYBRID = "HYBRID"        # HEV and REEV: electrified, no plug
-    PLUGIN = "PLUGIN"        # PHEV: a plug and an engine
+    HYBRID = "HYBRID"        # HEV, including Nissan e-Power
+    PLUGIN = "PLUGIN"        # PHEV
+    REEV = "REEV"            # maker-positioned REEV / EREV
     ELECTRIC = "ELECTRIC"    # BEV and FCEV
     MIXED = "MIXED"
     UNKNOWN = "UNKNOWN"
@@ -199,18 +200,19 @@ class MarketPowertrain(Facet):
 _MARKET_POWERTRAIN = {
     Powertrain.ICE: MarketPowertrain.FUEL,
     Powertrain.HEV: MarketPowertrain.HYBRID,
-    Powertrain.REEV: MarketPowertrain.HYBRID,
+    Powertrain.REEV: MarketPowertrain.REEV,
     Powertrain.PHEV: MarketPowertrain.PLUGIN,
     Powertrain.BEV: MarketPowertrain.ELECTRIC,
     Powertrain.FCEV: MarketPowertrain.ELECTRIC,
     Powertrain.UNKNOWN: MarketPowertrain.UNKNOWN,
 }
 
-#: Thai labels for the four, for anything reader-facing.
+#: Thai labels for reader-facing market buckets.
 MARKET_POWERTRAIN_TH: dict[str, str] = {
     MarketPowertrain.FUEL.value: "น้ำมัน/ดีเซล",
     MarketPowertrain.HYBRID.value: "ไฮบริด",
     MarketPowertrain.PLUGIN.value: "ปลั๊กอินไฮบริด",
+    MarketPowertrain.REEV.value: "REEV",
     MarketPowertrain.ELECTRIC.value: "ไฟฟ้า",
     MarketPowertrain.MIXED.value: "ปนกัน",
     MarketPowertrain.UNKNOWN.value: "ไม่ทราบ",
@@ -483,7 +485,7 @@ THAI_LABELS: dict[str, dict[str, str]] = {
     },
     "Powertrain": {
         "ICE": "สันดาป", "HEV": "ไฮบริด",
-        "PHEV": "ปลั๊กอินไฮบริด", "REEV": "อีวีเพิ่มระยะทาง",
+        "PHEV": "ปลั๊กอินไฮบริด", "REEV": "REEV",
         "BEV": "ไฟฟ้าล้วน", "FCEV": "เซลล์เชื้อเพลิง", "UNKNOWN": "ไม่ระบุ",
     },
     "PowertrainGroup": {
@@ -541,7 +543,10 @@ FACET_ALIASES: dict[str, dict[str, str]] = {
         "MHEV": "ICE", "MILD_HYBRID": "ICE", "MILD_HEV": "ICE",
         "EQ_BOOST": "ICE", "48V": "ICE",
         "PLUG_IN_HYBRID": "PHEV", "PLUGIN": "PHEV",
-        "EREV": "REEV", "RANGE_EXTENDER": "REEV", "GASOLINE": "ICE",
+        # Only the explicit maker labels REEV/EREV map here. Generic
+        # RANGE_EXTENDER is ambiguous (notably Nissan e-Power) and must
+        # not auto-classify a vehicle as REEV.
+        "EREV": "REEV", "GASOLINE": "ICE",
         "PETROL": "ICE", "DIESEL": "ICE", "HYDROGEN": "FCEV",
     },
     "ImportType": {"IMPORTED": "CBU", "LOCAL": "CKD", "ASSEMBLED": "CKD"},

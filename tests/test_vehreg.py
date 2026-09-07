@@ -135,6 +135,13 @@ class TaxonomyTests(unittest.TestCase):
                       taxonomy.PowertrainGroup.HYBRID)
         self.assertIs(taxonomy.powertrain_group(Powertrain.parse("MHEV")),
                       taxonomy.PowertrainGroup.COMBUSTION)
+        self.assertIs(taxonomy.market_powertrain(Powertrain.HEV),
+                      taxonomy.MarketPowertrain.HYBRID)
+        self.assertIs(taxonomy.market_powertrain(Powertrain.REEV),
+                      taxonomy.MarketPowertrain.REEV)
+        self.assertIs(Powertrain.parse("EREV"), Powertrain.REEV)
+        with self.assertRaises(ValueError):
+            Powertrain.parse("RANGE_EXTENDER")
         self.assertTrue(taxonomy.is_plug_in(Powertrain.PHEV))
         self.assertFalse(taxonomy.is_plug_in(Powertrain.HEV))
         # A mild hybrid is not xEV here: it folds to ICE before it is asked.
@@ -1074,7 +1081,7 @@ if __name__ == "__main__":
 
 
 class MarketPowertrainTests(unittest.TestCase):
-    """The four buckets the site sells in, and what they exist to hide."""
+    """Reader-facing buckets keep HEV and maker-labelled REEV distinct."""
 
     def test_a_mild_hybrid_is_a_petrol_car_everywhere(self):
         """MHEV is not a value this warehouse can hold.
@@ -1092,9 +1099,9 @@ class MarketPowertrainTests(unittest.TestCase):
         self.assertIs(taxonomy.market_powertrain(Powertrain.ICE),
                       taxonomy.MarketPowertrain.FUEL)
 
-    def test_a_range_extender_sits_with_the_hybrids(self):
+    def test_reev_stays_separate_from_hev(self):
         self.assertIs(taxonomy.market_powertrain(Powertrain.REEV),
-                      taxonomy.MarketPowertrain.HYBRID)
+                      taxonomy.MarketPowertrain.REEV)
         self.assertIs(taxonomy.market_powertrain(Powertrain.HEV),
                       taxonomy.MarketPowertrain.HYBRID)
 

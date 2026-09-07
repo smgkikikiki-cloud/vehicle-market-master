@@ -218,7 +218,7 @@ def _migrate(conn: sqlite3.Connection) -> None:
     dim_columns = {row["name"] for row in
                    conn.execute("PRAGMA table_info(dim_unit)")}
     if "market_powertrain" not in dim_columns:
-        # The four buckets the site sells in. Derived, so a rebuild fills it;
+        # Reader-facing powertrain buckets. Derived, so a rebuild fills it;
         # the column just has to exist first.
         with conn:
             conn.execute("ALTER TABLE dim_unit ADD COLUMN market_powertrain TEXT")

@@ -193,11 +193,11 @@ body_family = st.sidebar.selectbox(
 )
 market_pt = st.sidebar.selectbox(
     "ระบบขับเคลื่อน",
-    ["ALL", "FUEL", "HYBRID", "PLUGIN", "ELECTRIC", "MIXED", "UNKNOWN"],
+    ["ALL", "FUEL", "HYBRID", "PLUGIN", "REEV", "ELECTRIC", "MIXED", "UNKNOWN"],
     format_func=lambda v: MARKET_POWERTRAIN_TH.get(v, v),
     key="f_market_pt",
-    help="สี่หมวดที่หน้าเว็บใช้จริง — mild hybrid นับเป็นน้ำมัน และ e-Power "
-         "นับเป็นไฮบริด กรองแบบละเอียดอยู่ช่องถัดไป",
+    help="หมวดที่หน้าเว็บใช้จริง — mild hybrid นับเป็นน้ำมัน, e-Power "
+         "อยู่ HEV/ไฮบริด และรถที่ผู้ผลิตเรียก REEV/EREV แยกเป็น REEV",
 )
 powertrain = st.sidebar.selectbox(
     "Powertrain (ละเอียด)",

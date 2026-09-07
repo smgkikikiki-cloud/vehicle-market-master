@@ -33,9 +33,11 @@ a car charged from a socket — a Deepal S05 REEV, a Jaecoo 6T REEV — and **no
 Nissan e-Power, whose battery is only ever charged by its own engine; e-Power is
 HEV, which is also how Thai excise treats it.
 
-**Four buckets for anything reader-facing.** `market_powertrain` is
-FUEL / HYBRID / PLUGIN / ELECTRIC with Thai labels. Group and filter by it on
-any page. The seven-code `powertrain` stays for analysis.
+**Reader-facing powertrain buckets.** `market_powertrain` is
+FUEL / HYBRID / PLUGIN / REEV / ELECTRIC. HEV includes Nissan e-Power;
+REEV stays separate and is used when the manufacturer markets the vehicle as
+REEV/EREV. Do not infer REEV from the generic phrase "range extender". The
+seven-code `powertrain` stays for analysis.
 
 **One nameplate per model, except the electric twin.** A 3 Series holds its
 petrol, diesel and plug-in trims together. An i5 is not a 5 Series with a

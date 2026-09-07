@@ -1364,6 +1364,23 @@ class OwnerConfirmedPowertrainTests(unittest.TestCase):
                 with self.subTest(model=model.id, alias=alias):
                     self.assertNotIn("tron", alias.lower())
 
+    def test_a_nameplate_and_its_ev_twin_stay_apart(self):
+        """MG ZS and MG ZS EV are two cars and DLT files them apart.
+
+        The pattern that went wrong for the Audi Q8 - the battery car sitting
+        on the petrol nameplate's alias list - so it is worth a test where it
+        is right.
+        """
+        zs = self.catalog.models["mg.mg_zs"]
+        zs_ev = self.catalog.models["mg.mg_zs_ev"]
+        self.assertEqual({v.powertrain for v in
+                          self.catalog.variants_of(zs.id)}, {Powertrain.ICE})
+        self.assertEqual({v.powertrain for v in
+                          self.catalog.variants_of(zs_ev.id)}, {Powertrain.BEV})
+        for alias in zs.aliases:
+            with self.subTest(alias=alias):
+                self.assertNotIn("ev", alias.lower().split())
+
     def test_the_bmw_plug_ins_no_longer_declare_a_gap(self):
         for model_id in ("bmw.bmw_x1", "bmw.bmw_x3"):
             plugin = [v for v in self.catalog.variants_of(model_id)

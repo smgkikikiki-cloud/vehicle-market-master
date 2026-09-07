@@ -1,0 +1,83 @@
+name: Apply owner powertrain batch2
+
+on:
+  push:
+    branches:
+      - feature/owner-powertrain-batch2
+    paths:
+      - tools/apply_owner_powertrain_batch2.py
+      - .github/workflows/apply-owner-powertrain-batch2.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/owner-powertrain-batch2
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply reviewed rules and catalog repair
+        run: python tools/apply_owner_powertrain_batch2.py
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+      - name: Compile and test
+        run: |
+          python -m compileall -q vehreg pages tests
+          pytest -q
+      - name: Fresh warehouse integrity audit
+        env:
+          VEHREG_DB: /tmp/owner-batch2.sqlite3
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from vehreg.web_bootstrap import bootstrap_database
+          from vehreg.db import connect
+          from vehreg import review, coverage, trimledger
+          from vehreg.powertrain_rules import RULES
+
+          db = Path('/tmp/owner-batch2.sqlite3')
+          report = bootstrap_database(db)
+          conn = connect(db)
+          total = float(conn.execute('select coalesce(sum(units),0) u from fact_registration').fetchone()['u'])
+          facts = int(conn.execute('select count(*) n from fact_registration').fetchone()['n'])
+          print('BOOT', report)
+          print('FACTS', facts, 'UNITS', total)
+          assert total == 4064148.0, total
+          rec = trimledger.reconcile(conn)
+          print('TRIM_RECONCILE', len(rec))
+          assert not rec, rec[:5]
+
+          catalogs = review.load_catalogs()
+          known = set()
+          for cat in catalogs.values():
+              for model in cat.models.values():
+                  brand = cat.brands[model.brand_id].name_en
+                  known.add((brand.upper(), model.name_en.upper()))
+          misses = sorted({(r.brand, r.model) for r in RULES
+                           if r.model != '*' and (r.brand.upper(), r.model.upper()) not in known})
+          print('RULE_KEY_MISSES', len(misses), misses)
+          assert not misses, misses
+
+          wl = coverage.assumed_powertrain(conn, catalogs)
+          print('WORKLIST', len(wl), 'UNITS', round(sum(float(x['units']) for x in wl)))
+          for x in wl[:30]:
+              print('WL', x)
+          conn.close()
+          PY
+      - name: Commit tested changes and remove one-shot files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm tools/apply_owner_powertrain_batch2.py .github/workflows/apply-owner-powertrain-batch2.yml
+          git add vehreg/powertrain_rules.py tests/test_powertrain_rules.py tests/test_owner_powertrain_batch2.py vehreg/data/*/models/land_rover.json
+          git commit -m 'Apply second owner-reviewed powertrain batch'
+          git push origin HEAD:feature/owner-powertrain-batch2

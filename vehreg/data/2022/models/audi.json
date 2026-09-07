@@ -75,11 +75,10 @@
           "ended": null,
           "variants": [
             {
-              "name": "2.0L MHEV AWD",
-              "powertrain": "MHEV",
+              "name": "2.0L ICE AWD",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 1984,
-              "battery_kwh": 0.5,
               "aliases": [
                 "45 TFSI quattro S line"
               ],
@@ -117,10 +116,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 1498,
-              "battery_kwh": 0.5,
               "price_thb": 2290000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -156,10 +154,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 1984,
-              "battery_kwh": 0.5,
               "price_thb": 3290000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -197,10 +194,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 1984,
-              "battery_kwh": 0.5,
               "price_thb": 3690000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -235,10 +231,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 2995,
-              "battery_kwh": 0.5,
               "price_thb": 5490000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -274,10 +269,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 2995,
-              "battery_kwh": 0.5,
               "price_thb": 8990000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -314,10 +308,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 2995,
-              "battery_kwh": 0.5,
               "price_thb": 6490000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -354,10 +347,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 1984,
-              "battery_kwh": 0.5,
               "price_thb": 3990000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -396,10 +388,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 2894,
-              "battery_kwh": 0.5,
               "price_thb": 8990000.0,
               "price_min_thb": null,
               "price_max_thb": null,

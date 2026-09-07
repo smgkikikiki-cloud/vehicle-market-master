@@ -166,6 +166,47 @@
           ]
         }
       ]
+    },
+    {
+      "id": "jaecoo_6t_reev",
+      "name_en": "Jaecoo 6T REEV",
+      "name_th": "เจคู 6T รีฟ",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "6T REEV",
+        "JAECOO 6T REEV"
+      ],
+      "incomplete": true,
+      "notes": "แยกจาก 6T EV เพราะเป็น REEV เสียบชาร์จได้แล้ววิ่งต่อด้วยเครื่องยนต์ คนละคันกับตัวไฟฟ้าล้วน — DLT จดแยกชัด สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2026-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "REEV",
+              "powertrain": "REEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }

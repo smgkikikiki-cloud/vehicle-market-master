@@ -351,8 +351,8 @@ class Catalog:
     #: Powertrains that must state a battery, and those that must state an
     #: engine. A PHEV is in both.
     _ELECTRIFIED = frozenset({Powertrain.BEV, Powertrain.PHEV, Powertrain.HEV,
-                              Powertrain.MHEV, Powertrain.REEV})
-    _COMBUSTION = frozenset({Powertrain.ICE, Powertrain.MHEV, Powertrain.HEV,
+                              Powertrain.REEV})
+    _COMBUSTION = frozenset({Powertrain.ICE, Powertrain.HEV,
                              Powertrain.PHEV, Powertrain.REEV})
 
     def incomplete_models(self) -> list[str]:

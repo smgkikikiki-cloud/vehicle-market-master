@@ -132,11 +132,12 @@ class TaxonomyTests(unittest.TestCase):
     def test_powertrain_rollups(self):
         self.assertIs(taxonomy.powertrain_group(Powertrain.REEV),
                       taxonomy.PowertrainGroup.HYBRID)
-        self.assertIs(taxonomy.powertrain_group(Powertrain.MHEV),
+        self.assertIs(taxonomy.powertrain_group(Powertrain.parse("MHEV")),
                       taxonomy.PowertrainGroup.COMBUSTION)
         self.assertTrue(taxonomy.is_plug_in(Powertrain.PHEV))
         self.assertFalse(taxonomy.is_plug_in(Powertrain.HEV))
-        self.assertTrue(taxonomy.is_electrified(Powertrain.MHEV))
+        # A mild hybrid is not xEV here: it folds to ICE before it is asked.
+        self.assertFalse(taxonomy.is_electrified(Powertrain.parse("MHEV")))
 
     def test_facets_parse_common_aliases(self):
         self.assertIs(Powertrain.parse("ev"), Powertrain.BEV)
@@ -1074,11 +1075,19 @@ if __name__ == "__main__":
 class MarketPowertrainTests(unittest.TestCase):
     """The four buckets the site sells in, and what they exist to hide."""
 
-    def test_a_mild_hybrid_is_a_petrol_car_to_a_buyer(self):
-        # Neither layer of the site has an MHEV column, and nobody cross-shops
-        # a mild hybrid against a Corolla Cross HEV.
-        self.assertIs(taxonomy.market_powertrain(Powertrain.MHEV),
-                      taxonomy.MarketPowertrain.FUEL)
+    def test_a_mild_hybrid_is_a_petrol_car_everywhere(self):
+        """MHEV is not a value this warehouse can hold.
+
+        Neither layer of the site has a column for it and nobody cross-shops a
+        mild hybrid against a Corolla Cross HEV, so it folds at parse rather
+        than at display - a catalog file that spells MHEV still loads and lands
+        on ICE, and no future edit can reintroduce the category.
+        """
+        self.assertFalse(hasattr(Powertrain, "MHEV"))
+        for spelling in ("MHEV", "MILD HYBRID", "mild-hybrid", "48V",
+                         "EQ BOOST"):
+            with self.subTest(spelling=spelling):
+                self.assertIs(Powertrain.parse(spelling), Powertrain.ICE)
         self.assertIs(taxonomy.market_powertrain(Powertrain.ICE),
                       taxonomy.MarketPowertrain.FUEL)
 
@@ -1134,3 +1143,30 @@ class GeneratedViewTests(unittest.TestCase):
         for facet in db.DIM_FACETS:
             with self.subTest(facet=facet):
                 self.assertIn(facet, columns)
+
+
+class ReevIsForPlugInsTests(unittest.TestCase):
+    """REEV means a socket. Without that it collects anything unusual."""
+
+    def test_a_range_extender_plugs_in_and_is_electrified(self):
+        self.assertTrue(taxonomy.is_plug_in(Powertrain.REEV))
+        self.assertTrue(taxonomy.is_electrified(Powertrain.REEV))
+
+    def test_the_catalog_only_files_real_range_extenders_as_reev(self):
+        """Nissan e-Power was REEV and has no socket at all.
+
+        Every REEV unit in the warehouse was then a car that cannot be plugged
+        in, and the plug-in total carried 21,863 units that never charged.
+        """
+        from vehreg.catalog import DATA_DIR, Catalog, available_years
+
+        offenders: list[str] = []
+        for year in available_years(DATA_DIR):
+            catalog = Catalog.load(DATA_DIR, year)
+            for model in catalog.models.values():
+                for variant in catalog.variants_of(model.id):
+                    if variant.powertrain is Powertrain.REEV:
+                        offenders.append(f"{year} {model.id}")
+        # Anything here has to be a car that charges from a socket.
+        self.assertEqual(sorted({o.split()[1] for o in offenders}),
+                         ["deepal.deepal_s05", "jaecoo.jaecoo_6t_reev"])

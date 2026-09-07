@@ -283,7 +283,7 @@ body_family = st.sidebar.selectbox(
 )
 powertrain = st.sidebar.selectbox(
     "Powertrain scope",
-    ["ALL", "ICE", "MHEV", "HEV", "PHEV", "REEV", "BEV", "FCEV", "MIXED", "UNKNOWN"],
+    ["ALL", "ICE", "HEV", "PHEV", "REEV", "BEV", "FCEV", "MIXED", "UNKNOWN"],
     key="f_powertrain",
 )
 price_band = st.sidebar.selectbox(

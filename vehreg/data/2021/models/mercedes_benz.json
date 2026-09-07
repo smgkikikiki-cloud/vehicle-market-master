@@ -94,11 +94,10 @@
           "ended": null,
           "variants": [
             {
-              "name": "2.0L MHEV",
-              "powertrain": "MHEV",
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1993,
-              "battery_kwh": 0.9,
               "aliases": [
                 "E220d AMG Dynamic"
               ],
@@ -311,10 +310,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1999,
-              "battery_kwh": 0.9,
               "price_thb": 3990000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -351,10 +349,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1993,
-              "battery_kwh": 0.9,
               "price_thb": 4290000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -432,10 +429,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1993,
-              "battery_kwh": 0.9,
               "price_thb": 5290000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -472,10 +468,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 2925,
-              "battery_kwh": 0.9,
               "price_thb": 8290000.0,
               "price_min_thb": null,
               "price_max_thb": null,

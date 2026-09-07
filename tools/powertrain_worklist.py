@@ -17,10 +17,9 @@ evidence, and they split the work in two.
                catalog claims, or two that disagree with each other. "HONDA
                JAZZ HYBRID" against a model listed as ICE; "BYD SEAL 5 DM-i",
                a plug-in, against a model listed BEV. Worth opening first,
-               though not every one is an error: "MILD HYBRID" and "BLUETEC
-               HYBRID" both read as HEV here and one of them is an MHEV, and a
-               nameplate genuinely sold in two powertrains will show both words
-               and should end up MIXED rather than either one.
+               though not every one is an error: a nameplate genuinely sold in
+               two powertrains shows both words and belongs at MIXED rather
+               than either one.
     CONFIRMS   A powertrain word that agrees with the claim. Low risk.
     NO-SIGNAL  DLT sends a bare nameplate and no source can settle it. Check
                the lineup, add or remove variants if it says so, then mark the
@@ -60,22 +59,24 @@ from vehreg.web_bootstrap import database_path  # noqa: E402
 #: "TURBO" is deliberately absent. A Taycan Turbo is a battery-electric car and
 #: a Cayenne Turbo is not, so the word carries no powertrain at all - it flagged
 #: the Taycan as combustion on the first run.
-#: Order matters: a mild hybrid is a combustion car with a bigger starter and
-#: DLT writes it "MILD HYBRID", so it has to be claimed before the plain HYBRID
-#: pattern gets to it. Without that split this list called the BMW 430D
-#: Mild-hybrid and the AMG GLE 53 electrified, which they are not, and two of
-#: the ten "wrong" nameplates were the tool's own reading.
+#: Order matters: a mild hybrid is a petrol car and DLT writes it "MILD
+#: HYBRID", so it has to be claimed before the plain HYBRID pattern gets to it.
+#: Without that split this list called the BMW 430D Mild-hybrid and the AMG GLE
+#: 53 electrified, which they are not, and two of the ten "wrong" nameplates
+#: were the tool's own reading. The catalog has no MHEV value any more, so the
+#: word resolves to ICE like everything else about a mild hybrid.
 MARKERS: tuple[tuple[str, str], ...] = (
-    ("MHEV", r"\bMILD[- ]?HYBRID\b|\bMHEV\b|\bEQ[- ]?BOOST\b"),
+    ("ICE",  r"\bMILD[- ]?HYBRID\b|\bMHEV\b|\bEQ[- ]?BOOST\b"),
     ("PHEV", r"\bPHEV\b|\bPLUG[- ]?IN\b|\bDM-?I\b|\bE-HYBRID\b"),
     ("HEV",  r"\bE:?[ -]?HEV\b|\bHEV\b|\bHYBRID\b|\bHV\b"),
     ("BEV",  r"\bBEV\b|\bELECTRIC\b|\bEV\b"),
 )
 
-#: There is no marker for combustion. TFSI, TSI and TDI were tried and they are
-#: injection systems, not powertrains - Audi puts TFSI on mild hybrids - so they
-#: flagged the A5 and the TT as contradicting an MHEV catalog entry that was
-#: right all along. Silence about electrification is not evidence against it.
+#: The only combustion marker is an explicit mild-hybrid badge. TFSI, TSI and
+#: TDI were tried and they are injection systems, not powertrains - Audi puts
+#: TFSI on mild hybrids - so they flagged the A5 and the TT against catalog
+#: entries that were right all along. Silence about electrification is not
+#: evidence against it.
 
 #: What the labels say about the claim.
 CONFLICT = "CONFLICT"      # they disagree with it, or with each other
@@ -91,7 +92,7 @@ def labels_say(labels: Iterable[str]) -> set[str]:
     """Powertrains the raw labels name, if any.
 
     Each label yields at most one, the first marker in ``MARKERS`` that hits,
-    so "MILD HYBRID" is read as MHEV and never also as HEV.
+    so "MILD HYBRID" is read as ICE and never also as HEV.
     """
     found: set[str] = set()
     for label in labels:

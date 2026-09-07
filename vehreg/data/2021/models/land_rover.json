@@ -31,11 +31,10 @@
           "ended": null,
           "variants": [
             {
-              "name": "3.0L MHEV",
-              "powertrain": "MHEV",
+              "name": "3.0L ICE",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 2996,
-              "battery_kwh": 0.5,
               "price_thb": 6900000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -72,11 +71,10 @@
           "ended": null,
           "variants": [
             {
-              "name": "3.0L MHEV",
-              "powertrain": "MHEV",
+              "name": "3.0L ICE",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 2996,
-              "battery_kwh": 0.5,
               "price_thb": 12900000.0,
               "price_min_thb": null,
               "price_max_thb": null,

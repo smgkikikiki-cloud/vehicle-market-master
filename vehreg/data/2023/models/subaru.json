@@ -73,11 +73,10 @@
           "ended": null,
           "variants": [
             {
-              "name": "2.0L MHEV AWD",
-              "powertrain": "MHEV",
+              "name": "2.0L ICE AWD",
+              "powertrain": "ICE",
               "drivetrain": "AWD",
               "engine_cc": 1995,
-              "battery_kwh": 0.6,
               "aliases": [
                 "2.0 e-Boxer"
               ],

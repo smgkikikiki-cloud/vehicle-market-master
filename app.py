@@ -201,7 +201,7 @@ market_pt = st.sidebar.selectbox(
 )
 powertrain = st.sidebar.selectbox(
     "Powertrain (ละเอียด)",
-    ["ALL", "ICE", "MHEV", "HEV", "PHEV", "REEV", "BEV", "FCEV",
+    ["ALL", "ICE", "HEV", "PHEV", "REEV", "BEV", "FCEV",
      "MIXED", "UNKNOWN"],
     key="f_powertrain",
 )
@@ -313,8 +313,7 @@ with TAB_DASH:
             "Body family": "body_family",
             "SUV type": "suv_type",
             # The four buckets the site sells in. Grouping by the raw
-            # powertrain puts MHEV on a chart nobody has a column for, and
-            # REEV on one with a single occupant.
+            # powertrain splits REEV out onto a chart with one occupant.
             "ระบบขับเคลื่อน (แบบที่เว็บใช้)": "market_powertrain",
             "Powertrain (ละเอียด)": "powertrain",
             "Powertrain group": "powertrain_group",

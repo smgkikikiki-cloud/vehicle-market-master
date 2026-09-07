@@ -1219,3 +1219,54 @@ class BmwModelSplitTests(unittest.TestCase):
                 powertrains = {v.powertrain for v in
                                catalog.variants_of(model_id)}
                 self.assertEqual(powertrains, {Powertrain.ICE, Powertrain.PHEV})
+
+
+class IncompleteVariantTests(unittest.TestCase):
+    """A nameplate can be researched on one side and not the other."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.dir = Path(self.temp.name)
+        target = year_dir(self.dir, YEAR)
+        target.mkdir(parents=True)
+        payload = tiny_payload()
+        # The Volt gains a plug-in whose battery and engine nobody has looked
+        # up - the BMW X1 xDrive30e case. Without a way to say so, either the
+        # trim is left out and its registrations read as petrol, or the whole
+        # model is called incomplete, which is false.
+        payload["models"][2]["generations"][1]["variants"].append({
+            "name": "1.5 PHEV", "powertrain": "PHEV", "drivetrain": "FWD",
+            "import_type": "CKD", "origin_country": "TH", "incomplete": True,
+        })
+        (target / "acme.json").write_text(
+            json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+        self.catalog = Catalog.load(self.dir, YEAR)
+
+    def test_a_declared_gap_is_not_a_validation_problem(self):
+        self.assertEqual(
+            [p for p in self.catalog.validate() if "1_5_phev" in p], [])
+
+    def test_it_is_reported_as_a_gap_instead(self):
+        gaps = [g for g in self.catalog.incomplete_models() if "1_5_phev" in g]
+        self.assertEqual(len(gaps), 1)
+        self.assertIn("battery_kwh", gaps[0])
+        self.assertIn("engine_cc", gaps[0])
+        self.assertTrue(gaps[0].startswith("variant "))
+
+    def test_the_model_itself_is_not_called_incomplete(self):
+        self.assertFalse(self.catalog.models["acme.volt"].incomplete)
+        self.assertEqual(
+            [g for g in self.catalog.incomplete_models()
+             if g.startswith("model acme.volt")], [])
+
+    def test_the_nameplate_now_reads_mixed(self):
+        rows = {r["unit_id"]: r for r in db.build_dimension(self.catalog)}
+        self.assertEqual(rows["acme.volt"]["powertrain"], db.MIXED)
+
+    def test_saving_the_brand_keeps_the_marker(self):
+        payload = self.catalog.brand_payload("acme")
+        variants = [v for m in payload["models"] for g in m["generations"]
+                    for v in g["variants"] if v["name"] == "1.5 PHEV"]
+        self.assertEqual(len(variants), 1)
+        self.assertTrue(variants[0]["incomplete"])

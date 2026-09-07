@@ -235,6 +235,7 @@ class Catalog:
             origin_country=raw.get("origin_country", "UNKNOWN"),
             price_note=raw.get("price_note", ""),
             aliases=_tuple(raw.get("aliases")),
+            incomplete=bool(raw.get("incomplete", False)),
             overrides=_overrides(raw.get("overrides")),
         )
         self._variants_by_model[model_id].append(variant_id)
@@ -345,6 +346,8 @@ class Catalog:
         for resolved in self.iter_resolved():
             if self.model_for_variant(resolved.variant_id).id in declared:
                 continue
+            if self.variants[resolved.variant_id].incomplete:
+                continue
             problems += cross_check(resolved)
         return problems
 
@@ -365,27 +368,42 @@ class Catalog:
         out: list[str] = []
         for model in sorted(self.models.values(), key=lambda m: m.id):
             if not model.incomplete:
+                # A nameplate can be complete while one of its trims is not -
+                # the X1's petrol side is written and its plug-in side is not.
+                for variant in self.variants_of(model.id):
+                    if not variant.incomplete:
+                        continue
+                    gaps = sorted(self._variant_gaps(variant))
+                    out.append(f"variant {variant.id}: incomplete "
+                               f"({', '.join(gaps)})" if gaps else
+                               f"variant {variant.id}: marked incomplete but "
+                               "nothing is missing")
                 continue
             missing = []
             if model.body_type is BodyType.OTHER:
                 missing.append("body_type")
             if not self.variants_of(model.id):
                 missing.append("variants")
-            gaps = set()
+            gaps: set[str] = set()
             for variant in self.variants_of(model.id):
-                if variant.price_thb is None:
-                    gaps.add("price")
-                if variant.powertrain in self._ELECTRIFIED and variant.battery_kwh is None:
-                    gaps.add("battery_kwh")
-                if variant.powertrain in self._COMBUSTION and variant.engine_cc is None:
-                    gaps.add("engine_cc")
-                if variant.powertrain is Powertrain.UNKNOWN:
-                    gaps.add("powertrain")
+                gaps |= self._variant_gaps(variant)
             missing += sorted(gaps)
             out.append(f"model {model.id}: incomplete ({', '.join(missing)})"
                        if missing else f"model {model.id}: marked incomplete "
                                        "but nothing is missing")
         return out
+
+    def _variant_gaps(self, variant) -> set[str]:
+        gaps: set[str] = set()
+        if variant.price_thb is None:
+            gaps.add("price")
+        if variant.powertrain in self._ELECTRIFIED and variant.battery_kwh is None:
+            gaps.add("battery_kwh")
+        if variant.powertrain in self._COMBUSTION and variant.engine_cc is None:
+            gaps.add("engine_cc")
+        if variant.powertrain is Powertrain.UNKNOWN:
+            gaps.add("powertrain")
+        return gaps
 
     def duplicate_body_warnings(self) -> list[str]:
         """One nameplate must not appear twice in the same body under a brand.
@@ -460,7 +478,7 @@ class Catalog:
                 for variant in self.variants.values():
                     if variant.generation_id != gen.id:
                         continue
-                    gen_payload["variants"].append({
+                    variant_payload = {
                         "name": variant.name,
                         "powertrain": variant.powertrain.value,
                         "drivetrain": variant.drivetrain.value,
@@ -473,7 +491,13 @@ class Catalog:
                         "origin_country": variant.origin_country,
                         "price_note": variant.price_note,
                         "aliases": list(variant.aliases),
-                    })
+                    }
+                    # Same reason as the model flag: saving from the editor
+                    # must not quietly clear the marker and turn a declared
+                    # gap back into a finished trim.
+                    if variant.incomplete:
+                        variant_payload["incomplete"] = True
+                    gen_payload["variants"].append(variant_payload)
                 model_payload["generations"].append(gen_payload)
             payload["models"].append(model_payload)
         return payload

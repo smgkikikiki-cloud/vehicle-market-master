@@ -189,7 +189,13 @@
               "engine_cc": 1499,
               "battery_kwh": null,
               "aliases": [
-                "sDrive18i xLine"
+                "sDrive18i xLine",
+                "sDrive20i",
+                "sDrive20d",
+                "sDrive18i",
+                "sDrive18d",
+                "X1 sDrive20i",
+                "X1 sDrive20d"
               ],
               "overrides": {},
               "price_thb": 2399000,
@@ -198,6 +204,25 @@
               "price_note": "seed-unverified",
               "price_min_thb": 2399000,
               "price_max_thb": 2399000
+            },
+            {
+              "name": "1.5L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "xDrive30e",
+                "sDrive30e",
+                "X1 xDrive30e"
+              ],
+              "incomplete": true
             }
           ]
         }
@@ -232,7 +257,11 @@
               "drivetrain": "AWD",
               "engine_cc": 1998,
               "aliases": [
-                "20 xDrive M Sport"
+                "20 xDrive M Sport",
+                "xDrive20d",
+                "20d xDrive",
+                "M50 xDrive",
+                "X3 xDrive20d"
               ],
               "overrides": {},
               "price_thb": 3999000,
@@ -241,6 +270,24 @@
               "price_note": "seed-unverified",
               "price_min_thb": 3999000,
               "price_max_thb": 3999000
+            },
+            {
+              "name": "2.0L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "xDrive30e",
+                "X3 xDrive30e"
+              ],
+              "incomplete": true
             }
           ]
         }

@@ -215,6 +215,15 @@ class Variant:
     origin_country: str = "UNKNOWN"
     price_note: str = ""
     aliases: tuple[str, ...] = ()
+    #: Set when the trim exists so a real registration has somewhere to land
+    #: and its specification has not been researched. The model-level flag says
+    #: that about a whole nameplate; this says it about one half of one. The
+    #: BMW X1 is the case it was written for: its petrol and diesel side is
+    #: fully specified, so calling the whole model incomplete would be a lie,
+    #: while leaving the xDrive30e out made 333 plug-in registrations read as
+    #: combustion. Validation skips the spec rules for a variant that declares
+    #: this; ``Catalog.incomplete_models`` reports it instead.
+    incomplete: bool = False
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:
@@ -239,8 +248,10 @@ class Variant:
         return out
 
     def validate(self) -> list[str]:
-        problems = check_powertrain(self.powertrain, self.battery_kwh,
-                                    self.engine_cc)
+        # A declared gap is reported by Catalog.incomplete_models, not here.
+        problems = ([] if self.incomplete else
+                    check_powertrain(self.powertrain, self.battery_kwh,
+                                     self.engine_cc))
         problems += check_origin(self.import_type, self.origin_country)
         locked = LOCKED_AT_MODEL & set(self.overrides)
         if locked:

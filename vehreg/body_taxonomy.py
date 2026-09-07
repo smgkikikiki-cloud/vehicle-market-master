@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from .taxonomy import BodyType
 
-SUV_BODY_TYPES = frozenset({BodyType.CROSSOVER, BodyType.PPV, BodyType.SUV})
+SUV_BODY_TYPES = frozenset({BodyType.CROSSOVER, BodyType.PPV, BodyType.CROSSOVER})
 
 # Explicit competitive-set exceptions. The legacy catalog used PPV for some
 # ladder-frame SUVs and SUV for some ordinary road SUVs, so body_type alone is
@@ -46,7 +46,7 @@ def suv_type_for(body: BodyType | str, model: str | None = None) -> str:
         return "OFFROAD_SUV"
     if parsed is BodyType.PPV:
         return "PPV"
-    if parsed in {BodyType.CROSSOVER, BodyType.SUV}:
+    if parsed in {BodyType.CROSSOVER, BodyType.CROSSOVER}:
         return "CROSSOVER"
     return "NOT_APPLICABLE"
 

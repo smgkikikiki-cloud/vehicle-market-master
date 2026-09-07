@@ -135,6 +135,26 @@ replace(
     '            Powertrain.parse("RANGE_EXTENDER")\n'
     '        self.assertTrue(taxonomy.is_plug_in(Powertrain.PHEV))\n',
 )
+replace(
+    "tests/test_vehreg.py",
+    'class MarketPowertrainTests(unittest.TestCase):\n'
+    '    """The four buckets the site sells in, and what they exist to hide."""\n',
+    'class MarketPowertrainTests(unittest.TestCase):\n'
+    '    """Reader-facing buckets keep HEV and maker-labelled REEV distinct."""\n',
+)
+replace(
+    "tests/test_vehreg.py",
+    '    def test_a_range_extender_sits_with_the_hybrids(self):\n'
+    '        self.assertIs(taxonomy.market_powertrain(Powertrain.REEV),\n'
+    '                      taxonomy.MarketPowertrain.HYBRID)\n'
+    '        self.assertIs(taxonomy.market_powertrain(Powertrain.HEV),\n'
+    '                      taxonomy.MarketPowertrain.HYBRID)\n',
+    '    def test_reev_stays_separate_from_hev(self):\n'
+    '        self.assertIs(taxonomy.market_powertrain(Powertrain.REEV),\n'
+    '                      taxonomy.MarketPowertrain.REEV)\n'
+    '        self.assertIs(taxonomy.market_powertrain(Powertrain.HEV),\n'
+    '                      taxonomy.MarketPowertrain.HYBRID)\n',
+)
 
 # Remove the one-shot machinery from the resulting commit.
 (ROOT / "tools" / "_apply_reev_policy.py").unlink()

@@ -17,6 +17,8 @@ OFFROAD_MODELS = {
 def update_taxonomy() -> None:
     path = Path("vehreg/taxonomy.py")
     text = path.read_text(encoding="utf-8")
+    if 'OFFROAD = "OFFROAD"' in text and 'SUV = "SUV"' not in text:
+        return
 
     old = '''    CROSSOVER = "CROSSOVER"          # monocoque, car-derived\n    SUV = "SUV"                      # monocoque, SUV-proportioned\n    PPV = "PPV"                      # body-on-frame SUV built off a pickup\n'''
     new = '''    CROSSOVER = "CROSSOVER"          # all monocoque/unibody SUVs and crossovers\n    PPV = "PPV"                      # pickup-derived passenger vehicle\n    OFFROAD = "OFFROAD"              # ladder-frame SUV that is not pickup-derived\n'''

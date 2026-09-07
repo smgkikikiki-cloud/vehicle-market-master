@@ -132,11 +132,12 @@ class TaxonomyTests(unittest.TestCase):
     def test_powertrain_rollups(self):
         self.assertIs(taxonomy.powertrain_group(Powertrain.REEV),
                       taxonomy.PowertrainGroup.HYBRID)
-        self.assertIs(taxonomy.powertrain_group(Powertrain.MHEV),
+        self.assertIs(taxonomy.powertrain_group(Powertrain.parse("MHEV")),
                       taxonomy.PowertrainGroup.COMBUSTION)
         self.assertTrue(taxonomy.is_plug_in(Powertrain.PHEV))
         self.assertFalse(taxonomy.is_plug_in(Powertrain.HEV))
-        self.assertTrue(taxonomy.is_electrified(Powertrain.MHEV))
+        # A mild hybrid is not xEV here: it folds to ICE before it is asked.
+        self.assertFalse(taxonomy.is_electrified(Powertrain.parse("MHEV")))
 
     def test_facets_parse_common_aliases(self):
         self.assertIs(Powertrain.parse("ev"), Powertrain.BEV)
@@ -1069,3 +1070,306 @@ class AuthoringTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MarketPowertrainTests(unittest.TestCase):
+    """The four buckets the site sells in, and what they exist to hide."""
+
+    def test_a_mild_hybrid_is_a_petrol_car_everywhere(self):
+        """MHEV is not a value this warehouse can hold.
+
+        Neither layer of the site has a column for it and nobody cross-shops a
+        mild hybrid against a Corolla Cross HEV, so it folds at parse rather
+        than at display - a catalog file that spells MHEV still loads and lands
+        on ICE, and no future edit can reintroduce the category.
+        """
+        self.assertFalse(hasattr(Powertrain, "MHEV"))
+        for spelling in ("MHEV", "MILD HYBRID", "mild-hybrid", "48V",
+                         "EQ BOOST"):
+            with self.subTest(spelling=spelling):
+                self.assertIs(Powertrain.parse(spelling), Powertrain.ICE)
+        self.assertIs(taxonomy.market_powertrain(Powertrain.ICE),
+                      taxonomy.MarketPowertrain.FUEL)
+
+    def test_a_range_extender_sits_with_the_hybrids(self):
+        self.assertIs(taxonomy.market_powertrain(Powertrain.REEV),
+                      taxonomy.MarketPowertrain.HYBRID)
+        self.assertIs(taxonomy.market_powertrain(Powertrain.HEV),
+                      taxonomy.MarketPowertrain.HYBRID)
+
+    def test_a_plug_keeps_its_own_bucket(self):
+        # The coarser PowertrainGroup puts a Prius and an Outlander PHEV
+        # together, which is the distinction a buyer is actually shopping.
+        self.assertIs(taxonomy.powertrain_group(Powertrain.HEV),
+                      taxonomy.powertrain_group(Powertrain.PHEV))
+        self.assertIsNot(taxonomy.market_powertrain(Powertrain.HEV),
+                         taxonomy.market_powertrain(Powertrain.PHEV))
+
+    def test_every_powertrain_has_a_bucket_and_a_thai_label(self):
+        for pt in Powertrain:
+            bucket = taxonomy.market_powertrain(pt)
+            self.assertIn(bucket.value, taxonomy.MARKET_POWERTRAIN_TH)
+
+    def test_e_power_is_not_a_plug_in_car(self):
+        """A Nissan e-Power battery is only ever charged by its own engine.
+
+        Filing it REEV made all 21,863 of its units read as plug-ins and put
+        the only occupant in a category of its own; it is HEV in this catalog.
+        """
+        self.assertFalse(taxonomy.is_plug_in(Powertrain.HEV))
+        self.assertTrue(taxonomy.is_electrified(Powertrain.HEV))
+        # REEV keeps its meaning for a car that really has a socket.
+        self.assertTrue(taxonomy.is_plug_in(Powertrain.REEV))
+
+
+class GeneratedViewTests(unittest.TestCase):
+    def test_a_new_facet_reaches_the_reading_view(self):
+        """The views are generated from DIM_FACETS and must not go stale.
+
+        ``CREATE VIEW IF NOT EXISTS`` leaves an existing definition alone, so
+        adding market_powertrain left every warehouse built before it querying
+        a view without the column - "no such column: market_powertrain" on the
+        dashboard's first chart.
+        """
+        conn = db.connect(":memory:")
+        conn.execute("DROP VIEW fact_classified")
+        conn.execute("CREATE VIEW fact_classified AS SELECT 1 AS stale")
+        conn.commit()
+        conn.close()
+
+        conn = db.connect(":memory:")
+        columns = {row["name"] for row in
+                   conn.execute("PRAGMA table_info(fact_classified)")}
+        for facet in db.DIM_FACETS:
+            with self.subTest(facet=facet):
+                self.assertIn(facet, columns)
+
+
+class ReevIsForPlugInsTests(unittest.TestCase):
+    """REEV means a socket. Without that it collects anything unusual."""
+
+    def test_a_range_extender_plugs_in_and_is_electrified(self):
+        self.assertTrue(taxonomy.is_plug_in(Powertrain.REEV))
+        self.assertTrue(taxonomy.is_electrified(Powertrain.REEV))
+
+    def test_the_catalog_only_files_real_range_extenders_as_reev(self):
+        """Nissan e-Power was REEV and has no socket at all.
+
+        Every REEV unit in the warehouse was then a car that cannot be plugged
+        in, and the plug-in total carried 21,863 units that never charged.
+        """
+        from vehreg.catalog import DATA_DIR, Catalog, available_years
+
+        offenders: list[str] = []
+        for year in available_years(DATA_DIR):
+            catalog = Catalog.load(DATA_DIR, year)
+            for model in catalog.models.values():
+                for variant in catalog.variants_of(model.id):
+                    if variant.powertrain is Powertrain.REEV:
+                        offenders.append(f"{year} {model.id}")
+        # Anything here has to be a car that charges from a socket.
+        self.assertEqual(sorted({o.split()[1] for o in offenders}),
+                         ["deepal.deepal_s05", "jaecoo.jaecoo_6t_reev"])
+
+
+class BmwModelSplitTests(unittest.TestCase):
+    """The owner's rule for BMW, pinned so a later edit cannot drift off it.
+
+    One nameplate holds its combustion and plug-in halves together - a 3 Series
+    is a 3 Series whether it is a 320d or a 330e - and every i car is its own
+    model, because an i5 is not a 5 Series with a different engine.
+    """
+
+    def setUp(self):
+        from vehreg.catalog import DATA_DIR, Catalog, available_years
+        self.catalogs = {year: Catalog.load(DATA_DIR, year)
+                         for year in available_years(DATA_DIR)}
+
+    def test_every_i_car_is_its_own_model(self):
+        for year, catalog in self.catalogs.items():
+            for model in catalog.models_of("bmw"):
+                name = model.name_en.lower()
+                if not name.startswith("i") or name.startswith("ix1"):
+                    continue
+                with self.subTest(year=year, model=model.id):
+                    # An i model never shares a row with a combustion nameplate.
+                    powertrains = {v.powertrain for v in
+                                   catalog.variants_of(model.id)}
+                    self.assertTrue(
+                        powertrains <= {Powertrain.BEV, Powertrain.PHEV},
+                        f"{model.id} carries {powertrains}")
+
+    def test_an_i_badge_never_lands_on_a_combustion_nameplate(self):
+        """The iX2 sat inside the iX, and the i7 inside the 7 Series."""
+        for year, catalog in self.catalogs.items():
+            for model in catalog.models_of("bmw"):
+                if model.name_en.lower().startswith("i"):
+                    continue
+                for alias in model.aliases:
+                    with self.subTest(year=year, model=model.id, alias=alias):
+                        self.assertFalse(
+                            alias.lower().lstrip().startswith("i")
+                            and any(ch.isdigit() for ch in alias),
+                            f"{model.id} claims the i-car alias {alias!r}")
+
+    def test_a_nameplate_sold_both_ways_holds_both(self):
+        catalog = self.catalogs[max(self.catalogs)]
+        for model_id in ("bmw.bmw_3", "bmw.bmw_5", "bmw.7_series", "bmw.x5"):
+            with self.subTest(model=model_id):
+                powertrains = {v.powertrain for v in
+                               catalog.variants_of(model_id)}
+                self.assertEqual(powertrains, {Powertrain.ICE, Powertrain.PHEV})
+
+
+class IncompleteVariantTests(unittest.TestCase):
+    """A nameplate can be researched on one side and not the other."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.dir = Path(self.temp.name)
+        target = year_dir(self.dir, YEAR)
+        target.mkdir(parents=True)
+        payload = tiny_payload()
+        # The Volt gains a plug-in whose battery and engine nobody has looked
+        # up - the BMW X1 xDrive30e case. Without a way to say so, either the
+        # trim is left out and its registrations read as petrol, or the whole
+        # model is called incomplete, which is false.
+        payload["models"][2]["generations"][1]["variants"].append({
+            "name": "1.5 PHEV", "powertrain": "PHEV", "drivetrain": "FWD",
+            "import_type": "CKD", "origin_country": "TH", "incomplete": True,
+        })
+        (target / "acme.json").write_text(
+            json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+        self.catalog = Catalog.load(self.dir, YEAR)
+
+    def test_a_declared_gap_is_not_a_validation_problem(self):
+        self.assertEqual(
+            [p for p in self.catalog.validate() if "1_5_phev" in p], [])
+
+    def test_it_is_reported_as_a_gap_instead(self):
+        gaps = [g for g in self.catalog.incomplete_models() if "1_5_phev" in g]
+        self.assertEqual(len(gaps), 1)
+        self.assertIn("battery_kwh", gaps[0])
+        self.assertIn("engine_cc", gaps[0])
+        self.assertTrue(gaps[0].startswith("variant "))
+
+    def test_the_model_itself_is_not_called_incomplete(self):
+        self.assertFalse(self.catalog.models["acme.volt"].incomplete)
+        self.assertEqual(
+            [g for g in self.catalog.incomplete_models()
+             if g.startswith("model acme.volt")], [])
+
+    def test_the_nameplate_now_reads_mixed(self):
+        rows = {r["unit_id"]: r for r in db.build_dimension(self.catalog)}
+        self.assertEqual(rows["acme.volt"]["powertrain"], db.MIXED)
+
+    def test_saving_the_brand_keeps_the_marker(self):
+        payload = self.catalog.brand_payload("acme")
+        variants = [v for m in payload["models"] for g in m["generations"]
+                    for v in g["variants"] if v["name"] == "1.5 PHEV"]
+        self.assertEqual(len(variants), 1)
+        self.assertTrue(variants[0]["incomplete"])
+
+
+class TrailingNumberGuardTests(unittest.TestCase):
+    """A nameplate's number is the nameplate, not noise on the end of it."""
+
+    def setUp(self):
+        self.index = normalize.MatchIndex()
+        self.index.add("geely.ex5", ["Geely EX5"], priority=1)
+        self.index.add("geely.ex2", ["Geely EX2"], priority=1)
+
+    def test_a_neighbouring_number_is_not_a_near_miss(self):
+        """EX2 scored 0.90 against EX5 and took 8,731 registrations with it."""
+        self.assertGreater(
+            normalize.similarity(normalize.fold("GEELY EX2"),
+                                 normalize.fold("Geely EX5")),
+            normalize.MATCH_FLOOR)
+        self.assertEqual(self.index.lookup("GEELY EX2")[0], "geely.ex2")
+        self.assertEqual(self.index.lookup("GEELY EX5")[0], "geely.ex5")
+
+    def test_an_unknown_number_matches_nothing_rather_than_its_neighbour(self):
+        lonely = normalize.MatchIndex()
+        lonely.add("geely.ex5", ["Geely EX5"], priority=1)
+        key, _score, how = lonely.lookup("GEELY EX2")
+        self.assertIsNone(key)
+        self.assertEqual(how, "none")
+
+    def test_the_guard_stays_out_of_the_way_of_a_trim_code(self):
+        """A trim code differs from its nameplate in digits, for a reason.
+
+        "BMW 330e Sport" reaches the 3 Series on the alias the catalog carries
+        for it, not on fuzzy - it scores 0.59 against the bare name. The guard
+        must not interfere with that path, and must not fire on the pair at
+        all, or every BMW would fall to brand grain.
+        """
+        index = normalize.MatchIndex()
+        index.add("bmw.3", ["BMW 3 Series"], priority=1)
+        index.add("bmw.3", ["330e", "320d"])
+        self.assertEqual(index.lookup("BMW 330e Sport")[0], "bmw.3")
+        self.assertFalse(normalize._numbers_disagree(
+            normalize.fold("BMW 330e Sport"), normalize.fold("BMW 3 Series")))
+
+    def test_it_only_applies_when_both_names_end_in_a_number(self):
+        self.assertTrue(normalize._numbers_disagree("geely ex 2", "geely ex 5"))
+        self.assertFalse(normalize._numbers_disagree("bmw 330 e sport",
+                                                     "bmw 3 series"))
+        self.assertFalse(normalize._numbers_disagree("geely ex 5",
+                                                     "geely ex 5"))
+
+
+class OwnerConfirmedPowertrainTests(unittest.TestCase):
+    """Calls the owner made about what is actually sold, pinned as tests.
+
+    They are market facts, not derivable from any file, so the only thing that
+    keeps a later edit from quietly undoing them is a test that names them.
+    """
+
+    def setUp(self):
+        from vehreg.catalog import DATA_DIR, Catalog
+        self.catalog = Catalog.load(DATA_DIR, 2026)
+
+    def test_the_pickups_are_diesel_and_say_they_were_checked(self):
+        for model_id in ("toyota.hilux_revo_cab", "toyota.hilux_revo_double_cab",
+                         "isuzu.dmax_cab", "isuzu.dmax_double_cab",
+                         "mitsubishi.triton_cab", "nissan.navara_cab"):
+            with self.subTest(model=model_id):
+                model = self.catalog.models[model_id]
+                self.assertTrue(model.powertrain_checked)
+                self.assertEqual(
+                    {v.powertrain for v in self.catalog.variants_of(model_id)},
+                    {Powertrain.ICE})
+
+    def test_the_yaris_ativ_is_mixed_because_dlt_cannot_split_it(self):
+        """It gained a hybrid and DLT files both under one bare label.
+
+        MIXED is the honest reading: 251,114 units that nothing can attribute
+        to one side or the other.
+        """
+        self.assertEqual(
+            {v.powertrain for v in
+             self.catalog.variants_of("toyota.yaris_ativ")},
+            {Powertrain.ICE, Powertrain.HEV})
+
+    def test_an_e_tron_badge_belongs_to_an_e_tron_model(self):
+        """The Q8 e-tron was inside the petrol Q8, on the Q8's own alias list."""
+        for model in self.catalog.models_of("audi"):
+            if "etron" in model.id:
+                self.assertEqual(
+                    {v.powertrain for v in self.catalog.variants_of(model.id)},
+                    {Powertrain.BEV}, model.id)
+                continue
+            for alias in model.aliases:
+                with self.subTest(model=model.id, alias=alias):
+                    self.assertNotIn("tron", alias.lower())
+
+    def test_the_bmw_plug_ins_no_longer_declare_a_gap(self):
+        for model_id in ("bmw.bmw_x1", "bmw.bmw_x3"):
+            plugin = [v for v in self.catalog.variants_of(model_id)
+                      if v.powertrain is Powertrain.PHEV]
+            self.assertEqual(len(plugin), 1, model_id)
+            with self.subTest(model=model_id):
+                self.assertFalse(plugin[0].incomplete)
+                self.assertTrue(plugin[0].engine_cc)
+                self.assertTrue(plugin[0].battery_kwh)

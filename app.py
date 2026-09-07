@@ -4,13 +4,13 @@ import os
 from pathlib import Path
 
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
-from vehreg import cube, dlt
-from vehreg.catalog import DATA_DIR, Catalog, available_years
-from vehreg.db import connect, rebuild_dimension
-from vehreg.ingest import ingest_csv
+import ui
+
+from vehreg import charting, coverage, cube
+from vehreg.catalog import DATA_DIR, available_years
+from vehreg.db import connect
 from vehreg.monthly_state import (
     audit_log,
     delete_change,
@@ -19,7 +19,8 @@ from vehreg.monthly_state import (
     history,
     set_state,
 )
-from vehreg.taxonomy import KNOWN_ORIGIN_COUNTRIES
+from vehreg.taxonomy import KNOWN_ORIGIN_COUNTRIES, MARKET_POWERTRAIN_TH
+from vehreg.web_bootstrap import bootstrap_database as shared_bootstrap
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = Path(os.environ.get("VEHREG_DB", str(ROOT / "data" / "vehreg.sqlite3")))
@@ -28,52 +29,13 @@ RAW_DIR = ROOT / "data" / "raw"
 
 @st.cache_resource
 def bootstrap_database() -> dict[str, object]:
-    """Build dimensions and ingest any committed monthly DLT files once."""
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = connect(DB_PATH)
-    ensure_monthly_schema(conn)
+    """Build dimensions and ingest the committed monthly sources once.
 
-    years = available_years(DATA_DIR)
-    catalogs: dict[int, Catalog] = {}
-    rebuilt: list[int] = []
-    for year in years:
-        catalog = Catalog.load(DATA_DIR, year)
-        catalogs[year] = catalog
-        rebuild_dimension(conn, catalog)
-        rebuilt.append(year)
-
-    ingested: list[str] = []
-    for path in sorted(RAW_DIR.glob("dlt_????-??.csv")):
-        period = path.stem.removeprefix("dlt_")
-        try:
-            year = int(period[:4])
-        except ValueError:
-            continue
-        if year not in catalogs:
-            continue
-
-        absolute = str(path.resolve())
-        already = conn.execute(
-            "SELECT 1 FROM dim_source WHERE file_name = ? OR file_name LIKE ? "
-            "OR file_name LIKE ? OR name IN (?,?,?) LIMIT 1",
-            (absolute, f"%/{path.name}", f"%\\{path.name}",
-             f"DLT {period}", path.name, f"WEB {period}"),
-        ).fetchone()
-        if already:
-            continue
-
-        ingest_csv(
-            conn,
-            catalogs[year],
-            path,
-            f"WEB {period}",
-            colmap=dlt.column_map(),
-            publisher="DLT",
-        )
-        ingested.append(period)
-
-    conn.close()
-    return {"years": rebuilt, "ingested": ingested, "db": str(DB_PATH)}
+    This page used to carry its own copy of the loop. The copies drifted the
+    moment one of them learned about a new source directory, so the shared one
+    is the only one now; this wrapper exists for the Streamlit cache.
+    """
+    return shared_bootstrap(DB_PATH, RAW_DIR)
 
 
 def open_conn():
@@ -85,6 +47,7 @@ def open_conn():
 def distinct_values(conn, field: str, year: int) -> list[str]:
     allowed = {
         "brand", "segment", "body_type", "powertrain", "powertrain_group",
+        "market_powertrain",
         "import_type", "origin_country", "brand_origin",
     }
     if field not in allowed:
@@ -143,9 +106,13 @@ def composition_chart(df: pd.DataFrame, dimension: str, chart_type: str):
             ], ignore_index=True)
         visual = top
     if chart_type == "Pie":
-        return px.pie(visual, names=dimension, values="units")
+        return charting.composition_pie(visual, names=dimension, values="units")
     visual = visual.sort_values("units", ascending=True)
-    return px.bar(visual, x="units", y=dimension, orientation="h")
+    return charting.rank_bar(
+        visual, x="units", y=dimension,
+        height=coverage.chart_height(len(visual)),
+        labels={"units": "คัน", dimension: ""}, hover_unit="คัน",
+    )
 
 
 st.set_page_config(page_title="TDR Vehicle Market", layout="wide")
@@ -165,8 +132,16 @@ periods = [r["period"] for r in conn.execute(
 st.title("TDR Vehicle Market")
 st.caption(f"Local database: {DB_PATH}")
 
-if boot.get("ingested"):
-    st.success("โหลด DLT ใหม่: " + ", ".join(boot["ingested"]))
+ingested = boot.get("ingested") or []
+if ingested:
+    # Listing fifty periods pushed the whole dashboard below the fold on every
+    # cold start. The count is the news; the list is detail.
+    st.success(f"โหลด DLT ใหม่ {len(ingested)} เดือน: {ingested[0]} ถึง {ingested[-1]}")
+    with st.expander("ดูรายเดือนที่โหลด"):
+        st.write(", ".join(ingested))
+
+for skipped in boot.get("duplicates") or []:
+    st.error(f"ข้าม {skipped['period']}: {skipped['reason']}")
 
 if not periods:
     st.warning("ยังไม่มียอดจดทะเบียนในฐานข้อมูล แต่ Monthly Editor ยังใช้ได้")
@@ -174,9 +149,31 @@ if not periods:
     fallback_year = catalog_years[-1]
     selected_period = f"{fallback_year}-01"
 else:
+    # DLT publishes the current month before it is over, so the newest period
+    # is routinely a stub. Opening on it made every metric on this page read as
+    # a broken market rather than as an incomplete file.
+    totals = coverage.period_totals(conn)
+    provisional = coverage.provisional_periods(totals)
     selected_period = st.sidebar.selectbox(
-        "เดือนข้อมูล", periods, index=len(periods) - 1,
+        "เดือนข้อมูล", periods,
+        index=coverage.default_period_index(periods, totals, provisional),
     )
+    for notice in coverage.coverage_notices(
+        provisional, coverage.duplicate_payload_periods(RAW_DIR)
+    ):
+        st.warning(notice)
+    if selected_period in provisional:
+        st.error(
+            f"กำลังดู {selected_period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
+            "ตัวเลขและส่วนแบ่งด้านล่างยังใช้อ้างอิงไม่ได้"
+        )
+    coarse = coverage.coarse_periods(coverage.brand_grain_share(conn))
+    if selected_period in coarse:
+        st.warning(coverage.coarse_notice(selected_period, coarse[selected_period]))
+
+# A month with unattributed volume is read at every grain, so its total is the
+# month's total rather than the part that happened to reach a model.
+grains = coverage.analysis_grains(selected_period, coarse if periods else {})
 
 selected_year = int(selected_period[:4])
 
@@ -184,30 +181,43 @@ if st.sidebar.button("Reload catalog / raw data"):
     bootstrap_database.clear()
     st.rerun()
 
-registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"])
+registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"], key="f_reg")
 brand_values = distinct_values(conn, "brand", selected_year)
-brand = st.sidebar.selectbox("ยี่ห้อ", ["ALL", *brand_values])
-segment = st.sidebar.selectbox("Segment", ["ALL", "A", "B", "C", "D", "E", "F"])
+brand = st.sidebar.selectbox("ยี่ห้อ", ["ALL", *brand_values], key="f_brand")
+segment = st.sidebar.selectbox("Segment", ["ALL", "A", "B", "C", "D", "E", "F"], key="f_segment")
 body_family = st.sidebar.selectbox(
     "Body family",
     ["ALL", "SUV", "SEDAN", "HATCHBACK", "MPV", "PICKUP", "COUPE",
      "WAGON", "VAN", "TRUCK", "OTHER"],
+    key="f_body",
+)
+market_pt = st.sidebar.selectbox(
+    "ระบบขับเคลื่อน",
+    ["ALL", "FUEL", "HYBRID", "PLUGIN", "ELECTRIC", "MIXED", "UNKNOWN"],
+    format_func=lambda v: MARKET_POWERTRAIN_TH.get(v, v),
+    key="f_market_pt",
+    help="สี่หมวดที่หน้าเว็บใช้จริง — mild hybrid นับเป็นน้ำมัน และ e-Power "
+         "นับเป็นไฮบริด กรองแบบละเอียดอยู่ช่องถัดไป",
 )
 powertrain = st.sidebar.selectbox(
-    "Powertrain",
-    ["ALL", "ICE", "MHEV", "HEV", "PHEV", "REEV", "BEV", "FCEV",
+    "Powertrain (ละเอียด)",
+    ["ALL", "ICE", "HEV", "PHEV", "REEV", "BEV", "FCEV",
      "MIXED", "UNKNOWN"],
+    key="f_powertrain",
 )
 price_band = st.sidebar.selectbox(
     "Price band",
     ["ALL", "UNDER_1M", "1M_TO_2M", "2M_PLUS", "MIXED", "UNKNOWN"],
+    key="f_price",
 )
 import_type = st.sidebar.selectbox(
-    "CBU / CKD", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"]
+    "CBU / CKD", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"],
+    key="f_import",
 )
 origin_values = distinct_values(conn, "origin_country", selected_year)
-origin = st.sidebar.selectbox("ประเทศผลิต", ["ALL", *origin_values])
-include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False)
+origin = st.sidebar.selectbox("ประเทศผลิต", ["ALL", *origin_values], key="f_origin")
+include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False,
+                                          key="f_scopes")
 scopes = "all" if include_all_scopes else None
 
 filters: dict[str, object] = {}
@@ -215,10 +225,25 @@ add_filter(filters, "fact_registration_type", registration)
 add_filter(filters, "brand", brand)
 add_filter(filters, "segment", segment)
 add_filter(filters, "body_family", body_family)
+add_filter(filters, "market_powertrain", market_pt)
 add_filter(filters, "powertrain", powertrain)
 add_filter(filters, "price_band", price_band)
 add_filter(filters, "import_type", import_type)
 add_filter(filters, "origin_country", origin)
+
+# Every number below is scoped by controls that live in a sidebar the reader
+# may not have open. Name the ones that are on, where the numbers are.
+ui.filter_bar({
+    "f_reg": ("ประเภทรถ", registration),
+    "f_brand": ("ยี่ห้อ", brand),
+    "f_segment": ("Segment", segment),
+    "f_body": ("Body", body_family),
+    "f_market_pt": ("ระบบขับเคลื่อน", market_pt),
+    "f_powertrain": ("Powertrain", powertrain),
+    "f_price": ("Price band", price_band),
+    "f_import": ("CBU / CKD", import_type),
+    "f_origin": ("ประเทศผลิต", origin),
+}, extra=["f_scopes"], defaults={"f_scopes": False})
 
 TAB_DASH, TAB_EDIT, TAB_HISTORY = st.tabs([
     "Dashboard", "Monthly State Editor", "History / Audit",
@@ -231,17 +256,17 @@ with TAB_DASH:
         total = cube.run(
             conn, [], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         brands_result = cube.run(
             conn, ["brand"], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         models_result = cube.run(
             conn, ["model"], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         review = conn.execute(
             "SELECT COALESCE(SUM(units),0) AS u FROM ingest_review "
@@ -255,14 +280,42 @@ with TAB_DASH:
         c.metric("Models", f"{len(models_result.rows):,}")
         d.metric("Unmatched / review", f"{review or 0:,.0f}")
 
+        # The headline is smaller than the month DLT published, for reasons
+        # nothing on screen used to give. Rather than trust the cube's own
+        # excluded_by_scope -- which does not reconcile once the grain set is
+        # widened -- ask the same question again with every scope allowed and
+        # report the difference that actually appears.
+        all_scope = cube.run(
+            conn, [], filters=filters,
+            period_from=selected_period, period_to=selected_period,
+            scopes="all", grains=grains,
+        )
+        # A month total only compares with the figure above when nothing else
+        # is narrowing it.
+        month_total = None
+        if not filters:
+            month_total = conn.execute(
+                "SELECT COALESCE(SUM(units),0) AS u FROM fact_registration "
+                "WHERE period = ?", (selected_period,)
+            ).fetchone()["u"]
+        st.caption(ui.scope_caption(total.total_units, all_scope.total_units,
+                                    month_total))
+
         st.subheader("Automatic chart")
         dimension_labels = {
             "Brand": "brand",
+            # Aion and GAC are separate brands to a buyer but one company and
+            # one showroom network; the warehouse has carried oem_group all
+            # along, nothing exposed it.
+            "กลุ่มบริษัท (OEM group)": "oem_group",
             "Model": "model",
             "Segment": "segment",
             "Body family": "body_family",
             "SUV type": "suv_type",
-            "Powertrain": "powertrain",
+            # The four buckets the site sells in. Grouping by the raw
+            # powertrain splits REEV out onto a chart with one occupant.
+            "ระบบขับเคลื่อน (แบบที่เว็บใช้)": "market_powertrain",
+            "Powertrain (ละเอียด)": "powertrain",
             "Powertrain group": "powertrain_group",
             "Price band": "price_band",
             "CBU / CKD": "import_type",
@@ -276,7 +329,7 @@ with TAB_DASH:
         result = cube.run(
             conn, [dimension], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         )
         df = frame(result)
         if df.empty:
@@ -300,12 +353,16 @@ with TAB_DASH:
         top_models = frame(cube.run(
             conn, ["model"], filters=filters,
             period_from=selected_period, period_to=selected_period,
-            scopes=scopes, limit=20,
+            scopes=scopes, grains=grains, limit=20,
         ))
         if not top_models.empty:
             top_models = top_models.sort_values("units", ascending=True)
             st.plotly_chart(
-                px.bar(top_models, x="units", y="model", orientation="h"),
+                charting.rank_bar(
+                    top_models, x="units", y="model",
+                    height=coverage.chart_height(len(top_models)),
+                    labels={"units": "คัน", "model": ""}, hover_unit="คัน",
+                ),
                 use_container_width=True,
             )
 
@@ -315,11 +372,12 @@ with TAB_DASH:
         trend = frame(cube.timeseries(
             conn, [], bucket="period", filters=filters,
             period_from=start_period, period_to=selected_period,
-            scopes=scopes,
+            scopes=scopes, grains=grains,
         ))
         if not trend.empty:
             st.plotly_chart(
-                px.line(trend, x="period", y="units", markers=True),
+                charting.trend_line(trend, x="period", y="units",
+                                    labels={"units": "คัน", "period": ""}),
                 use_container_width=True,
             )
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from vehreg import charting, coverage
 from vehreg.db import connect
 from vehreg.rankings import chinese_ev_trim_ranking, model_ranking
 from vehreg.web_bootstrap import bootstrap_database, database_path
@@ -34,7 +35,22 @@ if not periods:
     conn.close()
     st.stop()
 
-period = st.sidebar.selectbox("เดือน", periods, index=len(periods) - 1)
+# Same stub-month trap as the dashboard: a trim ranking off fifteen
+# registrations reads as a ranking, not as an empty month.
+totals = coverage.period_totals(conn)
+provisional = coverage.provisional_periods(totals)
+period = st.sidebar.selectbox(
+    "เดือน", periods,
+    index=coverage.default_period_index(periods, totals, provisional),
+)
+if period in provisional:
+    st.error(
+        f"กำลังดู {period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
+        "อันดับด้านล่างยังใช้อ้างอิงไม่ได้"
+    )
+_coarse = coverage.coarse_periods(coverage.brand_grain_share(conn))
+if period in _coarse:
+    st.warning(coverage.coarse_notice(period, _coarse[period]))
 registration = st.sidebar.selectbox("DLT class", ["ALL", "RY1", "RY2", "RY3"])
 powertrain = st.sidebar.selectbox("Powertrain", ["ALL", "BEV", "PHEV", "REEV"])
 
@@ -82,7 +98,17 @@ with tab_trim:
 
         visual = df.copy()
         visual["label"] = visual["brand"] + " " + visual["model"] + " — " + visual["trim"]
-        st.bar_chart(visual.head(30).set_index("label")["units"], horizontal=True)
+        # st.bar_chart truncated these labels to "Aion Aion Y Plus …", which on a
+        # page whose whole point is telling trims apart removed the answer.
+        visual = visual.head(30).sort_values("units", ascending=True)
+        st.plotly_chart(
+            charting.rank_bar(
+                visual, x="units", y="label",
+                height=coverage.chart_height(len(visual)),
+                labels={"units": "คัน", "label": ""}, hover_unit="คัน",
+            ),
+            use_container_width=True,
+        )
 
         show = df[[
             "rank", "brand", "model", "trim", "powertrain", "grade", "drive",

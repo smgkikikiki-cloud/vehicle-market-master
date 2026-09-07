@@ -48,7 +48,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "wuling_air_ev",
@@ -86,7 +87,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     }
   ]
 }

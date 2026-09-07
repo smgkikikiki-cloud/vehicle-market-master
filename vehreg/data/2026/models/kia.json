@@ -210,6 +210,47 @@
           ]
         }
       ]
+    },
+    {
+      "id": "kia_pv5",
+      "name_en": "Kia PV5",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "pv5"
+      ],
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
+      "generations": [
+        {
+          "code": "KIA_PV5",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": 1199000,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 1199000,
+              "price_max_thb": 1199000
+            }
+          ]
+        }
+      ],
+      "incomplete": true
     }
   ]
 }

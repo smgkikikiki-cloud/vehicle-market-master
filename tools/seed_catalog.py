@@ -481,7 +481,7 @@ def seed_japanese() -> None:
     V("2.0 i-S EyeSight", "ICE", "AWD", 1995, None, 1590000, "CBU", "JP")
     M("crosstrek", "Crosstrek", "ครอสส์เทรค", "CROSSOVER", aliases=["xv"])
     G("GU", "B", 5, "2023-11-01")
-    V("2.0 e-Boxer", "MHEV", "AWD", 1995, 0.6, 1290000, "CBU", "JP")
+    V("2.0 e-Boxer", "ICE", "AWD", 1995, 0.6, 1290000, "CBU", "JP")
 
 
 def seed_chinese() -> None:
@@ -740,7 +740,7 @@ def seed_korean_western() -> None:
     V("sDrive18i xLine", "ICE", "FWD", 1499, None, 2399000, "CKD", "TH")
     M("bmw_x3", "X3", "เอ็กซ์3", "CROSSOVER", aliases=["x 3"])
     G("G45", "D", 5, "2024-11-01")
-    V("20 xDrive M Sport", "MHEV", "AWD", 1998, 0.5, 3999000, "CKD", "TH")
+    V("20 xDrive M Sport", "ICE", "AWD", 1998, 0.5, 3999000, "CKD", "TH")
     M("bmw_ix3", "iX3", "ไอเอ็กซ์3", "CROSSOVER", aliases=["ix 3"])
     G("G08", "D", 5, "2021-08-01")
     V("Inspiring", "BEV", "RWD", None, 80.0, 3399000, "CBU", "CN")
@@ -756,7 +756,7 @@ def seed_korean_western() -> None:
     V("C350e AMG Dynamic", "PHEV", "RWD", 1999, 25.4, 3399000, "CKD", "TH")
     M("mb_e_class", "E-Class", "อี-คลาส", "SEDAN", aliases=["e class", "e220d"])
     G("W214", "E", 5, "2024-01-01")
-    V("E220d AMG Dynamic", "MHEV", "RWD", 1993, 0.9, 4290000, "CKD", "TH")
+    V("E220d AMG Dynamic", "ICE", "RWD", 1993, 0.9, 4290000, "CKD", "TH")
     M("mb_gla", "GLA", "จีแอลเอ", "CROSSOVER")
     G("H247", "B", 5, "2020-01-01")
     V("GLA200 AMG Dynamic", "ICE", "FWD", 1332, None, 2590000, "CKD", "TH")
@@ -774,7 +774,7 @@ def seed_korean_western() -> None:
     V("35 TFSI S line", "ICE", "FWD", 1498, None, 2799000, "CBU", "DE")
     M("audi_q5", "Q5", "คิว5", "CROSSOVER", aliases=["q 5"])
     G("FY", "D", 5, "2018-01-01")
-    V("45 TFSI quattro S line", "MHEV", "AWD", 1984, 0.5, 3999000, "CBU", "DE")
+    V("45 TFSI quattro S line", "ICE", "AWD", 1984, 0.5, 3999000, "CBU", "DE")
 
     # --------------------------------------------------------------- Lexus
     B("lexus", "Lexus", "เล็กซัส", "PREMIUM_LUXURY", "Toyota Group", "JP", ["เล็กซัส"])

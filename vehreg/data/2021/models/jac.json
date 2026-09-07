@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "jac",
+    "name_en": "JAC",
+    "name_th": "เจเอซี",
+    "brand_segment": "BUDGET",
+    "oem_group": "JAC",
+    "brand_origin": "CN",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "jac_truck",
+      "name_en": "JAC Truck",
+      "name_th": "เจเอซี ทรัค",
+      "nameplate": "",
+      "body_type": "TRUCK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "HFC"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 3,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "electric",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 80.0,
+              "price_thb": 1500000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

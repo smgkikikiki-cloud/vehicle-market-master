@@ -72,6 +72,33 @@ def similarity(a: str, b: str) -> float:
     return base
 
 
+def _trailing_number(folded: str) -> Optional[str]:
+    """The last token of a folded name, when it is a bare number."""
+    parts = folded.split()
+    return parts[-1] if parts and parts[-1].isdigit() else None
+
+
+def _numbers_disagree(raw: str, surface: str) -> bool:
+    """True when two names differ precisely in the number that ends them.
+
+    A nameplate's number is the nameplate. "GEELY EX2" scored 0.90 against
+    "Geely EX5" - one character in nine, comfortably over the fuzzy floor - and
+    8,731 registrations of a car the catalog had never heard of were filed as
+    a different one. ``fold`` splits digits off, which shortens the difference
+    further: "geely ex 2" against "geely ex 5".
+
+    Deliberately narrow. It looks only at a trailing bare number on both sides,
+    so it says nothing about "BMW 330e Sport" against "3 Series", where the
+    digits differ for a reason and the match is right. Across the whole
+    warehouse it refuses three fuzzy matches - the Geely, a Sokon EC31 filed as
+    an EC35, and a Land Cruiser 200 filed as a 300 - and leaves the other
+    twenty-five alone. It applies to fuzzy only; exact and whole-token matches
+    carry their own evidence.
+    """
+    a, b = _trailing_number(raw), _trailing_number(surface)
+    return a is not None and b is not None and a != b
+
+
 class MatchIndex:
     """Maps many spellings onto one catalog key.
 
@@ -155,6 +182,8 @@ class MatchIndex:
 
         best_key, best_score = None, 0.0
         for surface, candidate, _priority in self._candidates:
+            if _numbers_disagree(folded, surface):
+                continue
             score = similarity(folded, surface)
             if score > best_score:
                 best_key, best_score = candidate, score

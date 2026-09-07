@@ -1,0 +1,717 @@
+{
+  "brand": {
+    "id": "mg",
+    "name_en": "MG",
+    "name_th": "เอ็มจี",
+    "brand_segment": "MASS",
+    "oem_group": "SAIC",
+    "brand_origin": "CN",
+    "aliases": [
+      "เอ็มจี",
+      "mg sales thailand",
+      "morris garages"
+    ],
+    "trim_detail": true
+  },
+  "models": [
+    {
+      "id": "mg3",
+      "name_en": "MG3",
+      "name_th": "เอ็มจี3",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mg 3"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MG3H",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2024-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 1.8,
+              "aliases": [
+                "1.5 HEV+"
+              ],
+              "overrides": {},
+              "price_thb": 789000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 789000,
+              "price_max_thb": 789000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg4",
+      "name_en": "MG4 Electric",
+      "name_th": "เอ็มจี4",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mg4",
+        "mg 4"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MG4E",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2022-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "51 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 51.0,
+              "aliases": [
+                "D 51kWh"
+              ],
+              "overrides": {},
+              "price_thb": 769000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 769000,
+              "price_max_thb": 769000
+            },
+            {
+              "name": "64 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 64.0,
+              "aliases": [
+                "X 64kWh"
+              ],
+              "overrides": {},
+              "price_thb": 969000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 969000,
+              "price_max_thb": 969000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg5",
+      "name_en": "MG5",
+      "name_th": "เอ็มจี5",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "mg 5"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MG5G",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2021-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 X"
+              ],
+              "overrides": {},
+              "price_thb": 679000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 679000,
+              "price_max_thb": 679000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_zs",
+      "name_en": "MG ZS",
+      "name_th": "เอ็มจี แซดเอส",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "zs"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "ZSG",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2018-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 X"
+              ],
+              "overrides": {},
+              "price_thb": 689000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 689000,
+              "price_max_thb": 689000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_zs_ev",
+      "name_en": "MG ZS EV",
+      "name_th": "เอ็มจี แซดเอส อีวี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "zs ev",
+        "new zs ev"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "ZSEV",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2019-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "51 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 51.1,
+              "aliases": [
+                "Long Range"
+              ],
+              "overrides": {},
+              "price_thb": 949000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 949000,
+              "price_max_thb": 949000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_hs",
+      "name_en": "MG HS",
+      "name_th": "เอ็มจี เอชเอส",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "hs"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "HSG",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2019-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1490,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 Turbo X"
+              ],
+              "overrides": {},
+              "price_thb": 999000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 999000,
+              "price_max_thb": 999000
+            },
+            {
+              "name": "1.5L PHEV",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1490,
+              "battery_kwh": 16.6,
+              "aliases": [
+                "PHEV X"
+              ],
+              "overrides": {},
+              "price_thb": 1359000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 1359000,
+              "price_max_thb": 1359000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_vs_hev",
+      "name_en": "MG VS HEV",
+      "name_th": "เอ็มจี วีเอส เอชอีวี",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "vs hev"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "VSH",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2023-08-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "1.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1498,
+              "battery_kwh": 1.8,
+              "aliases": [
+                "HEV D"
+              ],
+              "overrides": {},
+              "price_thb": 899000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 899000,
+              "price_max_thb": 899000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_extender_cab",
+      "name_en": "MG Extender Cab",
+      "name_th": "เอ็มจี เอ็กซ์เทนเดอร์ ตอนเดียว/แค็บ",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "SINGLE_SMART",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "extender cab",
+        "giant cab",
+        "MG Extender",
+        "เอ็มจี เอ็กซ์เทนเดอร์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "EXT",
+          "segment": "F",
+          "seats": 4,
+          "launched": "2019-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1996,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 Grand X"
+              ],
+              "overrides": {},
+              "price_thb": 649000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 649000,
+              "price_max_thb": 649000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_extender_double_cab",
+      "name_en": "MG Extender Double Cab",
+      "name_th": "เอ็มจี เอ็กซ์เทนเดอร์ 4 ประตู",
+      "nameplate": "",
+      "body_type": "PICKUP",
+      "cab_type": "DOUBLE_CAB",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "extender double cab",
+        "grand tiger",
+        "MG Extender",
+        "เอ็มจี เอ็กซ์เทนเดอร์"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "EXT",
+          "segment": "F",
+          "seats": 5,
+          "launched": "2019-10-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1996,
+              "battery_kwh": null,
+              "aliases": [
+                "2.0 Grand Tiger"
+              ],
+              "overrides": {},
+              "price_thb": 799000,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "price_min_thb": 799000,
+              "price_max_thb": 799000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_maxus_9",
+      "name_en": "MG Maxus 9",
+      "name_th": "เอ็มจี แม็กซัส 9",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "maxus 9",
+        "mifa 9"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "MIFA9",
+          "segment": "E",
+          "seats": 7,
+          "launched": "2023-03-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "90 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 90.0,
+              "aliases": [
+                "Luxury"
+              ],
+              "overrides": {},
+              "price_thb": 2599000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 2599000,
+              "price_max_thb": 2599000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_es",
+      "name_en": "MG ES",
+      "name_th": "เอ็มจี อีเอส",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "es5",
+        "mg es5",
+        "ES5",
+        "MG ES5"
+      ],
+      "notes": "",
+      "generations": [
+        {
+          "code": "ES5",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2025-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "62 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 62.0,
+              "aliases": [
+                "Long Range"
+              ],
+              "overrides": {},
+              "price_thb": 999000,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "price_min_thb": 999000,
+              "price_max_thb": 999000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_s5_ev",
+      "name_en": "MG S5 EV",
+      "name_th": "เอ็มจี เอส5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "s5 ev",
+        "s5"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2025-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "62 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 62.0,
+              "price_thb": 899000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_im6",
+      "name_en": "MG IM6",
+      "name_th": "เอ็มจี ไอเอ็ม6",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "im6"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2025-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "100 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "RWD",
+              "engine_cc": null,
+              "battery_kwh": 100.0,
+              "price_thb": 1899000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_ep",
+      "name_en": "MG EP",
+      "name_th": "เอ็มจี อีพี",
+      "nameplate": "",
+      "body_type": "WAGON",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "ep"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2020-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "50 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 50.3,
+              "price_thb": 799000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_maxus_7",
+      "name_en": "MG Maxus 7",
+      "name_th": "เอ็มจี แม็กซัส 7",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "maxus 7"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 7,
+          "launched": "2025-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "RWD",
+              "engine_cc": 1996,
+              "battery_kwh": null,
+              "price_thb": 1399000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mg_cyberster",
+      "name_en": "MG Cyberster",
+      "name_th": "เอ็มจี ไซเบอร์สเตอร์",
+      "nameplate": "",
+      "body_type": "COUPE",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "cyberster"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 2,
+          "launched": "2024-11-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "77 kWh BEV",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": 77.0,
+              "price_thb": 3599000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

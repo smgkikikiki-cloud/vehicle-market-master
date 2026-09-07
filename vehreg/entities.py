@@ -47,7 +47,8 @@ from .taxonomy import (
     MarketScope, Powertrain, RegistrationType, Segment,
     check_body_segment, check_origin, check_powertrain, check_registration,
     is_electrified, is_locally_assembled, is_plug_in, market_position_for_price,
-    normalize_country, powertrain_group, registration_type_for,
+    market_powertrain, normalize_country, powertrain_group,
+    registration_type_for,
 )
 
 #: Facet -> the layer that owns it. Used for validation messages and for the
@@ -133,6 +134,21 @@ class Model:
     market_scope: MarketScope = MarketScope.CORE
     aliases: tuple[str, ...] = ()
     notes: str = ""
+    #: Set when the model exists only so DLT's label has somewhere to land.
+    #: The registrations are real and worth attributing; the specification is
+    #: not researched yet, and saying so is better than either guessing a body
+    #: type or leaving the volume unattributed. ``Catalog.validate`` stays
+    #: silent about what such a model is missing and reports it separately, so
+    #: "the catalog is complete" keeps meaning something.
+    incomplete: bool = False
+    #: Set when someone has checked that the variant list covers every
+    #: powertrain this nameplate actually sold that year. DLT never states a
+    #: powertrain, so model-grain volume inherits the consensus of the trims
+    #: the catalog happens to list; that consensus is only trustworthy when
+    #: the list is known complete. Without this flag there is no way to tell a
+    #: confirmed "hybrid only" from a nameplate nobody has looked at yet, and
+    #: both read the same on every chart.
+    powertrain_checked: bool = False
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:
@@ -199,6 +215,15 @@ class Variant:
     origin_country: str = "UNKNOWN"
     price_note: str = ""
     aliases: tuple[str, ...] = ()
+    #: Set when the trim exists so a real registration has somewhere to land
+    #: and its specification has not been researched. The model-level flag says
+    #: that about a whole nameplate; this says it about one half of one. The
+    #: BMW X1 is the case it was written for: its petrol and diesel side is
+    #: fully specified, so calling the whole model incomplete would be a lie,
+    #: while leaving the xDrive30e out made 333 plug-in registrations read as
+    #: combustion. Validation skips the spec rules for a variant that declares
+    #: this; ``Catalog.incomplete_models`` reports it instead.
+    incomplete: bool = False
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:
@@ -223,8 +248,10 @@ class Variant:
         return out
 
     def validate(self) -> list[str]:
-        problems = check_powertrain(self.powertrain, self.battery_kwh,
-                                    self.engine_cc)
+        # A declared gap is reported by Catalog.incomplete_models, not here.
+        problems = ([] if self.incomplete else
+                    check_powertrain(self.powertrain, self.battery_kwh,
+                                     self.engine_cc))
         problems += check_origin(self.import_type, self.origin_country)
         locked = LOCKED_AT_MODEL & set(self.overrides)
         if locked:
@@ -303,6 +330,7 @@ def resolve(brand: Brand, model: Model, generation: Generation, variant: Variant
     # disagree with the layer that produced their input.
     pt = facets.get("powertrain", Powertrain.UNKNOWN)
     facets["powertrain_group"] = powertrain_group(pt)
+    facets["market_powertrain"] = market_powertrain(pt)
     facets["is_electrified"] = is_electrified(pt)
     facets["is_plug_in"] = is_plug_in(pt)
     facets.setdefault("market_position", MarketPosition.UNKNOWN)

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
+from vehreg import charting, coverage
 from vehreg.db import connect
 from vehreg.market_metrics import (
     missing_periods,
@@ -146,12 +146,11 @@ with left:
     st.subheader("Top provinces")
     top = nonzero.head(20).sort_values("units", ascending=True)
     st.plotly_chart(
-        px.bar(
-            top,
-            x="units",
-            y="province",
-            orientation="h",
+        charting.rank_bar(
+            top, x="units", y="province",
+            height=coverage.chart_height(len(top)),
             labels={"units": "Registrations", "province": ""},
+            hover_unit="คัน",
         ),
         use_container_width=True,
     )
@@ -160,12 +159,12 @@ with right:
     region_show = region_df.copy()
     region_show["distribution_share_pct"] = region_show["distribution_share"] * 100
     st.plotly_chart(
-        px.bar(
+        charting.rank_bar(
             region_show.sort_values("units", ascending=True),
-            x="units",
-            y="region",
-            orientation="h",
+            x="units", y="region",
+            height=coverage.chart_height(len(region_show)),
             labels={"units": "Registrations", "region": ""},
+            hover_unit="คัน",
         ),
         use_container_width=True,
     )
@@ -190,13 +189,18 @@ st.caption(
 index_df = nonzero[nonzero["over_index"].notna()].copy()
 index_df = index_df.sort_values(["over_index", "units"], ascending=[False, False]).head(20)
 if not index_df.empty:
+    over = index_df.sort_values("over_index", ascending=True).copy()
+    # Over-index reads against 1.00, not against zero: 0.8x and 1.2x are
+    # opposite findings, so the chart plots the distance from the national
+    # average and colours the two directions apart.
+    over["vs_national"] = over["over_index"] - 1.0
     st.plotly_chart(
-        px.bar(
-            index_df.sort_values("over_index", ascending=True),
-            x="over_index",
-            y="province",
-            orientation="h",
-            labels={"over_index": "Over-index (x)", "province": ""},
+        charting.signed_bar(
+            over, x="vs_national", y="province",
+            height=coverage.chart_height(len(over)),
+            value_format="+.2f",
+            labels={"vs_national": "ต่างจากค่าเฉลี่ยประเทศ (x)", "province": ""},
+            hover_unit="x",
         ),
         use_container_width=True,
     )

@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "sokon",
+    "name_en": "Sokon",
+    "name_th": "โซคอน",
+    "brand_segment": "BUDGET",
+    "oem_group": "Sokon",
+    "brand_origin": "CN",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "sokon_ec35",
+      "name_en": "Sokon EC35",
+      "name_th": "Sokon EC35",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY3",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "EC35"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 2,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 41.9,
+              "price_thb": 849000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

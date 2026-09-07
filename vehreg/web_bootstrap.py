@@ -15,12 +15,33 @@ from .state_seed import load_seed_csv
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB_PATH = ROOT / "data" / "vehreg.sqlite3"
 DEFAULT_RAW_DIR = ROOT / "data" / "raw"
+DEFAULT_PIVOT_DIR = ROOT / "data" / "raw_pivot"
 DEFAULT_STATE_SEED = ROOT / "data" / "research" / "monthly_production_state.csv"
 PROVINCIAL_SOURCE_NAME = "DLT Provincial Brand-Model-Province"
 
 
 def database_path() -> Path:
     return Path(os.environ.get("VEHREG_DB", str(DEFAULT_DB_PATH)))
+
+
+def pivot_dir() -> Path:
+    """Months read from the DLT pivot workbook rather than the monthly API.
+
+    Kept in their own directory because they are a weaker source: the pivot
+    carries no registration class, so a pickup's cab split is not available and
+    that volume queues for review instead of classifying. They are loaded only
+    for months the API exports do not cover.
+    """
+    return Path(os.environ.get("VEHREG_PIVOT_DIR", str(DEFAULT_PIVOT_DIR)))
+
+
+def raw_dir() -> Path:
+    """Where the committed monthly DLT exports live.
+
+    Pages need this to check one month's payload against another's, which is a
+    question about the files rather than about the warehouse.
+    """
+    return Path(os.environ.get("VEHREG_RAW_DIR", str(DEFAULT_RAW_DIR)))
 
 
 def bootstrap_database(db_path: Path | str | None = None,
@@ -54,6 +75,7 @@ def bootstrap_database(db_path: Path | str | None = None,
         rebuilt.append(year)
 
     ingested: list[str] = []
+    duplicates: list[dict[str, str]] = []
     for path in sorted(raw.glob("dlt_????-??.csv")):
         period = path.stem.removeprefix("dlt_")
         try:
@@ -71,8 +93,60 @@ def bootstrap_database(db_path: Path | str | None = None,
         ).fetchone()
         if already:
             continue
-        ingest_csv(conn, catalogs[year], path, f"WEB {period}",
-                   colmap=dlt.column_map(), publisher="DLT")
+        try:
+            ingest_csv(conn, catalogs[year], path, f"WEB {period}",
+                       colmap=dlt.column_map(), publisher="DLT")
+        except ValueError as exc:
+            # A month whose payload repeats one already loaded is left out
+            # rather than doubling a year's registrations. Booting has to keep
+            # working, so this is reported, not raised.
+            if "already loaded as" not in str(exc):
+                raise
+            duplicates.append({"period": period, "reason": str(exc)})
+            continue
+        ingested.append(period)
+
+    # Secondary sources come after the exports, best first, and only where
+    # nothing better already covers the period. Precedence is export > long >
+    # pivot, which is the order of how much each one can say: the export and the
+    # long sheet both carry the registration class the matcher needs to split a
+    # pickup by cab, the pivot does not.
+    pivot = Path(os.environ.get("VEHREG_PIVOT_DIR", str(DEFAULT_PIVOT_DIR)))
+    covered = {p.stem.removeprefix("dlt_") for p in raw.glob("dlt_????-??.csv")}
+    secondary = (sorted(pivot.glob("long_????-??.csv"))
+                 + sorted(pivot.glob("pivot_????-??.csv")))
+    for path in secondary:
+        period = path.stem.split("_", 1)[1]
+        if period in covered:
+            continue
+        try:
+            year = int(period[:4])
+        except ValueError:
+            continue
+        if year not in catalogs:
+            continue
+        label = "LONG" if path.name.startswith("long_") else "PIVOT"
+        already = conn.execute(
+            "SELECT 1 FROM dim_source WHERE file_name=? OR file_name LIKE ? "
+            "OR name IN (?,?) LIMIT 1",
+            (str(path.resolve()), f"%/{path.name}",
+             f"PIVOT {period}", f"LONG {period}"),
+        ).fetchone()
+        if already:
+            continue
+        note = ("DLT long sheet; carries the registration class"
+                if label == "LONG" else
+                "DLT pivot workbook; no registration class, so cab-split "
+                "volume stays on the brand")
+        try:
+            ingest_csv(conn, catalogs[year], path, f"{label} {period}",
+                       publisher="DLT", notes=note)
+        except ValueError as exc:
+            if "already loaded as" not in str(exc):
+                raise
+            duplicates.append({"period": period, "reason": str(exc)})
+            continue
+        covered.add(period)
         ingested.append(period)
 
     seeded: dict[str, object] | None = None
@@ -118,6 +192,7 @@ def bootstrap_database(db_path: Path | str | None = None,
     return {
         "years": rebuilt,
         "ingested": ingested,
+        "duplicates": duplicates,
         "state_seed": seeded,
         "provincial": provincial_state,
         "db": str(db),

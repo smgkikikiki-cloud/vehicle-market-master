@@ -62,7 +62,12 @@
       "cab_type": "NOT_APPLICABLE",
       "registration_type": "",
       "market_scope": "CORE",
-      "aliases": [],
+      "aliases": [
+        "cooper s countryman",
+        "countryman s",
+        "jcw countryman",
+        "cooper sd all4 countryman"
+      ],
       "notes": "",
       "generations": [
         {
@@ -131,6 +136,47 @@
           ]
         }
       ]
+    },
+    {
+      "id": "jcw_e",
+      "name_en": "JCW E",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "HATCHBACK",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "jcw e"
+      ],
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
+      "generations": [
+        {
+          "code": "JCW_E",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": 2069000,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 2069000,
+              "price_max_thb": 2069000
+            }
+          ]
+        }
+      ],
+      "incomplete": true
     }
   ]
 }

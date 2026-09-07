@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "farizon",
+    "name_en": "Farizon",
+    "name_th": "ฟาริซอน",
+    "brand_segment": "BUDGET",
+    "oem_group": "Farizon",
+    "brand_origin": "CN",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "farizon_sv",
+      "name_en": "Farizon SV",
+      "name_th": "Farizon SV",
+      "nameplate": "",
+      "body_type": "VAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "RY3",
+      "market_scope": "COMMERCIAL",
+      "aliases": [
+        "SV"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "UNKNOWN",
+          "seats": 3,
+          "launched": "2023-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": 83.0,
+              "price_thb": 1690000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

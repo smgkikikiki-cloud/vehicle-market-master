@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "id": "rolls_royce",
+    "name_en": "Rolls-Royce",
+    "name_th": "โรลส์-รอยซ์",
+    "brand_segment": "PREMIUM_LUXURY",
+    "oem_group": "BMW Group",
+    "brand_origin": "GB",
+    "trim_detail": false,
+    "aliases": []
+  },
+  "models": [
+    {
+      "id": "ghost",
+      "name_en": "Ghost",
+      "name_th": "Ghost",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "Ghost"
+      ],
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "PHEV",
+              "drivetrain": "AWD",
+              "engine_cc": 3996,
+              "battery_kwh": 18.0,
+              "price_thb": 25000000.0,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "UNKNOWN",
+              "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

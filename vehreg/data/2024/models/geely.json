@@ -47,6 +47,90 @@
           ]
         }
       ]
+    },
+    {
+      "id": "geely_ex2",
+      "name_en": "Geely EX2",
+      "name_th": "จีลี่ อีเอ็กซ์2",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "EX2",
+        "Geely EX2"
+      ],
+      "incomplete": true,
+      "notes": "แยกจาก EX5 — คนละรุ่นกัน เดิม fuzzy จับ EX2 ไปเกาะ EX5 เพราะต่างกันตัวเดียว สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "B",
+          "seats": 5,
+          "launched": "2026-02-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ],
+      "powertrain_checked": true
+    },
+    {
+      "id": "galaxy_e5",
+      "name_en": "Geely Galaxy E5",
+      "name_th": "จีลี่ กาแล็กซี่ อี5",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "Galaxy E5",
+        "GALAXY E5",
+        "E5"
+      ],
+      "incomplete": true,
+      "notes": "รุ่นที่ค้างอยู่ในคิวรอตรวจ สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2025-05-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
-from vehreg import cube
+import ui
+
+from vehreg import charting, coverage, cube
 from vehreg.db import connect
 from vehreg.market_metrics import (
     compare_share_rows,
@@ -15,7 +16,7 @@ from vehreg.market_metrics import (
     window_is_complete,
     ytd_window,
 )
-from vehreg.web_bootstrap import bootstrap_database, database_path
+from vehreg.web_bootstrap import bootstrap_database, database_path, raw_dir
 
 st.set_page_config(page_title="Admin Market Intelligence | TDR", layout="wide")
 st.title("Admin Market Intelligence")
@@ -72,6 +73,7 @@ def market_rows(
         period_from=period_from,
         period_to=period_to,
         scopes=scopes,
+        grains=GRAINS,
     )
     rows: list[dict[str, object]] = []
     for raw in result.rows:
@@ -160,12 +162,13 @@ def render_movement(
         st.markdown("**Share gainers**")
         chart = gainers.sort_values("share_change_pp", ascending=True)
         st.plotly_chart(
-            px.bar(
+            charting.signed_bar(
                 chart,
                 x="share_change_pp",
                 y="entity",
-                orientation="h",
+                height=coverage.chart_height(len(chart)),
                 labels={"share_change_pp": "Share change (pp)", "entity": ""},
+                hover_unit="pp",
             ),
             use_container_width=True,
         )
@@ -173,12 +176,13 @@ def render_movement(
         st.markdown("**Share losers**")
         chart = losers.sort_values("share_change_pp", ascending=False)
         st.plotly_chart(
-            px.bar(
+            charting.signed_bar(
                 chart,
                 x="share_change_pp",
                 y="entity",
-                orientation="h",
+                height=coverage.chart_height(len(chart)),
                 labels={"share_change_pp": "Share change (pp)", "entity": ""},
+                hover_unit="pp",
             ),
             use_container_width=True,
         )
@@ -198,6 +202,8 @@ def render_movement(
             "share_change_pp": st.column_config.NumberColumn(format="%+.2f pp"),
         },
     )
+    ui.download_table(data, stem=f"movement-{title}", period=current_to,
+                      context=EXPORT_CONTEXT, key=f"dl_move_{title}")
 
 
 try:
@@ -217,15 +223,45 @@ if not periods:
     conn.close()
     st.stop()
 
-selected_period = st.sidebar.selectbox("เดือนข้อมูล", periods, index=len(periods) - 1)
+# This deck reports leader share. Opening it on a month DLT has only started
+# publishing produced "Leader share 100.00%" off fifteen registrations, which is
+# the single most misleading thing this product can put on a screen.
+totals = coverage.period_totals(conn)
+provisional = coverage.provisional_periods(totals)
+selected_period = st.sidebar.selectbox(
+    "เดือนข้อมูล", periods,
+    index=coverage.default_period_index(periods, totals, provisional),
+)
 selected_year = int(selected_period[:4])
+
+for notice in coverage.coverage_notices(
+    provisional, coverage.duplicate_payload_periods(raw_dir())
+):
+    st.warning(notice)
+if selected_period in provisional:
+    st.error(
+        f"กำลังดู {selected_period} ซึ่งเป็นเดือนที่ข้อมูลยังไม่ครบ "
+        "ส่วนแบ่งตลาดและอันดับด้านล่างยังใช้อ้างอิงไม่ได้"
+    )
+coarse = coverage.coarse_periods(coverage.brand_grain_share(conn))
+if selected_period in coarse:
+    st.warning(coverage.coarse_notice(selected_period, coarse[selected_period]))
+
+# Read every grain on a month that carries unattributed volume, so this deck
+# ranks the whole month rather than the part that reached a model.
+GRAINS = coverage.analysis_grains(selected_period, coarse)
 
 grouping_labels = {
     "Brand": "brand",
+    # Aion and GAC rank as two brands but sell through one network, as do
+    # Chery/Jaecoo, Changan/Deepal/Avatr and BYD/Denza. oem_group has always
+    # been in the warehouse; this is the first thing to offer it.
+    "OEM group": "oem_group",
     "Model": "model",
     "Segment": "segment",
     "Body family": "body_family",
-    "Powertrain": "powertrain",
+    "ระบบขับเคลื่อน (แบบที่เว็บใช้)": "market_powertrain",
+    "Powertrain (ละเอียด)": "powertrain",
     "Powertrain group": "powertrain_group",
     "Price band": "price_band",
     "CBU / CKD": "import_type",
@@ -235,29 +271,71 @@ grouping_labels = {
 grouping_label = st.sidebar.selectbox("Compare / rank by", list(grouping_labels))
 dimension = grouping_labels[grouping_label]
 
-registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"])
+registration = st.sidebar.selectbox("ประเภทรถ DLT", ["ALL", "RY1", "RY2", "RY3"], key="f_reg")
 brand_values = distinct_model_values(conn, "brand", selected_year)
-brand = st.sidebar.selectbox("Brand scope", ["ALL", *brand_values])
-segment = st.sidebar.selectbox("Segment scope", ["ALL", "A", "B", "C", "D", "E", "F"])
+brand = st.sidebar.selectbox("Brand scope", ["ALL", *brand_values], key="f_brand")
+segment = st.sidebar.selectbox("Segment scope", ["ALL", "A", "B", "C", "D", "E", "F"],
+                                 key="f_segment")
 body_family = st.sidebar.selectbox(
     "Body scope",
     ["ALL", "SUV", "SEDAN", "HATCHBACK", "MPV", "PICKUP", "COUPE", "WAGON", "VAN", "TRUCK", "OTHER"],
+    key="f_body",
 )
 powertrain = st.sidebar.selectbox(
     "Powertrain scope",
-    ["ALL", "ICE", "MHEV", "HEV", "PHEV", "REEV", "BEV", "FCEV", "MIXED", "UNKNOWN"],
+    ["ALL", "ICE", "HEV", "PHEV", "REEV", "BEV", "FCEV", "MIXED", "UNKNOWN"],
+    key="f_powertrain",
 )
 price_band = st.sidebar.selectbox(
     "Price scope",
     ["ALL", "UNDER_1M", "1M_TO_2M", "2M_PLUS", "MIXED", "UNKNOWN"],
+    key="f_price",
 )
 import_type = st.sidebar.selectbox(
-    "CBU / CKD scope", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"]
+    "CBU / CKD scope", ["ALL", "CBU", "CKD", "SKD", "MIXED", "UNKNOWN"],
+    key="f_import",
 )
 origin_values = distinct_model_values(conn, "origin_country", selected_year)
-origin = st.sidebar.selectbox("Production country scope", ["ALL", *origin_values])
-include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False)
+origin = st.sidebar.selectbox("Production country scope", ["ALL", *origin_values],
+                              key="f_origin")
+include_all_scopes = st.sidebar.checkbox("รวม NICHE / GREY / COMMERCIAL", value=False,
+                                          key="f_scopes")
 scopes = "all" if include_all_scopes else None
+
+# This deck reports leader share and rank. A scope left on from earlier reads
+# as a fact about the whole market, so the active ones are named up here.
+ui.filter_bar({
+    "f_reg": ("ประเภทรถ", registration),
+    "f_brand": ("Brand", brand),
+    "f_segment": ("Segment", segment),
+    "f_body": ("Body", body_family),
+    "f_powertrain": ("Powertrain", powertrain),
+    "f_price": ("Price", price_band),
+    "f_import": ("CBU / CKD", import_type),
+    "f_origin": ("Production country", origin),
+}, extra=["f_scopes"], defaults={"f_scopes": False},
+   # comparison_filters() drops whatever this page is ranking by, so that a
+   # brand ranking has other brands in it. Say so on the chip rather than
+   # letting it claim a scope the numbers below do not obey.
+   ignored=[{
+       "brand": "f_brand", "segment": "f_segment", "body_family": "f_body",
+       "powertrain": "f_powertrain", "price_band": "f_price",
+       "import_type": "f_import", "origin_country": "f_origin",
+   }.get(dimension, "")])
+
+# Downloaded files name what they are: a folder of "data.csv" is a folder
+# nobody can tell apart a week later.
+EXPORT_CONTEXT = {
+    "dimension": grouping_label,
+    "registration": registration,
+    "brand": brand,
+    "segment": segment,
+    "body": body_family,
+    "powertrain": powertrain,
+    "price": price_band,
+    "import": import_type,
+    "origin": origin,
+}
 
 filters: dict[str, object] = {}
 add_filter(filters, "fact_registration_type", registration)
@@ -308,17 +386,34 @@ with tab_structure:
     else:
         c.metric("Leader share", "—")
 
+    # Same question with every scope allowed, so the gap to the published month
+    # is stated rather than left for a reader to discover against a press
+    # release. A month total is only comparable when nothing else narrows it.
+    _, all_scope_total = market_rows(
+        conn, dimension, analysis_filters, selected_period, selected_period,
+        "all",
+    )
+    month_total = None
+    if not analysis_filters:
+        month_total = conn.execute(
+            "SELECT COALESCE(SUM(units),0) AS u FROM fact_registration "
+            "WHERE period = ?", (selected_period,)
+        ).fetchone()["u"]
+    st.caption(ui.scope_caption(total, all_scope_total, month_total))
+
     if table.empty:
         st.info("ไม่มีข้อมูลตาม scope นี้")
     else:
         visual = table.head(30).sort_values("share_pct", ascending=True)
         st.plotly_chart(
-            px.bar(
+            charting.rank_bar(
                 visual,
                 x="share_pct",
                 y="entity",
-                orientation="h",
+                height=coverage.chart_height(len(visual)),
+                value_format=",.2f",
                 labels={"share_pct": "Market share (%)", "entity": ""},
+                hover_unit="%",
             ),
             use_container_width=True,
         )
@@ -331,6 +426,8 @@ with tab_structure:
                 "share_pct": st.column_config.NumberColumn("Share", format="%.2f%%"),
             },
         )
+        ui.download_table(table, stem="market-structure",
+                          period=selected_period, context=EXPORT_CONTEXT)
 
 with tab_movement:
     previous_month = shift_period(selected_period, -1)
@@ -419,6 +516,8 @@ with tab_ytd:
                     "share_pct": st.column_config.NumberColumn("YTD share", format="%.2f%%"),
                 },
             )
+            ui.download_table(table, stem="ytd-position", period=ytd_to,
+                              context=EXPORT_CONTEXT)
 
         previous_ytd_from = f"{selected_year - 1:04d}-01"
         previous_ytd_to = f"{selected_year - 1:04d}-{selected_period[5:7]}"
@@ -452,7 +551,7 @@ with tab_raw:
         filters=filters,
         period_from=trend_from,
         period_to=selected_period,
-        scopes=scopes,
+        scopes=scopes, grains=GRAINS,
     )
     trend_df = pd.DataFrame(trend.rows)
     st.caption(
@@ -467,9 +566,12 @@ with tab_raw:
         )
         trend_df = expected.merge(trend_df[["period", "units"]], on="period", how="left")
         st.plotly_chart(
-            px.line(trend_df, x="period", y="units", markers=True),
+            charting.trend_line(trend_df, x="period", y="units",
+                                labels={"units": "คัน", "period": ""}),
             use_container_width=True,
         )
         st.dataframe(trend_df, use_container_width=True, hide_index=True)
+        ui.download_table(trend_df, stem="raw-trend", period=selected_period,
+                          context=EXPORT_CONTEXT)
 
 conn.close()

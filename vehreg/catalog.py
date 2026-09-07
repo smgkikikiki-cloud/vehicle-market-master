@@ -178,6 +178,8 @@ class Catalog:
                                      registration_type_for(body, cab)),
             market_scope=_facet(MarketScope, raw.get("market_scope"),
                                 MarketScope.CORE),
+            incomplete=bool(raw.get("incomplete", False)),
+            powertrain_checked=bool(raw.get("powertrain_checked", False)),
             aliases=_tuple(raw.get("aliases")),
             notes=raw.get("notes", ""),
             overrides=_overrides(raw.get("overrides")),
@@ -233,6 +235,7 @@ class Catalog:
             origin_country=raw.get("origin_country", "UNKNOWN"),
             price_note=raw.get("price_note", ""),
             aliases=_tuple(raw.get("aliases")),
+            incomplete=bool(raw.get("incomplete", False)),
             overrides=_overrides(raw.get("overrides")),
         )
         self._variants_by_model[model_id].append(variant_id)
@@ -318,18 +321,89 @@ class Catalog:
     # ------------------------------------------------------------ validate
     def validate(self) -> list[str]:
         problems: list[str] = []
+        # A stub keeps the powertrain the DLT label stated, which is worth
+        # more than dropping it to UNKNOWN would be. The spec rules that hang
+        # off a powertrain -- a PHEV needs an engine and a battery -- are then
+        # unmeetable until someone researches the car, so they are reported by
+        # incomplete_models() rather than here.
+        declared = {model.id for model in self.models.values() if model.incomplete}
         for model in self.models.values():
             problems += model.validate()
+            # A model that declares itself incomplete is a known gap with a
+            # name on it, not a defect. It is reported by incomplete_models()
+            # instead, so this list stays "things nobody has looked at".
+            if model.incomplete:
+                continue
             if model.body_type is BodyType.OTHER:
                 problems.append(f"model {model.id}: body_type not set")
             if not self.variants_of(model.id):
                 problems.append(f"model {model.id}: no variants")
         for variant in self.variants.values():
+            if self.model_for_variant(variant.id).id in declared:
+                continue
             problems += variant.validate()
         problems += self.duplicate_body_warnings()
         for resolved in self.iter_resolved():
+            if self.model_for_variant(resolved.variant_id).id in declared:
+                continue
+            if self.variants[resolved.variant_id].incomplete:
+                continue
             problems += cross_check(resolved)
         return problems
+
+    #: Powertrains that must state a battery, and those that must state an
+    #: engine. A PHEV is in both.
+    _ELECTRIFIED = frozenset({Powertrain.BEV, Powertrain.PHEV, Powertrain.HEV,
+                              Powertrain.REEV})
+    _COMBUSTION = frozenset({Powertrain.ICE, Powertrain.HEV,
+                             Powertrain.PHEV, Powertrain.REEV})
+
+    def incomplete_models(self) -> list[str]:
+        """Models carrying registrations while their specification is unwritten.
+
+        Kept apart from ``validate`` so a full catalog and a catalog with
+        declared holes are not the same answer, and so the holes are countable
+        rather than buried in a list of problems.
+        """
+        out: list[str] = []
+        for model in sorted(self.models.values(), key=lambda m: m.id):
+            if not model.incomplete:
+                # A nameplate can be complete while one of its trims is not -
+                # the X1's petrol side is written and its plug-in side is not.
+                for variant in self.variants_of(model.id):
+                    if not variant.incomplete:
+                        continue
+                    gaps = sorted(self._variant_gaps(variant))
+                    out.append(f"variant {variant.id}: incomplete "
+                               f"({', '.join(gaps)})" if gaps else
+                               f"variant {variant.id}: marked incomplete but "
+                               "nothing is missing")
+                continue
+            missing = []
+            if model.body_type is BodyType.OTHER:
+                missing.append("body_type")
+            if not self.variants_of(model.id):
+                missing.append("variants")
+            gaps: set[str] = set()
+            for variant in self.variants_of(model.id):
+                gaps |= self._variant_gaps(variant)
+            missing += sorted(gaps)
+            out.append(f"model {model.id}: incomplete ({', '.join(missing)})"
+                       if missing else f"model {model.id}: marked incomplete "
+                                       "but nothing is missing")
+        return out
+
+    def _variant_gaps(self, variant) -> set[str]:
+        gaps: set[str] = set()
+        if variant.price_thb is None:
+            gaps.add("price")
+        if variant.powertrain in self._ELECTRIFIED and variant.battery_kwh is None:
+            gaps.add("battery_kwh")
+        if variant.powertrain in self._COMBUSTION and variant.engine_cc is None:
+            gaps.add("engine_cc")
+        if variant.powertrain is Powertrain.UNKNOWN:
+            gaps.add("powertrain")
+        return gaps
 
     def duplicate_body_warnings(self) -> list[str]:
         """One nameplate must not appear twice in the same body under a brand.
@@ -387,6 +461,14 @@ class Catalog:
                 "market_scope": model.market_scope.value,
                 "aliases": list(model.aliases), "generations": [],
             }
+            # Without this, saving a brand from the editor would silently clear
+            # the marker and the model would start reading as a finished one.
+            if model.incomplete:
+                model_payload["incomplete"] = True
+            if model.powertrain_checked:
+                model_payload["powertrain_checked"] = True
+            if model.notes:
+                model_payload["notes"] = model.notes
             for gen in self.generations_of(model.id):
                 gen_payload: dict[str, Any] = {
                     "code": gen.code, "segment": gen.segment.value,
@@ -396,7 +478,7 @@ class Catalog:
                 for variant in self.variants.values():
                     if variant.generation_id != gen.id:
                         continue
-                    gen_payload["variants"].append({
+                    variant_payload = {
                         "name": variant.name,
                         "powertrain": variant.powertrain.value,
                         "drivetrain": variant.drivetrain.value,
@@ -409,7 +491,13 @@ class Catalog:
                         "origin_country": variant.origin_country,
                         "price_note": variant.price_note,
                         "aliases": list(variant.aliases),
-                    })
+                    }
+                    # Same reason as the model flag: saving from the editor
+                    # must not quietly clear the marker and turn a declared
+                    # gap back into a finished trim.
+                    if variant.incomplete:
+                        variant_payload["incomplete"] = True
+                    gen_payload["variants"].append(variant_payload)
                 model_payload["generations"].append(gen_payload)
             payload["models"].append(model_payload)
         return payload

@@ -55,10 +55,25 @@
               "price_note": "seed-unverified",
               "price_min_thb": 559000,
               "price_max_thb": 709000
+            },
+            {
+              "name": "1.2L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "yaris",
@@ -178,7 +193,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "camry",
@@ -217,6 +233,24 @@
               "price_note": "seed-unverified",
               "price_min_thb": 1749000,
               "price_max_thb": 1749000
+            },
+            {
+              "name": "2.5L ICE",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 2487,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "2.5G",
+                "2.5G ESport",
+                "2.0G"
+              ]
             }
           ]
         },
@@ -247,7 +281,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "corolla_cross",
@@ -308,7 +343,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "yaris_cross",
@@ -349,7 +385,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "fortuner",
@@ -425,7 +462,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_revo_cab",
@@ -475,7 +513,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_revo_double_cab",
@@ -539,7 +578,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_champ",
@@ -600,7 +640,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "innova_zenix",
@@ -853,7 +894,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_travo_double_cab",
@@ -894,7 +936,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "commuter",
@@ -1382,6 +1425,45 @@
               "price_note": "not-researched",
               "price_min_thb": null,
               "price_max_thb": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "avanza",
+      "name_en": "Avanza",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "MPV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "avanza"
+      ],
+      "notes": "added from DLT registrations; this model stopped being sold but is still being registered from stock. Price and spec are not researched.",
+      "incomplete": true,
+      "generations": [
+        {
+          "code": "AVANZA",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "not-researched"
             }
           ]
         }

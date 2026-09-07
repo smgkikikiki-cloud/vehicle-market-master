@@ -58,7 +58,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "triton_double_cab",
@@ -121,7 +122,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "pajero_sport",
@@ -277,6 +279,22 @@
               "price_note": "seed-unverified",
               "price_min_thb": 949000,
               "price_max_thb": 949000
+            },
+            {
+              "name": "1.6L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1599,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "XPANDER CROSS HEV"
+              ]
             }
           ]
         }
@@ -401,6 +419,22 @@
               "price_note": "seed-unverified",
               "price_min_thb": 949000,
               "price_max_thb": 949000
+            },
+            {
+              "name": "1.5L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": 1499,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": [
+                "XFORCE HEV"
+              ]
             }
           ]
         }

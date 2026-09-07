@@ -54,7 +54,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "dolphin",
@@ -113,7 +114,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "seal",
@@ -357,9 +359,11 @@
       "market_scope": "CORE",
       "aliases": [
         "seagull",
-        "dolphin mini"
+        "dolphin mini",
+        "atto 1",
+        "atto1"
       ],
-      "notes": "",
+      "notes": "DLT registers this car as ATTO 1; Dolphin Mini and Seagull are the same vehicle under earlier names and have never appeared in a DLT export.",
       "generations": [
         {
           "code": "SGL",
@@ -378,12 +382,12 @@
                 "Standard"
               ],
               "overrides": {},
-              "price_thb": 569000,
+              "price_thb": 444900,
               "import_type": "CBU",
               "origin_country": "CN",
-              "price_note": "seed-unverified",
-              "price_min_thb": 569000,
-              "price_max_thb": 569000
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 444900,
+              "price_max_thb": 444900
             }
           ]
         }
@@ -421,6 +425,132 @@
               "import_type": "CBU",
               "origin_country": "CN",
               "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atto2",
+      "name_en": "Atto 2",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "atto 2"
+      ],
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
+      "generations": [
+        {
+          "code": "ATTO2",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-04-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": 644900,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 644900,
+              "price_max_thb": 644900
+            }
+          ]
+        }
+      ],
+      "incomplete": true
+    },
+    {
+      "id": "sealion5",
+      "name_en": "Sealion 5 DM-i",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "CROSSOVER",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "sealion 5",
+        "sealion5"
+      ],
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
+      "generations": [
+        {
+          "code": "SEALION5",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-06-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "PHEV",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": 759900,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 759900,
+              "price_max_thb": 759900
+            }
+          ]
+        }
+      ],
+      "incomplete": true
+    },
+    {
+      "id": "seal_5_dmi",
+      "name_en": "Seal 5 DM-i",
+      "name_th": "ซีล 5 ดีเอ็มไอ",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "SEAL 5 DM-i",
+        "BYD SEAL 5 DM-i",
+        "SEAL 5 DMI",
+        "SEAL 5"
+      ],
+      "incomplete": true,
+      "notes": "แยกจาก Seal เพราะเป็นปลั๊กอินไฮบริดคนละคัน ไม่ใช่ Seal ไฟฟ้าล้วน — DLT จดแยกชัด สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "C",
+          "seats": 5,
+          "launched": "2025-09-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "DM-i",
+              "powertrain": "PHEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "CN",
+              "price_note": "ยังไม่ได้ตรวจราคา",
               "aliases": []
             }
           ]

@@ -32,7 +32,9 @@
         "C250",
         "C 300",
         "C 300 e",
-        "C 350 e"
+        "C 350 e",
+        "AMG C43",
+        "AMG C43 4MATIC Coupe"
       ],
       "notes": "",
       "generations": [
@@ -92,11 +94,10 @@
           "ended": null,
           "variants": [
             {
-              "name": "2.0L MHEV",
-              "powertrain": "MHEV",
+              "name": "2.0L ICE",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1993,
-              "battery_kwh": 0.9,
               "aliases": [
                 "E220d AMG Dynamic"
               ],
@@ -309,10 +310,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1999,
-              "battery_kwh": 0.9,
               "price_thb": 3990000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -349,10 +349,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1993,
-              "battery_kwh": 0.9,
               "price_thb": 4290000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -430,10 +429,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 1993,
-              "battery_kwh": 0.9,
               "price_thb": 5290000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -470,10 +468,9 @@
           "variants": [
             {
               "name": "spec",
-              "powertrain": "MHEV",
+              "powertrain": "ICE",
               "drivetrain": "RWD",
               "engine_cc": 2925,
-              "battery_kwh": 0.9,
               "price_thb": 8290000.0,
               "price_min_thb": null,
               "price_max_thb": null,
@@ -500,7 +497,9 @@
         "S 450",
         "S 500",
         "S 580 e",
-        "Maybach S 580 e"
+        "Maybach S 580 e",
+        "S 560 e",
+        "S 560"
       ],
       "generations": [
         {
@@ -728,6 +727,48 @@
           ]
         }
       ]
+    },
+    {
+      "id": "cla",
+      "name_en": "CLA",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "cla 250+",
+        "cla 250"
+      ],
+      "notes": "added from DLT registrations; price is the owner's median MSRP, spec detail beyond body type and powertrain is not filled in",
+      "generations": [
+        {
+          "code": "CLA",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": "2026-07-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "ยังไม่แยกรุ่นย่อย",
+              "powertrain": "BEV",
+              "drivetrain": "",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "aliases": [],
+              "overrides": {},
+              "price_thb": 2290000,
+              "import_type": "",
+              "origin_country": "",
+              "price_note": "owner-supplied: median MSRP of the current variants, list price excluding promotional discounts",
+              "price_min_thb": 2290000,
+              "price_max_thb": 2290000
+            }
+          ]
+        }
+      ],
+      "incomplete": true
     }
   ]
 }

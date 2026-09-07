@@ -1,11 +1,10 @@
 """Targeted brochure extraction for Vehicle Master.
 
-Brochures are heterogeneous, so this module does *not* attempt to digitize a
-whole brochure schema.  It searches only for fields Vehicle Master currently
-cares about and leaves everything else absent.  Missing is preferable to an
-invented value.
+Brochures are heterogeneous.  This module searches only for fields Vehicle
+Master currently cares about and leaves everything else absent.  Missing is
+preferable to an invented value.
 
-The first pass uses the PDF text layer via PyMuPDF.  Image-only or badly encoded
+The first pass uses the PDF text layer via PyMuPDF. Image-only or badly encoded
 PDFs are marked ``needs_vision`` for a later visual/OCR fallback rather than
 silently guessing.
 """
@@ -40,7 +39,10 @@ class BrochureExtraction:
     text_chars: int = 0
     needs_vision: bool = False
 
-    def put(self, key: str, value: Any, page: int, *, label: str = "", raw: str = "", confidence: float = 0.9) -> None:
+    def put(
+        self, key: str, value: Any, page: int, *, label: str = "", raw: str = "",
+        confidence: float = 0.9,
+    ) -> None:
         if value is None or value == "":
             return
         if key not in self.fields:
@@ -63,22 +65,20 @@ _TYRE_RE = re.compile(r"\b(\d{3})\s*/\s*(\d{2,3})\s*R\s*(\d{2})\b", re.I)
 
 
 def clean_text(text: str) -> str:
-    # Some Thai brochure fonts map combining glyphs into the Unicode private-use
-    # area. Removing those glyphs keeps stable consonant fragments and numbers,
-    # which is sufficient for targeted matching without OCR.
+    # Some Thai brochure fonts map combining glyphs into Unicode private-use
+    # characters. Removing those glyphs preserves stable words/numbers and is
+    # enough for targeted matching without OCR.
     text = _PRIVATE_USE_RE.sub("", text or "")
-    text = text.replace("\u200b", "").replace("\ufeff", "")
-    return text
+    return text.replace("\u200b", "").replace("\ufeff", "")
+
+
+def _numbers(text: str) -> list[float]:
+    return [float(x.replace(",", "")) for x in _NUMBER_RE.findall(text or "")]
 
 
 def _num(text: str) -> Optional[float]:
-    m = _NUMBER_RE.search(text or "")
-    if not m:
-        return None
-    try:
-        return float(m.group(0).replace(",", ""))
-    except ValueError:
-        return None
+    values = _numbers(text)
+    return values[0] if values else None
 
 
 def _integer(text: str) -> Optional[int]:
@@ -88,18 +88,16 @@ def _integer(text: str) -> Optional[int]:
 
 def _tyre(text: str) -> str:
     m = _TYRE_RE.search(text or "")
-    if not m:
-        return ""
-    return f"{m.group(1)}/{m.group(2)} R{m.group(3)}"
+    return f"{m.group(1)}/{m.group(2)} R{m.group(3)}" if m else ""
 
 
 def _drivetrain(text: str) -> str:
     low = clean_text(text).lower()
-    if "ขับเคลอนล้อหน้า" in low or "front-wheel" in low or re.search(r"\bfwd\b", low):
+    if re.search(r"ขับเคล.*ล้อหน้า", low) or "front-wheel" in low or re.search(r"\bfwd\b", low):
         return "FWD"
-    if "ขับเคลอนล้อหลัง" in low or "rear-wheel" in low or re.search(r"\brwd\b", low):
+    if re.search(r"ขับเคล.*ล้อหลัง", low) or "rear-wheel" in low or re.search(r"\brwd\b", low):
         return "RWD"
-    if "4wd" in low or "four-wheel" in low or "ขับเคลอน 4 ล้อ" in low:
+    if "4wd" in low or "four-wheel" in low or re.search(r"ขับเคล.*4\s*ล้อ", low):
         return "4WD"
     if "awd" in low or "all-wheel" in low:
         return "AWD"
@@ -109,22 +107,19 @@ def _drivetrain(text: str) -> str:
 def pdf_pages(path: Path | str) -> list[str]:
     document = fitz.open(str(path))
     try:
+        # sort=True keeps many brochure label/value table rows on one line.
         return [clean_text(page.get_text("text", sort=True)) for page in document]
     finally:
         document.close()
 
 
-# Ordered common Thai technical-table labels.  A frequent brochure layout puts
-# all labels in one column and all values in the next; PyMuPDF then emits the
-# labels as a block followed by the values.  This list lets us pair those blocks
-# without assuming a page number or fixed row coordinates.
 _TECH_ROWS: list[tuple[str, re.Pattern[str]]] = [
-    ("drivetrain", re.compile(r"รูปแบบการขับเคลอน|drive\s*type|drivetrain", re.I)),
-    ("motor_count", re.compile(r"จานวนมอเตอร์|number\s+of\s+motors?", re.I)),
-    ("motor_power", re.compile(r"กาลังมอเตอร์.*สูงสุด|max(?:imum)?\s+motor\s+power", re.I)),
+    ("drivetrain", re.compile(r"รูปแบบการขับเคล|drive\s*type|drivetrain", re.I)),
+    ("motor_count", re.compile(r"จํ?านวนมอเตอร์|number\s+of\s+motors?", re.I)),
+    ("motor_power", re.compile(r"ก.*ลังมอเตอร์.*สูงสุด|max(?:imum)?\s+motor\s+power", re.I)),
     ("torque_nm", re.compile(r"แรงบิดสูงสุด.*มอเตอร์|max(?:imum)?\s+torque", re.I)),
     ("battery_kwh", re.compile(r"ความจุพลังงานแบต|battery\s+capacity", re.I)),
-    ("range_km", re.compile(r"ระยะทางการขับเคลอน|driving\s+range|range\s*\(.*km", re.I)),
+    ("range_km", re.compile(r"ระยะทางการขับเคล|driving\s+range|range\s*\(.*km", re.I)),
     ("ac_charge_kw", re.compile(r"ชาร์จ.*\bAC\b.*สูงสุด|max(?:imum)?.*\bAC\b.*charg", re.I)),
     ("dc_charge_kw", re.compile(r"ชาร์จ.*\bDC\b.*สูงสุด|max(?:imum)?.*\bDC\b.*charg", re.I)),
     ("acceleration_0_100_s", re.compile(r"0\s*-\s*100.*วินาที|0\s*-\s*100.*sec", re.I)),
@@ -133,9 +128,14 @@ _TECH_ROWS: list[tuple[str, re.Pattern[str]]] = [
     ("rear_cargo_l", re.compile(r"สัมภาระด้านหลัง|rear.*(?:cargo|luggage|boot)", re.I)),
     ("dimensions", re.compile(r"มิติตัวถัง|dimensions?", re.I)),
     ("wheelbase_mm", re.compile(r"ระยะฐานล้อ|wheelbase", re.I)),
-    ("ground_clearance_mm", re.compile(r"ระยะ.*จากพน|ground\s+clearance", re.I)),
+    ("ground_clearance_mm", re.compile(r"ระยะ.*จากพ.?น|ground\s+clearance", re.I)),
     ("tyre", re.compile(r"ขนาดล้อและยาง|tire\s+size|tyre\s+size", re.I)),
 ]
+
+
+def _value_tail(label_pattern: re.Pattern[str], line: str) -> str:
+    m = label_pattern.search(line)
+    return line[m.end():].strip(" :-|\t") if m else line
 
 
 def _convert_row(key: str, raw: str) -> dict[str, Any]:
@@ -146,7 +146,7 @@ def _convert_row(key: str, raw: str) -> dict[str, Any]:
     if key in {"torque_nm", "battery_kwh", "range_km", "ac_charge_kw", "dc_charge_kw", "acceleration_0_100_s"}:
         return {key: _num(raw)}
     if key == "motor_power":
-        nums = [float(x.replace(",", "")) for x in _NUMBER_RE.findall(raw)]
+        nums = _numbers(raw)
         result: dict[str, Any] = {}
         if nums:
             result["power_kw"] = nums[0]
@@ -154,14 +154,14 @@ def _convert_row(key: str, raw: str) -> dict[str, Any]:
             result["power_hp"] = nums[1]
         return result
     if key == "rear_cargo_l":
-        nums = [int(float(x.replace(",", ""))) for x in _NUMBER_RE.findall(raw)]
+        nums = [int(x) for x in _numbers(raw)]
         if not nums:
             return {}
-        return {"rear_cargo_l": nums[0], "rear_cargo_max_l": nums[-1] if len(nums) > 1 else nums[0]}
+        return {"rear_cargo_l": nums[0], "rear_cargo_max_l": nums[-1]}
     if key == "dimensions":
-        nums = [int(float(x.replace(",", ""))) for x in _NUMBER_RE.findall(raw)]
+        nums = [int(x) for x in _numbers(raw)]
         if len(nums) >= 3:
-            # Thai brochures commonly label this row กว้าง x ยาว x สูง.
+            # Thai labels often explicitly say กว้าง x ยาว x สูง.
             return {"width_mm": nums[0], "length_mm": nums[1], "height_mm": nums[2]}
         return {}
     if key == "tyre":
@@ -170,7 +170,30 @@ def _convert_row(key: str, raw: str) -> dict[str, Any]:
     return {}
 
 
-def _extract_column_table(lines: list[str], result: BrochureExtraction, page: int) -> None:
+def _extract_technical_rows(lines: list[str], result: BrochureExtraction, page: int) -> None:
+    # First choice: label and value were emitted on the same sorted text line.
+    direct_hits = 0
+    for key, pattern in _TECH_ROWS:
+        for line in lines:
+            if not pattern.search(line):
+                continue
+            tail = _value_tail(pattern, line)
+            converted = _convert_row(key, tail)
+            if converted:
+                direct_hits += 1
+                for out_key, value in converted.items():
+                    result.put(out_key, value, page, label=line, raw=tail, confidence=0.97)
+                if key == "range_km":
+                    m = re.search(r"\b(NEDC|WLTP|CLTC|EPA)\b", line, re.I)
+                    if m:
+                        result.put("range_standard", m.group(1).upper(), page, label=line, raw=m.group(1), confidence=0.99)
+            break
+
+    if direct_hits >= 8:
+        return
+
+    # Fallback for PDFs whose text order emits a label column followed by a value
+    # column. Only trust this when most of the expected rows are present in order.
     found: list[tuple[int, str, str]] = []
     cursor = -1
     for key, pattern in _TECH_ROWS:
@@ -178,19 +201,14 @@ def _extract_column_table(lines: list[str], result: BrochureExtraction, page: in
         if idx >= 0:
             found.append((idx, key, lines[idx]))
             cursor = idx
-
-    # Fail closed: only trust the label-block/value-block heuristic when most of
-    # the expected technical rows are present in order.
     if len(found) < 10:
         return
-    value_start = found[-1][0] + 1
-    values = [line.strip() for line in lines[value_start:] if line.strip()]
+    values = [line.strip() for line in lines[found[-1][0] + 1:] if line.strip()]
     if len(values) < len(found):
         return
-
     for (_, key, label), raw in zip(found, values):
         for out_key, value in _convert_row(key, raw).items():
-            result.put(out_key, value, page, label=label, raw=raw, confidence=0.97)
+            result.put(out_key, value, page, label=label, raw=raw, confidence=0.9)
         if key == "range_km":
             m = re.search(r"\b(NEDC|WLTP|CLTC|EPA)\b", label, re.I)
             if m:
@@ -201,21 +219,19 @@ def _extract_direct(text: str, result: BrochureExtraction, page: int) -> None:
     lines = [_SPACE_RE.sub(" ", x.strip()) for x in text.splitlines() if x.strip()]
     joined = "\n".join(lines)
 
-    # Common inline tyre declaration anywhere in the brochure.
     tyre = _tyre(joined)
     if tyre:
         result.put("tire_front", tyre, page, raw=tyre, confidence=0.88)
         result.put("tire_rear", tyre, page, raw=tyre, confidence=0.88)
 
-    # Seats.
     for line in lines:
-        if ("รองรับผู้โดยสาร" in line or "ทนง" in line or re.search(r"\bseats?\b", line, re.I)):
+        low = line.lower()
+        if "รองรับผู้โดยสาร" in line or re.search(r"\bseats?\b", low):
             n = _integer(line)
             if n and 1 <= n <= 20:
                 result.put("seats", n, page, raw=line, confidence=0.92)
                 break
 
-    # Screens and speakers are useful paper-spec fields.
     for line in lines:
         low = line.lower()
         if "มาตรวัด" in line or "instrument" in low or "cluster" in low:
@@ -230,12 +246,11 @@ def _extract_direct(text: str, result: BrochureExtraction, page: int) -> None:
             n = _integer(line)
             if n and 1 <= n <= 40:
                 result.put("speaker_count", n, page, raw=line, confidence=0.9)
-        if "ไร้สาย" in line and "วัตต์" in line or "wireless charg" in low:
+        if (("ไร้สาย" in line and "วัตต์" in line) or "wireless charg" in low):
             n = _num(line)
             if n and 1 <= n <= 500:
                 result.put("wireless_charge_w", n, page, raw=line, confidence=0.9)
 
-    # Boolean/compact paper specs. Presence is evidence; absence is not false.
     feature_patterns = {
         "panoramic_roof": r"panoramic|พาโนราม",
         "power_tailgate": r"ประตูท้าย.*ไฟฟ|power(?:ed)?\s+tailgate|electric\s+tailgate",
@@ -249,17 +264,14 @@ def _extract_direct(text: str, result: BrochureExtraction, page: int) -> None:
         if re.search(pattern, joined, re.I):
             result.put(key, True, page, raw=pattern, confidence=0.88)
 
-    cam = re.search(r"(?:กล้อง|camera)[^\n]{0,80}?(360|540)\s*(?:องศา|degree)?", joined, re.I)
+    cam = re.search(r"(?:กล้อง|camera)[^\n]{0,100}?(360|540)\s*(?:องศา|degree)?", joined, re.I)
     if cam:
         result.put("camera_degrees", int(cam.group(1)), page, raw=cam.group(0), confidence=0.95)
 
-    # Common automotive SoC names/numbers. Keep the brochure wording instead of
-    # trying to infer vendor/spec from a bare model number.
     chip = re.search(r"(?:Qualcomm|Snapdragon|NVIDIA|Nvidia|Orin|Dimensity|8155|8295|SA8155P)[^\n]{0,80}", joined, re.I)
     if chip:
         result.put("chip_soc", chip.group(0).strip(), page, raw=chip.group(0), confidence=0.82)
 
-    # ADAS acronyms are much more consistent across manufacturers than prose.
     common_adas = [
         "AEB", "ACC", "FCW", "LDW", "LKA", "LDP", "ELK", "ICA", "TJA",
         "BSD", "DOW", "LCA", "RCTA", "RCTB", "RCW", "IES", "DAI", "ASL",
@@ -269,7 +281,7 @@ def _extract_direct(text: str, result: BrochureExtraction, page: int) -> None:
             if acronym not in result.adas:
                 result.adas.append(acronym)
 
-    _extract_column_table(lines, result, page)
+    _extract_technical_rows(lines, result, page)
 
 
 def extract_brochure(path: Path | str) -> BrochureExtraction:

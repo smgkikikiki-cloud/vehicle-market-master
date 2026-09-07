@@ -5,9 +5,19 @@ from urllib.parse import urljoin
 import requests
 
 CAR_ID = "98c1d7de-79db-4581-b332-69abe657a532"
-FILE_ID = "d086cd15-ea65-4b25-ab6f-80ffb2071a31"
 DETAIL = f"https://car.ecosticker.go.th/landing-page/detail/{CAR_ID}"
-FILE_URL = f"https://api-car.ecosticker.go.th/api/v1/file/data?file_id={FILE_ID}"
+
+
+def _snips_all(text, needle, radius=700):
+    out = []
+    start = 0
+    while len(out) < 20:
+        i = text.find(needle, start)
+        if i < 0:
+            break
+        out.append(text[max(0, i-radius):min(len(text), i+len(needle)+radius)])
+        start = i + len(needle)
+    return out
 
 
 def test_probe_brochure_discovery():
@@ -15,25 +25,29 @@ def test_probe_brochure_discovery():
     s.headers.update({"User-Agent": "Mozilla/5.0"})
     page = s.get(DETAIL, timeout=30)
     scripts = re.findall(r'<script[^>]+src=["\']([^"\']+)', page.text, flags=re.I)
-    out = {"detail_status": page.status_code, "scripts": scripts}
+    out = {"detail_status": page.status_code}
 
     for src in scripts:
         url = urljoin(DETAIL, src)
         js = s.get(url, timeout=30)
         text = js.text
-        idx = text.find("brochure_link")
-        if idx >= 0:
-            lo, hi = max(0, idx - 10000), min(len(text), idx + 10000)
-            ctx = text[lo:hi]
-            out["bundle"] = url
-            out["brochure_context"] = ctx
-            out["api_like_strings"] = sorted(set(re.findall(r'["\']([^"\']*(?:api|car)[^"\']*)["\']', ctx, flags=re.I)))[:100]
-            out["http_strings"] = sorted(set(re.findall(r'https?://[^"\'\\ ]+', ctx)))[:100]
-            break
+        if "brochure_link" not in text:
+            continue
+        out["bundle"] = url
+        out["brochure_link_count"] = text.count("brochure_link")
+        out["brochure_link_snips"] = _snips_all(text, "brochure_link")
+        # The app's endpoint literals are more useful than de-minifying the full
+        # React component. Keep only short strings containing /api/.
+        candidates = set()
+        for m in re.finditer(r"/api/", text):
+            lo = max(0, m.start()-160)
+            hi = min(len(text), m.start()+300)
+            frag = text[lo:hi]
+            for x in re.findall(r"[A-Za-z0-9_?&=./:{}$+-]{4,}", frag):
+                if "/api/" in x and len(x) < 240:
+                    candidates.add(x)
+        out["api_candidates"] = sorted(candidates)[:400]
+        out["equip_factory_snips"] = _snips_all(text, "car_equip_factory", radius=1200)
+        break
 
-    f = s.get(FILE_URL, timeout=30, allow_redirects=False)
-    out["file_direct"] = {
-        "status": f.status_code,
-        "location": f.headers.get("location"),
-    }
-    raise AssertionError("BROCHURE_CONTEXT=" + json.dumps(out, ensure_ascii=False))
+    raise AssertionError("BROCHURE_APIS=" + json.dumps(out, ensure_ascii=False))

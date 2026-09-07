@@ -1,0 +1,51 @@
+name: Probe ECO Sticker JAECOO 5
+
+on:
+  push:
+    branches:
+      - feature/jaecoo-j5-market-trims
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch public ECO Sticker records
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.parse
+          import urllib.request
+
+          base = "https://api-car.ecosticker.go.th/api/v2/landing-page/cars"
+          params = urllib.parse.urlencode({"page": 1, "row": 100, "search": "JAECOO 5", "sort": ""})
+          req = urllib.request.Request(f"{base}?{params}", headers={"User-Agent": "vehicle-market-master/1.0"})
+          with urllib.request.urlopen(req, timeout=30) as r:
+              listing = json.load(r)
+
+          print("LIST_RESPONSE_BEGIN")
+          print(json.dumps(listing, ensure_ascii=False))
+          print("LIST_RESPONSE_END")
+
+          rows = listing.get("data", {}).get("car_list", [])
+          detail_base = "https://api-car.ecosticker.go.th/api/v1/eco-sticker/public/by-car-id"
+          details = []
+          for row in rows:
+              car_id = row.get("id")
+              if not car_id:
+                  continue
+              url = detail_base + "?" + urllib.parse.urlencode({"car_id": car_id})
+              req = urllib.request.Request(url, headers={"User-Agent": "vehicle-market-master/1.0"})
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      details.append({"list": row, "detail": json.load(r)})
+              except Exception as exc:
+                  details.append({"list": row, "error": repr(exc)})
+
+          print("DETAIL_RESPONSES_BEGIN")
+          print(json.dumps(details, ensure_ascii=False))
+          print("DETAIL_RESPONSES_END")
+          PY

@@ -242,7 +242,9 @@ def _extract_direct(text: str, result: BrochureExtraction, page: int) -> None:
             n = _num(line)
             if n and 5 <= n <= 40:
                 result.put("infotainment_screen_in", n, page, raw=line, confidence=0.9)
-        if "ลาโพง" in line or "speaker" in low:
+        # Thai fonts vary in how sara-am is encoded; "โพง" is the stable part
+        # of ลำโพง / ลําโพง after PDF text extraction.
+        if "โพง" in line or "speaker" in low:
             n = _integer(line)
             if n and 1 <= n <= 40:
                 result.put("speaker_count", n, page, raw=line, confidence=0.9)

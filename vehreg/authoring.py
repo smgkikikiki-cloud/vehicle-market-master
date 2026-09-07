@@ -1,7 +1,7 @@
 """Bulk catalog authoring from a flat CSV, for one year at a time.
 
 The owner holds most of this taxonomy in their head, and typing it into nested
-JSON is the wrong shape for that. This module accepts one wide row per รุ่นย่อย
+JSON is the wrong shape for that. This module accepts one wide row per analytical spec line
 and builds the brand/model/generation/variant nesting underneath, so the catalog
 can be filled in a spreadsheet and re-imported at any time.
 

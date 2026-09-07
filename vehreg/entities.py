@@ -148,8 +148,8 @@ class Model:
     incomplete: bool = False
     #: Set when someone has checked that the variant list covers every
     #: powertrain this nameplate actually sold that year. DLT never states a
-    #: powertrain, so model-grain volume inherits the consensus of the trims
-    #: the catalog happens to list; that consensus is only trustworthy when
+    #: powertrain, so model-grain volume inherits the consensus of the analytical
+    #: variants the catalog happens to list; that consensus is only trustworthy when
     #: the list is known complete. Without this flag there is no way to tell a
     #: confirmed "hybrid only" from a nameplate nobody has looked at yet, and
     #: both read the same on every chart.
@@ -204,11 +204,16 @@ class Generation:
 
 @dataclass(frozen=True, slots=True)
 class Variant:
-    """One รุ่นย่อย, priced for the catalog year it belongs to."""
+    """One analytical spec line used to classify registration volume.
+
+    This is deliberately not the retail trim list. Multiple marketed grades may
+    fold into one Variant when DLT cannot distinguish them; exact retail grades
+    live in ``MarketTrim``.
+    """
 
     id: str                                   # "toyota.yaris_ativ.mxpa10.smart"
     generation_id: str
-    name: str                                 # trim as marketed, e.g. "1.2 Smart"
+    name: str                                 # analytical line, e.g. "1.2 ICE"
     powertrain: Powertrain = Powertrain.UNKNOWN
     drivetrain: Drivetrain = Drivetrain.UNKNOWN
     engine_cc: Optional[int] = None
@@ -220,7 +225,7 @@ class Variant:
     origin_country: str = "UNKNOWN"
     price_note: str = ""
     aliases: tuple[str, ...] = ()
-    #: Set when the trim exists so a real registration has somewhere to land
+    #: Set when the analytical spec line exists so a real registration has somewhere to land
     #: and its specification has not been researched. The model-level flag says
     #: that about a whole nameplate; this says it about one half of one. The
     #: BMW X1 is the case it was written for: its petrol and diesel side is

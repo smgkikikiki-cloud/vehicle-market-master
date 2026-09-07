@@ -1,0 +1,36 @@
+name: Audit powertrain worklist
+
+on:
+  push:
+    branches: [audit/powertrain-worklist-65]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Dump full worklist
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from vehreg.web_bootstrap import bootstrap_database
+          from vehreg.db import connect
+          from vehreg import review, coverage
+
+          db = Path('/tmp/worklist.sqlite3')
+          bootstrap_database(db)
+          conn = connect(db)
+          catalogs = review.load_catalogs()
+          wl = coverage.assumed_powertrain(conn, catalogs)
+          print('WORKLIST_COUNT', len(wl))
+          print('WORKLIST_UNITS', round(sum(float(x['units']) for x in wl)))
+          for i, x in enumerate(wl, 1):
+              print(f"WL{i:02d}|{x['brand']}|{x['model']}|{x['powertrain']}|{int(round(float(x['units'])))}|{x['labels']}|{x['periods']}")
+          conn.close()
+          PY

@@ -20,7 +20,9 @@ jobs:
           python-version: '3.12'
           cache: pip
       - name: Apply schema migration
-        run: python scripts/add_market_trim_layer.py
+        run: |
+          python scripts/add_market_trim_layer.py
+          python scripts/clarify_variant_vs_trim.py
       - name: Install
         run: python -m pip install -r requirements.txt pytest
       - name: Compile
@@ -32,5 +34,5 @@ jobs:
           git config user.name "smgkikikiki-cloud"
           git config user.email "smgkikikiki@gmail.com"
           git add vehreg tests docs
-          git commit -m "Add retail market trim layer without changing analytics grain" || true
+          git commit -m "Clarify analytical variants versus retail trims" || true
           git push

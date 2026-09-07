@@ -1,0 +1,36 @@
+name: Apply Phase 1 structural hardening
+
+on:
+  push:
+    branches:
+      - phase1/markettrim-structural-hardening
+    paths:
+      - .github/workflows/phase1-structural-hardening.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Apply structural patch
+        run: python scripts/phase1_structural_patch.py
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt pytest
+      - name: Compile
+        run: python -m compileall -q vehreg pages tests
+      - name: Run tests
+        run: pytest -q
+      - name: Commit structural hardening
+        run: |
+          git config user.name "smgkikikiki-cloud"
+          git config user.email "smgkikikiki@gmail.com"
+          git add vehreg/entities.py vehreg/catalog.py tests/test_catalog_structural_integrity.py
+          git commit -m "Harden catalog round-trip and atomic writes"
+          git push origin HEAD:phase1/markettrim-structural-hardening

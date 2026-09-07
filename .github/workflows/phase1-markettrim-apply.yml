@@ -1,0 +1,71 @@
+name: Apply Phase 1 MarketTrim schema hardening
+
+on:
+  push:
+    branches:
+      - phase1/markettrim-powertrain-dimensions
+    paths:
+      - .github/workflows/phase1-markettrim-apply.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Harden MarketTrim identity and round-trip
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('vehreg/catalog.py')
+          text = path.read_text(encoding='utf-8')
+
+          old = '''    def _add_trim(self, gen_id: str, raw: dict, source: str) -> None:\n        if not raw.get("name"):\n            raise CatalogError(f"{source}: trim under {gen_id} is missing name")\n        trim_id = f"{gen_id}.trim.{slug(raw.get('id') or raw['name'])}"\n        if trim_id in self.trims:\n            raise CatalogError(f"{source}: duplicate trim id {trim_id!r}")\n'''
+          new = '''    def _add_trim(self, gen_id: str, raw: dict, source: str) -> None:\n        if not raw.get("name"):\n            raise CatalogError(f"{source}: trim under {gen_id} is missing name")\n\n        # A MarketTrim is a real showroom SKU, not an unresolved analytical\n        # bucket.  Its powertrain is therefore part of the product identity and\n        # must be exact.  UNKNOWN remains valid on analytical Variants, where it\n        # can describe source limitations, but it is not valid for a retail trim.\n        trim_powertrain = _facet(Powertrain, raw.get("powertrain"),\n                                 Powertrain.UNKNOWN)\n        if trim_powertrain is Powertrain.UNKNOWN:\n            raise CatalogError(\n                f"{source}: trim {raw['name']!r} under {gen_id} must declare "\n                "an exact powertrain")\n\n        # Explicit IDs stay stable forever.  When an author omits one, include\n        # powertrain in the generated key so e.g. Premium BEV and Premium PHEV\n        # are different MarketTrims instead of colliding on `premium`.\n        raw_id = raw.get("id")\n        identity = raw_id or f"{raw['name']} {trim_powertrain.value}"\n        trim_id = f"{gen_id}.trim.{slug(identity)}"\n        if trim_id in self.trims:\n            raise CatalogError(f"{source}: duplicate trim id {trim_id!r}")\n'''
+          assert old in text, 'MarketTrim loader anchor changed'
+          text = text.replace(old, new, 1)
+
+          old = '''            variant_id=variant_id,\n            powertrain=_facet(Powertrain, raw.get("powertrain"),\n                              Powertrain.UNKNOWN),\n            price_thb=raw.get("price_thb"),\n'''
+          new = '''            variant_id=variant_id,\n            powertrain=trim_powertrain,\n            price_thb=raw.get("price_thb"),\n'''
+          assert old in text, 'MarketTrim powertrain constructor anchor changed'
+          text = text.replace(old, new, 1)
+
+          old = '''    def coverage(self) -> dict[str, int]:\n        scopes: dict[str, int] = {}\n'''
+          new = '''    def trim_coverage(self) -> dict[str, int]:\n        """Coverage counters for retail-product fields, independent of DLT grain.\n\n        These counters make it cheap to audit Phase 1 enrichment without ever\n        treating a missing trim spec as missing registration classification.\n        Dimensions are the canonical exterior L/W/H plus wheelbase, all in mm.\n        """\n        dims = ("length_mm", "width_mm", "height_mm", "wheelbase_mm")\n        return {\n            "trims": len(self.trims),\n            "exact_powertrain": sum(\n                t.powertrain is not Powertrain.UNKNOWN for t in self.trims.values()),\n            **{name: sum(getattr(t, name) is not None for t in self.trims.values())\n               for name in dims},\n            "complete_dimensions": sum(\n                all(getattr(t, name) is not None for name in dims)\n                for t in self.trims.values()),\n        }\n\n    def coverage(self) -> dict[str, int]:\n        scopes: dict[str, int] = {}\n'''
+          assert old in text, 'coverage anchor changed'
+          text = text.replace(old, new, 1)
+
+          old = '''                gen_payload: dict[str, Any] = {\n                    "code": gen.code, "segment": gen.segment.value,\n                    "seats": gen.seats, "launched": gen.launched,\n                    "ended": gen.ended, "variants": [],\n                }\n'''
+          new = '''                gen_payload: dict[str, Any] = {\n                    "code": gen.code, "segment": gen.segment.value,\n                    "seats": gen.seats, "launched": gen.launched,\n                    "ended": gen.ended, "variants": [], "trims": [],\n                }\n'''
+          assert old in text, 'generation writer anchor changed'
+          text = text.replace(old, new, 1)
+
+          old = '''                    if variant.incomplete:\n                        variant_payload["incomplete"] = True\n                    gen_payload["variants"].append(variant_payload)\n                model_payload["generations"].append(gen_payload)\n'''
+          new = '''                    if variant.incomplete:\n                        variant_payload["incomplete"] = True\n                    gen_payload["variants"].append(variant_payload)\n\n                # MarketTrim is catalog product data and must survive every\n                # editor/save round-trip.  Previously brand_payload() omitted\n                # trims entirely, so saving a brand could silently erase them.\n                for trim in self.trims_of_generation(gen.id):\n                    trim_payload = {\n                        "id": trim.id.split(".trim.", 1)[1],\n                        "name": trim.name,\n                        "variant_id": trim.variant_id,\n                        "powertrain": trim.powertrain.value,\n                        "price_thb": trim.price_thb,\n                        "drivetrain": trim.drivetrain.value,\n                        "engine_code": trim.engine_code,\n                        "engine_cc": trim.engine_cc,\n                        "battery_kwh": trim.battery_kwh,\n                        "transmission": trim.transmission,\n                        "seats": trim.seats,\n                        "length_mm": trim.length_mm,\n                        "width_mm": trim.width_mm,\n                        "height_mm": trim.height_mm,\n                        "wheelbase_mm": trim.wheelbase_mm,\n                        "tire_front": trim.tire_front,\n                        "tire_rear": trim.tire_rear,\n                        "wheel_front": trim.wheel_front,\n                        "wheel_rear": trim.wheel_rear,\n                        "aliases": list(trim.aliases),\n                        "source_refs": {\n                            source: list(refs)\n                            for source, refs in trim.source_refs.items()\n                        },\n                    }\n                    if trim.notes:\n                        trim_payload["notes"] = trim.notes\n                    gen_payload["trims"].append(trim_payload)\n                model_payload["generations"].append(gen_payload)\n'''
+          assert old in text, 'brand_payload trim writer anchor changed'
+          text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+
+          Path('tests/test_markettrim_phase1_contract.py').write_text(r'''\nimport unittest\n\nfrom vehreg.catalog import Catalog, CatalogError\nfrom vehreg.taxonomy import Powertrain\n\n\ndef base_payload():\n    return {\n        "brand": {"id": "acme", "name_en": "Acme", "name_th": ""},\n        "models": [{\n            "id": "one",\n            "name_en": "One",\n            "body_type": "CROSSOVER",\n            "generations": [{\n                "code": "G1",\n                "segment": "C",\n                "variants": [\n                    {\n                        "name": "BEV",\n                        "powertrain": "BEV",\n                        "drivetrain": "FWD",\n                        "battery_kwh": 60,\n                        "import_type": "CBU",\n                        "origin_country": "CN",\n                    },\n                    {\n                        "name": "PHEV",\n                        "powertrain": "PHEV",\n                        "drivetrain": "FWD",\n                        "engine_cc": 1498,\n                        "battery_kwh": 20,\n                        "import_type": "CBU",\n                        "origin_country": "CN",\n                    },\n                ],\n                "trims": [\n                    {\n                        "name": "Premium",\n                        "variant": "BEV",\n                        "powertrain": "BEV",\n                        "length_mm": 4500,\n                        "width_mm": 1850,\n                        "height_mm": 1650,\n                        "wheelbase_mm": 2700,\n                        "source_refs": {"ecosticker": ["eco-bev"]},\n                    },\n                    {\n                        "name": "Premium",\n                        "variant": "PHEV",\n                        "powertrain": "PHEV",\n                        "length_mm": 4510,\n                        "width_mm": 1850,\n                        "height_mm": 1650,\n                    },\n                ],\n            }],\n        }],\n    }\n\n\nclass Phase1MarketTrimContractTests(unittest.TestCase):\n    def test_default_identity_includes_exact_powertrain(self):\n        c = Catalog(2026)\n        c.add_brand_payload(base_payload(), source="<phase1>")\n        c.build_indexes()\n        self.assertIn("acme.one.g1.trim.premium_bev", c.trims)\n        self.assertIn("acme.one.g1.trim.premium_phev", c.trims)\n        self.assertIs(c.trims["acme.one.g1.trim.premium_bev"].powertrain, Powertrain.BEV)\n        self.assertIs(c.trims["acme.one.g1.trim.premium_phev"].powertrain, Powertrain.PHEV)\n\n    def test_market_trim_refuses_unknown_powertrain(self):\n        p = base_payload()\n        del p["models"][0]["generations"][0]["trims"][0]["powertrain"]\n        c = Catalog(2026)\n        with self.assertRaisesRegex(CatalogError, "exact powertrain"):\n            c.add_brand_payload(p, source="<phase1>")\n\n    def test_dimension_coverage_is_separate_and_queryable(self):\n        c = Catalog(2026)\n        c.add_brand_payload(base_payload(), source="<phase1>")\n        c.build_indexes()\n        coverage = c.trim_coverage()\n        self.assertEqual(coverage["trims"], 2)\n        self.assertEqual(coverage["exact_powertrain"], 2)\n        self.assertEqual(coverage["length_mm"], 2)\n        self.assertEqual(coverage["width_mm"], 2)\n        self.assertEqual(coverage["height_mm"], 2)\n        self.assertEqual(coverage["wheelbase_mm"], 1)\n        self.assertEqual(coverage["complete_dimensions"], 1)\n\n    def test_brand_payload_round_trip_preserves_trim_product_fields(self):\n        c = Catalog(2026)\n        c.add_brand_payload(base_payload(), source="<phase1>")\n        c.build_indexes()\n        saved = c.brand_payload("acme")\n\n        trims = saved["models"][0]["generations"][0]["trims"]\n        self.assertEqual(len(trims), 2)\n        bev = next(t for t in trims if t["powertrain"] == "BEV")\n        self.assertEqual(bev["id"], "premium_bev")\n        self.assertEqual(bev["length_mm"], 4500)\n        self.assertEqual(bev["wheelbase_mm"], 2700)\n        self.assertEqual(bev["source_refs"]["ecosticker"], ["eco-bev"])\n\n        c2 = Catalog(2026)\n        c2.add_brand_payload(saved, source="<phase1-roundtrip>")\n        c2.build_indexes()\n        rt = c2.trims["acme.one.g1.trim.premium_bev"]\n        self.assertIs(rt.powertrain, Powertrain.BEV)\n        self.assertEqual(rt.length_mm, 4500)\n        self.assertEqual(rt.wheelbase_mm, 2700)\n\n    def test_trims_still_do_not_multiply_registration_rows(self):\n        c = Catalog(2026)\n        c.add_brand_payload(base_payload(), source="<phase1>")\n        c.build_indexes()\n        self.assertEqual(len(c.trims), 2)\n        self.assertEqual(len(list(c.iter_resolved())), 2)\n\n\nif __name__ == "__main__":\n    unittest.main()\n'''.lstrip(), encoding='utf-8')
+          PY
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt pytest
+      - name: Compile
+        run: python -m compileall -q vehreg pages tests
+      - name: Test
+        run: pytest -q
+      - name: Commit Phase 1 code only
+        run: |
+          git config user.name "smgkikikiki-cloud"
+          git config user.email "smgkikikiki@gmail.com"
+          git add vehreg/catalog.py tests/test_markettrim_phase1_contract.py
+          git commit -m "Harden MarketTrim powertrain and dimensions contract"
+          git push origin HEAD:phase1/markettrim-powertrain-dimensions

@@ -1270,3 +1270,50 @@ class IncompleteVariantTests(unittest.TestCase):
                     for v in g["variants"] if v["name"] == "1.5 PHEV"]
         self.assertEqual(len(variants), 1)
         self.assertTrue(variants[0]["incomplete"])
+
+
+class TrailingNumberGuardTests(unittest.TestCase):
+    """A nameplate's number is the nameplate, not noise on the end of it."""
+
+    def setUp(self):
+        self.index = normalize.MatchIndex()
+        self.index.add("geely.ex5", ["Geely EX5"], priority=1)
+        self.index.add("geely.ex2", ["Geely EX2"], priority=1)
+
+    def test_a_neighbouring_number_is_not_a_near_miss(self):
+        """EX2 scored 0.90 against EX5 and took 8,731 registrations with it."""
+        self.assertGreater(
+            normalize.similarity(normalize.fold("GEELY EX2"),
+                                 normalize.fold("Geely EX5")),
+            normalize.MATCH_FLOOR)
+        self.assertEqual(self.index.lookup("GEELY EX2")[0], "geely.ex2")
+        self.assertEqual(self.index.lookup("GEELY EX5")[0], "geely.ex5")
+
+    def test_an_unknown_number_matches_nothing_rather_than_its_neighbour(self):
+        lonely = normalize.MatchIndex()
+        lonely.add("geely.ex5", ["Geely EX5"], priority=1)
+        key, _score, how = lonely.lookup("GEELY EX2")
+        self.assertIsNone(key)
+        self.assertEqual(how, "none")
+
+    def test_the_guard_stays_out_of_the_way_of_a_trim_code(self):
+        """A trim code differs from its nameplate in digits, for a reason.
+
+        "BMW 330e Sport" reaches the 3 Series on the alias the catalog carries
+        for it, not on fuzzy - it scores 0.59 against the bare name. The guard
+        must not interfere with that path, and must not fire on the pair at
+        all, or every BMW would fall to brand grain.
+        """
+        index = normalize.MatchIndex()
+        index.add("bmw.3", ["BMW 3 Series"], priority=1)
+        index.add("bmw.3", ["330e", "320d"])
+        self.assertEqual(index.lookup("BMW 330e Sport")[0], "bmw.3")
+        self.assertFalse(normalize._numbers_disagree(
+            normalize.fold("BMW 330e Sport"), normalize.fold("BMW 3 Series")))
+
+    def test_it_only_applies_when_both_names_end_in_a_number(self):
+        self.assertTrue(normalize._numbers_disagree("geely ex 2", "geely ex 5"))
+        self.assertFalse(normalize._numbers_disagree("bmw 330 e sport",
+                                                     "bmw 3 series"))
+        self.assertFalse(normalize._numbers_disagree("geely ex 5",
+                                                     "geely ex 5"))

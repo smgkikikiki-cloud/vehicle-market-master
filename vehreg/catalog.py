@@ -30,6 +30,7 @@ from typing import Any, Iterator, Optional
 
 from .entities import (
     Brand, Generation, MarketTrim, Model, ResolvedVehicle, Variant, cross_check, resolve,
+    to_jsonable,
 )
 from .normalize import MatchIndex, base_nameplate, slug
 from .taxonomy import (
@@ -91,6 +92,31 @@ def _tuple(raw: Any) -> tuple[str, ...]:
     return tuple(str(x) for x in raw)
 
 
+def _source_refs(raw: Any) -> dict[str, tuple[str, ...]]:
+    """Canonicalize external source IDs without changing their meaning.
+
+    Source-system IDs are provenance, not vehicle identity. Whitespace-only
+    keys/IDs are discarded and duplicates are removed while preserving order,
+    so repeated ECO imports cannot silently accumulate junk references.
+    """
+    out: dict[str, tuple[str, ...]] = {}
+    for key, value in dict(raw or {}).items():
+        source = str(key).strip()
+        if not source:
+            continue
+        refs: list[str] = []
+        seen: set[str] = set()
+        for item in _tuple(value):
+            ref = item.strip()
+            if not ref or ref in seen:
+                continue
+            seen.add(ref)
+            refs.append(ref)
+        if refs:
+            out[source] = tuple(refs)
+    return out
+
+
 class Catalog:
     """One year of catalog, in memory, with the indexes ingest needs."""
 
@@ -138,6 +164,33 @@ class Catalog:
         self.add_brand_payload(payload, source=str(path))
 
     def add_brand_payload(self, payload: dict, source: str = "<memory>") -> None:
+        """Atomically add one brand payload.
+
+        Parsing used to mutate the live Catalog as it descended the payload. A
+        bad late trim therefore left a half-added brand/models/variants behind
+        after raising CatalogError. Stage the whole brand in an isolated Catalog
+        first, then merge only after every nested object was accepted.
+        """
+        raw_brand = payload.get("brand")
+        if not raw_brand:
+            raise CatalogError(f"{source}: missing 'brand'")
+        brand_id = slug(raw_brand.get("id") or raw_brand["name_en"])
+        if brand_id in self.brands:
+            raise CatalogError(f"{source}: duplicate brand id {brand_id!r}")
+
+        staged = Catalog(self.year)
+        staged._add_brand_payload_inplace(payload, source)
+        self.brands.update(staged.brands)
+        self.models.update(staged.models)
+        self.generations.update(staged.generations)
+        self.variants.update(staged.variants)
+        self.trims.update(staged.trims)
+        self._models_by_brand.update(staged._models_by_brand)
+        self._variants_by_model.update(staged._variants_by_model)
+        self._trims_by_generation.update(staged._trims_by_generation)
+        self._trims_by_variant.update(staged._trims_by_variant)
+
+    def _add_brand_payload_inplace(self, payload: dict, source: str) -> None:
         raw_brand = payload.get("brand")
         if not raw_brand:
             raise CatalogError(f"{source}: missing 'brand'")
@@ -292,11 +345,7 @@ class Catalog:
             raise CatalogError(f"{source}: duplicate trim id {trim_id!r}")
         variant_id = self._resolve_trim_variant_ref(
             gen_id, raw.get("variant_id") or raw.get("variant"), source)
-        source_refs = {
-            str(key): _tuple(value)
-            for key, value in dict(raw.get("source_refs") or {}).items()
-            if str(key).strip()
-        }
+        source_refs = _source_refs(raw.get("source_refs"))
         trim = MarketTrim(
             id=trim_id,
             generation_id=gen_id,
@@ -602,6 +651,8 @@ class Catalog:
             },
             "models": [],
         }
+        if brand.overrides:
+            payload["brand"]["overrides"] = to_jsonable(brand.overrides)
         for model in self.models_of(brand_id):
             model_payload: dict[str, Any] = {
                 "id": model.id.split(".", 1)[1], "name_en": model.name_en,
@@ -612,6 +663,8 @@ class Catalog:
                 "market_scope": model.market_scope.value,
                 "aliases": list(model.aliases), "generations": [],
             }
+            if model.overrides:
+                model_payload["overrides"] = to_jsonable(model.overrides)
             # Without this, saving a brand from the editor would silently clear
             # the marker and the model would start reading as a finished one.
             if model.incomplete:
@@ -622,14 +675,24 @@ class Catalog:
                 model_payload["notes"] = model.notes
             for gen in self.generations_of(model.id):
                 gen_payload: dict[str, Any] = {
+                    # Preserve the canonical local ID even when `code` is blank.
+                    # Otherwise a generation authored with only `id` reloads as
+                    # `gen1` after an editor/save round-trip.
+                    "id": gen.id[len(model.id) + 1:],
                     "code": gen.code, "segment": gen.segment.value,
                     "seats": gen.seats, "launched": gen.launched,
                     "ended": gen.ended, "variants": [], "trims": [],
                 }
+                if gen.overrides:
+                    gen_payload["overrides"] = to_jsonable(gen.overrides)
                 for variant in self.variants.values():
                     if variant.generation_id != gen.id:
                         continue
                     variant_payload = {
+                        # Variant IDs are referenced by MarketTrim. Saving only
+                        # the display name could rename the analytical parent and
+                        # strand every trim link on the next load.
+                        "id": variant.id[len(gen.id) + 1:],
                         "name": variant.name,
                         "powertrain": variant.powertrain.value,
                         "drivetrain": variant.drivetrain.value,
@@ -643,6 +706,8 @@ class Catalog:
                         "price_note": variant.price_note,
                         "aliases": list(variant.aliases),
                     }
+                    if variant.overrides:
+                        variant_payload["overrides"] = to_jsonable(variant.overrides)
                     # Same reason as the model flag: saving from the editor
                     # must not quietly clear the marker and turn a declared
                     # gap back into a finished trim.

@@ -299,8 +299,10 @@ class MarketTrim:
     id: str                                   # "toyota.alphard.ah40.trim.z_premier"
     generation_id: str
     name: str                                 # marketed grade, e.g. "Z Premier"
+    # Retail identity must name one real powertrain. Unlike analytical Variant,
+    # MarketTrim cannot represent an unresolved/aggregate UNKNOWN bucket.
+    powertrain: Powertrain
     variant_id: Optional[str] = None           # analytical Variant, if known
-    powertrain: Powertrain = Powertrain.UNKNOWN
     price_thb: Optional[float] = None
     drivetrain: Drivetrain = Drivetrain.UNKNOWN
     engine_code: str = ""
@@ -323,6 +325,10 @@ class MarketTrim:
 
     def validate(self) -> list[str]:
         problems: list[str] = []
+        # Loader already rejects UNKNOWN, but keep the entity itself honest too:
+        # direct construction in tests/tools must not create an invalid retail SKU.
+        if self.powertrain is Powertrain.UNKNOWN:
+            problems.append("powertrain must be exact; UNKNOWN is not valid for MarketTrim")
         if self.price_thb is not None and self.price_thb < 0:
             problems.append("price_thb must not be negative")
         if self.engine_cc is not None and self.engine_cc <= 0:

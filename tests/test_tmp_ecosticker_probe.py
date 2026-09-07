@@ -15,6 +15,7 @@ def test_probe_ecosticker_j5():
         r = requests.get(url, params={"car_id": car_id}, timeout=20)
         out[name] = {"status": r.status_code, "json": r.json()}
     list_url = "https://api-car.ecosticker.go.th/api/v2/landing-page/cars"
-    r = requests.get(list_url, params={"page": 1, "row": 100, "search": "JAECOO 5", "sort": ""}, timeout=20)
-    out["search"] = {"status": r.status_code, "json": r.json()}
+    for term in ("JAECOO", "5 EV", "JAECOO 5 EV", "MAX+", "ULTRA"):
+        r = requests.get(list_url, params={"page": 1, "row": 100, "search": term, "sort": ""}, timeout=20)
+        out[f"search:{term}"] = {"status": r.status_code, "json": r.json()}
     raise AssertionError("ECOSTICKER_PROBE=" + json.dumps(out, ensure_ascii=False, sort_keys=True))

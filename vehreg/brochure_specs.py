@@ -128,7 +128,7 @@ _TECH_ROWS: list[tuple[str, re.Pattern[str]]] = [
     ("rear_cargo_l", re.compile(r"สัมภาระด้านหลัง|rear.*(?:cargo|luggage|boot)", re.I)),
     ("dimensions", re.compile(r"มิติตัวถัง|dimensions?", re.I)),
     ("wheelbase_mm", re.compile(r"ระยะฐานล้อ|wheelbase", re.I)),
-    ("ground_clearance_mm", re.compile(r"ระยะ.*จากพ.?น|ground\s+clearance", re.I)),
+    ("ground_clearance_mm", re.compile(r"ระยะ.*จากพ.*น|ground\s+clearance", re.I)),
     ("tyre", re.compile(r"ขนาดล้อและยาง|tire\s+size|tyre\s+size", re.I)),
 ]
 

@@ -114,10 +114,10 @@ class MarketTrimTests(unittest.TestCase):
 
     def test_trim_index_exists_but_is_not_the_variant_index(self):
         c = self.catalog()
-        self.assertIn("acme.echo.e1.trim.long_range",
-                      c.trim_index.lookup("Echo Long Range"))
-        self.assertNotIn("acme.echo.e1.trim.long_range",
-                         c.variant_index.lookup("Echo Long Range"))
+        trim_key, _score, _how = c.trim_index.lookup("Echo Long Range")
+        variant_key, _score, _how = c.variant_index.lookup("Echo Long Range")
+        self.assertEqual(trim_key, "acme.echo.e1.trim.long_range")
+        self.assertNotEqual(variant_key, "acme.echo.e1.trim.long_range")
 
     def test_missing_analytical_variant_reference_fails_closed(self):
         p = payload()

@@ -64,10 +64,16 @@ jobs:
           assert len(wl) == 0, wl[:10]
           assert wl_units == 0, wl_units
 
-          cube = run(conn, ['powertrain'])
-          powertrain = {str(r['powertrain']): float(r['units']) for r in cube.rows}
-          print('POWERTRAIN_CUBE', powertrain)
-          assert abs(sum(powertrain.values()) - total) < 0.001, (sum(powertrain.values()), total)
+          reader_cube = run(conn, ['powertrain'])
+          reader_powertrain = {str(r['powertrain']): float(r['units']) for r in reader_cube.rows}
+          print('READER_POWERTRAIN_CUBE', reader_powertrain)
+          print('READER_TOTAL', reader_cube.total_units, 'EXCLUDED_BY_SCOPE', reader_cube.excluded_by_scope)
+
+          audit_cube = run(conn, ['powertrain'], grains=(), scopes='all')
+          audit_powertrain = {str(r['powertrain']): float(r['units']) for r in audit_cube.rows}
+          print('ALL_FACT_POWERTRAIN_CUBE', audit_powertrain)
+          print('ALL_FACT_TOTAL', audit_cube.total_units)
+          assert abs(audit_cube.total_units - total) < 0.001, (audit_cube.total_units, total)
 
           conn.close()
           print('FINAL_RECHECK_OK')

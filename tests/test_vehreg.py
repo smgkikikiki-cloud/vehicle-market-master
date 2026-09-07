@@ -149,7 +149,7 @@ class TaxonomyTests(unittest.TestCase):
 
     def test_facets_parse_common_aliases(self):
         self.assertIs(Powertrain.parse("ev"), Powertrain.BEV)
-        self.assertIs(BodyType.parse("body on frame suv"), BodyType.PPV)
+        self.assertIs(BodyType.parse("body on frame suv"), BodyType.OFFROAD)
         self.assertIs(CabType.parse("space cab"), CabType.SMART_CAB)
         self.assertIs(RegistrationType.parse("รย.3"), RegistrationType.RY3)
         with self.assertRaises(ValueError):

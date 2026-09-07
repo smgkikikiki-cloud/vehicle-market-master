@@ -102,6 +102,16 @@ seed ตอนนี้ mark เป็น NICHE ไว้ 9 รุ่น: Land C
 911, Cayenne, EQS, Lexus LM, Zeekr 009, EV9 — **เป็นแค่ชุดตั้งต้น**
 `python -m vehreg catalog scope NICHE` ดูรายการ แล้วปรับเองผ่าน CSV ได้
 
+## SUV body taxonomy
+
+Vehicle Master ใช้ SUV สามกลุ่มเท่านั้น:
+
+- `CROSSOVER` = SUV/crossover โครงสร้าง monocoque หรือ unibody ทุกขนาด
+- `PPV` = รถนั่งที่พัฒนาจากแพลตฟอร์มกระบะ เช่น Fortuner, Everest, MU-X, Pajero Sport, Terra
+- `OFFROAD` = SUV โครงแชสซีส์/ladder frame ที่ไม่ใช่ pickup-derived เช่น Land Cruiser 300, Lexus LX, Tank 300/500, G-Class, Jimny, Wrangler
+
+ค่า `SUV` แบบเก่าไม่ใช่ canonical value อีกต่อไป และ parse เป็น `CROSSOVER` เพื่อรองรับข้อมูลเก่าเท่านั้น
+
 ## Vocabulary ทั้งหมด
 
 ดูรายการเต็มพร้อมคำแปลไทยด้วย `python -m vehreg facets`
@@ -109,7 +119,7 @@ seed ตอนนี้ mark เป็น NICHE ไว้ 9 รุ่น: Land C
 | facet | ค่า |
 |---|---|
 | `segment` | A, B, C, D, E, F, UNKNOWN |
-| `body_type` | HATCHBACK, SEDAN, CROSSOVER, SUV, PPV, COUPE, MPV, PICKUP, OTHER |
+| `body_type` | HATCHBACK, SEDAN, CROSSOVER, PPV, OFFROAD, COUPE, MPV, PICKUP, WAGON, VAN, TRUCK, OTHER |
 | `cab_type` | DOUBLE_CAB, SMART_CAB, SINGLE_CAB, NOT_APPLICABLE |
 | `market_position` | ENTRY, VOLUME, UPPER, LUXURY, UNKNOWN |
 | `powertrain` | ICE, MHEV, HEV, PHEV, REEV, BEV, FCEV, UNKNOWN |

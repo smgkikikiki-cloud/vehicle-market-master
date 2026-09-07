@@ -65,9 +65,9 @@ class Segment(Facet):
 class BodyType(Facet):
     HATCHBACK = "HATCHBACK"
     SEDAN = "SEDAN"
-    CROSSOVER = "CROSSOVER"          # monocoque, car-derived
-    SUV = "SUV"                      # monocoque, SUV-proportioned
-    PPV = "PPV"                      # body-on-frame SUV built off a pickup
+    CROSSOVER = "CROSSOVER"          # all monocoque/unibody SUVs and crossovers
+    PPV = "PPV"                      # pickup-derived passenger vehicle
+    OFFROAD = "OFFROAD"              # ladder-frame SUV that is not pickup-derived
     COUPE = "COUPE"
     MPV = "MPV"
     PICKUP = "PICKUP"
@@ -94,7 +94,7 @@ class CabType(Facet):
     NOT_APPLICABLE = "NOT_APPLICABLE"
 
 
-BODY_ON_FRAME = frozenset({BodyType.PPV, BodyType.PICKUP})
+BODY_ON_FRAME = frozenset({BodyType.PPV, BodyType.OFFROAD, BodyType.PICKUP})
 
 
 # --------------------------------------------------------------------------
@@ -466,8 +466,8 @@ THAI_LABELS: dict[str, dict[str, str]] = {
         "UNKNOWN": "ไม่ระบุ",
     },
     "BodyType": {
-        "HATCHBACK": "แฮทช์แบ็ก", "SEDAN": "ซีดาน", "CROSSOVER": "ครอสโอเวอร์",
-        "SUV": "เอสยูวี", "PPV": "เอสยูวีบอดี้ออนเฟรม (PPV)", "COUPE": "คูเป้",
+        "HATCHBACK": "แฮทช์แบ็ก", "SEDAN": "ซีดาน", "CROSSOVER": "ครอสโอเวอร์ / SUV โมโนค็อก",
+        "PPV": "PPV พื้นฐานกระบะ", "OFFROAD": "SUV ออฟโรดโครงแชสซีส์", "COUPE": "คูเป้",
         "MPV": "เอ็มพีวี", "PICKUP": "กระบะ", "WAGON": "สเตชันแวกอน",
         "VAN": "รถตู้",
         "TRUCK": "รถบรรทุก", "OTHER": "อื่น ๆ",
@@ -524,7 +524,11 @@ THAI_LABELS: dict[str, dict[str, str]] = {
 
 FACET_ALIASES: dict[str, dict[str, str]] = {
     "BodyType": {
-        "SUV_BOF": "PPV", "BODY_ON_FRAME_SUV": "PPV", "PPV_SUV": "PPV",
+        "SUV": "CROSSOVER", "MONOCOQUE_SUV": "CROSSOVER", "UNIBODY_SUV": "CROSSOVER",
+        "PPV_SUV": "PPV", "PICKUP_DERIVED_SUV": "PPV",
+        "SUV_BOF": "OFFROAD", "BODY_ON_FRAME_SUV": "OFFROAD",
+        "LADDER_FRAME_SUV": "OFFROAD", "OFFROAD_SUV": "OFFROAD",
+        "OFFROAD_LADDER_FRAME": "OFFROAD",
         "MINIVAN": "MPV", "CONVERTIBLE": "COUPE",
         "CABRIOLET": "COUPE", "ESTATE": "WAGON", "PICK_UP": "PICKUP",
     },

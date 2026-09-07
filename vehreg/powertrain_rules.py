@@ -200,6 +200,104 @@ RULES: tuple[Rule, ...] = (
     R("Audi", "A8", "ICE", end="2024-03"),
     R("Audi", "A8", MIXED, start="2024-04"),
 
+    # Owner batch 3: clear the remaining reviewed worklist.
+    # Most entries are direct owner approval of the existing catalog assumption.
+    R("Jaecoo", "Jaecoo 5 EV", "BEV"),
+    R("Honda", "Jazz", "ICE"),
+    R("MG", "MG S5 EV", "BEV"),
+    R("BYD", "Sealion 7", "BEV"),
+    R("Suzuki", "Suzuki Carry", "ICE"),
+    R("BYD", "Seal", "BEV"),
+    R("MG", "MG EP", "BEV"),
+    R("MG", "MG Extender Double Cab", "ICE"),
+    R("Isuzu", "Isuzu Elf", "ICE"),
+    R("Chery", "Chery V23", "BEV"),
+    R("Jaecoo", "Jaecoo 6 EV", "BEV"),
+    R("Toyota", "Vios", "ICE"),
+    R("Toyota", "Hiace Majesty", "ICE"),
+    R("Changan", "Changan Lumin", "BEV"),
+    R("Hyundai", "H-1", "ICE"),
+    R("Suzuki", "Ciaz", "ICE"),
+    R("BMW", "2 Series Gran Coupe", "ICE"),
+    R("Mazda", "CX-8", "ICE"),
+    R("Mercedes-Benz", "CLS", "ICE"),
+    R("Nissan", "Terra", "ICE"),
+    R("XPeng", "XPeng G6", "BEV"),
+    R("MG", "MG VS HEV", "HEV"),
+    R("Geely", "Geely EX5", "BEV"),
+    R("Honda", "BR-V", "ICE"),
+    R("Chery", "Omoda C5", "BEV"),
+    R("MG", "MG Extender Cab", "ICE"),
+    R("Nissan", "March", "ICE"),
+    R("BYD", "BYD M6", "BEV"),
+    R("Zeekr", "Zeekr X", "BEV"),
+    R("Zeekr", "Zeekr 009", "BEV"),
+    R("Honda", "WR-V", "ICE"),
+    R("Nissan", "Note", "ICE"),
+    R("Toyota", "Hiace", "ICE"),
+
+    # MINI Countryman: the DLT history is ICE, then the U25 BEV appears as
+    # Countryman SE ALL4 from 2024-11. ICE Countryman S/JCW registrations
+    # continue alongside it, so explicit labels win over the current default.
+    R("MINI", "Countryman", "BEV", raw_any=("COUNTRYMAN SE", "ELECTRIC")),
+    R("MINI", "Countryman", "ICE", raw_any=("COOPER S COUNTRYMAN", "COUNTRYMAN S", "JCW COUNTRYMAN", "COOPER SD")),
+    R("MINI", "Countryman", "ICE", end="2024-10"),
+    R("MINI", "Countryman", "BEV", start="2024-11"),
+
+    R("Nissan", "Serena", "HEV"),
+    R("Hyundai", "Stargazer", "ICE"),
+    R("Suzuki", "Ertiga", "ICE"),
+    R("XPeng", "XPeng X9", "BEV"),
+    R("Hino", "Hino Truck", "ICE"),
+    R("Mazda", "BT-50 Double Cab", "ICE"),
+    R("Toyota", "Sienta", "ICE"),
+    R("MG", "MG IM6", "BEV"),
+    R("Mazda", "BT-50 Cab", "ICE"),
+    R("BMW", "iX3", "BEV"),
+
+    # Audi A5: e-hybrid first appears in DLT in 2025-11. Legacy 40/45 TFSI
+    # registrations continue after that, so keep those exact while the current
+    # bare-nameplate default follows the owner's PHEV call.
+    R("Audi", "A5", "PHEV", raw_any=("E-HYBRID", "PHEV", "PLUG-IN")),
+    R("Audi", "A5", "ICE", raw_any=("40 TFSI", "45 TFSI", "2.0T FSI")),
+    R("Audi", "A5", "ICE", end="2025-10"),
+    R("Audi", "A5", "PHEV", start="2025-11"),
+
+    R("BMW", "X4", "ICE"),
+    R("BYD", "Seal 5 DM-i", "PHEV"),
+    R("MG", "MG Maxus 9", "BEV"),
+    R("Toyota", "Land Cruiser 300", "ICE"),
+
+    # MINI Cooper also spans generations in this DLT window. Explicit old ICE
+    # body/engine labels stay ICE; Electric/E/SE labels are BEV. A bare current
+    # Cooper defaults BEV from the J01 launch window.
+    R("MINI", "Cooper", "BEV", raw_any=("ELECTRIC", "COOPER SE", "COOPER E")),
+    R("MINI", "Cooper", "ICE", raw_any=("COOPER S ", "COOPER D", "JOHN COOPER WORKS", "CLUBMAN", "CABRIO", "CONVERTIBLE", "HATCH", "5-TURER", "PACEMAN")),
+    R("MINI", "Cooper", "ICE", end="2024-05"),
+    R("MINI", "Cooper", "BEV", start="2024-06"),
+
+    R("Hyundai", "Creta", "ICE"),
+    R("Riddara", "Riddara RD6 Double Cab", "BEV"),
+    R("Deepal", "Deepal L07", "BEV"),
+    R("Kia", "EV5", "BEV"),
+    R("Foton", "Foton Truck", "ICE"),
+    R("Porsche", "Taycan", "BEV"),
+    R("Honda", "Step WGN", "HEV"),
+    R("Avatr", "Avatr 11", "BEV"),
+
+    # Owner default: 4 Series = BEV. Existing DLT rows through 2026-08 are
+    # explicitly 420/430/M440 (plus one stray 840i), all combustion; preserve
+    # those exact source labels as ICE rather than rewriting historical facts.
+    R("BMW", "4 Series", "ICE", raw_any=("420I", "420D", "430I", "430D", "M440I", "840I")),
+    R("BMW", "4 Series", "BEV"),
+
+    R("MG", "MG ES", "BEV"),
+    R("Audi", "TT", "ICE"),
+    R("Toyota", "bZ4X", "BEV"),
+    R("Jaecoo", "Jaecoo 7", "PHEV"),
+    R("BMW", "iX", "BEV"),
+    R("MINI", "Aceman", "BEV"),
+
     # Mazda: petrol/diesel/mild-hybrid all fold to ICE in this taxonomy.
     R("Mazda", "Mazda2", "ICE"),
     R("Mazda", "Mazda3", "ICE"),

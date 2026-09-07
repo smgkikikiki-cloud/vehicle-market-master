@@ -87,7 +87,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "galaxy_e5",

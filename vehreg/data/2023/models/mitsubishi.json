@@ -58,7 +58,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "triton_double_cab",
@@ -121,7 +122,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "pajero_sport",

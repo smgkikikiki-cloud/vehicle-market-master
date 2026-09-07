@@ -295,7 +295,6 @@
       "market_scope": "NICHE",
       "aliases": [
         "Q8 SB",
-        "Q8 etron",
         "Q8"
       ],
       "generations": [
@@ -397,6 +396,219 @@
               "import_type": "CBU",
               "origin_country": "DE",
               "price_note": "seed-unverified",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etron",
+      "name_en": "Audi e-tron",
+      "name_th": "ออดี้ อี-ทรอน",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "e-tron",
+        "etron",
+        "e tron",
+        "e-tron 55",
+        "e-tron SB",
+        "e-tron 55 q"
+      ],
+      "incomplete": true,
+      "notes": "รถไฟฟ้าตระกูล e-tron แยกเป็นรุ่นของตัวเอง — DLT จดแยก และเดิมมันไปเกาะรุ่นเบนซินชื่อคล้ายกัน สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "etron_gt",
+      "name_en": "Audi e-tron GT",
+      "name_th": "ออดี้ อี-ทรอน จีที",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "e-tron GT",
+        "etron GT",
+        "e-tron GT quattro"
+      ],
+      "incomplete": true,
+      "notes": "รถไฟฟ้าตระกูล e-tron แยกเป็นรุ่นของตัวเอง — DLT จดแยก และเดิมมันไปเกาะรุ่นเบนซินชื่อคล้ายกัน สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "q8_etron",
+      "name_en": "Audi Q8 e-tron",
+      "name_th": "ออดี้ คิว8 อี-ทรอน",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "Q8 e-tron",
+        "Q8 etron",
+        "Q8 SB e-tron",
+        "Q8 SB etron"
+      ],
+      "incomplete": true,
+      "notes": "รถไฟฟ้าตระกูล e-tron แยกเป็นรุ่นของตัวเอง — DLT จดแยก และเดิมมันไปเกาะรุ่นเบนซินชื่อคล้ายกัน สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "q6_etron",
+      "name_en": "Audi Q6 e-tron",
+      "name_th": "ออดี้ คิว6 อี-ทรอน",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "Q6 e-tron",
+        "Q6 etron"
+      ],
+      "incomplete": true,
+      "notes": "รถไฟฟ้าตระกูล e-tron แยกเป็นรุ่นของตัวเอง — DLT จดแยก และเดิมมันไปเกาะรุ่นเบนซินชื่อคล้ายกัน สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "D",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a6_etron",
+      "name_en": "Audi A6 e-tron",
+      "name_th": "ออดี้ เอ6 อี-ทรอน",
+      "nameplate": "",
+      "body_type": "SEDAN",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "CORE",
+      "aliases": [
+        "A6 e-tron",
+        "S6 e-tron",
+        "S6 Sportback e-tron"
+      ],
+      "incomplete": true,
+      "notes": "รถไฟฟ้าตระกูล e-tron แยกเป็นรุ่นของตัวเอง — DLT จดแยก และเดิมมันไปเกาะรุ่นเบนซินชื่อคล้ายกัน สเปกยังไม่ได้ตรวจ",
+      "generations": [
+        {
+          "code": "gen1",
+          "segment": "E",
+          "seats": 5,
+          "launched": "2022-01-01",
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec",
+              "powertrain": "BEV",
+              "drivetrain": "AWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CBU",
+              "origin_country": "DE",
+              "price_note": "ยังไม่ได้ตรวจราคา",
               "aliases": []
             }
           ]

@@ -291,7 +291,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "crv",

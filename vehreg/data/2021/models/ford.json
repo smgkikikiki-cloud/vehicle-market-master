@@ -180,7 +180,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "mustang",

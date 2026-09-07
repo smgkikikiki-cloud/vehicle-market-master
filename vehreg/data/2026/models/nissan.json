@@ -142,7 +142,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "navara_double_cab",
@@ -189,7 +190,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "terra",

@@ -209,20 +209,19 @@
               "name": "1.5L PHEV",
               "powertrain": "PHEV",
               "drivetrain": "AWD",
-              "engine_cc": null,
-              "battery_kwh": null,
+              "engine_cc": 1499,
+              "battery_kwh": 16.3,
               "price_thb": null,
               "price_min_thb": null,
               "price_max_thb": null,
               "import_type": "CKD",
               "origin_country": "TH",
-              "price_note": "ยังไม่ได้ตรวจราคา",
+              "price_note": "สเปกจากเอกสาร BMW ราคายังไม่ได้ตรวจ",
               "aliases": [
                 "xDrive30e",
                 "sDrive30e",
                 "X1 xDrive30e"
-              ],
-              "incomplete": true
+              ]
             }
           ]
         }
@@ -275,19 +274,18 @@
               "name": "2.0L PHEV",
               "powertrain": "PHEV",
               "drivetrain": "AWD",
-              "engine_cc": null,
-              "battery_kwh": null,
+              "engine_cc": 1998,
+              "battery_kwh": 19.7,
               "price_thb": null,
               "price_min_thb": null,
               "price_max_thb": null,
               "import_type": "CKD",
               "origin_country": "TH",
-              "price_note": "ยังไม่ได้ตรวจราคา",
+              "price_note": "สเปกจากเอกสาร BMW ราคายังไม่ได้ตรวจ",
               "aliases": [
                 "xDrive30e",
                 "X3 xDrive30e"
-              ],
-              "incomplete": true
+              ]
             }
           ]
         }

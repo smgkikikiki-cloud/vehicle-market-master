@@ -49,7 +49,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "crosstrek",
@@ -90,7 +91,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "brz",
@@ -128,7 +130,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "outback",
@@ -166,7 +169,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     }
   ]
 }

@@ -1317,3 +1317,59 @@ class TrailingNumberGuardTests(unittest.TestCase):
                                                      "bmw 3 series"))
         self.assertFalse(normalize._numbers_disagree("geely ex 5",
                                                      "geely ex 5"))
+
+
+class OwnerConfirmedPowertrainTests(unittest.TestCase):
+    """Calls the owner made about what is actually sold, pinned as tests.
+
+    They are market facts, not derivable from any file, so the only thing that
+    keeps a later edit from quietly undoing them is a test that names them.
+    """
+
+    def setUp(self):
+        from vehreg.catalog import DATA_DIR, Catalog
+        self.catalog = Catalog.load(DATA_DIR, 2026)
+
+    def test_the_pickups_are_diesel_and_say_they_were_checked(self):
+        for model_id in ("toyota.hilux_revo_cab", "toyota.hilux_revo_double_cab",
+                         "isuzu.dmax_cab", "isuzu.dmax_double_cab",
+                         "mitsubishi.triton_cab", "nissan.navara_cab"):
+            with self.subTest(model=model_id):
+                model = self.catalog.models[model_id]
+                self.assertTrue(model.powertrain_checked)
+                self.assertEqual(
+                    {v.powertrain for v in self.catalog.variants_of(model_id)},
+                    {Powertrain.ICE})
+
+    def test_the_yaris_ativ_is_mixed_because_dlt_cannot_split_it(self):
+        """It gained a hybrid and DLT files both under one bare label.
+
+        MIXED is the honest reading: 251,114 units that nothing can attribute
+        to one side or the other.
+        """
+        self.assertEqual(
+            {v.powertrain for v in
+             self.catalog.variants_of("toyota.yaris_ativ")},
+            {Powertrain.ICE, Powertrain.HEV})
+
+    def test_an_e_tron_badge_belongs_to_an_e_tron_model(self):
+        """The Q8 e-tron was inside the petrol Q8, on the Q8's own alias list."""
+        for model in self.catalog.models_of("audi"):
+            if "etron" in model.id:
+                self.assertEqual(
+                    {v.powertrain for v in self.catalog.variants_of(model.id)},
+                    {Powertrain.BEV}, model.id)
+                continue
+            for alias in model.aliases:
+                with self.subTest(model=model.id, alias=alias):
+                    self.assertNotIn("tron", alias.lower())
+
+    def test_the_bmw_plug_ins_no_longer_declare_a_gap(self):
+        for model_id in ("bmw.bmw_x1", "bmw.bmw_x3"):
+            plugin = [v for v in self.catalog.variants_of(model_id)
+                      if v.powertrain is Powertrain.PHEV]
+            self.assertEqual(len(plugin), 1, model_id)
+            with self.subTest(model=model_id):
+                self.assertFalse(plugin[0].incomplete)
+                self.assertTrue(plugin[0].engine_cc)
+                self.assertTrue(plugin[0].battery_kwh)

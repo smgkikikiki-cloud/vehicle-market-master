@@ -55,10 +55,25 @@
               "price_note": "seed-unverified",
               "price_min_thb": 559000,
               "price_max_thb": 709000
+            },
+            {
+              "name": "1.2L HEV",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "CKD",
+              "origin_country": "TH",
+              "price_note": "ยังไม่ได้ตรวจราคา",
+              "aliases": []
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "yaris",
@@ -353,7 +368,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "fortuner",
@@ -429,7 +445,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_revo_cab",
@@ -479,7 +496,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_revo_double_cab",
@@ -543,7 +561,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_champ",
@@ -604,7 +623,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "innova_zenix",
@@ -857,7 +877,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hilux_travo_double_cab",
@@ -898,7 +919,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "commuter",

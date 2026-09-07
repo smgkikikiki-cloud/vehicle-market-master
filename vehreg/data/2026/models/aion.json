@@ -54,7 +54,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "aion_es",
@@ -96,7 +97,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "aion_v",
@@ -138,7 +140,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "aion_ut",
@@ -191,7 +194,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "hyptec_ht",
@@ -230,7 +234,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     }
   ]
 }

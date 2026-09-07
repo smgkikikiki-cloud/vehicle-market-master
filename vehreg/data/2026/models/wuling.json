@@ -48,7 +48,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "wuling_air_ev",
@@ -86,7 +87,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "wuling_darion",
@@ -128,7 +130,8 @@
           ]
         }
       ],
-      "incomplete": true
+      "incomplete": true,
+      "powertrain_checked": true
     },
     {
       "id": "wuling_porta",
@@ -170,7 +173,8 @@
           ]
         }
       ],
-      "incomplete": true
+      "incomplete": true,
+      "powertrain_checked": true
     }
   ]
 }

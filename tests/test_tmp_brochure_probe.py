@@ -10,70 +10,30 @@ DETAIL = f"https://car.ecosticker.go.th/landing-page/detail/{CAR_ID}"
 FILE_URL = f"https://api-car.ecosticker.go.th/api/v1/file/data?file_id={FILE_ID}"
 
 
-def _snips(text, needle, radius=250):
-    out = []
-    low = text.lower()
-    start = 0
-    while len(out) < 10:
-        i = low.find(needle.lower(), start)
-        if i < 0:
-            break
-        out.append(text[max(0, i-radius): i+len(needle)+radius])
-        start = i + len(needle)
-    return out
-
-
 def test_probe_brochure_discovery():
     s = requests.Session()
     s.headers.update({"User-Agent": "Mozilla/5.0"})
-    out = {}
+    page = s.get(DETAIL, timeout=30)
+    scripts = re.findall(r'<script[^>]+src=["\']([^"\']+)', page.text, flags=re.I)
+    out = {"detail_status": page.status_code, "scripts": scripts}
 
-    r = s.get(DETAIL, timeout=30)
-    out["detail"] = {
-        "status": r.status_code,
-        "content_type": r.headers.get("content-type"),
-        "len": len(r.content),
-        "contains_file_id": FILE_ID in r.text,
-        "file_data_snips": _snips(r.text, "/api/v1/file/data"),
-        "brochure_snips": _snips(r.text, "brochur"),
-    }
-
-    scripts = re.findall(r'<script[^>]+src=["\']([^"\']+)', r.text, flags=re.I)
-    out["script_count"] = len(scripts)
-    hits = []
     for src in scripts:
         url = urljoin(DETAIL, src)
-        try:
-            js = s.get(url, timeout=30)
-        except Exception as exc:
-            hits.append({"url": url, "error": repr(exc)})
-            continue
+        js = s.get(url, timeout=30)
         text = js.text
-        needles = ["/api/v1/file/data", "brochur", "linkBrochurButton", "file_id"]
-        found = {n: _snips(text, n) for n in needles if n.lower() in text.lower()}
-        if found:
-            hits.append({"url": url, "status": js.status_code, "len": len(js.content), "found": found})
-    out["script_hits"] = hits[:20]
+        idx = text.find("brochure_link")
+        if idx >= 0:
+            lo, hi = max(0, idx - 10000), min(len(text), idx + 10000)
+            ctx = text[lo:hi]
+            out["bundle"] = url
+            out["brochure_context"] = ctx
+            out["api_like_strings"] = sorted(set(re.findall(r'["\']([^"\']*(?:api|car)[^"\']*)["\']', ctx, flags=re.I)))[:100]
+            out["http_strings"] = sorted(set(re.findall(r'https?://[^"\'\\ ]+', ctx)))[:100]
+            break
 
     f = s.get(FILE_URL, timeout=30, allow_redirects=False)
     out["file_direct"] = {
         "status": f.status_code,
-        "content_type": f.headers.get("content-type"),
-        "content_disposition": f.headers.get("content-disposition"),
         "location": f.headers.get("location"),
-        "len": len(f.content),
-        "first16_hex": f.content[:16].hex(),
     }
-
-    api = s.get(
-        "https://api-car.ecosticker.go.th/api/v1/eco-sticker/public/by-car-id",
-        params={"car_id": CAR_ID}, timeout=30)
-    out["detail_api"] = {
-        "status": api.status_code,
-        "contains_file_id": FILE_ID in api.text,
-        "file_data_snips": _snips(api.text, "/api/v1/file/data"),
-        "brochure_snips": _snips(api.text, "brochur"),
-        "file_id_snips": _snips(api.text, "file_id"),
-    }
-
-    raise AssertionError("BROCHURE_PROBE=" + json.dumps(out, ensure_ascii=False))
+    raise AssertionError("BROCHURE_CONTEXT=" + json.dumps(out, ensure_ascii=False))

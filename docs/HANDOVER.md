@@ -61,6 +61,21 @@ unresearched; `Variant.incomplete` says one trim is. Both are reported by
 `Catalog.incomplete_models()` rather than by `validate()`, so a declared hole
 stays countable instead of disappearing into a clean bill of health.
 
+## Owner-reviewed fact-level powertrain rules
+
+`vehreg/powertrain_rules.py` is the versioned exception layer for decisions that
+annual variant consensus cannot represent honestly: month cut-offs (Camry XV80,
+CR-V, Accord, HR-V, Corolla Cross, CLA), trim-rich model labels that DLT leaves
+at MODEL grain (Deepal S05, Denza D9, Haval H6), and owner-reviewed bare-label
+defaults. Rules never split or redistribute units; they only classify the fact
+that DLT actually reported. First matching rule wins, source-explicit labels are
+listed before bare-nameplate defaults, and MIXED remains a valid deliberate
+answer.
+
+A model covered by this rulebook is also considered owner-reviewed by the
+powertrain worklist. `powertrain_checked` in the annual catalog still works and
+remains the right flag for ordinary catalog-only reviews.
+
 ## How to change data safely
 
 Matching happens when a file is read, so a catalog edit or a taught alias

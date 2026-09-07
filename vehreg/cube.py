@@ -15,6 +15,7 @@ from typing import Any, Optional, Sequence
 from .body_taxonomy import BODY_FAMILY_SQL, SUV_TYPE_SQL
 from .db import DIM_FACETS, DIM_FLAGS, DIM_NUMERIC, MIXED
 from .monthly_state import effective_source_sql, ensure_schema as ensure_monthly_schema
+from .powertrain_rules import apply_powertrain_rules_sql
 from .taxonomy import DEFAULT_SCOPES
 
 VIRTUAL_FACETS: tuple[str, ...] = ("body_family", "suv_type", "price_band")
@@ -180,7 +181,9 @@ def _base_source_sql(allocate: bool) -> str:
 
 
 def _source_sql(allocate: bool) -> str:
-    return effective_source_sql(_base_source_sql(allocate))
+    return apply_powertrain_rules_sql(
+        effective_source_sql(_base_source_sql(allocate))
+    )
 
 
 def run(conn: sqlite3.Connection, group_by: Sequence[str], *,

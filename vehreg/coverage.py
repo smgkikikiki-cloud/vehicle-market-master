@@ -28,6 +28,8 @@ from pathlib import Path
 from statistics import median
 from typing import Any, Iterable, Mapping, Sequence
 
+from .powertrain_rules import is_owner_reviewed
+
 #: A month holding less than this share of its trailing baseline is treated as
 #: provisional. A real Thai month has never moved by anything close to this:
 #: the largest fall in the 50 months loaded is December 2024 at 74% of its
@@ -432,6 +434,7 @@ def assumed_powertrain(conn: sqlite3.Connection,
         for row in rows
         if float(row["units"] or 0.0) >= ASSUMED_UNITS_FLOOR
         and str(row["unit_id"]) not in checked
+        and not is_owner_reviewed(row["brand"], row["model"])
     ]
 
 

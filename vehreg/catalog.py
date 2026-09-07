@@ -15,6 +15,7 @@ folder, and the year already published never moves.
 Inside a year file the layers nest exactly as ``entities.py`` describes them:
 
     brand -> models[] -> generations[] -> variants[]
+                                      -> trims[]  (retail catalog only)
 
 IDs are composed from the path, so nothing in the file repeats a parent key and
 no two brands can collide.
@@ -28,7 +29,7 @@ from pathlib import Path
 from typing import Any, Iterator, Optional
 
 from .entities import (
-    Brand, Generation, Model, ResolvedVehicle, Variant, cross_check, resolve,
+    Brand, Generation, MarketTrim, Model, ResolvedVehicle, Variant, cross_check, resolve,
 )
 from .normalize import MatchIndex, base_nameplate, slug
 from .taxonomy import (
@@ -99,11 +100,17 @@ class Catalog:
         self.models: dict[str, Model] = {}
         self.generations: dict[str, Generation] = {}
         self.variants: dict[str, Variant] = {}
+        # Retail trims are deliberately separate from analytical variants.
+        self.trims: dict[str, MarketTrim] = {}
         self.brand_index = MatchIndex()
         self.model_index = MatchIndex()
         self.variant_index = MatchIndex()
+        # Useful to catalog/enrichment code only; Resolver does not consult it.
+        self.trim_index = MatchIndex()
         self._models_by_brand: dict[str, list[str]] = {}
         self._variants_by_model: dict[str, list[str]] = {}
+        self._trims_by_generation: dict[str, list[str]] = {}
+        self._trims_by_variant: dict[str, list[str]] = {}
 
     # ---------------------------------------------------------------- load
     @classmethod
@@ -199,6 +206,7 @@ class Catalog:
         gen_id = f"{model_id}.{slug(code)}"
         if gen_id in self.generations:
             raise CatalogError(f"{source}: duplicate generation id {gen_id!r}")
+        self._trims_by_generation[gen_id] = []
         self.generations[gen_id] = Generation(
             id=gen_id,
             model_id=model_id,
@@ -211,6 +219,10 @@ class Catalog:
         )
         for raw_variant in raw.get("variants", []):
             self._add_variant(gen_id, model_id, raw_variant, source)
+        # Market trims are loaded only after variants, so an optional `variant`
+        # reference can be resolved without changing the analytical hierarchy.
+        for raw_trim in raw.get("trims", []):
+            self._add_trim(gen_id, raw_trim, source)
 
     def _add_variant(self, gen_id: str, model_id: str, raw: dict,
                      source: str) -> None:
@@ -240,11 +252,73 @@ class Catalog:
         )
         self._variants_by_model[model_id].append(variant_id)
 
+    def _resolve_trim_variant_ref(self, gen_id: str, raw_ref: Any,
+                                  source: str) -> Optional[str]:
+        if raw_ref in (None, ""):
+            return None
+        ref = str(raw_ref).strip()
+        if ref in self.variants and self.variants[ref].generation_id == gen_id:
+            return ref
+        candidate = f"{gen_id}.{slug(ref)}"
+        if candidate in self.variants:
+            return candidate
+        for variant in self.variants.values():
+            if variant.generation_id == gen_id and slug(variant.name) == slug(ref):
+                return variant.id
+        raise CatalogError(
+            f"{source}: trim variant reference {ref!r} does not exist under {gen_id}")
+
+    def _add_trim(self, gen_id: str, raw: dict, source: str) -> None:
+        if not raw.get("name"):
+            raise CatalogError(f"{source}: trim under {gen_id} is missing name")
+        trim_id = f"{gen_id}.trim.{slug(raw.get('id') or raw['name'])}"
+        if trim_id in self.trims:
+            raise CatalogError(f"{source}: duplicate trim id {trim_id!r}")
+        variant_id = self._resolve_trim_variant_ref(
+            gen_id, raw.get("variant_id") or raw.get("variant"), source)
+        source_refs = {
+            str(key): _tuple(value)
+            for key, value in dict(raw.get("source_refs") or {}).items()
+            if str(key).strip()
+        }
+        trim = MarketTrim(
+            id=trim_id,
+            generation_id=gen_id,
+            name=raw["name"],
+            variant_id=variant_id,
+            powertrain=_facet(Powertrain, raw.get("powertrain"),
+                              Powertrain.UNKNOWN),
+            price_thb=raw.get("price_thb"),
+            drivetrain=_facet(Drivetrain, raw.get("drivetrain"),
+                              Drivetrain.UNKNOWN),
+            engine_code=raw.get("engine_code", ""),
+            engine_cc=raw.get("engine_cc"),
+            battery_kwh=raw.get("battery_kwh"),
+            transmission=raw.get("transmission", ""),
+            seats=raw.get("seats"),
+            length_mm=raw.get("length_mm"),
+            width_mm=raw.get("width_mm"),
+            height_mm=raw.get("height_mm"),
+            wheelbase_mm=raw.get("wheelbase_mm"),
+            tire_front=raw.get("tire_front", ""),
+            tire_rear=raw.get("tire_rear", ""),
+            wheel_front=raw.get("wheel_front", ""),
+            wheel_rear=raw.get("wheel_rear", ""),
+            aliases=_tuple(raw.get("aliases")),
+            source_refs=source_refs,
+            notes=raw.get("notes", ""),
+        )
+        self.trims[trim_id] = trim
+        self._trims_by_generation.setdefault(gen_id, []).append(trim_id)
+        if variant_id:
+            self._trims_by_variant.setdefault(variant_id, []).append(trim_id)
+
     # -------------------------------------------------------------- indexes
     def build_indexes(self) -> None:
         self.brand_index = MatchIndex()
         self.model_index = MatchIndex()
         self.variant_index = MatchIndex()
+        self.trim_index = MatchIndex()
         for brand in self.brands.values():
             self.brand_index.add(brand.id, [brand.name_en, brand.name_th,
                                             brand.id], priority=1)
@@ -264,6 +338,11 @@ class Catalog:
             surfaces = [variant.name, *variant.aliases]
             surfaces += [f"{model.name_en} {s}" for s in surfaces if s]
             self.variant_index.add(variant.id, [s for s in surfaces if s])
+        for trim in self.trims.values():
+            model = self.model_for_trim(trim.id)
+            surfaces = [trim.name, *trim.aliases]
+            surfaces += [f"{model.name_en} {s}" for s in surfaces if s]
+            self.trim_index.add(trim.id, [s for s in surfaces if s])
 
     # ------------------------------------------------------------ traversal
     def generation_for_variant(self, variant_id: str) -> Generation:
@@ -274,6 +353,31 @@ class Catalog:
 
     def brand_for_variant(self, variant_id: str) -> Brand:
         return self.brands[self.model_for_variant(variant_id).brand_id]
+
+    def generation_for_trim(self, trim_id: str) -> Generation:
+        return self.generations[self.trims[trim_id].generation_id]
+
+    def model_for_trim(self, trim_id: str) -> Model:
+        return self.models[self.generation_for_trim(trim_id).model_id]
+
+    def brand_for_trim(self, trim_id: str) -> Brand:
+        return self.brands[self.model_for_trim(trim_id).brand_id]
+
+    def variant_for_trim(self, trim_id: str) -> Optional[Variant]:
+        variant_id = self.trims[trim_id].variant_id
+        return self.variants.get(variant_id) if variant_id else None
+
+    def trims_of_generation(self, generation_id: str) -> list[MarketTrim]:
+        return [self.trims[t] for t in self._trims_by_generation.get(generation_id, [])]
+
+    def trims_of_variant(self, variant_id: str) -> list[MarketTrim]:
+        return [self.trims[t] for t in self._trims_by_variant.get(variant_id, [])]
+
+    def trims_of(self, model_id: str) -> list[MarketTrim]:
+        out: list[MarketTrim] = []
+        for generation in self.generations_of(model_id):
+            out.extend(self.trims_of_generation(generation.id))
+        return out
 
     def models_of(self, brand_id: str) -> list[Model]:
         return [self.models[m] for m in self._models_by_brand.get(brand_id, [])]
@@ -315,6 +419,8 @@ class Catalog:
         return resolve(brand, model, generation, variant, self.year)
 
     def iter_resolved(self) -> Iterator[ResolvedVehicle]:
+        # Intentionally variants only. Retail trims enrich the catalog but never
+        # multiply or allocate registration facts.
         for variant_id in self.variants:
             yield self.resolve(variant_id)
 
@@ -342,6 +448,17 @@ class Catalog:
             if self.model_for_variant(variant.id).id in declared:
                 continue
             problems += variant.validate()
+        for trim in self.trims.values():
+            problems += trim.validate()
+            if trim.variant_id:
+                parent = self.variants[trim.variant_id]
+                if trim.powertrain is not Powertrain.UNKNOWN and \
+                        parent.powertrain is not Powertrain.UNKNOWN and \
+                        trim.powertrain is not parent.powertrain:
+                    problems.append(
+                        f"trim {trim.id}: powertrain {trim.powertrain.value} "
+                        f"does not match analytical variant {parent.id} "
+                        f"({parent.powertrain.value})")
         problems += self.duplicate_body_warnings()
         for resolved in self.iter_resolved():
             if self.model_for_variant(resolved.variant_id).id in declared:

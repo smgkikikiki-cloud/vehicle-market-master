@@ -3,7 +3,7 @@
 Layers, in the order data moves through them:
 
     taxonomy   closed vocabularies for every facet the owner listed
-    entities   Brand / Model / Generation / Variant + the override resolver
+    entities   Brand / Model / Generation / Variant + retail MarketTrim
     catalog    load, validate and index one year's on-disk catalog
     authoring  bulk-edit the catalog from a wide CSV
     normalize  fold messy Thai/English labels and match them to the catalog
@@ -27,7 +27,7 @@ from .price_taxonomy import (  # noqa: F401
     price_band_for_range,
 )
 from .entities import (  # noqa: F401
-    Brand, Generation, Model, ResolvedVehicle, Variant, resolve,
+    Brand, Generation, MarketTrim, Model, ResolvedVehicle, Variant, resolve,
 )
 from .catalog import DEFAULT_YEAR, Catalog, available_years, fork_year  # noqa: F401
 

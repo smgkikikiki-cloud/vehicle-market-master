@@ -31,6 +31,7 @@ jobs:
           from vehreg import review, coverage, trimledger
           from vehreg.powertrain_rules import RULES
           from vehreg.cube import run
+          from vehreg.catalog import Catalog
 
           db = Path('/tmp/final-powertrain-recheck.sqlite3')
           report = bootstrap_database(db)
@@ -42,6 +43,9 @@ jobs:
           print('FACTS', facts, 'UNITS', total)
           assert facts == 35212, facts
           assert total == 4064148.0, total
+
+          catalog = Catalog.load(year=2026)
+          print('CATALOG_2026', 'BRANDS', len(catalog.brands), 'MODELS', len(catalog.models), 'NAMEPLATES', len(catalog.nameplates()), 'GENERATIONS', len(catalog.generations), 'VARIANTS', len(catalog.variants))
 
           rec = trimledger.reconcile(conn)
           print('TRIM_RECONCILE', len(rec))

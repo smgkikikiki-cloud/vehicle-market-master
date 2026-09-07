@@ -58,9 +58,7 @@
       "market_scope": "NICHE",
       "aliases": [
         "range rover",
-        "evoque",
-        "velar",
-        "range rover sport"
+        "evoque"
       ],
       "generations": [
         {
@@ -82,6 +80,89 @@
               "origin_country": "GB",
               "price_note": "seed-unverified",
               "aliases": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "range_rover_sport",
+      "name_en": "Range Rover Sport",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "range rover sport"
+      ],
+      "incomplete": true,
+      "notes": "Added because DLT Range Rover Sport labels were previously swallowed by the generic Range Rover alias. Specs deliberately left incomplete; generic fact-level powertrain is owner-reviewed MIXED.",
+      "generations": [
+        {
+          "code": "unresearched",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec incomplete; powertrain handled at fact level",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "UNKNOWN",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "spec incomplete; owner-reviewed fact-level powertrain",
+              "aliases": [],
+              "incomplete": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "range_rover_velar",
+      "name_en": "Range Rover Velar",
+      "name_th": "",
+      "nameplate": "",
+      "body_type": "SUV",
+      "cab_type": "NOT_APPLICABLE",
+      "registration_type": "",
+      "market_scope": "NICHE",
+      "aliases": [
+        "range rover velar",
+        "velar"
+      ],
+      "incomplete": true,
+      "notes": "Added because DLT Range Rover Velar labels were previously swallowed by the generic Range Rover alias. Specs deliberately left incomplete; generic fact-level powertrain is owner-reviewed MIXED.",
+      "generations": [
+        {
+          "code": "unresearched",
+          "segment": "UNKNOWN",
+          "seats": null,
+          "launched": null,
+          "ended": null,
+          "variants": [
+            {
+              "name": "spec incomplete; powertrain handled at fact level",
+              "powertrain": "UNKNOWN",
+              "drivetrain": "UNKNOWN",
+              "engine_cc": null,
+              "battery_kwh": null,
+              "price_thb": null,
+              "price_min_thb": null,
+              "price_max_thb": null,
+              "import_type": "UNKNOWN",
+              "origin_country": "UNKNOWN",
+              "price_note": "spec incomplete; owner-reviewed fact-level powertrain",
+              "aliases": [],
+              "incomplete": true
             }
           ]
         }

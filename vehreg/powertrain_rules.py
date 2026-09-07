@@ -163,6 +163,43 @@ RULES: tuple[Rule, ...] = (
     R("Audi", "Audi Q7", MIXED),
     R("Audi", "Audi A6", MIXED),
 
+    # Owner batch 2: high-impact worklist decisions reviewed against the
+    # DLT source through 2026-08. Explicit source labels beat generic defaults.
+    R("Deepal", "Deepal S07", "BEV"),
+    R("BYD", "Sealion 6 DM-i", "PHEV"),
+
+    # Kia Carnival: diesel-only historically; HEV appears in DLT from 2025-11
+    # while generic CARNIVAL continues, so the unsplit current nameplate is MIXED.
+    R("Kia", "Carnival", "HEV", raw_any=("HEV", "HYBRID")),
+    R("Kia", "Carnival", "ICE", end="2025-10"),
+    R("Kia", "Carnival", MIXED, start="2025-11"),
+
+    R("Hyundai", "Staria", "ICE"),
+
+    # Porsche: generic nameplates span ICE/PHEV; explicit E-Hybrid labels stay exact.
+    R("Porsche", "Cayenne", "PHEV", raw_any=("E-HYBRID", "PHEV", "PLUG-IN")),
+    R("Porsche", "Cayenne", MIXED),
+    R("Porsche", "Panamera", "PHEV", raw_any=("E-HYBRID", "PHEV", "PLUG-IN")),
+    R("Porsche", "Panamera", MIXED),
+
+    # JLR Sport/Velar are separate canonical models after the catalog repair below.
+    R("Land Rover", "Range Rover Sport", "PHEV", raw_any=("PHEV",)),
+    R("Land Rover", "Range Rover Sport", MIXED),
+    R("Land Rover", "Range Rover Velar", "PHEV", raw_any=("PHEV",)),
+    R("Land Rover", "Range Rover Velar", MIXED),
+
+    # Audi Q8 generic spans ICE/PHEV. Q8 e-tron remains a separate electric model.
+    R("Audi", "Q8", "PHEV", raw_any=("TFSI E", "TFSIE", "PHEV", "PLUG-IN")),
+    R("Audi", "Q8", MIXED),
+
+    # A8 source evidence proves a transition overlap: TFSI e appears in 2024-04,
+    # while a 55 TFSI ICE registration still appears in 2024-06. Keep explicit
+    # labels exact and make only the post-transition bare nameplate MIXED.
+    R("Audi", "A8", "PHEV", raw_any=("TFSI E", "TFSIE", "PHEV", "PLUG-IN")),
+    R("Audi", "A8", "ICE", raw_any=("55 TFSI",)),
+    R("Audi", "A8", "ICE", end="2024-03"),
+    R("Audi", "A8", MIXED, start="2024-04"),
+
     # Mazda: petrol/diesel/mild-hybrid all fold to ICE in this taxonomy.
     R("Mazda", "Mazda2", "ICE"),
     R("Mazda", "Mazda3", "ICE"),

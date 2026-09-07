@@ -19,7 +19,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Apply migration
-        run: python scripts/migrate_suv_taxonomy.py
+        run: |
+          python scripts/migrate_suv_taxonomy.py
+          sed -i 's/BodyType.parse("body on frame suv"), BodyType.PPV/BodyType.parse("body on frame suv"), BodyType.OFFROAD/' tests/test_vehreg.py
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

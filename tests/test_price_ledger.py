@@ -134,9 +134,9 @@ def test_2026_jaecoo_eco_prices_do_not_override_official_list():
     ledger = PriceLedger.load(year=2026, catalog=catalog)
 
     expected = {
-        "chery.jaecoo_j5.j5.trim.long_range_dynamic_bev": 629000,
-        "chery.jaecoo_j5.j5.trim.long_range_max_bev": 679000,
-        "chery.jaecoo_j5.j5.trim.max_plus_bev": 699000,
+        "jaecoo.jaecoo_5_ev.j5.trim.long_range_dynamic_bev": 629000,
+        "jaecoo.jaecoo_5_ev.j5.trim.long_range_max_bev": 679000,
+        "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev": 699000,
     }
     for trim_id, amount in expected.items():
         row = ledger.latest(trim_id, price_type=PriceType.ECO_STICKER_PRICE)

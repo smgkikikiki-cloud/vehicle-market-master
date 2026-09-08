@@ -7,9 +7,9 @@ history. Everything below is on `main` and reproducible from the repo.
 
 ```
 registrations   4,064,148 units across 35,212 fact rows, 68 months (2021-01 … 2026-08)
-open review        20,045 units (0.49%)
+open review        20,030 units (0.49%)
 trim ledger        reconciles at 0 against the master
-tests                 284
+tests                 401
 ```
 
 Where the powertrain reading comes from:
@@ -105,6 +105,25 @@ python -c "from vehreg.db import connect; from vehreg import trimledger; \
 ```
 
 and confirm the total moved only by what you meant to move.
+
+## One nameplate, one home
+
+A nameplate duplicated under its parent group splits a model in two: volume
+lands on whichever entry DLT's brand column resolves to, and the other copy
+carries the product data while reading as a zero-volume car. Three of these had
+accumulated — JAECOO 5 and JAECOO J7 under `chery`, Deepal L07 and S07 under
+`changan` — along with brand aliases (`chery`→jaecoo, `changan`→deepal/avatr)
+pointing at brands that have their own files.
+
+The JAECOO 5 duplicate was also live damage waiting to happen: its bare aliases
+`5 ev` and `j5` made **Omoda C5 EV** ambiguous, so the next re-ingest would have
+moved 1,464 Omoda C5 units into the review queue. The fix recovered them —
+`chery.omoda_c5` 2,649 → 4,113 units, the `chery` brand-only bucket 1,479 → 15.
+
+`tests/test_catalog_no_shadow_nameplates.py` fails on any nameplate claimed by
+two brands, any brand alias naming a brand with its own file, and any model
+alias ambiguous across brands. Do not add a nameplate under an OEM group when
+the marque already has a file.
 
 ## Open work
 

@@ -2,27 +2,30 @@
   "decisions": [
     {
       "action": "accept_existing_trim",
-      "notes": "Reference mapping retained from reviewed Phase 1 ECO evidence.",
+      "notes": "Mapping proposed from Phase 1 ECO evidence. Awaiting owner review; not counted as accepted.",
+      "origin": "agent",
       "reviewed_at": "2026-09-08",
-      "reviewer": "vehicle-master-owner",
+      "reviewer": "agent-proposed",
       "source_id": "d744d9f3-d393-4ac3-b441-17a022098fed",
-      "trim_id": "chery.jaecoo_j5.j5.trim.long_range_dynamic_bev"
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.long_range_dynamic_bev"
     },
     {
       "action": "accept_existing_trim",
-      "notes": "Reference mapping retained from reviewed Phase 1 ECO evidence.",
+      "notes": "Mapping proposed from Phase 1 ECO evidence. Awaiting owner review; not counted as accepted.",
+      "origin": "agent",
       "reviewed_at": "2026-09-08",
-      "reviewer": "vehicle-master-owner",
+      "reviewer": "agent-proposed",
       "source_id": "b4529bb4-d813-416b-b272-430b123cc06c",
-      "trim_id": "chery.jaecoo_j5.j5.trim.long_range_max_bev"
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.long_range_max_bev"
     },
     {
       "action": "accept_existing_trim",
-      "notes": "Reference mapping retained from reviewed Phase 1 ECO evidence.",
+      "notes": "Mapping proposed from Phase 1 ECO evidence. Awaiting owner review; not counted as accepted.",
+      "origin": "agent",
       "reviewed_at": "2026-09-08",
-      "reviewer": "vehicle-master-owner",
+      "reviewer": "agent-proposed",
       "source_id": "98c1d7de-79db-4581-b332-69abe657a532",
-      "trim_id": "chery.jaecoo_j5.j5.trim.max_plus_bev"
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev"
     }
   ],
   "schema_version": 1,

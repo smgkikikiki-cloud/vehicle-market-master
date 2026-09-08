@@ -5,11 +5,11 @@ from vehreg.catalog import Catalog
 from vehreg.homologation import ECOStickerSpecStore, spec_dir
 
 
-MODEL_ID = "chery.jaecoo_j5"
-DYNAMIC = "chery.jaecoo_j5.j5.trim.long_range_dynamic_bev"
-LONG_MAX = "chery.jaecoo_j5.j5.trim.long_range_max_bev"
-MAX_PLUS = "chery.jaecoo_j5.j5.trim.max_plus_bev"
-ULTRA = "chery.jaecoo_j5.j5.trim.ultra_bev"
+MODEL_ID = "jaecoo.jaecoo_5_ev"
+DYNAMIC = "jaecoo.jaecoo_5_ev.j5.trim.long_range_dynamic_bev"
+LONG_MAX = "jaecoo.jaecoo_5_ev.j5.trim.long_range_max_bev"
+MAX_PLUS = "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev"
+ULTRA = "jaecoo.jaecoo_5_ev.j5.trim.ultra_bev"
 
 
 def test_jaecoo_5_ecosticker_phase1_specs_load_and_match_market_trims():
@@ -53,7 +53,7 @@ def test_jaecoo_5_ecosticker_phase1_specs_load_and_match_market_trims():
 
 
 def test_ecosticker_phase1_spec_file_contains_no_price_fields():
-    path = spec_dir(Path("vehreg/data"), 2026) / "chery.json"
+    path = spec_dir(Path("vehreg/data"), 2026) / "jaecoo.json"
     payload = json.loads(path.read_text(encoding="utf-8"))
 
     for row in payload["specs"]:

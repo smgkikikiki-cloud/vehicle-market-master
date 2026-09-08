@@ -17,12 +17,14 @@ from vehreg.ecosticker_ingest import (
     load_raw_inventory,
     normalize_inventory,
     save_decisions,
+    validate_decisions,
 )
 from vehreg.product import ProductMaster
 
 
 SOURCE_ID = "98c1d7de-79db-4581-b332-69abe657a532"
-TRIM_ID = "chery.jaecoo_j5.j5.trim.max_plus_bev"
+TRIM_ID = "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev"
+SNAPSHOT_DATE = "2026-09-08"
 
 
 def raw_row(**changes):
@@ -34,6 +36,19 @@ def raw_row(**changes):
         "price_thb": 699000,
         "importer_raw": "บริษัท โอโมดา แอนด์ เจคู (ประเทศไทย) จำกัด",
         "list_page": 1,
+        # As harvested: the ECO detail page is what says BEV, 235/55R18, 4380mm.
+        "detail": {
+            "cartype_name": "BEV",
+            "car_length": "4380",
+            "car_width": "1860",
+            "car_height": "1650",
+            "car_seats": "5",
+            "total_weight": "1645",
+            "wheel_size": "235/55R18",
+            "battery_type": "Lithium iron phosphate (LFP)",
+            "factory": "OMODA & JAECOO MANUFACTURING (THAILAND) CO., LTD.",
+        },
+        "detail_status": "available",
     }
     row.update(changes)
     return row
@@ -54,31 +69,60 @@ def local_data(tmp_path):
     return tmp_path
 
 
-def test_normalizer_exposes_jaecoo_catalog_collision_instead_of_guessing():
+def test_normalizer_lands_jaecoo_on_its_own_brand_without_a_collision():
+    """The JAECOO 5 used to exist twice, so this row could not be matched.
+
+    One nameplate under one brand is what makes the match unambiguous; the
+    duplicate under CHERY is gone and the row now resolves on its own.
+    """
     catalog = Catalog.load(year=2026)
     row = normalize_inventory([raw_row()], catalog, "2026-09-08")[0]
-    assert row["brand_candidates"] == ["chery", "jaecoo"]
+    assert row["brand_candidates"] == ["jaecoo"]
     assert {candidate["model_id"] for candidate in row["model_candidates"]} == {
-        "chery.jaecoo_j5", "jaecoo.jaecoo_5_ev",
+        "jaecoo.jaecoo_5_ev",
     }
-    assert row["matched_model_id"] is None
-    assert row["matched_generation_id"] is None
-    assert row["powertrain_candidate"] == "BEV"
-    assert row["review_status"] == "needs_model_review"
-    assert "brand_alias_collision" in row["review_reasons"]
+    assert row["matched_model_id"] == "jaecoo.jaecoo_5_ev"
+    assert "brand_alias_collision" not in row["review_reasons"]
     assert row["price_classification"] == "ECO_STICKER_PRICE"
 
 
 @pytest.mark.parametrize(("label", "expected"), [
     ("SEALION 6 DM-i PREMIUM", "PHEV"),
     ("6T REEV 4WD", "REEV"),
-    ("MODEL 3 EV LONG RANGE", "BEV"),
     ("CAMRY HEV PREMIUM", "HEV"),
+    ("KICKS e-POWER VL", "HEV"),
     ("MIRAI FUEL CELL", "FCEV"),
     ("COROLLA ALTIS 1.8 SPORT", None),
+    # A name is not evidence of electrification either way.
+    ("GLE 53 4MATIC+ 48V", "ICE"),
+    ("BENTAYGA HYBRID", None),
+    ("AMG GLE 53 HYBRID 4MATIC+", None),
+    ("MODEL 3 EV LONG RANGE", None),
 ])
-def test_powertrain_inference_requires_explicit_label(label, expected):
+def test_powertrain_inference_requires_a_decisive_label(label, expected):
     assert infer_powertrain(label)[0] == expected
+
+
+@pytest.mark.parametrize(("label", "engine_name", "expected"), [
+    # The ECO record's own declared engine type settles all three of these,
+    # and the model name would have got two of them wrong.
+    ("AMG GLE 53 HYBRID 4MATIC+", "\u0e44\u0e21\u0e25\u0e4c\u0e14\u0e44\u0e2e\u0e1a\u0e23\u0e34\u0e14 (MHEV)", "ICE"),
+    ("BENTAYGA HYBRID", "\u0e1b\u0e25\u0e31\u0e4a\u0e01\u0e2d\u0e34\u0e19\u0e44\u0e2e\u0e1a\u0e23\u0e34\u0e14", "PHEV"),
+    ("VELLFIRE HYBRID Z PREMIER", "\u0e44\u0e2e\u0e1a\u0e23\u0e34\u0e14 (HEV)", "HEV"),
+    ("RANGER WILDTRAK", "\u0e14\u0e35\u0e40\u0e0b\u0e25", "ICE"),
+    ("YARIS ATIV SMART", "\u0e41\u0e01\u0e4a\u0e2a\u0e42\u0e0b\u0e25\u0e35\u0e19", "ICE"),
+    # A declared plug-in whose name says REEV keeps the range-extender label.
+    ("6T REEV 4WD ULTRA", "\u0e1b\u0e25\u0e31\u0e4a\u0e01\u0e2d\u0e34\u0e19\u0e44\u0e2e\u0e1a\u0e23\u0e34\u0e14", "REEV"),
+])
+def test_declared_engine_type_outranks_the_model_name(label, engine_name, expected):
+    powertrain, basis = infer_powertrain(label, {"engine_name": engine_name})
+    assert (powertrain, basis) == (expected, "detail_engine_name")
+
+
+def test_blank_engine_name_falls_back_to_the_coarse_eco_class():
+    assert infer_powertrain("ATTO 3 EXTENDED RANGE",
+                            {"engine_name": "", "cartype_name": "BEV"}) == (
+        "BEV", "detail_cartype")
 
 
 @pytest.mark.parametrize("changes", [
@@ -183,7 +227,7 @@ def test_review_cannot_force_powertrain_conflict(local_data, tmp_path):
         "decisions": [{
             "source_id": SOURCE_ID,
             "action": "accept_existing_trim",
-            "trim_id": "chery.jaecoo_j5.j5.trim.max_plus_bev",
+            "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev",
             "reviewer": "owner",
             "reviewed_at": "2026-09-08",
         }],
@@ -224,22 +268,61 @@ def test_committed_1640_record_snapshot_and_reference_review_are_self_consistent
     normalized = [json.loads(line) for line in normalized_bytes.splitlines()]
     assert manifest["records"] == len(raw) == len(normalized) == 1640
     assert manifest["unique_source_ids"] == len({row["source_id"] for row in raw}) == 1640
-    assert manifest["pages"] == 55
-    assert sum(row["list_page"] == 55 for row in raw) == 20
+    assert manifest["pages"] == 137
+    assert sum(row["list_page"] == 137 for row in raw) == 8
     assert hashlib.sha256(raw_bytes).hexdigest() == manifest["raw_sha256"]
     assert hashlib.sha256(normalized_bytes).hexdigest() == manifest["normalized_sha256"]
     assert manifest["counts_by_review_status"] == {
-        "needs_model_review": 286,
-        "needs_powertrain_review": 1012,
-        "ready_for_review": 342,
+        "needs_model_review": 274,
+        "needs_powertrain_review": 31,
+        "ready_for_review": 1335,
     }
-    assert manifest["records_with_unique_model"] == 1357
-    assert manifest["records_with_unique_generation"] == 1354
-    assert manifest["catalog_models_matched"] == 260
+    assert manifest["records_with_unique_model"] == 1369
+    assert manifest["records_with_unique_generation"] == 1366
+    assert manifest["catalog_models_matched"] == 263
+    # Every listed record now carries its own detail page, so the powertrain
+    # comes from the manufacturer's declaration rather than the model name.
+    assert manifest["coverage"]["detail_pages"] == "1640/1640"
+    assert manifest["coverage"]["dimensions"] == 1640
+    assert manifest["coverage"]["wheel_size"] == 1384
+    assert manifest["powertrain_basis"]["explicit_label"] == 2
+    assert manifest["counts_by_review_reason"].get("brand_alias_collision") is None
     status = ingestion_status(snapshot_date="2026-09-08")
-    assert status["accepted_existing_trims"] == 3
-    assert status["accepted_with_spec_evidence"] == 3
-    assert status["accepted_with_tyre_evidence"] == 3
+    # Three reference mappings exist, and all three are still proposals.
+    assert status["accepted_existing_trims"] == 0
+    assert status["agent_proposed_existing_trims"] == 3
     # Staging all 1,640 public prices does not append them to the retail ledger.
     assert ProductMaster.load().prices.coverage()["eco_sticker_price_records"] == 3
-    assert len(list(Catalog.load(year=2026).iter_resolved())) == 371
+    assert len(list(Catalog.load(year=2026).iter_resolved())) == 367
+
+
+def _decision(**changes):
+    row = {
+        "source_id": SOURCE_ID,
+        "action": "accept_existing_trim",
+        "trim_id": TRIM_ID,
+        "reviewer": "agent-proposed",
+        "reviewed_at": "2026-09-08",
+        "notes": "",
+    }
+    row.update(changes)
+    return {"schema_version": 1, "snapshot_date": "2026-09-08", "decisions": [row]}
+
+
+def test_a_decision_this_code_wrote_is_marked_as_a_proposal():
+    catalog = Catalog.load(year=2026)
+    records = normalize_inventory([raw_row()], catalog, "2026-09-08")
+    for row in records:
+        row["powertrain_candidate"] = catalog.trims[TRIM_ID].powertrain.value
+    agent = validate_decisions(_decision(), records, catalog)[0]
+    assert (agent["reviewer"], agent["origin"]) == ("agent-proposed", "agent")
+    human = validate_decisions(
+        _decision(reviewer="vehicle-master-owner"), records, catalog)[0]
+    assert human["origin"] == "human"
+
+
+def test_committed_reference_decisions_are_proposals_not_owner_acceptances():
+    """Nothing may sign off in the owner's name on the owner's behalf."""
+    status = ingestion_status(snapshot_date=SNAPSHOT_DATE)
+    assert status["accepted_existing_trims"] == 0
+    assert status["agent_proposed_existing_trims"] == 3

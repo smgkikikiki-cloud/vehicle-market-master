@@ -120,6 +120,350 @@
               "price_min_thb": 1999000,
               "price_max_thb": 1999000
             }
+          ],
+          "trims": [
+            {
+              "id": "3_0l_v6_turbo_4wd_10at",
+              "name": "3.0L V6 Turbo 4WD 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "c907c04b-232f-455d-acd2-86f616640fc1"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1932,
+              "tire_front": "255/55R20",
+              "tire_rear": "255/55R20"
+            },
+            {
+              "id": "raptor_2_0l_bi_turbo_4wd_10at",
+              "name": "Raptor 2.0L Bi-Turbo 4WD 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "216c4c71-e7da-43b5-98f7-b8a5f23ef32b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1932,
+              "tire_front": "285/70R17",
+              "tire_rear": "285/70R17"
+            },
+            {
+              "id": "raptor_3_0l_v6_twin_turbo_ecoboost_4wd_10at",
+              "name": "Raptor 3.0L V6 Twin-Turbo EcoBoost 4WD 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "719801cb-7494-454d-b46e-862deb508f18"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5381,
+              "width_mm": 2028,
+              "height_mm": 1922,
+              "tire_front": "285/70R17",
+              "tire_rear": "285/70R17"
+            },
+            {
+              "id": "sport_2_0l_turbo_4x4_6at",
+              "name": "Sport 2.0L Turbo 4x4 6AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "28c60576-baf9-4892-bf8c-ce191d6ac33a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1886,
+              "tire_front": "255/65R18",
+              "tire_rear": "255/65R18"
+            },
+            {
+              "id": "sport_2_0l_turbo_hr_6at",
+              "name": "Sport 2.0L Turbo HR 6AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "fc5f6caa-8666-4595-a9ca-d277a8617c40"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1886,
+              "tire_front": "255/65R18",
+              "tire_rear": "255/65R18"
+            },
+            {
+              "id": "stormtrak_2_0l_bi_turbo_4x4_10at",
+              "name": "Stormtrak 2.0L Bi-Turbo 4x4 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "20f5bfac-6b6b-4037-a20e-7933162be9de"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1932,
+              "tire_front": "255/55R20",
+              "tire_rear": "255/55R20"
+            },
+            {
+              "id": "stormtrak_2_0l_bi_turbo_hr_10at",
+              "name": "Stormtrak 2.0L Bi-Turbo HR 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "949ce678-c081-4c3e-9f40-082fb6893b7b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1932,
+              "tire_front": "255/55R20",
+              "tire_rear": "255/55R20"
+            },
+            {
+              "id": "wildtrak_2_0l_turbo_4x4_10at",
+              "name": "Wildtrak 2.0L Turbo 4x4 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "c0f6caab-6f18-42cd-a9ff-6c3c703b5922"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 1918,
+              "height_mm": 1884,
+              "tire_front": "255/65R18",
+              "tire_rear": "255/65R18"
+            },
+            {
+              "id": "wildtrak_2_0l_turbo_hr_10at",
+              "name": "Wildtrak 2.0L Turbo HR 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "31b05a86-eeda-44de-a369-2d4fb8ec158d"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 1918,
+              "height_mm": 1884,
+              "tire_front": "255/65R18",
+              "tire_rear": "255/65R18"
+            },
+            {
+              "id": "wildtrak_2_0l_turbo_hr_6at",
+              "name": "Wildtrak 2.0L Turbo HR 6AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "daebf32b-6ee8-4734-be08-9646be01beda"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1916,
+              "tire_front": "255/65R18",
+              "tire_rear": "255/65R18"
+            },
+            {
+              "id": "wildtrak_2_0l_turbo_hr_6at_extra_pack",
+              "name": "Wildtrak 2.0L Turbo HR 6AT (Extra Pack)",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "765dbbf8-34b1-44c6-b24f-e817dbaca2ea"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1916,
+              "tire_front": "255/65R18",
+              "tire_rear": "255/65R18"
+            },
+            {
+              "id": "wildtrak_3_0l_v6_turbo_4wd_10at",
+              "name": "Wildtrak 3.0L V6 Turbo 4WD 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "9498c65e-267b-4325-add9-254f746f7c67"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1932,
+              "tire_front": "255/55R20",
+              "tire_rear": "255/55R20"
+            },
+            {
+              "id": "wildtrak_x_3_0l_v6_turbo_4wd_10at",
+              "name": "Wildtrak-X 3.0L V6 Turbo 4WD 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "da4c93fd-752f-4ccc-ace8-cdf45e518234"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 1949,
+              "height_mm": 1914,
+              "tire_front": "265/70R17",
+              "tire_rear": "265/70R17"
+            },
+            {
+              "id": "wolftrak_2_0l_turbo_4x4_10at",
+              "name": "Wolftrak 2.0L Turbo 4x4 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "d66998ea-6a63-4f35-a83f-674ac5279e96"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 1918,
+              "height_mm": 1884,
+              "tire_front": "255/70R17",
+              "tire_rear": "255/70R17"
+            },
+            {
+              "id": "wolftrak_2_0l_turbo_hr_10at",
+              "name": "Wolftrak 2.0L Turbo HR 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "b1a2a6df-916e-4c54-bc4c-b5516cd649e2"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 1918,
+              "height_mm": 1884,
+              "tire_front": "255/70R17",
+              "tire_rear": "255/70R17"
+            },
+            {
+              "id": "xl_2_0l_turbo_hr_6mt",
+              "name": "XL+ 2.0L Turbo HR 6MT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "b04c4434-ec1c-4ff7-8075-877a58ea5bc2"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1886,
+              "tire_front": "255/70R16",
+              "tire_rear": "255/70R16"
+            },
+            {
+              "id": "xls_2_0l_turbo_hr_10at",
+              "name": "XLS 2.0L Turbo HR 10AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "a827c510-37a0-48a1-b51a-8e52e064c399"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 1918,
+              "height_mm": 1884,
+              "tire_front": "255/70R17",
+              "tire_rear": "255/70R17"
+            },
+            {
+              "id": "xls_2_0l_turbo_hr_6at",
+              "name": "XLS 2.0L Turbo HR 6AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "0b0a7600-7251-4205-9595-23d232b38b58"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1886,
+              "tire_front": "255/70R17",
+              "tire_rear": "255/70R17"
+            },
+            {
+              "id": "xls_2_0l_turbo_hr_6at_extra_pack",
+              "name": "XLS 2.0L Turbo HR 6AT (Extra Pack)",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "d49cd35a-056e-41ab-8582-1502610013a0"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5370,
+              "width_mm": 2208,
+              "height_mm": 1886,
+              "tire_front": "255/70R17",
+              "tire_rear": "255/70R17"
+            }
           ]
         }
       ],

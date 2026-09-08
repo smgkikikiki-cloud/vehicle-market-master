@@ -431,6 +431,41 @@ def cmd_market(args) -> int:
             snapshot_date=args.snapshot_date, write=args.write)
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0
+    if args.market_cmd == "price-run":
+        from . import pricefeed
+        from .catalog import Catalog
+        from .pricing import PriceLedger
+        documents, claims = pricefeed.load_batch(args.path)
+        catalog = Catalog.load(args.data_dir, args.year)
+        ledger = PriceLedger.load(args.data_dir, year=args.year, catalog=catalog)
+        decisions = (pricefeed.load_decisions(args.decisions)
+                     if args.decisions else {})
+        result = pricefeed.run(documents, claims,
+                               pricefeed.load_sources(args.data_dir, args.year),
+                               catalog, campaigns=ledger.campaigns,
+                               decisions=decisions)
+        rows = pricefeed.to_price_rows(
+            result, observed_at=date.today().isoformat(),
+            source_of=pricefeed.load_sources(args.data_dir, args.year))
+        written = None
+        if args.write and rows:
+            written = append_prices(args.data_dir, args.year, {"prices": rows},
+                                    write=True)
+        print(json.dumps({**result.summary(), "offer_rows": len(rows),
+                          "written": written,
+                          "review": result.review[:40],
+                          "trim_proposals": result.trim_proposals[:40]},
+                         ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd == "quote":
+        from .catalog import Catalog
+        from .pricing import PriceLedger
+        catalog = Catalog.load(args.data_dir, args.year)
+        ledger = PriceLedger.load(args.data_dir, year=args.year, catalog=catalog)
+        as_of = date.fromisoformat(args.as_of) if args.as_of else None
+        print(json.dumps(ledger.campaign_quote(args.trim_id, as_of=as_of),
+                         ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
     if args.market_cmd == "eco-status":
         result = ingestion_status(
             args.data_dir, args.year, snapshot_date=args.snapshot_date)
@@ -472,7 +507,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("market", help="Vehicle Master retail products, specs and Price Ledger")
     msub = p.add_subparsers(dest="market_cmd", required=True)
     for name in ("list", "show", "coverage", "validate", "import-trims", "append-prices",
-                 "eco-build", "eco-review", "eco-status"):
+                 "eco-build", "eco-review", "eco-status", "price-run", "quote"):
         m = msub.add_parser(name)
         m.set_defaults(func=cmd_market)
         if name in ("list", "show", "coverage"):
@@ -497,6 +532,14 @@ def build_parser() -> argparse.ArgumentParser:
             m.add_argument("--snapshot-date", required=True, help="snapshot date YYYY-MM-DD")
             m.add_argument("--write", action="store_true",
                            help="write validated decisions; default is dry run")
+        if name == "price-run":
+            m.add_argument("path", help="harvested batch JSON")
+            m.add_argument("--decisions", help="reviewer decisions JSON")
+            m.add_argument("--write", action="store_true",
+                           help="append canonical offers to the ledger; default is dry run")
+        if name == "quote":
+            m.add_argument("trim_id")
+            m.add_argument("--as-of", help="date YYYY-MM-DD")
         if name == "eco-status":
             m.add_argument("--snapshot-date", required=True, help="snapshot date YYYY-MM-DD")
 

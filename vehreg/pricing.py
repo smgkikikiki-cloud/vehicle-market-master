@@ -11,11 +11,24 @@ Price rows are stored under::
 
 and always reference a stable ``MarketTrim.id``.  The ledger never participates
 in ``Catalog.iter_resolved()`` and therefore cannot redistribute DLT volume.
+
+A **campaign** is a dated promotion a brand runs across one or more trims.  Its
+alternatives are :class:`CampaignOption` rows: "cash discount" *or* "0% finance"
+are two options, and a buyer takes one.  Conditions inside one option are AND;
+options are OR.  Nothing here merges the best of two options into one offer.
+
+Campaign prices never overwrite MSRP.  They are separate records on the same
+trim, and when a campaign ends nothing is deleted -- :meth:`PriceLedger.
+current_campaign_offers` simply stops selecting it.
+
+A price type says what *kind of money* a number is, never when it applies.
+When it applies is ``effective_from``/``effective_to``, and an announced future
+price is an ordinary ``LIST_PRICE`` whose window has not opened yet.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from enum import Enum
 import json
@@ -41,6 +54,8 @@ class PriceType(str, Enum):
     CAMPAIGN_PRICE = "CAMPAIGN_PRICE"
     FINANCE_PRICE = "FINANCE_PRICE"
     ESTIMATED_PRICE = "ESTIMATED_PRICE"
+    # One dealer's number, not the manufacturer's.
+    DEALER_PRICE = "DEALER_PRICE"
     ECO_STICKER_PRICE = "ECO_STICKER_PRICE"
     UNKNOWN = "UNKNOWN"
 
@@ -59,6 +74,10 @@ def price_dir(data_dir: Path | str, year: int) -> Path:
     return Path(data_dir) / str(year) / "market" / "prices"
 
 
+def campaign_dir(data_dir: Path | str, year: int) -> Path:
+    return Path(data_dir) / str(year) / "market" / "campaigns"
+
+
 def _iso_date(raw: object, field_name: str) -> Optional[str]:
     if raw in (None, ""):
         return None
@@ -73,7 +92,200 @@ def _iso_date(raw: object, field_name: str) -> Optional[str]:
 
 
 @dataclass(frozen=True, slots=True)
+class Conditions:
+    """What a buyer must do to get a campaign price.
+
+    Only the fields the resolver branches on are modelled.  Eligible colours,
+    customer groups, sales channel, trade-in, interest rate and down payment are
+    displayed rather than computed, so they stay verbatim in ``text`` in the
+    words the source used.  A field earns a column by being read by code.
+    """
+
+    booking_from: Optional[str] = None
+    booking_to: Optional[str] = None
+    delivery_by: Optional[str] = None
+    #: Announced cap. Never counted down: nobody publishes live remaining quota,
+    #: so the cap and its date are shown and no expiry is inferred from it.
+    quota_units: Optional[int] = None
+    finance_required: bool = False
+    text: str = ""
+
+    def validate(self) -> list[str]:
+        problems: list[str] = []
+        for field_name in ("booking_from", "booking_to", "delivery_by"):
+            try:
+                _iso_date(getattr(self, field_name), field_name)
+            except PricingError as exc:
+                problems.append(str(exc))
+        if self.booking_from and self.booking_to and \
+                self.booking_from > self.booking_to:
+            problems.append("booking_from is after booking_to")
+        if self.quota_units is not None and (
+                type(self.quota_units) is not int or self.quota_units <= 0):
+            problems.append("quota_units must be a positive integer")
+        if not isinstance(self.finance_required, bool):
+            problems.append("finance_required must be a boolean")
+        return problems
+
+    def open_on(self, when: date) -> bool:
+        day = when.isoformat()
+        if self.booking_from and day < self.booking_from:
+            return False
+        if self.booking_to and day > self.booking_to:
+            return False
+        return True
+
+
+@dataclass(frozen=True, slots=True)
+class CampaignOption:
+    """One alternative inside a campaign. Options are OR, never combined."""
+
+    id: str
+    label: str = ""
+    conditions: Conditions = field(default_factory=Conditions)
+
+    def validate(self) -> list[str]:
+        problems = ["option id is required"] if not self.id else []
+        return problems + [f"option {self.id}: {p}"
+                           for p in self.conditions.validate()]
+
+
+@dataclass(frozen=True, slots=True)
+class Campaign:
+    """A dated promotion covering one or more trims of one brand."""
+
+    id: str
+    brand_id: str
+    name: str = ""
+    starts: Optional[str] = None
+    ends: Optional[str] = None
+    source: str = ""
+    source_ref: str = ""
+    options: tuple[CampaignOption, ...] = ()
+    notes: str = ""
+
+    def validate(self) -> list[str]:
+        problems: list[str] = []
+        if not self.id:
+            problems.append("campaign id is required")
+        if not self.brand_id:
+            problems.append(f"campaign {self.id}: brand_id is required")
+        for field_name in ("starts", "ends"):
+            try:
+                _iso_date(getattr(self, field_name), field_name)
+            except PricingError as exc:
+                problems.append(f"campaign {self.id}: {exc}")
+        if self.starts and self.ends and self.starts > self.ends:
+            problems.append(f"campaign {self.id}: starts is after ends")
+        if not self.options:
+            problems.append(f"campaign {self.id}: at least one option is required")
+        seen: set[str] = set()
+        for option in self.options:
+            if option.id in seen:
+                problems.append(f"campaign {self.id}: duplicate option {option.id}")
+            seen.add(option.id)
+            problems.extend(f"campaign {self.id}: {p}" for p in option.validate())
+        return problems
+
+    def option(self, option_id: str) -> Optional[CampaignOption]:
+        return next((o for o in self.options if o.id == option_id), None)
+
+    def live_on(self, when: date) -> bool:
+        day = when.isoformat()
+        if self.starts and day < self.starts:
+            return False
+        if self.ends and day > self.ends:
+            return False
+        return True
+
+
+def to_conditions_dict(conditions: Conditions) -> dict:
+    """Only the parts a reader needs; empty fields are noise on a page."""
+    payload = {
+        "booking_from": conditions.booking_from,
+        "booking_to": conditions.booking_to,
+        "delivery_by": conditions.delivery_by,
+        "quota_units": conditions.quota_units,
+        "finance_required": conditions.finance_required,
+        "text": conditions.text,
+    }
+    return {k: v for k, v in payload.items() if v not in (None, "", False)}
+
+
+def _read_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise PricingError(f"{path}: invalid JSON: {exc}") from exc
+
+
+def _parse_conditions(raw: object, source: str) -> Conditions:
+    if raw in (None, {}):
+        return Conditions()
+    if not isinstance(raw, dict):
+        raise PricingError(f"{source}: conditions must be an object")
+    unknown = set(raw) - set(Conditions.__dataclass_fields__)
+    if unknown:
+        raise PricingError(f"{source}: unknown condition fields: {sorted(unknown)}")
+    quota = raw.get("quota_units")
+    if quota is not None and (isinstance(quota, bool)
+                              or not re.fullmatch(r"[0-9]+", str(quota))):
+        raise PricingError(f"{source}: quota_units must be a positive integer")
+    return Conditions(
+        booking_from=_iso_date(raw.get("booking_from"), "booking_from"),
+        booking_to=_iso_date(raw.get("booking_to"), "booking_to"),
+        delivery_by=_iso_date(raw.get("delivery_by"), "delivery_by"),
+        quota_units=int(quota) if quota is not None else None,
+        finance_required=bool(raw.get("finance_required", False)),
+        text=str(raw.get("text") or "").strip(),
+    )
+
+
+def _parse_campaign(raw: object, source: str) -> Campaign:
+    if not isinstance(raw, dict):
+        raise PricingError(f"{source}: campaign must be an object")
+    unknown = set(raw) - set(Campaign.__dataclass_fields__)
+    if unknown:
+        raise PricingError(f"{source}: unknown campaign fields: {sorted(unknown)}")
+    options = raw.get("options") or []
+    if not isinstance(options, list):
+        raise PricingError(f"{source}: campaign options must be an array")
+    parsed: list[CampaignOption] = []
+    for option in options:
+        if not isinstance(option, dict):
+            raise PricingError(f"{source}: campaign option must be an object")
+        extra = set(option) - set(CampaignOption.__dataclass_fields__)
+        if extra:
+            raise PricingError(f"{source}: unknown option fields: {sorted(extra)}")
+        parsed.append(CampaignOption(
+            id=str(option.get("id") or "").strip(),
+            label=str(option.get("label") or "").strip(),
+            conditions=_parse_conditions(option.get("conditions"), source),
+        ))
+    return Campaign(
+        id=str(raw.get("id") or "").strip(),
+        brand_id=str(raw.get("brand_id") or "").strip(),
+        name=str(raw.get("name") or "").strip(),
+        starts=_iso_date(raw.get("starts"), "starts"),
+        ends=_iso_date(raw.get("ends"), "ends"),
+        source=str(raw.get("source") or "").strip(),
+        source_ref=str(raw.get("source_ref") or "").strip(),
+        options=tuple(parsed),
+        notes=str(raw.get("notes") or ""),
+    )
+
+
+@dataclass(frozen=True, slots=True)
 class PriceRecord:
+    """One price a source stated for one trim, over one window.
+
+    A campaign price carries ``campaign_id``/``option_id`` back to the promotion
+    that produced it, and ``reference_price_thb`` is the "from" figure the source
+    quoted beside it.  Those three fields are the whole of what a campaign adds:
+    the number itself is an ordinary price row, so a campaign can never overwrite
+    or hide the MSRP.
+    """
+
     trim_id: str
     amount_thb: int
     price_type: PriceType
@@ -83,6 +295,17 @@ class PriceRecord:
     source: str = ""
     source_ref: str = ""
     notes: str = ""
+    campaign_id: Optional[str] = None
+    option_id: Optional[str] = None
+    #: The price this one is discounted from, as the source stated it.
+    reference_price_thb: Optional[int] = None
+
+    @property
+    def discount_thb(self) -> Optional[int]:
+        """Derived, never stored: a stored copy is one more thing to disagree."""
+        if self.reference_price_thb is None:
+            return None
+        return self.reference_price_thb - self.amount_thb
 
     def validate(self) -> list[str]:
         problems: list[str] = []
@@ -92,6 +315,18 @@ class PriceRecord:
             problems.append("amount_thb must be a positive integer")
         if not isinstance(self.price_type, PriceType):
             problems.append("price_type must be a PriceType")
+        if self.reference_price_thb is not None and (
+                type(self.reference_price_thb) is not int
+                or self.reference_price_thb <= 0):
+            problems.append("reference_price_thb must be a positive integer")
+        if self.price_type is PriceType.CAMPAIGN_PRICE and not self.campaign_id:
+            problems.append("CAMPAIGN_PRICE requires a campaign_id")
+        if self.option_id and not self.campaign_id:
+            problems.append("option_id without campaign_id")
+        if self.campaign_id and self.price_type not in (
+                PriceType.CAMPAIGN_PRICE, PriceType.FINANCE_PRICE):
+            problems.append(
+                f"{self.price_type.value} must not belong to a campaign")
         for field_name in ("effective_from", "effective_to", "observed_at"):
             try:
                 _iso_date(getattr(self, field_name), field_name)
@@ -122,22 +357,41 @@ class PriceLedger:
         self.year = year
         self.catalog = catalog
         self.records: list[PriceRecord] = []
+        self.campaigns: dict[str, Campaign] = {}
 
     @classmethod
     def load(cls, data_dir: Path | str = DATA_DIR, *,
              year: int = DEFAULT_YEAR,
              catalog: Optional["Catalog"] = None) -> "PriceLedger":
         ledger = cls(year, catalog=catalog)
+        # Campaigns first: a price row may not name a campaign that is unknown.
+        for path in sorted(campaign_dir(data_dir, year).glob("*.json")) \
+                if campaign_dir(data_dir, year).is_dir() else []:
+            ledger.add_campaign_payload(_read_json(path), source=str(path))
         folder = price_dir(data_dir, year)
         if not folder.is_dir():
             return ledger
         for path in sorted(folder.glob("*.json")):
-            try:
-                payload = json.loads(path.read_text(encoding="utf-8"))
-            except json.JSONDecodeError as exc:
-                raise PricingError(f"{path}: invalid JSON: {exc}") from exc
-            ledger.add_payload(payload, source=str(path))
+            ledger.add_payload(_read_json(path), source=str(path))
         return ledger
+
+    def add_campaign_payload(self, payload: dict, *,
+                             source: str = "<memory>") -> None:
+        if not isinstance(payload, dict) or not isinstance(
+                payload.get("campaigns"), list):
+            raise PricingError(f"{source}: campaigns must be an array")
+        staged: list[Campaign] = []
+        for raw in payload["campaigns"]:
+            campaign = _parse_campaign(raw, source)
+            if campaign.id in self.campaigns or any(
+                    c.id == campaign.id for c in staged):
+                raise PricingError(f"{source}: duplicate campaign {campaign.id}")
+            problems = campaign.validate()
+            if problems:
+                raise PricingError(f"{source}: " + "; ".join(problems))
+            staged.append(campaign)
+        # A malformed later campaign must not leave earlier ones half-imported.
+        self.campaigns.update({c.id: c for c in staged})
 
     def add_payload(self, payload: dict, *, source: str = "<memory>") -> None:
         if not isinstance(payload, dict) or not isinstance(payload.get("prices"), list):
@@ -159,6 +413,13 @@ class PriceLedger:
                 amount = int(value)
             except (KeyError, TypeError, ValueError) as exc:
                 raise PricingError(f"{source}: invalid amount_thb for {trim_id!r}") from exc
+            reference = raw.get("reference_price_thb")
+            if reference is not None:
+                if isinstance(reference, bool) or not re.fullmatch(
+                        r"[0-9]+", str(reference)):
+                    raise PricingError(
+                        f"{source}: invalid reference_price_thb for {trim_id!r}")
+                reference = int(reference)
             record = PriceRecord(
                 trim_id=trim_id,
                 amount_thb=amount,
@@ -169,6 +430,9 @@ class PriceLedger:
                 source=str(raw.get("source") or "").strip(),
                 source_ref=str(raw.get("source_ref") or "").strip(),
                 notes=str(raw.get("notes") or ""),
+                campaign_id=str(raw.get("campaign_id") or "").strip() or None,
+                option_id=str(raw.get("option_id") or "").strip() or None,
+                reference_price_thb=reference,
             )
             problems = record.validate()
             if problems:
@@ -223,13 +487,79 @@ class PriceLedger:
         row = self.current_list_price(trim_id, as_of=as_of)
         return row.amount_thb if row else None
 
+    def current_campaign_offers(self, trim_id: str, *,
+                                as_of: Optional[date] = None) -> list[PriceRecord]:
+        """Every campaign price live today, one row per option.
+
+        Options are alternatives, so all of them are returned and none is
+        declared best: a cash discount and a finance deal are not comparable,
+        and choosing between them is the buyer's decision.
+        """
+        when = as_of or date.today()
+        live: list[PriceRecord] = []
+        for record in self.records_for(trim_id,
+                                       price_type=PriceType.CAMPAIGN_PRICE):
+            if not record.active_on(when):
+                continue
+            campaign = self.campaigns.get(record.campaign_id or "")
+            if campaign is not None:
+                if not campaign.live_on(when):
+                    continue
+                option = campaign.option(record.option_id or "")
+                if option is not None and not option.conditions.open_on(when):
+                    continue
+            live.append(record)
+        return live
+
+    def campaign_quote(self, trim_id: str, *,
+                       as_of: Optional[date] = None) -> dict:
+        """What a page needs to show: the list price and every live option."""
+        when = as_of or date.today()
+        listed = self.current_list_price(trim_id, as_of=when)
+        offers = []
+        for record in self.current_campaign_offers(trim_id, as_of=when):
+            campaign = self.campaigns.get(record.campaign_id or "")
+            option = campaign.option(record.option_id or "") if campaign else None
+            offers.append({
+                "amount_thb": record.amount_thb,
+                "reference_price_thb": record.reference_price_thb,
+                "discount_thb": record.discount_thb,
+                "campaign_id": record.campaign_id,
+                "campaign_name": campaign.name if campaign else "",
+                "option_id": record.option_id,
+                "option_label": option.label if option else "",
+                "conditions": to_conditions_dict(option.conditions) if option else {},
+                "valid_to": record.effective_to,
+                "source": record.source,
+                "source_ref": record.source_ref,
+            })
+        return {
+            "trim_id": trim_id,
+            "as_of": when.isoformat(),
+            "list_price_thb": listed.amount_thb if listed else None,
+            # Alternatives, never merged and never ranked.
+            "campaign_options": offers,
+        }
+
     def validate(self) -> list[str]:
         problems: list[str] = []
+        for campaign in self.campaigns.values():
+            problems.extend(campaign.validate())
         for record in self.records:
             problems.extend(
                 f"price {record.trim_id}: {problem}" for problem in record.validate())
             if self.catalog is not None and record.trim_id not in self.catalog.trims:
                 problems.append(f"price {record.trim_id}: trim does not exist in catalog")
+            if record.campaign_id:
+                campaign = self.campaigns.get(record.campaign_id)
+                if campaign is None:
+                    problems.append(
+                        f"price {record.trim_id}: unknown campaign "
+                        f"{record.campaign_id}")
+                elif record.option_id and campaign.option(record.option_id) is None:
+                    problems.append(
+                        f"price {record.trim_id}: campaign {record.campaign_id} "
+                        f"has no option {record.option_id}")
         for trim_id in {r.trim_id for r in self.records}:
             for start in {r.effective_from or r.observed_at for r in self.records_for(
                     trim_id, price_type=PriceType.LIST_PRICE)} - {None}:
@@ -249,4 +579,10 @@ class PriceLedger:
             "trims_with_current_list_price": len(current_list),
             "eco_sticker_price_records": sum(
                 r.price_type is PriceType.ECO_STICKER_PRICE for r in self.records),
+            "campaigns": len(self.campaigns),
+            "campaign_price_records": sum(
+                r.price_type is PriceType.CAMPAIGN_PRICE for r in self.records),
+            "trims_with_live_campaign": len({
+                trim_id for trim_id in trims_with_any
+                if self.current_campaign_offers(trim_id, as_of=as_of)}),
         }

@@ -58,6 +58,332 @@
               "price_min_thb": 569000,
               "price_max_thb": 829000
             }
+          ],
+          "trims": [
+            {
+              "id": "4_1_9_ddi_s_at_mhev",
+              "name": "4 1.9 Ddi S AT MHEV",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "573119a1-e7dd-4a18-adad-bf294b2aa623"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5230,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "4_2_2_ddi_l",
+              "name": "4 2.2 Ddi L",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "ba8b19e9-5ede-4b56-85c2-58a14c5964e9"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1810,
+              "height_mm": 1700,
+              "tire_front": "215/70R16",
+              "tire_rear": "215/70R16"
+            },
+            {
+              "id": "4_2_2_ddi_l_at",
+              "name": "4 2.2 Ddi L AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "2278a04b-dab4-4290-81ff-6b08d3fb3750"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1810,
+              "height_mm": 1700,
+              "tire_front": "215/70R16",
+              "tire_rear": "215/70R16"
+            },
+            {
+              "id": "4_2_2_ddi_s",
+              "name": "4 2.2 Ddi S",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "efb9d2dc-b4b6-4b70-bef4-ca5e8f646e27"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5230,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "4_2_2_ddi_s_at",
+              "name": "4 2.2 Ddi S AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "8fde42dd-7a27-4608-8b54-26fd5fa26f61"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5230,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "4_2_2_ddi_sr",
+              "name": "4 2.2 Ddi SR",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "609bb005-12b7-4bbc-a5eb-08129b65ceb4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5230,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "4_2_2_ddi_z",
+              "name": "4 2.2 Ddi Z",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "dd969b51-08a0-435b-a7d4-2dc98bb6c1aa"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1810,
+              "height_mm": 1700,
+              "tire_front": "215/70R16",
+              "tire_rear": "215/70R16"
+            },
+            {
+              "id": "4_2_2_ddi_z_at",
+              "name": "4 2.2 Ddi Z AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "68b45593-b64f-47ee-a9a7-3dac1eb4cfe8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1810,
+              "height_mm": 1700,
+              "tire_front": "215/70R16",
+              "tire_rear": "215/70R16"
+            },
+            {
+              "id": "d_max_spark_2_2_ddi_b",
+              "name": "D-MAX Spark 2.2 Ddi B",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "555b44e3-dd93-4410-9ca8-15b55fa8313f"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5245,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_2_2_ddi_b_cab_chassis",
+              "name": "D-MAX Spark 2.2 Ddi B Cab-Chassis",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "8ca76c72-10f7-48d3-8505-8f1f9fa03185"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5035,
+              "width_mm": 1810,
+              "height_mm": 1695,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_2_2_ddi_b_cab_chassis_refrigerator",
+              "name": "D-MAX Spark 2.2 Ddi B Cab-Chassis (Refrigerator)",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "d136e05c-af27-40a0-a9f0-1ab37abcaa7a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5035,
+              "width_mm": 1810,
+              "height_mm": 1695,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_2_2_ddi_b_cab_chassis_refrigerator_at",
+              "name": "D-MAX Spark 2.2 Ddi B Cab-Chassis (Refrigerator) AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "23681bfa-f98c-4c96-9b3c-31a8f340fd6e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5035,
+              "width_mm": 1810,
+              "height_mm": 1695,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_2_2_ddi_b_flat_deck_swb",
+              "name": "D-MAX Spark 2.2 Ddi B Flat Deck (SWB)",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "b41799d3-219c-48e4-be9f-a61797e1efd4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 4930,
+              "width_mm": 1810,
+              "height_mm": 1705,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_2_2_ddi_s",
+              "name": "D-MAX Spark 2.2 Ddi S",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "cbfe5389-0c6a-4676-a5ae-c13e64e7a284"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5245,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_2_2_ddi_s_at",
+              "name": "D-MAX Spark 2.2 Ddi S AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "9246b577-6c7d-491c-b1f2-4b5a30be10d5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5245,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_3_0_ddi_s",
+              "name": "D-MAX Spark 3.0 Ddi S",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "e05a7ae4-8c29-4935-bb22-6a29ac97fedc"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5245,
+              "width_mm": 1810,
+              "height_mm": 1690,
+              "tire_front": "215/70R15",
+              "tire_rear": "215/70R15"
+            },
+            {
+              "id": "d_max_spark_3_0_ddi_s_4x4",
+              "name": "D-MAX Spark 3.0 Ddi S 4x4",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "cdd00b4b-280f-42a7-8097-55a57996953b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5245,
+              "width_mm": 1810,
+              "height_mm": 1770,
+              "tire_front": "205R16",
+              "tire_rear": "205R16"
+            },
+            {
+              "id": "d_max_spark_3_0_ddi_s_4x4_at",
+              "name": "D-MAX Spark 3.0 Ddi S 4x4 AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "fbaefffe-f7cd-4017-b1eb-60ac30118e18"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 2,
+              "length_mm": 5245,
+              "width_mm": 1810,
+              "height_mm": 1770,
+              "tire_front": "205R16",
+              "tire_rear": "205R16"
+            }
           ]
         }
       ],

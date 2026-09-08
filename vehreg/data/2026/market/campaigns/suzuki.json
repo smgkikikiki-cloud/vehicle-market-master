@@ -1,0 +1,48 @@
+{
+  "campaigns": [
+    {
+      "id": "campaign.suzuki.fronx_september_2026",
+      "brand_id": "suzuki",
+      "name": "ราคาพิเศษ Suzuki Fronx กันยายน 2026",
+      "starts": "2026-09-01",
+      "ends": null,
+      "source": "headlightmag",
+      "source_ref": "https://www.headlightmag.com/special-price-suzuki-fronx-september-2026/",
+      "notes": "End date is not stated in the source. Left open rather than guessed; recheck before quoting.",
+      "options": [
+        {
+          "id": "family_cash",
+          "label": "ลูกค้า SUZUKI FAMILY — ทางเลือกที่ 1 ราคาพิเศษ",
+          "conditions": {
+            "finance_required": false,
+            "text": "สำหรับลูกค้า SUZUKI FAMILY ที่ลงทะเบียนแอปพลิเคชัน Hello Suzuki หรือให้สิทธิ์กับสมาชิกครอบครัว ตามเงื่อนไขที่บริษัทฯ กำหนด"
+          }
+        },
+        {
+          "id": "family_finance",
+          "label": "ลูกค้า SUZUKI FAMILY — ทางเลือกที่ 2 ดอกเบี้ยเริ่ม 0%",
+          "conditions": {
+            "finance_required": true,
+            "text": "ดอกเบี้ยพิเศษเริ่ม 0% สำหรับลูกค้าที่ทำสัญญาเช่าซื้อรถยนต์รุ่น SUZUKI FRONX พร้อมส่วนลดอุปกรณ์ตกแต่งสูงสุด 40,000 บาท (GL) / 50,000 บาท (GLX). ราคารถไม่ได้ลด จึงไม่มีตัวเลขราคาแคมเปญสำหรับทางเลือกนี้"
+          }
+        },
+        {
+          "id": "open_cash",
+          "label": "ลูกค้าทั่วไป — ทางเลือกที่ 1 ราคาพิเศษ",
+          "conditions": {
+            "finance_required": false,
+            "text": "สำหรับลูกค้าทุกท่านหรือลูกค้าเจ้าของรถยนต์ยี่ห้ออื่นๆ พร้อมฟรีประกันภัยชั้นหนึ่งและบริการช่วยเหลือฉุกเฉิน"
+          }
+        },
+        {
+          "id": "open_finance",
+          "label": "ลูกค้าทั่วไป — ทางเลือกที่ 2 ดอกเบี้ยเริ่ม 0%",
+          "conditions": {
+            "finance_required": true,
+            "text": "ดอกเบี้ยพิเศษเริ่ม 0% พร้อมส่วนลดอุปกรณ์ตกแต่งสูงสุด 20,000 บาท (GL) / 30,000 บาท (GLX). ราคารถไม่ได้ลด จึงไม่มีตัวเลขราคาแคมเปญสำหรับทางเลือกนี้"
+          }
+        }
+      ]
+    }
+  ]
+}

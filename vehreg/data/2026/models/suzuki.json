@@ -296,6 +296,26 @@
               "price_min_thb": 659000,
               "price_max_thb": 659000
             }
+          ],
+          "trims": [
+            {
+              "id": "gl_1_5l_4at",
+              "name": "GL 1.5L 4AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "784000e3-160f-47da-968e-d22f1e5e8ee8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 3995,
+              "width_mm": 1765,
+              "height_mm": 1550,
+              "tire_front": "195/60R16",
+              "tire_rear": "195/60R16"
+            }
           ]
         }
       ]

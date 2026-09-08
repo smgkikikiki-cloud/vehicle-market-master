@@ -1,0 +1,60 @@
+{
+  "prices": [
+    {
+      "trim_id": "toyota.alphard.ah40.trim.hev_smart",
+      "amount_thb": 3590000,
+      "price_type": "LIST_PRICE",
+      "effective_from": null,
+      "effective_to": null,
+      "observed_at": "2026-09-08",
+      "source": "autolifethailand",
+      "source_ref": "https://autolifethailand.tv/official-price-toyota-alphard-40-series-my2026-thailand/",
+      "notes": "",
+      "campaign_id": null,
+      "option_id": null,
+      "reference_price_thb": null
+    },
+    {
+      "trim_id": "toyota.alphard.ah40.trim.hev_premium",
+      "amount_thb": 4290000,
+      "price_type": "LIST_PRICE",
+      "effective_from": null,
+      "effective_to": null,
+      "observed_at": "2026-09-08",
+      "source": "autolifethailand",
+      "source_ref": "https://autolifethailand.tv/official-price-toyota-alphard-40-series-my2026-thailand/",
+      "notes": "",
+      "campaign_id": null,
+      "option_id": null,
+      "reference_price_thb": null
+    },
+    {
+      "trim_id": "toyota.vellfire.gen1.trim.hev_premium",
+      "amount_thb": 4290000,
+      "price_type": "LIST_PRICE",
+      "effective_from": null,
+      "effective_to": null,
+      "observed_at": "2026-09-08",
+      "source": "autolifethailand",
+      "source_ref": "https://autolifethailand.tv/official-price-toyota-alphard-40-series-my2026-thailand/",
+      "notes": "",
+      "campaign_id": null,
+      "option_id": null,
+      "reference_price_thb": null
+    },
+    {
+      "trim_id": "toyota.alphard.ah40.trim.hev_premium_luxury",
+      "amount_thb": 4590000,
+      "price_type": "LIST_PRICE",
+      "effective_from": null,
+      "effective_to": null,
+      "observed_at": "2026-09-08",
+      "source": "autolifethailand",
+      "source_ref": "https://autolifethailand.tv/official-price-toyota-alphard-40-series-my2026-thailand/",
+      "notes": "",
+      "campaign_id": null,
+      "option_id": null,
+      "reference_price_thb": null
+    }
+  ]
+}

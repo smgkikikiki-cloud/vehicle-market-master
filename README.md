@@ -14,6 +14,11 @@ normalized Model/Generation and trim candidates, and a human-review queue. The
 three JAECOO 5 reference mappings are agent proposals awaiting owner review, not
 acceptances. ECO staging never writes registration analytics.
 
+Phase 4 is documented in [Comparable Specs — C-Crossover pilot](docs/COMPARABLE_SPECS_PHASE4.md).
+It adds a typed field registry, temporal SpecLedger and battle-card output,
+bounded to 20 C-segment crossover models. Unreviewed ECO candidates remain
+provisional and ECO prices never become retail MSRP.
+
 ```bash
 python -m vehreg market validate
 python -m vehreg market list --model jaecoo.jaecoo_5_ev

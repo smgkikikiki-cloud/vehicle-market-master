@@ -41,27 +41,62 @@ manufacture a de-specification event for Phase 5. `NOT_APPLICABLE` matters for
 honesty as much as for Phase 5: reporting "this BEV has no engine capacity" as
 missing research is a statement about our files disguised as one about the car.
 
-## Cohort
+## Eligibility, and what is published
 
-The cohort is versioned at
-`vehreg/data/2026/product/comparable_specs/cohorts/c_crossover.json`, with the
-selection rule written into the file beside the members.
+Two different questions, kept apart because conflating them costs something
+either way.
 
-The immutable 2026-09-08 ECO snapshot yields 118 candidate trim rows and 1,842
-candidate comparable values across the 31 models.
+**`model_ids` is the eligibility universe** — every 2026-catalog model whose
+body type is CROSSOVER, which has a Segment C generation, and which has at least
+one ECO Sticker detail record with a declared powertrain. 31 models. It is a
+rule, not a list: a test recomputes it from the catalog and the snapshot and
+fails if the file drifts.
 
-One representative source row per model is chosen explicitly; it is never
-inferred from price or file order. **20 of the 31 have one so far.** A model
-without a representative stays in the cohort and is reported as
-`models_without_representative` — dropping it would hide a whole car and still
-call the result the segment. Currently awaiting a choice: Audi Q3, BMW X1, iX1,
-iX2, Lexus UX, Mercedes-Benz EQB and GLB, MINI Countryman, Peugeot 3008,
-Volvo EC40 and XC40.
+**`pilot_model_ids` is what is published today** — the 20 models that have a
+chosen representative. The Compare page opens on these.
 
-These rows remain `PROVISIONAL_UNRESOLVED_TRIM`. An ECO homologation record is
-evidence that a configuration exists, not sufficient evidence that it is the
-current showroom offering. Its recommended price is exposed only as
-`ECO_STICKER_PRICE`, with `canonical_retail_price: false`.
+The remaining 11 are the **expansion backlog**. They stay in the universe: a
+comparison of C-crossovers that quietly omits the X1 and the XC40 is not a
+comparison of C-crossovers. They are simply not published yet, and they do not
+block anything.
+
+`expansion_candidates` holds a verified suggestion for 10 of them — each
+checked against the snapshot to be a real row for that model. They are
+suggestions, not decisions: choosing which grade speaks for a model is a
+judgement, and nothing publishes from them. The Volvo XC40 has no suggestion at
+all, because its ECO rows are older Recharge BEV/PHEV records while the car on
+sale is a mild hybrid, so no candidate matches it.
+
+Three eligible-looking models are out for reasons of their own: `kia.ev6` is not
+in Kia Thailand's lineup and carries `retail_status: UNVERIFIED`; `mg.mg_es` is
+a wagon, not a crossover; `geely.galaxy_e5` no longer exists as a separate
+nameplate, being the Chinese name of the EX5.
+
+The 2026-09-08 ECO snapshot yields 118 candidate trim rows and 1,842 candidate
+comparable values across the 31 models.
+
+## The promotion gate, and where it currently stands
+
+A MarketTrim is promoted from the manufacturer's own current listing, never from
+an ECO record alone: homologation proves a configuration exists, not that it is
+what the showroom sells today.
+
+**Nothing is promoted yet: 0 published MarketTrims, 0 facts, 20 provisional
+representatives.** `comparable_specs/oem_sources.json` records why, per model —
+which site is the authority, whether we may poll it, and what we have from it.
+Measured 2026-09-08:
+
+| | Models |
+|---|---:|
+| Pilot | 20 |
+| Site permits automated access | 17 |
+| Site refuses AI agents by name | 3 (Mazda CX-30, Jaecoo 6T EV, Jaecoo 7) |
+| Current OEM evidence held | **0** |
+
+The gap is not permission for most of them; it is that the marketing pages
+render their specification tables in JavaScript, so each brand needs its own
+adapter. Until one exists, those cells stay provisional ECO evidence and say so
+on the card. The file gives the gap an address instead of leaving it a silence.
 
 ## What the card refuses to compare
 

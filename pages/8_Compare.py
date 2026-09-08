@@ -80,19 +80,24 @@ profile_id = st.sidebar.selectbox("ชุดหัวข้อ", profiles)
 source = st.sidebar.radio(
     "เทียบจาก", ["ECO (รอตรวจ)", "trim ที่ผ่านการตรวจแล้ว"])
 
-missing = cohort.models_without_representative
+backlog = cohort.expansion_backlog
 st.sidebar.caption(
-    f"กลุ่ม {cohort.id}: {len(cohort.model_ids)} รุ่น · "
-    f"เลือกรุ่นย่อยตัวแทนแล้ว {len(cohort.representative_source_ids)}")
-if missing:
-    st.sidebar.warning(
-        f"{len(missing)} รุ่นยังไม่ได้เลือกรุ่นย่อยตัวแทน จึงยังเทียบไม่ได้ "
-        "แต่ยังนับอยู่ในกลุ่ม ไม่ได้ถูกตัดออกเงียบๆ:\n\n"
-        + "\n".join(f"- {m}" for m in missing))
+    f"กลุ่ม {cohort.id}: อยู่ในเกณฑ์ {len(cohort.model_ids)} รุ่น · "
+    f"เทียบได้ตอนนี้ {len(cohort.pilot_model_ids)} รุ่น")
+if backlog:
+    st.sidebar.info(
+        f"อีก {len(backlog)} รุ่นอยู่ในเกณฑ์แต่ยังไม่ได้เลือกรุ่นย่อยตัวแทน "
+        "จึงยังไม่ขึ้นมาเทียบ — เป็นงานค้าง ไม่ได้ถูกตัดออกจากเซกเมนต์:\n\n"
+        + "\n".join(f"- {m}" for m in backlog))
 
 if source.startswith("ECO"):
+    # The pilot only. A model in the universe without a chosen representative
+    # has nothing to put in a column, and guessing one would be the judgement
+    # this design refuses to automate.
+    pilot = set(cohort.pilot_model_ids)
     options = {f'{r["label"]}  ({r["model_id"]})': r["source_id"]
-               for r in store.list(representatives_only=True)}
+               for r in store.list(representatives_only=True)
+               if r["model_id"] in pilot}
     st.info("การ์ดจากหลักฐาน ECO — ยืนยันว่าสเปคนี้ผ่านการรับรอง "
             "ไม่ได้ยืนยันว่าโชว์รูมขายรุ่นย่อยนี้อยู่ตอนนี้ และราคาที่เห็นคือราคาแจ้ง ไม่ใช่ราคาขาย")
 else:

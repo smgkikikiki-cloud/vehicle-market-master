@@ -58,6 +58,18 @@
     "toyota.corolla_cross": "45fb3f35-5428-43f5-b085-9b1f8b63682c",
     "volvo.ex40": "039d37fd-d95d-458a-957e-b78cbf759bc4"
   },
-  "notes": "Representative rows are provisional comparison anchors, not claims of current retail availability or canonical MSRP. A model with no representative yet stays in the cohort and is reported as an open gap rather than dropped from the segment.",
-  "selection_rule": "Every 2026-catalog model whose body type is CROSSOVER and which has a Segment C generation, and which has at least one ECO Sticker detail record with a declared powertrain. Nothing is hand-picked. Three eligible models have no ECO detail evidence yet and are therefore out: geely.galaxy_e5, kia.ev6, mg.mg_es."
+  "notes": "model_ids is the eligibility universe; the 20 models in representative_source_ids are the published pilot. expansion_candidates holds verified suggestions for the rest -- they are suggestions, not decisions, and nothing publishes from them. Volvo XC40 has no suggestion: its ECO candidates are older Recharge BEV/PHEV records while the current XC40 is a mild hybrid, so no candidate matches the car on sale. Representative rows remain provisional comparison anchors, not claims of current retail availability or canonical MSRP.",
+  "selection_rule": "Every 2026-catalog model whose body type is CROSSOVER and which has a Segment C generation, and which has at least one ECO Sticker detail record with a declared powertrain. Nothing is hand-picked. Three eligible models have no ECO detail evidence yet and are therefore out: geely.galaxy_e5, kia.ev6, mg.mg_es.",
+  "expansion_candidates": {
+    "audi.audi_q3": "b9a4dcd1-c2a1-4b3d-b867-fe889686be93",
+    "bmw.bmw_x1": "1a853999-faa5-4093-92b7-5dca33a1868e",
+    "bmw.ix1": "990602f6-4b29-440c-a83a-574e75d18cd6",
+    "bmw.ix2": "8cfe1069-3df1-4f69-b1bc-abdb89e29262",
+    "lexus.ux": "a1302795-1b4a-42f4-b80a-3edc36ffbb62",
+    "mercedes_benz.eqb": "871b3d8f-3f63-4f3b-b3e8-8c276d84dbb9",
+    "mercedes_benz.glb": "3575dda434c346eb9b046d7128d09088",
+    "mini.countryman": "15f61346-32d1-425c-ad36-423874390352",
+    "peugeot.peugeot_3008": "ceff3013-a7c7-4d8e-ba7d-6466b7fdfc2e",
+    "volvo.ec40": "1e3eff34-498d-4f6e-9765-d27e01ac674f"
+  }
 }

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {
+      "id": "c_crossover_core",
+      "fields": [
+        "identity.powertrain", "vehicle.model_year", "vehicle.seats",
+        "vehicle.length_mm", "vehicle.width_mm", "vehicle.height_mm",
+        "vehicle.wheelbase_mm", "vehicle.ground_clearance_mm",
+        "vehicle.declared_total_weight_kg", "vehicle.curb_weight_kg",
+        "vehicle.cargo_volume_l", "vehicle.turning_radius_m",
+        "engine.displacement_cc", "powertrain.max_power_kw",
+        "powertrain.max_torque_nm", "powertrain.drivetrain",
+        "powertrain.transmission", "performance.acceleration_0_100_s",
+        "battery.catalog_capacity_kwh", "battery.gross_capacity_kwh",
+        "battery.usable_capacity_kwh", "battery.chemistry",
+        "ev.rated_range_km", "ev.energy_consumption_wh_km",
+        "charging.ac_max_kw", "charging.dc_max_kw", "charging.dc_time_min",
+        "fitment.tyre_size", "fitment.tyre_front", "fitment.tyre_rear",
+        "emissions.co2_g_km", "manufacturing.factory"
+      ]
+    },
+    {
+      "id": "c_crossover_safety",
+      "fields": [
+        "safety.airbag_count", "safety.aeb", "safety.adaptive_cruise",
+        "safety.lane_keep_assist", "safety.blind_spot",
+        "safety.rear_cross_traffic", "safety.ncap_stars"
+      ]
+    },
+    {
+      "id": "c_crossover_comfort",
+      "fields": [
+        "comfort.ventilated_front_seats", "comfort.panoramic_roof",
+        "technology.head_up_display"
+      ]
+    }
+  ]
+}

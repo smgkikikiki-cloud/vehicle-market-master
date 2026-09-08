@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from copy import deepcopy
-from dataclasses import fields
+from dataclasses import asdict, fields
 from datetime import date
 import json
 import os
@@ -19,24 +19,37 @@ from .entities import MarketTrim, to_jsonable
 from .homologation import ECOStickerSpecStore
 from .normalize import slug
 from .pricing import PriceLedger, price_dir
+from .comparable_specs import (
+    ComparableSpecError, SpecLedger, SpecRegistry, comparable_spec_root,
+)
 
 
 class ProductMaster:
     def __init__(self, catalog: Catalog, prices: PriceLedger,
-                 eco: ECOStickerSpecStore):
+                 eco: ECOStickerSpecStore,
+                 comparable_specs: SpecLedger | None = None):
         self.catalog, self.prices, self.eco = catalog, prices, eco
+        self.comparable_specs = comparable_specs or SpecLedger(
+            SpecRegistry(), catalog.year, catalog=catalog)
+        self.spec_registry = self.comparable_specs.registry
         if catalog.year != prices.year or catalog.year != eco.year:
             raise CatalogError("product stores must use the same catalog year")
+        if catalog.year != self.comparable_specs.year:
+            raise CatalogError("comparable specs must use the same catalog year")
 
     @classmethod
     def load(cls, data_dir=DATA_DIR, year=DEFAULT_YEAR):
         catalog = Catalog.load(data_dir, year)
-        return cls(catalog, PriceLedger.load(data_dir, year=year, catalog=catalog),
-                   ECOStickerSpecStore.load(data_dir, year, catalog=catalog))
+        registry = SpecRegistry.load(data_dir, year)
+        return cls(
+            catalog, PriceLedger.load(data_dir, year=year, catalog=catalog),
+            ECOStickerSpecStore.load(data_dir, year, catalog=catalog),
+            SpecLedger.load(data_dir, year, registry=registry, catalog=catalog))
 
     def validate(self):
         return (self.catalog.validate() + self.prices.validate()
-                + self.eco.validate_against_catalog(self.catalog))
+                + self.eco.validate_against_catalog(self.catalog)
+                + self.spec_registry.validate() + self.comparable_specs.validate())
 
     def detail(self, trim_id: str, *, as_of: date | None = None):
         if trim_id not in self.catalog.trims:
@@ -57,7 +70,17 @@ class ProductMaster:
             "current_list_price": to_jsonable(current) if current else None,
             "price_history": [to_jsonable(r) for r in self.prices.records_for(trim_id)],
             "ecosticker_evidence": to_jsonable(eco) if eco else None,
+            "comparable_specs": [
+                to_jsonable(asdict(f)) for f in self.comparable_specs.resolved(
+                    trim_id, as_of=as_of)
+            ],
         }
+
+    def battle_card(self, trim_ids: list[str], *, profile_id="c_crossover_core",
+                    as_of: date | None = None):
+        from .battlecard import BattleCardEngine
+        return BattleCardEngine(self.spec_registry).trim_card(
+            self, trim_ids, profile_id=profile_id, as_of=as_of)
 
     def rows(self, *, model_id=None, powertrain=None, as_of=None):
         if model_id is not None and model_id not in self.catalog.models:
@@ -82,6 +105,7 @@ class ProductMaster:
             "legacy_embedded_prices": sum(t.price_thb is not None for t in trims),
             "prices": self.prices.coverage(as_of=as_of),
             "ecosticker": self.eco.coverage(),
+            "comparable_specs": self.comparable_specs.coverage(as_of=as_of),
         }
 
 
@@ -190,7 +214,9 @@ def import_trims(data_dir, year, payload, *, write=False):
                 json.loads(source_path.read_text(encoding="utf-8")), source=str(source_path))
         probe.build_indexes()
         master.prices.catalog = probe
-        checked = ProductMaster(probe, master.prices, master.eco)
+        master.comparable_specs.catalog = probe
+        checked = ProductMaster(probe, master.prices, master.eco,
+                                master.comparable_specs)
         problems = checked.validate()
         if problems:
             raise CatalogError("; ".join(problems))
@@ -225,3 +251,30 @@ def append_prices(data_dir, year, payload, *, write=False):
         if write and added:
             _write_json(path, current)
         return {"written": bool(write and added), "added": len(added), "path": str(path)}
+
+
+def import_spec_facts(data_dir, year, payload, *, write=False):
+    """Append verified/provisional comparable facts without touching identity.
+
+    Facts are immutable by ``fact_id``.  A correction is another dated fact;
+    reusing an id with different bytes is rejected.
+    """
+    with _writer_lock(data_dir, year):
+        master = ProductMaster.load(data_dir, year)
+        before = len(master.comparable_specs.facts)
+        try:
+            master.comparable_specs.add_payload(payload)
+        except ComparableSpecError as exc:
+            raise CatalogError(str(exc)) from exc
+        problems = master.comparable_specs.validate()
+        if problems:
+            raise CatalogError("; ".join(problems))
+        added = master.comparable_specs.facts[before:]
+        path = comparable_spec_root(data_dir, year) / "facts" / "observations.json"
+        current = (json.loads(path.read_text(encoding="utf-8")) if path.exists()
+                   else {"schema_version": 1, "facts": []})
+        current["facts"].extend(to_jsonable(asdict(fact)) for fact in added)
+        if write and added:
+            _write_json(path, current)
+        return {"written": bool(write and added), "added": len(added),
+                "path": str(path)}

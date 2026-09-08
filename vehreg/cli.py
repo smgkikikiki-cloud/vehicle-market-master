@@ -416,8 +416,12 @@ def cmd_coverage(args) -> int:
 
 # --------------------------------------------------------------------- parser
 def cmd_market(args) -> int:
-    from .product import ProductMaster, append_prices, import_trims
+    from .product import (ProductMaster, append_prices, import_spec_facts,
+                          import_trims)
     from .ecosticker_ingest import build_snapshot, ingestion_status, save_decisions
+    from .battlecard import BattleCardEngine
+    from .comparable_specs import (ComparableCohort, ECOCandidateSpecStore,
+                                   SpecRegistry)
     if args.market_cmd == "eco-build":
         result = build_snapshot(
             args.path, data_dir=args.data_dir, year=args.year,
@@ -436,9 +440,61 @@ def cmd_market(args) -> int:
             args.data_dir, args.year, snapshot_date=args.snapshot_date)
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0
-    if args.market_cmd in ("import-trims", "append-prices"):
+    if args.market_cmd == "spec-candidates":
+        registry = SpecRegistry.load(args.data_dir, args.year)
+        cohort = ComparableCohort.load(
+            args.data_dir, args.year, args.cohort)
+        catalog = Catalog.load(args.data_dir, args.year)
+        problems = cohort.validate(catalog)
+        if problems:
+            raise CatalogError("; ".join(problems))
+        store = ECOCandidateSpecStore.load(
+            args.data_dir, args.year, snapshot_date=args.snapshot_date,
+            cohort_id=args.cohort, registry=registry)
+        result = {"cohort": args.cohort, "snapshot_date": args.snapshot_date,
+                  "coverage": store.coverage(),
+                  "records": store.list(model_id=args.model,
+                                        representatives_only=args.representatives_only)}
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd == "spec-coverage":
+        registry = SpecRegistry.load(args.data_dir, args.year)
+        cohort = ComparableCohort.load(args.data_dir, args.year, args.cohort)
+        catalog = Catalog.load(args.data_dir, args.year)
+        problems = cohort.validate(catalog)
+        if problems:
+            raise CatalogError("; ".join(problems))
+        candidates = ECOCandidateSpecStore.load(
+            args.data_dir, args.year, snapshot_date=args.snapshot_date,
+            cohort_id=args.cohort, registry=registry)
+        master = ProductMaster.load(args.data_dir, args.year)
+        result = {"cohort": args.cohort, "snapshot_date": args.snapshot_date,
+                  "registry_fields": len(registry.fields),
+                  "profiles": sorted(registry.profiles),
+                  "candidates": candidates.coverage(),
+                  "published": master.comparable_specs.coverage()}
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd == "battle-card":
+        registry = SpecRegistry.load(args.data_dir, args.year)
+        engine = BattleCardEngine(registry)
+        as_of = date.fromisoformat(args.as_of) if args.as_of else None
+        if args.candidate:
+            candidates = ECOCandidateSpecStore.load(
+                args.data_dir, args.year, snapshot_date=args.snapshot_date,
+                cohort_id=args.cohort, registry=registry)
+            result = engine.candidate_card(
+                candidates, args.candidate, profile_id=args.profile)
+        else:
+            master = ProductMaster.load(args.data_dir, args.year)
+            result = engine.trim_card(
+                master, args.trim, profile_id=args.profile, as_of=as_of)
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd in ("import-trims", "append-prices", "spec-import"):
         payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
-        operation = import_trims if args.market_cmd == "import-trims" else append_prices
+        operation = {"import-trims": import_trims, "append-prices": append_prices,
+                     "spec-import": import_spec_facts}[args.market_cmd]
         result = operation(args.data_dir, args.year, payload, write=args.write)
     else:
         master = ProductMaster.load(args.data_dir, args.year)
@@ -472,17 +528,18 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("market", help="Vehicle Master retail products, specs and Price Ledger")
     msub = p.add_subparsers(dest="market_cmd", required=True)
     for name in ("list", "show", "coverage", "validate", "import-trims", "append-prices",
-                 "eco-build", "eco-review", "eco-status"):
+                 "eco-build", "eco-review", "eco-status", "spec-import",
+                 "spec-candidates", "spec-coverage", "battle-card"):
         m = msub.add_parser(name)
         m.set_defaults(func=cmd_market)
-        if name in ("list", "show", "coverage"):
+        if name in ("list", "show", "coverage", "battle-card"):
             m.add_argument("--as-of", help="price date YYYY-MM-DD; specs are the selected catalog snapshot")
         if name == "list":
             m.add_argument("--model", help="exact model ID")
             m.add_argument("--powertrain", choices=[p.value for p in Powertrain if p is not Powertrain.UNKNOWN])
         if name == "show":
             m.add_argument("trim_id")
-        if name in ("import-trims", "append-prices"):
+        if name in ("import-trims", "append-prices", "spec-import"):
             m.add_argument("path", help="JSON input file")
             m.add_argument("--write", action="store_true", help="apply after validation; default is dry run")
         if name == "eco-build":
@@ -499,6 +556,23 @@ def build_parser() -> argparse.ArgumentParser:
                            help="write validated decisions; default is dry run")
         if name == "eco-status":
             m.add_argument("--snapshot-date", required=True, help="snapshot date YYYY-MM-DD")
+        if name in ("spec-candidates", "spec-coverage", "battle-card"):
+            m.add_argument("--snapshot-date", default="2026-09-08",
+                           help="immutable ECO evidence snapshot date")
+            m.add_argument("--cohort", default="c_crossover",
+                           help="comparison cohort id")
+        if name == "spec-candidates":
+            m.add_argument("--model", help="exact model id within the cohort")
+            m.add_argument("--representatives-only", action="store_true",
+                           help="one explicitly selected provisional row per model")
+        if name == "battle-card":
+            selection = m.add_mutually_exclusive_group(required=True)
+            selection.add_argument("--trim", action="append",
+                                   help="published MarketTrim id; repeat 2-6 times")
+            selection.add_argument("--candidate", action="append",
+                                   help="provisional ECO source id; repeat 2-6 times")
+            m.add_argument("--profile", default="c_crossover_core",
+                           help="comparison profile id")
 
     p = sub.add_parser("facets", help="print every facet vocabulary")
     p.set_defaults(func=cmd_facets)

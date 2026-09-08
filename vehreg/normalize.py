@@ -55,8 +55,9 @@ def tokens(text: str) -> list[str]:
     return fold(text).split()
 
 
-def similarity(a: str, b: str) -> float:
-    fa, fb = fold(a), fold(b)
+def similarity(a: str, b: str, *, prefolded: bool = False) -> float:
+    """Set ``prefolded`` when both sides are already folded, to skip the work."""
+    fa, fb = (a, b) if prefolded else (fold(a), fold(b))
     if not fa or not fb:
         return 0.0
     if fa == fb:
@@ -181,10 +182,21 @@ class MatchIndex:
             return key, min(0.99, 0.90 + 0.03 * hit_len), "contains"
 
         best_key, best_score = None, 0.0
+        # ``similarity`` finishes at ``max(ratio, (ratio + jaccard) / 2)`` and
+        # jaccard cannot exceed 1, so a candidate can only reach ``floor`` if
+        # its ratio reaches ``2 * floor - 1``.  difflib's own cheapest upper
+        # bound on that ratio is 2 * min(len) / (len(a) + len(b)), which is
+        # arithmetic -- and it discards most of the catalog before any string
+        # comparison happens at all.
+        want_ratio = 2 * floor - 1
+        length = len(folded)
         for surface, candidate, _priority in self._candidates:
+            other = len(surface)
+            if 2 * min(length, other) < want_ratio * (length + other):
+                continue
             if _numbers_disagree(folded, surface):
                 continue
-            score = similarity(folded, surface)
+            score = similarity(folded, surface, prefolded=True)
             if score > best_score:
                 best_key, best_score = candidate, score
         if best_key is not None and best_score >= floor:

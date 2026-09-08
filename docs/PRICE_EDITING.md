@@ -79,10 +79,29 @@ option of a campaign rather than the list price.
 - **Nothing live to change.** A correction never silently becomes an insert; use
   `market append-prices` for a genuinely new price.
 
-## What is still by hand
+## Clearing the review queue from the page
 
-Accepting a queue item — a provisional price, or a price whose car needs a trim
-creating — is read-only on the page. Those decisions go through
-`vehreg/data/2026/market/pricefeed/review/decisions.json`, and a decision
-written by the harvester carries `reviewer: "agent-proposed"`, which by design
-does not move a price.
+The **คิวรอตรวจ** tab acts on what the harvester found. Every button writes the
+owner's name into `pricefeed/review/decisions.json`; a decision the harvester
+wrote carries `reviewer: "agent-proposed"` and by design moves nothing.
+
+| The queue says | You do |
+|---|---|
+| one outlet reported this (`provisional`) | **ยืนยันและเผยแพร่** — you vouch for the single source, and it publishes |
+| a campaign price with no campaign | pick the campaign and the option; it becomes provisional, then you vouch |
+| the car has no trim yet | open the proposal, confirm model/generation/powertrain, **สร้าง trim แล้วรับราคา** — the trim and the price are one decision |
+| wrong, or not a price at all | **ปฏิเสธ** |
+
+**Publish only promotes a provisional price.** The review reasons — no trim, an
+implausible amount, a campaign with no conditions, two sources disagreeing —
+are structural, and each is answered by fixing the thing rather than overriding
+it. Once fixed, the item becomes provisional and can then be vouched for.
+
+Answers **merge**. Reviewing is not one question: you bind a campaign price to
+its campaign, and later vouch for the source that reported it, and the second
+answer must not erase the first. Rejecting is the exception — it withdraws the
+whole answer.
+
+A trim created this way cites the articles that reported it, in
+`source_refs.press`. It is a real trim in the catalog from that moment, so the
+model/generation/powertrain you confirm are the ones the warehouse will use.

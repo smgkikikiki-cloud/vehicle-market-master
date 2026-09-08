@@ -378,7 +378,18 @@ class Catalog:
             self._trims_by_variant.setdefault(variant_id, []).append(trim_id)
 
     # -------------------------------------------------------------- indexes
+    def ensure_indexes(self) -> None:
+        """Build the match indexes once.
+
+        ``build_indexes`` rebuilds unconditionally, which is right after the
+        catalog is edited and wasteful when it is only being read: a batch of
+        price claims would otherwise rebuild them once per claim.
+        """
+        if not getattr(self, "_indexes_built", False):
+            self.build_indexes()
+
     def build_indexes(self) -> None:
+        self._indexes_built = True
         self.brand_index = MatchIndex()
         self.model_index = MatchIndex()
         self.variant_index = MatchIndex()

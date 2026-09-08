@@ -297,3 +297,112 @@ class ExtractionTests(unittest.TestCase):
             "Toyota LAND CRUISER FJ เปิดตัวในอินโดนีเซีย", "https://x/y"))
         self.assertFalse(foreign_market("ราคาอย่างเป็นทางการ Toyota Land Cruiser FJ",
                                         "https://x/official-price"))
+
+
+class ReviewDecisionWritingTests(unittest.TestCase):
+    """A second answer about one claim adds to the first; it never erases it."""
+
+    def setUp(self):
+        from tempfile import TemporaryDirectory
+        self.path = Path(self.enterContext(TemporaryDirectory())) / "decisions.json"
+
+    def save(self, **changes):
+        entry = {"claim_id": "c1", "reviewer": "owner", "action": "accept"}
+        entry.update(changes)
+        return pf.save_decision(self.path, entry, write=True,
+                                replace=entry["action"] == "reject")
+
+    def stored(self):
+        return json.loads(self.path.read_text(encoding="utf-8"))["decisions"][0]
+
+    def test_vouching_for_a_price_keeps_the_campaign_it_was_bound_to(self):
+        self.save(campaign_id="campaign.x", option_id="cash")
+        self.save(action="publish", notes="one source is enough here")
+        stored = self.stored()
+        self.assertEqual(("publish", "campaign.x", "cash"),
+                         (stored["action"], stored["campaign_id"],
+                          stored["option_id"]))
+
+    def test_rejecting_withdraws_the_whole_answer(self):
+        self.save(campaign_id="campaign.x", option_id="cash")
+        self.save(action="reject")
+        stored = self.stored()
+        self.assertEqual("reject", stored["action"])
+        self.assertIsNone(stored.get("campaign_id"))
+
+    def test_a_bad_entry_cannot_take_the_good_ones_down_with_it(self):
+        self.save(campaign_id="campaign.x")
+        with self.assertRaises(pf.PriceFeedError):
+            pf.save_decision(self.path,
+                             {"claim_id": "c2", "reviewer": "owner",
+                              "action": "not-an-action"}, write=True)
+        self.assertEqual("campaign.x", self.stored()["campaign_id"])
+
+    def test_a_decision_without_a_reviewer_is_refused(self):
+        with self.assertRaises(pf.PriceFeedError):
+            pf.save_decision(self.path, {"claim_id": "c1", "action": "accept"},
+                             write=True)
+
+
+class PublishOverrideTests(unittest.TestCase):
+    """One outlet plus a person who vouches is enough; nothing else is."""
+
+    def run_with(self, decision, *, trim_id="t.m.g.trim.x"):
+        documents = {f"sha256:outlet_a": document("outlet_a", "outlet_a")}
+        claims = [claim("c1", "outlet_a", trim_id=trim_id)]
+        verdict = pf.decide(claims, SOURCES, documents=documents)
+        return verdict
+
+    def test_a_lone_outlet_is_provisional_without_a_person(self):
+        self.assertEqual("provisional", self.run_with(None).state)
+
+    def test_publish_is_only_offered_for_a_provisional_price(self):
+        """Review reasons are structural: they get fixed, not overridden."""
+        verdict = pf.decide([claim("c1", "outlet_a", trim_id=None)], SOURCES)
+        self.assertEqual("review", verdict.state)
+
+
+class PublishPromotionTests(unittest.TestCase):
+    """The whole loop: a person's answer turns one outlet into a published price."""
+
+    def batch(self):
+        documents = [pf.SourceDocument(
+            document_id="sha256:d1", source_id="outlet_a",
+            url="https://example.test/a", content_hash="d1")]
+        claims = [pf.PriceClaim(
+            claim_id="c1", document_id="sha256:d1", source_id="outlet_a",
+            # "MAX+" is deliberately not used here: it folds to the same token
+            # as the alias "Max" on a sibling trim, and the matcher refuses it.
+            brand_raw="Jaecoo", model_raw="Jaecoo 5 EV",
+            trim_raw="Long Range Dynamic",
+            amount_thb=699_000, price_type=PriceType.LIST_PRICE)]
+        return documents, claims
+
+    def run_with(self, decisions):
+        from vehreg.catalog import Catalog
+        documents, claims = self.batch()
+        return pf.run(documents, claims, SOURCES, Catalog.load(year=2026),
+                      decisions=decisions)
+
+    def decision(self, action, reviewer):
+        return {"c1": {"claim_id": "c1", "action": action, "reviewer": reviewer,
+                       "origin": "agent" if reviewer == pf.AGENT_REVIEWER else "human",
+                       "trim_id": None, "campaign_id": None, "option_id": None,
+                       "reviewed_at": None, "notes": ""}}
+
+    def test_without_a_person_one_outlet_stays_internal(self):
+        result = self.run_with({})
+        self.assertEqual((0, 1), (len(result.offers), len(result.provisional)))
+
+    def test_a_person_vouching_publishes_it(self):
+        result = self.run_with(self.decision("publish", "vehicle-master-owner"))
+        self.assertEqual((1, 0), (len(result.offers), len(result.provisional)))
+        self.assertEqual(["vehicle-master-owner"], result.offers[0]["published_by"])
+
+    def test_this_code_vouching_for_itself_changes_nothing(self):
+        result = self.run_with(self.decision("publish", pf.AGENT_REVIEWER))
+        self.assertEqual((0, 1), (len(result.offers), len(result.provisional)))
+
+    def test_a_person_rejecting_drops_the_claim_entirely(self):
+        result = self.run_with(self.decision("reject", "vehicle-master-owner"))
+        self.assertEqual([], result.offers + result.provisional + result.review)

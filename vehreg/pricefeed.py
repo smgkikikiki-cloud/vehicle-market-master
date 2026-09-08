@@ -32,6 +32,7 @@ from datetime import date, datetime
 from enum import Enum
 import hashlib
 import json
+from functools import lru_cache
 import re
 import unicodedata
 from pathlib import Path
@@ -255,39 +256,63 @@ def looks_reprinted(left: SourceDocument, right: SourceDocument) -> bool:
 # Matching a claim to a trim
 # --------------------------------------------------------------------------
 
-def match_trim(catalog: Catalog, claim: PriceClaim) -> tuple[Optional[str], tuple[str, ...]]:
-    """Return ``(trim_id, candidates)``. A tie is never broken automatically."""
-    catalog.build_indexes()
-    brand_id, _, _ = catalog.brand_index.lookup(claim.brand_raw)
+def match_model(catalog: Catalog, brand_raw: str, model_raw: str,
+                trim_raw: str = "") -> tuple[Optional[str], Optional[str]]:
+    """Resolve ``(brand_id, model_id)`` for one claim, refusing to guess.
+
+    The grade line is more specific than the headline. One article covering
+    "Alphard / Vellfire" prices both, and only the line says which is which.
+    """
+    catalog.ensure_indexes()
+    brand_id, _, _ = catalog.brand_index.lookup(brand_raw)
     if brand_id is None:
-        return None, ()
-    # The grade line is more specific than the headline. One article covering
-    # "Alphard / Vellfire" prices both, and only the line says which is which.
-    model_id = None
-    for text in (claim.trim_raw, f"{claim.brand_raw} {claim.model_raw}",
-                 claim.model_raw):
+        return None, None
+    for text in (trim_raw, f"{brand_raw} {model_raw}", model_raw):
         if not text:
             continue
-        found, _, _ = catalog.model_index.lookup(f"{claim.brand_raw} {text}")
+        found, _, _ = catalog.model_index.lookup(f"{brand_raw} {text}")
         if found is None:
             found, _, _ = catalog.model_index.lookup(text)
         if found is not None and found.startswith(brand_id + "."):
-            model_id = found
-            break
+            return brand_id, found
+    return brand_id, None
+
+
+def trims_by_model(catalog: Catalog) -> dict[str, list]:
+    """model_id -> its trims. One pass, instead of one scan per claim."""
+    index: dict[str, list] = {}
+    for trim in catalog.trims.values():
+        index.setdefault(catalog.model_for_trim(trim.id).id, []).append(trim)
+    return index
+
+
+def match_trim(catalog: Catalog, claim: PriceClaim, *,
+               siblings_by_model: Optional[dict[str, list]] = None,
+               model_memo: Optional[dict] = None
+               ) -> tuple[Optional[str], tuple[str, ...]]:
+    """Return ``(trim_id, candidates)``. A tie is never broken automatically."""
+    key = (claim.brand_raw, claim.model_raw, claim.trim_raw)
+    if model_memo is not None and key in model_memo:
+        brand_id, model_id = model_memo[key]
+    else:
+        brand_id, model_id = match_model(catalog, *key)
+        if model_memo is not None:
+            model_memo[key] = (brand_id, model_id)
     if model_id is None:
         return None, ()
     model = catalog.models[model_id]
-    siblings = [trim for trim in catalog.trims.values()
-                if catalog.model_for_trim(trim.id).id == model_id]
+    if siblings_by_model is None:
+        siblings_by_model = trims_by_model(catalog)
+    siblings = siblings_by_model.get(model_id, [])
     if not siblings:
         return None, ()
 
     wanted = grade_tokens(claim.trim_raw, model.name_en)
     exact = sorted({
-        trim.id for trim in siblings
-        if grade_tokens(trim.name, model.name_en) == wanted and wanted
-        or any(grade_tokens(alias, model.name_en) == wanted and wanted
-               for alias in trim.aliases)})
+        trim.id for trim in siblings if wanted and (
+            grade_tokens(trim.name, model.name_en) == wanted
+            or any(grade_tokens(alias, model.name_en) == wanted
+                   for alias in trim.aliases))})
     if len(exact) == 1:
         return exact[0], tuple(exact)
     if exact:
@@ -316,8 +341,13 @@ def match_trim(catalog: Catalog, claim: PriceClaim) -> tuple[Optional[str], tupl
 NOISE_TOKENS = frozenset({"l", "cc", "litre", "liter", "รุ่น", "ใหม่"})
 
 
+@lru_cache(maxsize=8192)
 def grade_tokens(name: str, model_name: str) -> frozenset[str]:
-    """The tokens that identify a grade: no nameplate, no unit noise."""
+    """The tokens that identify a grade: no nameplate, no unit noise.
+
+    Cached: matching one claim compares it against every trim of the model, so
+    the same trim name is folded thousands of times over a batch.
+    """
     nameplate = set(fold(model_name).split())
     return frozenset(
         token for token in fold(name).split()
@@ -577,9 +607,15 @@ def load_decisions(path: Path | str) -> dict[str, dict]:
     """Reviewer answers, keyed by claim id.
 
     A decision may name the trim a claim belongs to, the campaign and option a
-    campaign price sits under, or reject the claim outright.  As in Phase 2, a
-    decision this code wrote carries ``reviewer: "agent-proposed"`` and does not
-    count: only a person's answer moves a price.
+    campaign price sits under, reject the claim outright, or -- ``publish`` --
+    say that one outlet is good enough for this particular price.  As in Phase 2,
+    a decision this code wrote carries ``reviewer: "agent-proposed"`` and does
+    not count: only a person's answer moves a price.
+
+    ``publish`` promotes a *provisional* price to canonical and nothing else.
+    The review reasons are structural -- no trim, an implausible amount, a
+    campaign with no conditions, two sources disagreeing -- and each has to be
+    answered by fixing the thing, not by overriding it.
     """
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(payload.get("decisions"), list):
@@ -600,7 +636,7 @@ def load_decisions(path: Path | str) -> dict[str, dict]:
         if not reviewer:
             raise PriceFeedError(f"{path}: {claim_id}: reviewer is required")
         action = str(raw.get("action") or "accept").strip()
-        if action not in {"accept", "reject"}:
+        if action not in {"accept", "reject", "publish"}:
             raise PriceFeedError(f"{path}: {claim_id}: invalid action {action!r}")
         out[claim_id] = {
             "claim_id": claim_id,
@@ -623,12 +659,16 @@ def run(documents: list[SourceDocument], claims: list[PriceClaim],
     """Match, group, decide. Pure: no file or network access."""
     campaigns = campaigns or {}
     decisions = decisions or {}
+    siblings_by_model = trims_by_model(catalog)
+    model_memo: dict = {}
     matched: list[PriceClaim] = []
     for claim in claims:
         answer = decisions.get(claim.claim_id)
         if answer and answer["origin"] == "human" and answer["action"] == "reject":
             continue
-        trim_id, candidates = match_trim(catalog, claim)
+        trim_id, candidates = match_trim(
+            catalog, claim, siblings_by_model=siblings_by_model,
+            model_memo=model_memo)
         changes = {"trim_id": trim_id, "trim_candidates": candidates}
         if answer and answer["origin"] == "human":
             # A person outranks the matcher, and is the only way a campaign
@@ -657,13 +697,22 @@ def run(documents: list[SourceDocument], claims: list[PriceClaim],
             or option.conditions.finance_required))
         verdict = decide(group, sources, catalog=catalog,
                          has_conditions=has_conditions, documents=by_document)
+        published_by = {
+            decisions[claim.claim_id]["reviewer"] for claim in group
+            if claim.claim_id in decisions
+            and decisions[claim.claim_id]["origin"] == "human"
+            and decisions[claim.claim_id]["action"] == "publish"}
+        if published_by and verdict.state == "provisional":
+            # One outlet, and a person who has looked at it and vouched.
+            verdict = Verdict("canonical", (), verdict.independent_claims,
+                              verdict.supporting_claim_ids)
         if (first.trim_id, first.price_type) in disputed:
             verdict = Verdict("review",
                               tuple(sorted(set(verdict.reasons) |
                                            {ReviewReason.SOURCES_DISAGREE.value})),
                               verdict.independent_claims,
                               verdict.supporting_claim_ids)
-        item = _item(first, group, verdict, by_document)
+        item = _item(first, group, verdict, by_document, published_by)
         if verdict.state == "canonical":
             result.offers.append(item)
         elif verdict.state == "provisional":
@@ -671,7 +720,8 @@ def run(documents: list[SourceDocument], claims: list[PriceClaim],
         else:
             result.review.append(item)
             if ReviewReason.NO_TRIM_MATCH.value in verdict.reasons:
-                result.trim_proposals.append(_trim_proposal(first, group))
+                result.trim_proposals.append(
+                    _trim_proposal(first, group, by_document))
     return result
 
 
@@ -682,7 +732,8 @@ def _replace(claim: PriceClaim, **changes) -> PriceClaim:
 
 
 def _item(first: PriceClaim, group: list[PriceClaim], verdict: Verdict,
-          documents: dict[str, SourceDocument]) -> dict:
+          documents: dict[str, SourceDocument],
+          published_by: Optional[set[str]] = None) -> dict:
     return {
         "trim_id": first.trim_id,
         "trim_candidates": list(first.trim_candidates),
@@ -695,6 +746,7 @@ def _item(first: PriceClaim, group: list[PriceClaim], verdict: Verdict,
         "option_hint": first.option_hint,
         "state": verdict.state,
         "reasons": list(verdict.reasons),
+        "published_by": sorted(published_by) if published_by else [],
         "independent_claims": verdict.independent_claims,
         "claim_ids": list(verdict.supporting_claim_ids),
         "sources": sorted({claim.source_id for claim in group}),
@@ -703,7 +755,8 @@ def _item(first: PriceClaim, group: list[PriceClaim], verdict: Verdict,
     }
 
 
-def _trim_proposal(first: PriceClaim, group: list[PriceClaim]) -> dict:
+def _trim_proposal(first: PriceClaim, group: list[PriceClaim],
+                   documents: Optional[dict[str, SourceDocument]] = None) -> dict:
     """A launch price and the trim it implies, as one decision for the owner.
 
     Without this the most valuable case -- a car announced today -- can never
@@ -716,6 +769,11 @@ def _trim_proposal(first: PriceClaim, group: list[PriceClaim]) -> dict:
         "amount_thb": first.amount_thb,
         "price_type": first.price_type.value,
         "claim_ids": [claim.claim_id for claim in group],
+        # The articles this proposal came from, so accepting it can cite them
+        # rather than whatever happened to be first in the queue.
+        "urls": sorted({(documents or {})[claim.document_id].url
+                        for claim in group
+                        if claim.document_id in (documents or {})}),
         "action": "propose_trim_and_price",
         "reviewer": "agent-proposed",
     }
@@ -743,3 +801,51 @@ def to_price_rows(result: RunResult, *, observed_at: str,
                 row["option_id"] = item["option_hint"]
         rows.append(row)
     return rows
+
+
+def save_decision(path: Path | str, entry: dict, *, write: bool = False,
+                  replace: bool = False) -> dict:
+    """Record one reviewer answer, keyed by claim id.
+
+    A second answer about the same claim **merges** into the first.  Reviewing
+    is not one question: a person binds a campaign price to its campaign, then
+    later vouches for the single source that reported it, and the second answer
+    must not silently erase the first.  Pass ``replace=True`` to overwrite the
+    whole entry -- which is what rejecting one does.
+
+    Validated by reading the whole file back through :func:`load_decisions`
+    before it is written, so a malformed entry cannot land and cannot take the
+    existing answers down with it.
+    """
+    path = Path(path)
+    claim_id = str(entry.get("claim_id") or "").strip()
+    if not claim_id:
+        raise PriceFeedError("a decision needs a claim_id")
+    reviewer = str(entry.get("reviewer") or "").strip()
+    if not reviewer:
+        raise PriceFeedError(f"{claim_id}: a decision needs a reviewer")
+    payload = (json.loads(path.read_text(encoding="utf-8"))
+               if path.exists() else {"schema_version": SCHEMA_VERSION,
+                                      "decisions": []})
+    kept = [d for d in payload["decisions"] if d.get("claim_id") != claim_id]
+    previous = next((d for d in payload["decisions"]
+                     if d.get("claim_id") == claim_id), None)
+    replaced = previous is not None
+    if previous is not None and not replace:
+        merged = dict(previous)
+        merged.update({k: v for k, v in entry.items() if v not in (None, "")})
+        entry = merged
+    payload["decisions"] = sorted(kept + [entry], key=lambda d: d["claim_id"])
+    text = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+
+    probe = path.parent / f".{path.name}.probe"
+    probe.parent.mkdir(parents=True, exist_ok=True)
+    probe.write_text(text, encoding="utf-8")
+    try:
+        load_decisions(probe)
+    finally:
+        probe.unlink(missing_ok=True)
+    if write:
+        path.write_text(text, encoding="utf-8")
+    return {"written": write, "replaced": replaced, "claim_id": claim_id,
+            "decisions": len(payload["decisions"]), "path": str(path)}

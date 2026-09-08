@@ -28,9 +28,12 @@ import streamlit as st
 
 from vehreg.catalog import Catalog, CatalogError, DATA_DIR, DEFAULT_YEAR
 from vehreg.pricing import PriceType, to_conditions_dict
+from vehreg.normalize import slug
 from vehreg.product import (
-    ProductMaster, close_price, correct_price, find_price_rows, save_campaign,
+    ProductMaster, append_prices, close_price, correct_price, find_price_rows,
+    import_trims, save_campaign,
 )
+from vehreg.taxonomy import Powertrain
 from vehreg import pricefeed
 
 st.set_page_config(page_title="ราคา | TDR", layout="wide")
@@ -250,6 +253,40 @@ with tab_campaign:
 
 
 # --------------------------------------------------------------- คิวรอตรวจ
+def decide(claim_ids, *, action, trim_id=None, campaign_id=None, option_id=None,
+           notes=""):
+    """Record the same answer for every claim behind one price.
+
+    Answers merge, so vouching for a price does not undo the campaign it was
+    bound to a moment earlier. Rejecting replaces: it withdraws the answer.
+    """
+    path = FEED / "review" / "decisions.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    for claim_id in claim_ids:
+        entry = {"claim_id": claim_id, "action": action, "reviewer": reviewer,
+                 "reviewed_at": date.today().isoformat(), "notes": notes}
+        for name, value in (("trim_id", trim_id), ("campaign_id", campaign_id),
+                            ("option_id", option_id)):
+            if value:
+                entry[name] = value
+        pricefeed.save_decision(path, entry, write=True,
+                                replace=action == "reject")
+    run_batch.clear()
+
+
+def publish_now(batch_name):
+    """Re-run with the new decisions and append whatever is now canonical."""
+    result = run_batch(batch_name)
+    rows = pricefeed.to_price_rows(
+        result, observed_at=date.today().isoformat(),
+        source_of=pricefeed.load_sources(DATA_DIR, YEAR))
+    if not rows:
+        return {"added": 0}
+    written = append_prices(DATA_DIR, YEAR, {"prices": rows}, write=True)
+    reload_master()
+    return written
+
+
 with tab_queue:
     batches = sorted(FEED.glob("batch-*.json"))
     if not batches:
@@ -276,22 +313,123 @@ with tab_queue:
             f"อยู่ใน 24 ชม. {summary.get('within_24h', 0)} จาก "
             f"{summary.get('documents_with_latency', 0)} ชิ้น")
 
-        def table(items):
-            return pd.DataFrame([{
-                "จำนวน": i["amount_thb"], "ประเภท": i["price_type"],
-                "trim": i["trim_id"] or "—", "เสียงอิสระ": i["independent_claims"],
-                "สื่อ": ", ".join(i["sources"]), "เหตุผล": ", ".join(i["reasons"]),
-                "ลิงก์": i["urls"][0] if i["urls"] else "",
-            } for i in items])
+        if not reviewer.strip():
+            st.warning("กรอกชื่อผู้ตัดสินใจในแถบซ้ายก่อน จึงจะกดรับหรือปฏิเสธได้")
+
+        if st.button("เขียนราคาที่ผ่านแล้วลง ledger", type="primary",
+                     disabled=not result.offers):
+            st.success(publish_now(pick))
+
+        def label(item):
+            return (f"{item['amount_thb']:,} บาท · {item['price_type']} · "
+                    f"{item['trim_id'] or item.get('trim_raw') or '—'} · "
+                    f"{', '.join(item['sources'])}")
 
         st.subheader("รอยืนยัน — สื่อเจ้าเดียว")
-        st.dataframe(table(result.provisional), width="stretch",
-                     hide_index=True)
+        st.caption("กดยืนยันคือมึงรับรองด้วยตัวเอง ว่าแหล่งเดียวพอสำหรับราคานี้")
+        for item in result.provisional:
+            with st.container(border=True):
+                st.write(label(item))
+                st.caption(" · ".join(item["urls"]) or "—")
+                left, right = st.columns(2)
+                if left.button("ยืนยันและเผยแพร่", key=f"pub-{item['claim_ids'][0]}",
+                               disabled=not reviewer.strip()):
+                    decide(item["claim_ids"], action="publish",
+                           notes="ยืนยันด้วยตัวเองจากแหล่งเดียว")
+                    st.success(publish_now(pick))
+                    st.rerun()
+                if right.button("ปฏิเสธ", key=f"rej-{item['claim_ids'][0]}",
+                                disabled=not reviewer.strip()):
+                    decide(item["claim_ids"], action="reject")
+                    st.rerun()
+
         st.subheader("รอตรวจ")
-        st.dataframe(table(result.review), width="stretch",
-                     hide_index=True)
+        fixable = [i for i in result.review if i["trim_id"]]
+        st.caption(f"{len(fixable)} รายการที่รู้ trim แล้ว เหลือแค่เหตุผลอื่น · "
+                   f"{len(result.review) - len(fixable)} รายการยังไม่รู้ว่าเป็นรุ่นไหน")
+        for item in fixable:
+            with st.container(border=True):
+                st.write(label(item))
+                st.caption("ติดที่: " + ", ".join(item["reasons"]))
+                if "campaign_without_conditions" in item["reasons"]:
+                    names = list(master.prices.campaigns)
+                    campaign_id = st.selectbox(
+                        "ผูกกับแคมเปญ", ["—", *names],
+                        key=f"camp-{item['claim_ids'][0]}")
+                    option_id = "—"
+                    if campaign_id != "—":
+                        option_id = st.selectbox(
+                            "ทางเลือก",
+                            ["—", *[o.id for o in
+                                    master.prices.campaigns[campaign_id].options]],
+                            key=f"opt-{item['claim_ids'][0]}")
+                    if st.button("ผูกแคมเปญ", key=f"bind-{item['claim_ids'][0]}",
+                                 disabled=not reviewer.strip()
+                                 or campaign_id == "—" or option_id == "—"):
+                        decide(item["claim_ids"], action="accept",
+                               campaign_id=campaign_id, option_id=option_id)
+                        st.rerun()
+                if st.button("ปฏิเสธ", key=f"rejr-{item['claim_ids'][0]}",
+                             disabled=not reviewer.strip()):
+                    decide(item["claim_ids"], action="reject")
+                    st.rerun()
+
         st.subheader("รุ่นที่ยังไม่มีในระบบ")
-        st.caption("ราคากับรุ่นมาด้วยกัน กดรับทีเดียวได้ทั้งคู่ — "
-                   "วันเปิดตัวรุ่นยังไม่มีในแคตตาล็อก นั่นคือความหมายของคำว่าเปิดตัว")
-        st.dataframe(pd.DataFrame(result.trim_proposals),
-                     width="stretch", hide_index=True)
+        st.caption("ราคากับรุ่นมาด้วยกัน กดรับทีเดียวได้ทั้งคู่ — วันเปิดตัวรุ่นยังไม่มี"
+                   "ในแคตตาล็อก นั่นคือความหมายของคำว่าเปิดตัว")
+        catalog = Catalog.load(DATA_DIR, YEAR)
+        for proposal in result.trim_proposals:
+            key = proposal["claim_ids"][0]
+            title = (f"{proposal['brand_raw']} {proposal['model_raw']} — "
+                     f"{proposal['trim_raw'] or '(ไม่ระบุรุ่นย่อย)'} · "
+                     f"{proposal['amount_thb']:,} บาท")
+            with st.expander(title):
+                brand_id, model_id = pricefeed.match_model(
+                    catalog, proposal["brand_raw"], proposal["model_raw"],
+                    proposal["trim_raw"])
+                if brand_id is None:
+                    st.warning("ไม่รู้จักแบรนด์นี้ในแคตตาล็อก ต้องเพิ่มแบรนด์ก่อน")
+                    continue
+                models = sorted(m for m in catalog.models
+                                if m.startswith(brand_id + "."))
+                model_choice = st.selectbox(
+                    "รุ่น", models,
+                    index=models.index(model_id) if model_id in models else 0,
+                    key=f"m-{key}")
+                generations = [g.id for g in catalog.generations_of(model_choice)]
+                if not generations:
+                    st.warning("รุ่นนี้ยังไม่มี generation ต้องเพิ่มในแคตตาล็อกก่อน")
+                    continue
+                generation = st.selectbox("โฉม", generations, key=f"g-{key}")
+                name = st.text_input("ชื่อรุ่นย่อย",
+                                     value=proposal["trim_raw"], key=f"n-{key}")
+                powertrain = st.selectbox(
+                    "ระบบขับเคลื่อน",
+                    [p.value for p in Powertrain if p is not Powertrain.UNKNOWN],
+                    key=f"p-{key}")
+                url = st.text_input("ลิงก์ที่มา",
+                                    value=", ".join(proposal.get("urls", [])),
+                                    key=f"u-{key}")
+                ready = bool(reviewer.strip() and name.strip() and url.strip())
+                if not ready:
+                    st.caption("ต้องมีชื่อผู้ตัดสินใจ ชื่อรุ่นย่อย และลิงก์ที่มา")
+                if st.button("สร้าง trim แล้วรับราคา", key=f"mk-{key}",
+                             disabled=not ready):
+                    local_id = slug(name)[:60]
+                    payload = {"generation_id": generation, "trims": [{
+                        "id": local_id, "name": name.strip(),
+                        "powertrain": powertrain,
+                        "source_refs": {"press": [u.strip() for u in url.split(",")
+                                                  if u.strip()]},
+                        "notes": f"สร้างจากข่าวราคา รับโดย {reviewer}",
+                    }]}
+                    try:
+                        st.write(import_trims(DATA_DIR, YEAR, payload))
+                        st.success(import_trims(DATA_DIR, YEAR, payload, write=True))
+                        decide(proposal["claim_ids"], action="accept",
+                               trim_id=f"{generation}.trim.{local_id}",
+                               notes="สร้าง trim พร้อมรับราคา")
+                        reload_master()
+                        st.rerun()
+                    except CatalogError as exc:
+                        st.error(str(exc))

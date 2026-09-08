@@ -107,6 +107,9 @@ def test_price_history_is_time_scoped_and_easy_to_update():
             "trim_id": TRIM_ID,
             "amount_thb": 949000,
             "price_type": "CAMPAIGN_PRICE",
+            "campaign_id": "campaign.acme.midyear_2026",
+            "option_id": "cash",
+            "reference_price_thb": 999000,
             "effective_from": "2026-06-15",
             "effective_to": "2026-06-30",
             "source": "official_oem",
@@ -153,4 +156,10 @@ def test_2026_jaecoo_eco_prices_do_not_override_official_list():
     coverage = ledger.coverage(as_of=date(2026, 9, 8))
     assert coverage["records"] >= 3
     assert coverage["eco_sticker_price_records"] >= 3
-    assert coverage["trims_with_current_list_price"] == 1
+    # Scoped to this model: prices published for other cars are not this test's
+    # business, and a global count would break every time one is added.
+    jaecoo_with_list = [
+        trim_id for trim_id in {r.trim_id for r in ledger.records}
+        if trim_id.startswith("jaecoo.jaecoo_5_ev.")
+        and ledger.current_list_price(trim_id, as_of=date(2026, 9, 8)) is not None]
+    assert jaecoo_with_list == ["jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev"]

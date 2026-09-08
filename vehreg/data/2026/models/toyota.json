@@ -542,6 +542,350 @@
               "price_min_thb": 1359000,
               "price_max_thb": 1359000
             }
+          ],
+          "trims": [
+            {
+              "id": "2_4_mid_mt_4x4",
+              "name": "2.4 Mid MT 4x4",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "c1c46e58-019b-45c9-bb49-1de432b16079"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R 18",
+              "tire_rear": "265/60R 18"
+            },
+            {
+              "id": "2_8_high_at_4x4",
+              "name": "2.8 High AT 4x4",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "6ad6ec89-c8c3-4714-868b-cd4ffd4a5ea4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "2_8_high_mt_4x4",
+              "name": "2.8 High MT 4x4",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "fffe1bae-3ae2-409c-9249-3eea75e7878a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "2wd_2_8_gr_sport_at",
+              "name": "2WD 2.8 GR Sport AT",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "b2ff31c1-d5d5-49e3-8aa3-bbf594f05ede"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5285,
+              "width_mm": 1855,
+              "height_mm": 1730,
+              "tire_front": "215/55R 17",
+              "tire_rear": "215/55R 17"
+            },
+            {
+              "id": "gr_sport_2_8_at_4x2",
+              "name": "GR Sport 2.8 AT 4x2",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "c610d416-c53d-4383-8f99-bd33ad13eaae"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5285,
+              "width_mm": 1855,
+              "height_mm": 1730,
+              "tire_front": "215/55R 17",
+              "tire_rear": "215/55R 17"
+            },
+            {
+              "id": "gr_sport_2_8_at_4x4",
+              "name": "GR Sport 2.8 AT 4x4",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "e4684e41-5753-4321-81c5-024cc17f24c6"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 2020,
+              "height_mm": 1880,
+              "tire_front": "265/65R17",
+              "tire_rear": "265/65R17"
+            },
+            {
+              "id": "gr_sport_2_8_at_4x4_base",
+              "name": "GR Sport 2.8 AT 4x4 (Base)",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "c59b479e-28d0-4154-a78b-4406d9cdafd5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 2020,
+              "height_mm": 1880,
+              "tire_front": "265/65R17",
+              "tire_rear": "265/65R17"
+            },
+            {
+              "id": "prerunner_2_4_entry_at",
+              "name": "Prerunner 2.4 Entry AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "09e86fd8-1726-4eef-bdcc-ab43717bb8c6"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/65R 17",
+              "tire_rear": "265/65R 17"
+            },
+            {
+              "id": "prerunner_2_4_entry_mt",
+              "name": "Prerunner 2.4 Entry MT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "3c293fec-b4fd-4b23-99b7-53081f18315a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/65R 17",
+              "tire_rear": "265/65R 17"
+            },
+            {
+              "id": "prerunner_2_4_high_at",
+              "name": "Prerunner 2.4 High AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "bdba5e51-1306-4e1a-9683-882e69c2d427"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R 18",
+              "tire_rear": "265/60R 18"
+            },
+            {
+              "id": "prerunner_2_4_high_mt",
+              "name": "Prerunner 2.4 High MT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "9d9e546d-d547-4345-8697-90795e8aebdb"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R 18",
+              "tire_rear": "265/60R 18"
+            },
+            {
+              "id": "prerunner_2_4_mid_at",
+              "name": "Prerunner 2.4 Mid AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "81348f13-ad06-4ed3-80b1-b0eb431da7b0"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R 18",
+              "tire_rear": "265/60R 18"
+            },
+            {
+              "id": "prerunner_2_4_mid_mt",
+              "name": "Prerunner 2.4 Mid MT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "f555749d-4b84-4034-bf27-7afbb0e12212"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R 18",
+              "tire_rear": "265/60R 18"
+            },
+            {
+              "id": "prerunner_rocco_2_4_at",
+              "name": "Prerunner Rocco 2.4 AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "77171d9a-31cc-4fd5-980a-f207c0917923"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R 18",
+              "tire_rear": "265/60R 18"
+            },
+            {
+              "id": "rocco_2_8_at_4x4",
+              "name": "Rocco 2.8 AT 4x4",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "68b7091e-af8d-4349-a385-da60c8a71da5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5325,
+              "width_mm": 1900,
+              "height_mm": 1815,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "z_edition_2_4_entry_at",
+              "name": "Z Edition 2.4 ENTRY AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "539dd437-41cd-40f8-9943-556cc35e8323"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5285,
+              "width_mm": 1855,
+              "height_mm": 1700,
+              "tire_front": "215/55R17",
+              "tire_rear": "215/55R17"
+            },
+            {
+              "id": "z_edition_2_4_entry_mt",
+              "name": "Z Edition 2.4 Entry MT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "fee847ef-507d-439f-a403-48534d415120"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5285,
+              "width_mm": 1855,
+              "height_mm": 1700,
+              "tire_front": "215/55R17",
+              "tire_rear": "215/55R17"
+            },
+            {
+              "id": "z_edition_2_4_mid_at",
+              "name": "Z Edition 2.4 Mid AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "37885724-2771-4064-89b8-c3980b6179e1"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5315,
+              "width_mm": 1855,
+              "height_mm": 1700,
+              "tire_front": "215/55R17",
+              "tire_rear": "215/55R17"
+            },
+            {
+              "id": "z_edition_2_4_mid_mt",
+              "name": "Z Edition 2.4 Mid MT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "755195a5-22c6-4454-a198-9a8a10ce32c3"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5315,
+              "width_mm": 1855,
+              "height_mm": 1700,
+              "tire_front": "215/55R17",
+              "tire_rear": "215/55R17"
+            }
           ]
         }
       ],
@@ -728,6 +1072,944 @@
               "price_note": "seed-unverified",
               "price_min_thb": 4599000,
               "price_max_thb": 4599000
+            }
+          ],
+          "trims": [
+            {
+              "id": "2_5_g",
+              "name": "2.5 G",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "136d3939ed28488790a5f2d02ffd03c4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "2_5_hev",
+              "name": "2.5 HEV",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "d68f8f3a-fb1a-424d-8cab-6b4f9fa8c128"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/65R17",
+              "tire_rear": "225/65R17"
+            },
+            {
+              "id": "2_5_hev_luxury",
+              "name": "2.5 HEV Luxury",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "a73b7c7c-5fd0-4277-97e2-8eb7ee38a0ab"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "2_5_hybrid_executive_lounge",
+              "name": "2.5 HYBRID EXECUTIVE LOUNGE",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "a6597e6fc4284395869bf69809dc8d16"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_hybrid_g",
+              "name": "2.5 HYBRID G",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "9a8a486f-199f-435d-8cf4-3d9f4d3f6ec7"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "2_5_hybrid_g_f_package",
+              "name": "2.5 HYBRID G F Package",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "c69e287a45354033a601f6114d1b12b8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_hybrid_s_type_gold_iii",
+              "name": "2.5 HYBRID S TYPE GOLD III",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "e1b04f76-6121-4bba-bdba-ceeca42034f7"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "2_5_hybrid_sr",
+              "name": "2.5 HYBRID SR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "4ec90b2f2ba64c2f8f36f238a8bef36f"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_hybrid_sr_c_package",
+              "name": "2.5 HYBRID SR-C PACKAGE",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "7c1a8c473f144ffcab8fd3a81355948c"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_hybrid_x",
+              "name": "2.5 HYBRID X",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "c178ea29c9a04704be18dcbab7859d23"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_hybrid_z_2wd",
+              "name": "2.5 HYBRID Z 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "4e725fb0-4790-457a-8a25-948607e2c3c2"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "2_5_hybrid_z_e_four",
+              "name": "2.5 HYBRID Z E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "ffdbce1b-ce41-4506-80a1-98f8692c350f"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "2_5_s_type_gold",
+              "name": "2.5 S TYPE GOLD",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "f43bf376cabd4daeaddb71df6a192a1b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "2_5_sc_package",
+              "name": "2.5 SC PACKAGE",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "fee7b66be05547c08b755a4d575cbab5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "2_5_x_side_lift_up_seat",
+              "name": "2.5 X SIDE LIFT UP SEAT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "a82be6efe43d4e958b5df24505c727b4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "2_5s_c_package_2wd",
+              "name": "2.5S C PACKAGE 2WD",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "a0450d7e-2e0d-4efe-aa21-002f870f1b29"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "alphard",
+              "name": "ALPHARD",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "4d4ff70e3fbf41819506f767763a5cb9"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "eclipse_edition_hev_premium",
+              "name": "Eclipse Edition - HEV Premium",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "cd0f4f43-a5be-450c-9fb5-db6ebd7a48a5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "eclipse_edition_hev_premium_luxury",
+              "name": "Eclipse Edition - HEV Premium Luxury",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "74c56dc2-7eed-4fe7-9ce4-b5481ec19d11"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "eclipse_edition_hev_smart",
+              "name": "Eclipse Edition - HEV Smart",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "263551ea-a035-49fd-b675-dfea529a6e71"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hev_premium",
+              "name": "HEV Premium",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "48c14603-c286-463a-9bed-e07ae20f52e1"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hev_premium_luxury",
+              "name": "HEV Premium Luxury",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "bc584ab9-f3c2-4741-b655-198d0dcf47e8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hev_smart",
+              "name": "HEV Smart",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "df03dc02-027a-4052-a9cb-9904dbda6734"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hybrid",
+              "name": "HYBRID",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "96e29081-5f9e-4f22-afc7-72f44612bc0e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 8,
+              "length_mm": 5010,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_2_5_z_2wd",
+              "name": "HYBRID 2.5 Z 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "94022927-c5df-480d-973d-eb320ca1a028"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hybrid_executive_lounge",
+              "name": "HYBRID EXECUTIVE LOUNGE",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "931c0d96-1371-43eb-9f27-588cd62b5f87"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_executive_lounge_2wd",
+              "name": "HYBRID EXECUTIVE LOUNGE 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "55f99743-60b9-475d-9c64-e55b414a9d07"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_executive_lounge_e_four",
+              "name": "HYBRID EXECUTIVE LOUNGE E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "2d81381f-007e-4c48-a919-1aa693492829"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hybrid_executive_lounge_s",
+              "name": "HYBRID EXECUTIVE LOUNGE S",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "394dbe44-381c-4f4b-b83d-96bf85987791"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "hybrid_g_2wd",
+              "name": "HYBRID G 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "09a59fc7-5f12-4d2d-bf8c-d70e82295a3e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_g_e_four",
+              "name": "HYBRID G E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "b873ee20-aab7-4fa0-ab54-c19267619e0a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hybrid_g_f_package",
+              "name": "HYBRID G F PACKAGE",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "266aabc5-6534-4250-b51f-350c11bbf6d0"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "hybrid_gf",
+              "name": "HYBRID GF",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "55dfb7d46ff0459eafef0f23880adccd"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "hybrid_s",
+              "name": "HYBRID S",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "43cf9aca936947b5b7a54352f0a678a9"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 1850,
+              "width_mm": 4945,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "hybrid_s_e_four",
+              "name": "HYBRID S E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "024d6003894d444c845bfdffa45da507"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "hybrid_s_type_gold_ii",
+              "name": "HYBRID S TYPE GOLD II",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "20b0f8f65b314e15b0f2987508582efc"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "hybrid_s_type_gold_iii",
+              "name": "HYBRID S TYPE GOLD III",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "92dde66d-3b76-4a32-87a1-61ee29f33a1b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "hybrid_sr_c_package",
+              "name": "HYBRID SR \"C Package\"",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "9fdff73d-d97d-455b-aba4-a9c2940b9a77"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "hybrid_x",
+              "name": "HYBRID X",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "f06a9e3e-c72c-4ec2-b8bc-14046e60a226"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "hybrid_x_2wd",
+              "name": "HYBRID X 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "25669220-1036-4ed7-a53b-1e0a14def610"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_x_e_four",
+              "name": "HYBRID X E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "bdc4b4de-60be-4c40-a9e9-36c2a079c3d5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 8,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hybrid_z",
+              "name": "HYBRID Z",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "d87514bb-f799-411c-8230-57b47a6d16df"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_z_2wd",
+              "name": "HYBRID Z 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "a07258c9-0cc4-4233-bbd5-917ede9d676e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_z_e_four",
+              "name": "HYBRID Z E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "8c3dbf8d-2dd6-4a58-b27b-5ca523fc5e2e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "s_c_package",
+              "name": "S\"C Package\"",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "310a03e4-4f26-4918-a408-e0a23e14be8c"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "s_type_gold",
+              "name": "S TYPE GOLD",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "4a47bd98-5d09-4a88-b423-24d99e973eba"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 1950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "s_type_gold_iii",
+              "name": "S TYPE GOLD III",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "ebb429e9-6acc-4b3d-9c79-cdecd17e00a8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 1950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "sc_package",
+              "name": "SC PACKAGE",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "11981a46-02d8-44e1-a112-c0d1d4068685"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4950,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "z",
+              "name": "Z",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "b8751aac-7d0f-42ce-ac7f-f0c19fa75da8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "z_2wd",
+              "name": "Z 2WD",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "b4059829-1cf2-4415-b750-da9c8a273b2b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "z_4wd",
+              "name": "Z 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "d370cd7c-2e56-4c2a-80a5-e830cd0cb06c"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "z_hybrid",
+              "name": "Z HYBRID",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "54d262c9-9956-42ef-8812-17e6dcfca0f5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
             }
           ]
         }
@@ -1053,6 +2335,422 @@
               "origin_country": "JP",
               "price_note": "seed-unverified",
               "aliases": []
+            }
+          ],
+          "trims": [
+            {
+              "id": "250",
+              "name": "250",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "982ae032-d414-4f1d-8101-810c167c3327"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "2_5_hev",
+              "name": "2.5 HEV",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "150c9bf7-c210-42d6-998a-7ace2dc17464"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5005,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "2_5_hybrid_v_l_edition",
+              "name": "2.5 HYBRID V L Edition",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "8ee3b76b67074161a85b41a4d812d2e9"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_hybrid_x",
+              "name": "2.5 HYBRID X",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "423d65344824408dbdbc57d0813ac803"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4935,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_hybrid_zr_g",
+              "name": "2.5 HYBRID ZR-G",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "70accb2303014d2aa6c01ad424dfa68e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4935,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "2_5_zg_edition",
+              "name": "2.5 ZG EDITION",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "09bbcad2f21a4ab8af4d32ae7f765922"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "eclipse_edition_hev_premium",
+              "name": "Eclipse Edition - HEV Premium",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "0186e2ef-20e0-47f2-9447-41124a739491"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5005,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "golden_eye_iii",
+              "name": "GOLDEN EYE III",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "c0e0d44b-da0d-449e-8d48-8a1193a072ec"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "hev_premium",
+              "name": "HEV Premium",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "c40e8a2d-4462-4382-9b66-e585b0f41ad4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5005,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hybrid",
+              "name": "HYBRID",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "fa43da23deec4647b43bca09443be63b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4935,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "hybrid_executive_lounge",
+              "name": "HYBRID EXECUTIVE LOUNGE",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "147e56b3-c37c-49b1-810e-9900db369e16"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_executive_lounge_2wd",
+              "name": "HYBRID EXECUTIVE LOUNGE 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "18f77a3e-6883-424b-a9c2-fb383904ea69"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_executive_lounge_e_four",
+              "name": "HYBRID EXECUTIVE LOUNGE E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "d4f0550e-1d97-4083-ac82-ac529688da4d"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 5005,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_x_e_four",
+              "name": "HYBRID X E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "73c3adf96487421e84de5570743762ae"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4935,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "215/65R16",
+              "tire_rear": "215/65R16"
+            },
+            {
+              "id": "hybrid_z_premier",
+              "name": "HYBRID Z PREMIER",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "39236d3e-5b9e-4262-adb3-bab74353334b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_z_premier_2wd",
+              "name": "HYBRID Z PREMIER 2WD",
+              "powertrain": "HEV",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "76c76aa2-7c76-446c-8928-b66df1cb7a51"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/60R18",
+              "tire_rear": "225/60R18"
+            },
+            {
+              "id": "hybrid_z_premier_e_four",
+              "name": "HYBRID Z PREMIER E-FOUR",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "a495e190-d412-40a6-81ca-a5e0bd0588f8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "hybrid_zrg_edition",
+              "name": "HYBRID ZRG EDITION",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "6016c4a4705c4337bc351966290e8c0e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4935,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "225/60R17",
+              "tire_rear": "225/60R17"
+            },
+            {
+              "id": "vellfire",
+              "name": "VELLFIRE",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "7574e074b56342449fad17b8cb627d33"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
+            },
+            {
+              "id": "z_premier",
+              "name": "Z PREMIER",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "3bd27424-f0cc-49be-909d-001be1a67072"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "z_premier_2wd",
+              "name": "Z PREMIER 2WD",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "79ca400a-e879-43a1-b939-e2d379b94c13"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1945,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "z_premier_hybrid",
+              "name": "Z PREMIER HYBRID",
+              "powertrain": "HEV",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "fff3df8d-6a9f-4f1e-859c-f7b2c8fb34b9"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4995,
+              "width_mm": 1850,
+              "height_mm": 1935,
+              "tire_front": "225/55R19",
+              "tire_rear": "225/55R19"
+            },
+            {
+              "id": "zg",
+              "name": "ZG",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "262cc2548d424e98908b2ef927350f2c"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 7,
+              "length_mm": 4945,
+              "width_mm": 1850,
+              "height_mm": 1950,
+              "tire_front": "235/50R18",
+              "tire_rear": "235/50R18"
             }
           ]
         }

@@ -1,0 +1,27 @@
+{
+  "sources": [
+    {
+      "id": "official_oem",
+      "name": "Manufacturer pricelist, press release or promotion page",
+      "tier": "A",
+      "adapter": "manual",
+      "poll_minutes": 60
+    },
+    {
+      "id": "headlightmag",
+      "name": "Headlightmag",
+      "tier": "B",
+      "base_url": "https://www.headlightmag.com",
+      "adapter": "wordpress",
+      "poll_minutes": 20
+    },
+    {
+      "id": "autolifethailand",
+      "name": "AutoLife Thailand",
+      "tier": "B",
+      "base_url": "https://autolifethailand.tv",
+      "adapter": "wordpress",
+      "poll_minutes": 20
+    }
+  ]
+}

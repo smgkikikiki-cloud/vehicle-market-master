@@ -299,6 +299,17 @@ class PriceRecord:
     option_id: Optional[str] = None
     #: The price this one is discounted from, as the source stated it.
     reference_price_thb: Optional[int] = None
+    #: A row that was wrong. It stops counting immediately but is never deleted:
+    #: a published number has to stay auditable even once it is withdrawn.
+    #: Contrast with ``effective_to``, which says a correct price ended.
+    retracted_at: Optional[str] = None
+    retraction_reason: str = ""
+    #: Who made the last manual decision about this row.
+    reviewed_by: str = ""
+
+    @property
+    def retracted(self) -> bool:
+        return bool(self.retracted_at)
 
     @property
     def discount_thb(self) -> Optional[int]:
@@ -327,11 +338,14 @@ class PriceRecord:
                 PriceType.CAMPAIGN_PRICE, PriceType.FINANCE_PRICE):
             problems.append(
                 f"{self.price_type.value} must not belong to a campaign")
-        for field_name in ("effective_from", "effective_to", "observed_at"):
+        for field_name in ("effective_from", "effective_to", "observed_at",
+                           "retracted_at"):
             try:
                 _iso_date(getattr(self, field_name), field_name)
             except PricingError as exc:
                 problems.append(str(exc))
+        if self.retracted_at and not self.retraction_reason:
+            problems.append("a retracted price must say why")
         if self.price_type is PriceType.LIST_PRICE and not (
                 self.effective_from or self.observed_at):
             problems.append("LIST_PRICE requires effective_from or observed_at")
@@ -433,6 +447,9 @@ class PriceLedger:
                 campaign_id=str(raw.get("campaign_id") or "").strip() or None,
                 option_id=str(raw.get("option_id") or "").strip() or None,
                 reference_price_thb=reference,
+                retracted_at=_iso_date(raw.get("retracted_at"), "retracted_at"),
+                retraction_reason=str(raw.get("retraction_reason") or "").strip(),
+                reviewed_by=str(raw.get("reviewed_by") or "").strip(),
             )
             problems = record.validate()
             if problems:
@@ -444,8 +461,11 @@ class PriceLedger:
         self.records.extend(staged)
 
     def records_for(self, trim_id: str, *,
-                    price_type: Optional[PriceType] = None) -> list[PriceRecord]:
-        rows = [r for r in self.records if r.trim_id == trim_id]
+                    price_type: Optional[PriceType] = None,
+                    include_retracted: bool = False) -> list[PriceRecord]:
+        """Resolution order. Retracted rows are excluded unless asked for."""
+        rows = [r for r in self.records if r.trim_id == trim_id
+                and (include_retracted or not r.retracted)]
         if price_type is not None:
             rows = [r for r in rows if r.price_type is price_type]
         return sorted(rows, key=self._sort_key)

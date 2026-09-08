@@ -44,7 +44,16 @@ class ComparisonRule(str, Enum):
 
 
 class ValueState(str, Enum):
+    """Four different silences, and they do not mean the same thing.
+
+    ``UNKNOWN`` is nobody has looked.  ``NOT_AVAILABLE`` is the source looked
+    and did not say.  ``NOT_APPLICABLE`` is the question does not arise -- a BEV
+    has no engine displacement, and reporting that as missing research would be
+    a lie about the car.
+    """
+
     KNOWN = "KNOWN"
+    UNKNOWN = "UNKNOWN"
     NOT_AVAILABLE = "NOT_AVAILABLE"
     NOT_APPLICABLE = "NOT_APPLICABLE"
 
@@ -52,6 +61,57 @@ class ValueState(str, Enum):
 class VerificationStatus(str, Enum):
     VERIFIED = "VERIFIED"
     PROVISIONAL = "PROVISIONAL"
+
+
+#: Money never becomes a comparable spec. A price has a ledger of its own, with
+#: campaigns, windows, supersession and retraction; a copy in the spec store
+#: would be a second answer to "what does this cost" that nobody maintains.
+PRICE_WORDS = ("price", "msrp", "thb", "baht", "cost", "ราคา")
+
+
+def _is_price_field(key: str, canonical_unit: str = "") -> bool:
+    lowered = f"{key} {canonical_unit}".lower()
+    return any(word in lowered for word in PRICE_WORDS)
+
+
+#: The ECO register writes one chemistry a dozen ways -- "LFP", "LiFePO4",
+#: "Lithium iron phosphate/graphite", "lithium-phosphate (LFP)". A comparison
+#: table showing the same battery as three different things is a table nobody
+#: trusts, so the cell carries a canonical family and the source's own wording
+#: is kept beside it under ``battery.chemistry_as_declared``.
+CHEMISTRY_FAMILIES = (
+    (("lifepo4", "iron phosphate", "lfp", "lithium-phosphate", "lmfp"), "LFP"),
+    (("nca",), "NCA"),
+    (("ncm", "nmc"), "NMC"),
+    (("lto", "titanate"), "LTO"),
+    (("lithium", "li-ion", "li ion"), "LI_ION_UNSPECIFIED"),
+)
+
+#: Same problem, in Thai: the register writes the gearbox as prose.
+TRANSMISSION_FAMILIES = (
+    (("cvt",), "CVT"),
+    (("\u0e18\u0e23\u0e23\u0e21\u0e14\u0e32", "manual"), "MANUAL"),
+    (("\u0e2d\u0e31\u0e15\u0e42\u0e19\u0e21\u0e31\u0e15\u0e34", "automatic"), "AUTOMATIC"),
+)
+
+
+def _family(raw: object, table) -> Optional[str]:
+    text = str(raw or "").strip().lower()
+    if not text or text in ("-", "n/a"):
+        return None
+    for needles, family in table:
+        if any(needle in text for needle in needles):
+            return family
+    return "OTHER"
+
+
+def battery_chemistry_family(raw: object) -> Optional[str]:
+    return _family(raw, CHEMISTRY_FAMILIES)
+
+
+def transmission_family(raw: object) -> Optional[str]:
+    """CVT is checked before "automatic": every CVT row also says automatic."""
+    return _family(raw, TRANSMISSION_FAMILIES)
 
 
 def comparable_spec_root(data_dir: Path | str, year: int) -> Path:
@@ -184,6 +244,13 @@ class SpecRegistry:
         for key, definition in self.fields.items():
             if not key or not re.fullmatch(r"[a-z][a-z0-9_.]*", key):
                 problems.append(f"invalid field key {key!r}")
+            if _is_price_field(key, definition.canonical_unit):
+                # The guard has to live here. Checking the payload's own dict
+                # keys catches nothing: SpecFact has no price field, so such a
+                # key is already rejected as unknown. A price only ever gets in
+                # by being *registered*, which is what this refuses.
+                problems.append(
+                    f"{key}: prices belong in PriceLedger, not the spec registry")
             if not definition.group or not definition.label_th or not definition.label_en:
                 problems.append(f"{key}: group and labels are required")
             if definition.value_type is ValueType.NUMBER and not definition.canonical_unit:
@@ -261,9 +328,11 @@ class SpecLedger:
         staged_by_id: dict[str, SpecFact] = {}
         allowed = {name for name in SpecFact.__dataclass_fields__}
         for raw in payload["facts"]:
-            if isinstance(raw, dict) and any(
-                    "price" in str(key).lower() for key in raw):
-                raise ComparableSpecError(f"{source}: prices belong in PriceLedger")
+            if isinstance(raw, dict) and _is_price_field(
+                    str(raw.get("field_key") or ""), str(raw.get("unit") or "")):
+                raise ComparableSpecError(
+                    f"{source}: {raw.get('fact_id')}: prices belong in "
+                    "PriceLedger, not the spec store")
             if not isinstance(raw, dict) or set(raw) - allowed:
                 raise ComparableSpecError(f"{source}: invalid/unknown fact fields")
             fact = SpecFact(
@@ -408,12 +477,26 @@ class ComparableCohort:
             notes=str(payload.get("notes") or ""),
         )
 
+    @property
+    def models_without_representative(self) -> tuple[str, ...]:
+        """In the segment, but nobody has chosen which grade speaks for it.
+
+        A model is not dropped from the cohort for want of a representative:
+        that would hide a whole car from the comparison and call the result the
+        segment. It stays, and the gap is reported.
+        """
+        return tuple(sorted(set(self.model_ids)
+                            - set(self.representative_source_ids)))
+
     def validate(self, catalog: "Catalog") -> list[str]:
         problems: list[str] = []
         if len(self.model_ids) != len(set(self.model_ids)):
             problems.append(f"cohort {self.id}: duplicate model ids")
-        if set(self.representative_source_ids) != set(self.model_ids):
-            problems.append(f"cohort {self.id}: representative map must cover every model")
+        stray = set(self.representative_source_ids) - set(self.model_ids)
+        if stray:
+            problems.append(
+                f"cohort {self.id}: representatives for models outside it: "
+                f"{sorted(stray)}")
         for model_id in self.model_ids:
             model = catalog.models.get(model_id)
             if model is None:
@@ -513,8 +596,12 @@ class ECOCandidateSpecStore:
                 ("vehicle.declared_total_weight_kg", row.get("declared_total_weight_kg"), "kg"),
                 ("fitment.tyre_size", row.get("wheel_size"), ""),
                 ("engine.displacement_cc", _positive_number(detail.get("capacity_cylinder")), "cc"),
-                ("powertrain.transmission", detail.get("gear_name"), ""),
-                ("battery.chemistry", row.get("battery_chemistry"), ""),
+                ("powertrain.transmission",
+                 transmission_family(detail.get("gear_name")), ""),
+                ("powertrain.transmission_as_declared", detail.get("gear_name"), ""),
+                ("battery.chemistry",
+                 battery_chemistry_family(row.get("battery_chemistry")), ""),
+                ("battery.chemistry_as_declared", row.get("battery_chemistry"), ""),
                 ("battery.supplier", row.get("battery_supplier"), ""),
                 ("battery.nominal_voltage_v", _positive_number(detail.get("nominal_voltage")), "V"),
                 ("powertrain.motor_type", detail.get("motor"), ""),
@@ -524,16 +611,27 @@ class ECOCandidateSpecStore:
             for key, value, unit in simple:
                 if value not in (None, "", "-") and key in registry.fields:
                     values.append(_candidate_value(key, value, unit=unit))
+            # A plug-in hybrid's declared range is how far it goes on the
+            # battery alone; a BEV's is how far it goes at all. Same field, two
+            # different quantities, so they are tagged into separate comparison
+            # contexts and never end up in one column.
+            scope = ("ELECTRIC_ONLY"
+                     if row.get("powertrain_candidate") in ("PHEV", "REEV")
+                     else "FULL")
             range_km = _positive_number(detail.get("driving_range"))
             if range_km is not None:
                 values.append(_candidate_value(
                     "ev.rated_range_km", range_km, unit="km",
-                    qualifiers={"measurement_basis": "ECO_STICKER_DECLARED"}))
+                    qualifiers={"measurement_basis": "ECO_STICKER_DECLARED",
+                                "range_scope": scope}))
+            # Same split as range: a PHEV's figure is its electric-mode
+            # consumption, which is not the whole story of running the car.
             consumption = _positive_number(detail.get("energy_consumption"))
             if consumption is not None:
                 values.append(_candidate_value(
                     "ev.energy_consumption_wh_km", consumption, unit="Wh/km",
-                    qualifiers={"measurement_basis": "ECO_STICKER_DECLARED"}))
+                    qualifiers={"measurement_basis": "ECO_STICKER_DECLARED",
+                                "range_scope": scope}))
             records.append({
                 "subject_id": f"ecosticker:{row['source_id']}",
                 "source_id": row["source_id"], "model_id": model_id,
@@ -572,6 +670,8 @@ class ECOCandidateSpecStore:
             "models_with_candidates": len({r["model_id"] for r in rows}),
             "candidate_trims": len(rows),
             "representative_candidates": sum(r["representative"] for r in rows),
+            "models_without_representative": len(
+                self.cohort.models_without_representative),
             "candidate_spec_values": sum(len(r["values"]) for r in rows),
             "published_market_trims": 0,
         }

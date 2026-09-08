@@ -23,6 +23,7 @@ from .catalog import (
 from .db import connect, loaded_years, rebuild_dimension, unmatched_summary
 from . import normalize
 from .ingest import ColumnMap, ingest_csv, teach_alias
+from .pricing import PriceType
 from .taxonomy import (
     BodyType, BrandSegment, CabType, Drivetrain, ImportType, MarketPosition,
     Powertrain, PowertrainGroup, RegistrationType, Segment, THAI_LABELS,
@@ -435,6 +436,66 @@ def cmd_market(args) -> int:
             snapshot_date=args.snapshot_date, write=args.write)
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0
+    if args.market_cmd in ("correct-price", "close-price", "campaign"):
+        from .product import close_price, correct_price, save_campaign
+        as_of = (date.fromisoformat(args.as_of)
+                 if getattr(args, "as_of", None) else None)
+        if args.market_cmd == "campaign":
+            result = save_campaign(
+                args.data_dir, args.year,
+                json.loads(Path(args.path).read_text(encoding="utf-8")),
+                write=args.write)
+        elif args.market_cmd == "correct-price":
+            result = correct_price(
+                args.data_dir, args.year, trim_id=args.trim_id,
+                price_type=args.price_type, amount_thb=args.amount_thb,
+                reason=args.reason, reviewer=args.reviewer, mode=args.mode,
+                effective_from=args.effective_from,
+                campaign_id=args.campaign_id, option_id=args.option_id,
+                source=args.source, source_ref=args.source_ref,
+                reference_price_thb=args.reference_price_thb,
+                as_of=as_of, write=args.write)
+        else:
+            result = close_price(
+                args.data_dir, args.year, trim_id=args.trim_id,
+                price_type=args.price_type, ends=args.ends, reason=args.reason,
+                reviewer=args.reviewer, campaign_id=args.campaign_id,
+                option_id=args.option_id, as_of=as_of, write=args.write)
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd == "price-run":
+        from . import pricefeed
+        from .pricing import PriceLedger
+        documents, claims = pricefeed.load_batch(args.path)
+        catalog = Catalog.load(args.data_dir, args.year)
+        ledger = PriceLedger.load(args.data_dir, year=args.year, catalog=catalog)
+        decisions = (pricefeed.load_decisions(args.decisions)
+                     if args.decisions else {})
+        result = pricefeed.run(documents, claims,
+                               pricefeed.load_sources(args.data_dir, args.year),
+                               catalog, campaigns=ledger.campaigns,
+                               decisions=decisions)
+        rows = pricefeed.to_price_rows(
+            result, observed_at=date.today().isoformat(),
+            source_of=pricefeed.load_sources(args.data_dir, args.year))
+        written = None
+        if args.write and rows:
+            written = append_prices(args.data_dir, args.year, {"prices": rows},
+                                    write=True)
+        print(json.dumps({**result.summary(), "offer_rows": len(rows),
+                          "written": written,
+                          "review": result.review[:40],
+                          "trim_proposals": result.trim_proposals[:40]},
+                         ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd == "quote":
+        from .pricing import PriceLedger
+        catalog = Catalog.load(args.data_dir, args.year)
+        ledger = PriceLedger.load(args.data_dir, year=args.year, catalog=catalog)
+        as_of = date.fromisoformat(args.as_of) if args.as_of else None
+        print(json.dumps(ledger.campaign_quote(args.trim_id, as_of=as_of),
+                         ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
     if args.market_cmd == "eco-status":
         result = ingestion_status(
             args.data_dir, args.year, snapshot_date=args.snapshot_date)
@@ -528,7 +589,8 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("market", help="Vehicle Master retail products, specs and Price Ledger")
     msub = p.add_subparsers(dest="market_cmd", required=True)
     for name in ("list", "show", "coverage", "validate", "import-trims", "append-prices",
-                 "eco-build", "eco-review", "eco-status", "spec-import",
+                 "eco-build", "eco-review", "eco-status", "price-run", "quote",
+                 "correct-price", "close-price", "campaign", "spec-import",
                  "spec-candidates", "spec-coverage", "battle-card"):
         m = msub.add_parser(name)
         m.set_defaults(func=cmd_market)
@@ -554,6 +616,43 @@ def build_parser() -> argparse.ArgumentParser:
             m.add_argument("--snapshot-date", required=True, help="snapshot date YYYY-MM-DD")
             m.add_argument("--write", action="store_true",
                            help="write validated decisions; default is dry run")
+        if name in ("correct-price", "close-price"):
+            m.add_argument("trim_id")
+            m.add_argument("--price-type", default="LIST_PRICE",
+                           choices=[p.value for p in PriceType])
+            m.add_argument("--campaign-id")
+            m.add_argument("--option-id")
+            m.add_argument("--reason", required=True,
+                           help="why; stored on the row and required")
+            m.add_argument("--reviewer", required=True, help="who decided")
+            m.add_argument("--as-of", help="treat this date as today")
+            m.add_argument("--write", action="store_true",
+                           help="apply; default is dry run")
+        if name == "correct-price":
+            m.add_argument("amount_thb", type=int)
+            m.add_argument("--mode", default="supersede",
+                           choices=["supersede", "retract"],
+                           help="supersede: the price changed. "
+                                "retract: this row was wrong and never applied")
+            m.add_argument("--effective-from",
+                           help="when the new price starts (default today)")
+            m.add_argument("--source", default="")
+            m.add_argument("--source-ref", default="")
+            m.add_argument("--reference-price-thb", type=int)
+        if name == "close-price":
+            m.add_argument("--ends", required=True, help="last day it applied")
+        if name == "campaign":
+            m.add_argument("path", help="one campaign object as JSON")
+            m.add_argument("--write", action="store_true",
+                           help="apply after validation; default is dry run")
+        if name == "price-run":
+            m.add_argument("path", help="harvested batch JSON")
+            m.add_argument("--decisions", help="reviewer decisions JSON")
+            m.add_argument("--write", action="store_true",
+                           help="append canonical offers to the ledger; default is dry run")
+        if name == "quote":
+            m.add_argument("trim_id")
+            m.add_argument("--as-of", help="date YYYY-MM-DD")
         if name == "eco-status":
             m.add_argument("--snapshot-date", required=True, help="snapshot date YYYY-MM-DD")
         if name in ("spec-candidates", "spec-coverage", "battle-card"):

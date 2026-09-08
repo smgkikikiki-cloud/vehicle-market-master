@@ -38,6 +38,10 @@ def quote(**overrides):
     return row
 
 
+def jaecoo_trims(catalog):
+    return [t for t in catalog.trims if t.startswith('jaecoo.jaecoo_5_ev.')]
+
+
 def file_bytes(root):
     return {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()}
 
@@ -71,7 +75,7 @@ def test_trim_authoring_dry_run_then_write_preserves_all_analytics(local_data):
     assert not import_trims(local_data, 2026, payload, write=True)['written']
     after = Catalog.load(local_data)
     assert [r.as_row() for r in after.iter_resolved()] == before
-    assert len(after.trims) == 4
+    assert len(jaecoo_trims(after)) == 4
     changed = [p for p, contents in file_bytes(local_data).items() if contents != original[p]]
     assert changed == ['2026/models/jaecoo.json']
 
@@ -83,7 +87,7 @@ def test_add_new_trim_requires_explicit_identity_and_preserves_siblings(local_da
     before = len(Catalog.load(local_data).variants)
     import_trims(local_data, 2026, payload, write=True)
     catalog = Catalog.load(local_data)
-    assert len(catalog.trims) == 5
+    assert len(jaecoo_trims(catalog)) == 5
     assert len(catalog.variants) == before
     assert TRIM in catalog.trims
 
@@ -145,9 +149,23 @@ def test_expired_new_list_does_not_resurrect_superseded_price():
     assert ledger.coverage(as_of=date(2026, 7, 1))['trims_with_current_list_price'] == 0
 
 
+def seed_campaign(root, campaign_id, option_id='cash'):
+    """A campaign price may only name a campaign that exists."""
+    path = root / '2026/market/campaigns/acme.json'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({'campaigns': [{
+        'id': campaign_id, 'brand_id': 'acme', 'name': 'Test campaign',
+        'options': [{'id': option_id, 'label': 'Cash',
+                     'conditions': {'booking_to': '2026-09-30'}}],
+    }]}), encoding='utf-8')
+
+
 def test_price_append_dry_run_repeat_and_bad_batch(local_data):
+    seed_campaign(local_data, 'campaign.acme.q3_2026')
     before = file_bytes(local_data)
-    row = quote(price_type='CAMPAIGN_PRICE', amount_thb=599000, effective_to='2026-09-30')
+    row = quote(price_type='CAMPAIGN_PRICE', amount_thb=599000,
+                effective_to='2026-09-30',
+                campaign_id='campaign.acme.q3_2026', option_id='cash')
     assert append_prices(local_data, 2026, {'prices': [row]})['added'] == 1
     assert file_bytes(local_data) == before
     assert append_prices(local_data, 2026, {'prices': [row]}, write=True)['written']

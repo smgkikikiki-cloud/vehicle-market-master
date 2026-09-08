@@ -50,6 +50,7 @@ class BattleCardEngine:
             subjects.append({
                 "subject_id": candidate["subject_id"], "label": candidate["label"],
                 "model_id": candidate["model_id"], "trim_id": None,
+                "powertrain": candidate.get("powertrain") or "",
                 "publication_status": candidate["publication_status"],
                 "current_list_price": None,
                 "price_evidence": {
@@ -116,7 +117,10 @@ class BattleCardEngine:
             if eco.rated_range_km is not None:
                 values.append(_value(
                     "ev.rated_range_km", eco.rated_range_km, "km",
-                    qualifiers={"measurement_basis": "ECO_STICKER_DECLARED"},
+                    qualifiers={"measurement_basis": "ECO_STICKER_DECLARED",
+                                "range_scope": "ELECTRIC_ONLY"
+                                if trim.powertrain.value in ("PHEV", "REEV")
+                                else "FULL"},
                     source="ecosticker", source_ref=eco_ref))
         # Authored facts take precedence over the Phase-1 baseline for the same
         # field and comparison context, while retaining both sources in storage.
@@ -142,6 +146,7 @@ class BattleCardEngine:
             trim_id, price_type=PriceType.CAMPAIGN_PRICE) if r.active_on(when)]
         return {
             "subject_id": trim_id, "trim_id": trim_id, "model_id": model.id,
+            "powertrain": trim.powertrain.value,
             "label": f"{brand.name_en} {model.name_en} {trim.name}",
             "publication_status": "VERIFIED_MARKET_TRIM",
             "current_list_price": to_jsonable(current) if current else None,
@@ -160,6 +165,8 @@ class BattleCardEngine:
         subject_ids = [s["subject_id"] for s in subjects]
         if len(subject_ids) != len(set(subject_ids)):
             raise ComparableSpecError("battle card subjects must be distinct")
+        powertrains = {s["subject_id"]: s.get("powertrain") or ""
+                       for s in subjects}
         by_subject: dict[str, dict[str, list[dict]]] = {}
         for subject in subjects:
             fields: dict[str, list[dict]] = {}
@@ -176,6 +183,11 @@ class BattleCardEngine:
                 for subject in subjects
                 for value in by_subject[subject["subject_id"]].get(field_key, [])
             }
+            # More than one context means these cars were not measured the
+            # same way -- a plug-in's electric-only range against a BEV's total,
+            # or NEDC against WLTP. Each becomes its own row, and a row holding
+            # one of them is not a gap in the research.
+            split_context = len(contexts) > 1
             for context in sorted(contexts or {()}):
                 cells: dict[str, dict] = {}
                 known: list[tuple[str, dict]] = []
@@ -190,7 +202,14 @@ class BattleCardEngine:
                             f"{subject['subject_id']}: duplicate {field_key} context {context}")
                     cell = matches[0] if matches else None
                     if cell is None:
-                        cell = {"field_key": field_key, "value_state": "UNKNOWN",
+                        # A BEV has no engine displacement. Reporting that as a
+                        # gap in our research would be a lie about the car.
+                        powertrain = powertrains.get(subject["subject_id"], "")
+                        state = ("NOT_APPLICABLE"
+                                 if definition.applicable_powertrains and powertrain
+                                 and powertrain not in definition.applicable_powertrains
+                                 else "UNKNOWN")
+                        cell = {"field_key": field_key, "value_state": state,
                                 "value": None, "unit": definition.canonical_unit,
                                 "qualifiers": dict(context), "source": None,
                                 "source_ref": None, "verification_status": None}
@@ -201,8 +220,31 @@ class BattleCardEngine:
                         known.append((subject["subject_id"], cell))
                 if not known:
                     continue
-                if len(known) < 2:
-                    comparison_status, leaders = "INSUFFICIENT_DATA", []
+                # A ranked field that names the powertrains it applies to means
+                # something different in each of them: a plug-in hybrid's 150 km
+                # of electric range is not a worse version of a BEV's 500 km,
+                # and its smaller battery is not a smaller version of the same
+                # thing. Show every value, crown nobody.
+                ranked = definition.comparison_rule in (
+                    ComparisonRule.HIGHER_BETTER, ComparisonRule.LOWER_BETTER)
+                spanned = {powertrains.get(sid, "") for sid, _ in known}
+                applicable = [s for s in subjects
+                              if not definition.applicable_powertrains
+                              or not powertrains.get(s["subject_id"])
+                              or powertrains[s["subject_id"]]
+                              in definition.applicable_powertrains]
+                if (ranked and definition.applicable_powertrains
+                        and len(spanned - {""}) > 1):
+                    comparison_status = "NOT_COMPARABLE_ACROSS_POWERTRAIN"
+                    leaders = []
+                elif len(applicable) < 2:
+                    # Only one of these cars even has the thing. That is not a
+                    # gap in the research, and calling it one reads as a fault.
+                    comparison_status, leaders = "NOT_APPLICABLE_TO_OTHERS", []
+                elif len(known) < 2:
+                    comparison_status = ("CONTEXT_NOT_SHARED" if split_context
+                                         else "INSUFFICIENT_DATA")
+                    leaders = []
                 elif definition.comparison_rule is ComparisonRule.INFORMATION_ONLY:
                     comparison_status, leaders = "INFORMATION_ONLY", []
                 elif definition.comparison_rule in (

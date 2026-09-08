@@ -52,6 +52,440 @@
               "price_min_thb": 546000,
               "price_max_thb": 749000
             }
+          ],
+          "trims": [
+            {
+              "id": "1_3_prime",
+              "name": "1.3 PRIME",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "21ae4f20-8e6c-4891-b8c4-392e0a2122ef"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "1_3_prime_sports",
+              "name": "1.3 PRIME SPORTS",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "84703dee-b14c-4b1d-a94b-49f7f8ba38b4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1495,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "1_3_signature",
+              "name": "1.3 SIGNATURE",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "695b7e13-333d-491a-baa5-de65f4384564"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "1_3_signature_sports",
+              "name": "1.3 SIGNATURE SPORTS",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "a204b1d7-cace-498d-aaf4-df7a2bc713e3"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "1_3_ultra",
+              "name": "1.3 ULTRA",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "0d37a673-ed0a-4d40-91e6-11826ef6f9e8"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "1_3_ultra_sports",
+              "name": "1.3 ULTRA SPORTS",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "713c4ed4-3850-4d7e-83db-56966cf4aa4b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_c",
+              "name": "MAZDA 2 1.3 C",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "eba62cc6-55ee-4e12-98ce-64de386c9706"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_c_sports",
+              "name": "MAZDA 2 1.3 C Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "670e6208-906d-4544-87df-259749ed7217"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1495,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_s",
+              "name": "MAZDA 2 1.3 S",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "07453b84-1844-4a30-a64d-92b2a53ed74c"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_s_leather",
+              "name": "MAZDA 2 1.3 S Leather",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "62c7d1c7818d4441bd5cb226433b2b02"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4340,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_s_sports",
+              "name": "MAZDA 2 1.3 S Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "fc7147d5-e2a4-42f8-9b6d-09b60f174287"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_s_sports_leather",
+              "name": "MAZDA 2 1.3 S Sports Leather",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "c51f0c0f4cb44ce69286e9595d093a0d"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4065,
+              "width_mm": 1695,
+              "height_mm": 1495,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_sp",
+              "name": "MAZDA 2 1.3 SP",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "aec150db-27be-47a5-8fba-6e579cc71876"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_1_3_sp_sports",
+              "name": "MAZDA 2 1.3 SP Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "7ca12cc9-9f74-46e7-b765-00b5264737a5"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_carbon_edition",
+              "name": "MAZDA 2 Carbon Edition",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "be78ae66-fb22-4e0c-840f-ba28bef4e1b9"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4340,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_carbon_edition_sports",
+              "name": "MAZDA 2 Carbon Edition Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "4d9a1bf4-493e-4855-ae55-bebf76292279"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4065,
+              "width_mm": 1695,
+              "height_mm": 1495,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_clap_pop_sports",
+              "name": "MAZDA 2 Clap Pop Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "01cd26a6-36a6-4d89-9948-dad329c673ce"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "mazda_2_rookie_drive_sports",
+              "name": "MAZDA 2 Rookie Drive Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "6d587659-8c95-4953-9c83-bd6ec4c879c3"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/65R15",
+              "tire_rear": "185/65R15"
+            },
+            {
+              "id": "xd",
+              "name": "XD",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "b25aa3cb-a408-4baa-97b8-ab65956533f9"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/60R16",
+              "tire_rear": "185/60R16"
+            },
+            {
+              "id": "xd_sports",
+              "name": "XD Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "e8529c4f-5d04-4db1-a9bb-f51f94e17843"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/60R16",
+              "tire_rear": "185/60R16"
+            },
+            {
+              "id": "xdl",
+              "name": "XDL",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "5878e2ab-60bd-46d7-8dd3-c954f8f9779f"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/60R16",
+              "tire_rear": "185/60R16"
+            },
+            {
+              "id": "xdl_signature",
+              "name": "XDL SIGNATURE",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "8be2ffd4-13e5-4609-a984-71d57ecf56d0"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4355,
+              "width_mm": 1695,
+              "height_mm": 1470,
+              "tire_front": "185/60R16",
+              "tire_rear": "185/60R16"
+            },
+            {
+              "id": "xdl_signature_sports",
+              "name": "XDL SIGNATURE SPORTS",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "d714c580-af57-4744-9c39-2b52346977ff"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/60R16",
+              "tire_rear": "185/60R16"
+            },
+            {
+              "id": "xdl_sports",
+              "name": "XDL Sports",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "53b4fe0f-484d-40fb-a190-1503b34abd1a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 4080,
+              "width_mm": 1695,
+              "height_mm": 1515,
+              "tire_front": "185/60R16",
+              "tire_rear": "185/60R16"
+            }
           ]
         }
       ],

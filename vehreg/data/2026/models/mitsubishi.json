@@ -120,6 +120,386 @@
               "price_min_thb": 1249000,
               "price_max_thb": 1249000
             }
+          ],
+          "trims": [
+            {
+              "id": "2_4_athlete_4wd_at",
+              "name": "2.4 ATHLETE 4WD AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "85080d33-33c9-4db8-bf10-730f2207c0fa"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5360,
+              "width_mm": 1930,
+              "height_mm": 1815,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "2_4_prime_4wd",
+              "name": "2.4 PRIME 4WD",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "e2911e64-6f7f-42a4-bd22-dcb69ce6ddc6"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1795,
+              "tire_front": "265/65R17",
+              "tire_rear": "265/65R17"
+            },
+            {
+              "id": "2_4_pro",
+              "name": "2.4 PRO",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "876feda9-dc91-4b58-81be-ff33e5f23183"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1705,
+              "tire_front": "215/70R15C",
+              "tire_rear": "215/70R15C"
+            },
+            {
+              "id": "2_4_ultra_4wd_at",
+              "name": "2.4 ULTRA 4WD AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "d425bf89-898f-4d99-8573-942baf97d66c"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "2wd_2_5_glx",
+              "name": "2WD 2.5 GLX",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "source_refs": {
+                "ecosticker": [
+                  "04c9dca90cef46d0a7cef0947e6e05a7"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5220,
+              "width_mm": 1815,
+              "height_mm": 1655,
+              "tire_front": "225/65R16",
+              "tire_rear": "225/65R16"
+            },
+            {
+              "id": "4wd_2_4_gls",
+              "name": "4WD 2.4 GLS",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "19ae5c1532a442f59fd329b183e6c821"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "4wd_2_4_gt_premium_at",
+              "name": "4WD 2.4 GT-Premium AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "a78b6daa71a1498c89a3e4cb20e18257"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "4wd_athlete_at",
+              "name": "4WD ATHLETE AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "b25b0cecde7e4870a45e96c214b19d65"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "athlete_2_4_4wd_at",
+              "name": "ATHLETE 2.4 4WD AT",
+              "powertrain": "ICE",
+              "drivetrain": "AWD",
+              "source_refs": {
+                "ecosticker": [
+                  "cd3bfe6b-9d8a-4ef3-9fbc-6667ab32bb77"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5360,
+              "width_mm": 1930,
+              "height_mm": 1815,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "athlete_2_4_at",
+              "name": "ATHLETE 2.4 AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "29463bd9-5df4-40ea-b900-b9fd5f8d373a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5360,
+              "width_mm": 1930,
+              "height_mm": 1815,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "plus_2_4_gls",
+              "name": "Plus 2.4 GLS",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "b8ed69192e824446aa8ad241018e9c0e"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1780,
+              "tire_front": "245/65R17",
+              "tire_rear": "245/65R17"
+            },
+            {
+              "id": "plus_2_4_gls_at",
+              "name": "Plus 2.4 GLS AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "2368a0f1bf3244ad9f704e8f23b1249a"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "plus_2_4_gt",
+              "name": "Plus 2.4 GT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "322622809faf45f5ac8a1e259846ebcc"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "plus_2_4_gt_at",
+              "name": "Plus 2.4 GT AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "1cb27c70dac24ca6b57ea48e0aec41e4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "plus_2_4_gt_premium_at",
+              "name": "Plus 2.4 GT-Premium AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "8f993f3819d147dbbb2fe645fd737c31"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "plus_2_4_prime",
+              "name": "PLUS 2.4 PRIME",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "59f9808d-0560-448a-8e38-17f2b686424b"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1795,
+              "tire_front": "265/65R17",
+              "tire_rear": "265/65R17"
+            },
+            {
+              "id": "plus_2_4_prime_at",
+              "name": "PLUS 2.4 PRIME AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "732d0081-7c7a-4102-9861-b53fd2931ea4"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1795,
+              "tire_front": "265/65R17",
+              "tire_rear": "265/65R17"
+            },
+            {
+              "id": "plus_2_4_pro",
+              "name": "PLUS 2.4 PRO",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "38f3ae47-5868-4c1f-8bbf-558d0ceec3db"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1795,
+              "tire_front": "265/70R16",
+              "tire_rear": "265/70R16"
+            },
+            {
+              "id": "plus_2_4_ultra",
+              "name": "PLUS 2.4 ULTRA",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "6668b3f5-0edb-457c-bd68-85bc6fcb44ce"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "plus_2_4_ultra_at",
+              "name": "PLUS 2.4 ULTRA AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "58f9889c-86f8-42d7-9a69-93a6be5612b7"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5320,
+              "width_mm": 1865,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            },
+            {
+              "id": "plus_athlete_gt_at",
+              "name": "Plus ATHLETE GT AT",
+              "powertrain": "ICE",
+              "drivetrain": "UNKNOWN",
+              "source_refs": {
+                "ecosticker": [
+                  "72888b3d4f7e42feb639058492360ff2"
+                ]
+              },
+              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "seats": 5,
+              "length_mm": 5300,
+              "width_mm": 1815,
+              "height_mm": 1795,
+              "tire_front": "265/60R18",
+              "tire_rear": "265/60R18"
+            }
           ]
         }
       ],

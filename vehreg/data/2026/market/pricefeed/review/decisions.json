@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "decisions": [
+    {
+      "claim_id": "45b1b1dbc600ffdc",
+      "trim_id": "suzuki.fronx.frx.trim.gl_1_5l_4at",
+      "campaign_id": "campaign.suzuki.fronx_september_2026",
+      "option_id": "family_cash",
+      "action": "accept",
+      "reviewer": "agent-proposed",
+      "reviewed_at": "2026-09-08",
+      "notes": "599,000 is the SUZUKI FAMILY cash option; the 619,000 open-customer price is a separate option on the same campaign. Awaiting owner review."
+    }
+  ]
+}

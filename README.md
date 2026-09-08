@@ -1,6 +1,16 @@
 # Vehicle Market Master
 
-Thai vehicle registration and market-data workspace.
+Thai vehicle product master and registration intelligence workspace.
+
+Vehicle Master is the foundation for retail trims, exact specifications, source
+evidence and a separate Price Ledger. Registration analytics is one consumer.
+See [Vehicle Master 2.0 — Phase 1](docs/VEHICLE_MASTER_PHASE1.md) for the delivered
+contract, JAECOO 5 reference, product API, import/export commands and next choices.
+
+```bash
+python -m vehreg market validate
+python -m vehreg market list --model chery.jaecoo_j5
+```
 
 This repository is the dedicated home for the vehicle-registration (`vehreg`) subsystem previously developed inside `Export-channel`.
 

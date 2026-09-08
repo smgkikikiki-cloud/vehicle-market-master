@@ -27,6 +27,24 @@
       "source": "ecosticker",
       "source_ref": "98c1d7de-79db-4581-b332-69abe657a532",
       "notes": "Recommended retail price shown on the ECO Sticker record. Kept as source evidence only; it is not promoted to current Thai MSRP."
+    },
+    {
+      "trim_id": "chery.jaecoo_j5.j5.trim.max_plus_bev",
+      "amount_thb": 699000,
+      "price_type": "LIST_PRICE",
+      "observed_at": "2026-09-08",
+      "source": "official_oem",
+      "source_ref": "https://www.omodajaecoo.co.th/en",
+      "notes": "Official homepage labels this Price. Effective start not published; available to queries from observation date only."
+    },
+    {
+      "trim_id": "chery.jaecoo_j5.j5.trim.ultra_bev",
+      "amount_thb": 809000,
+      "price_type": "ESTIMATED_PRICE",
+      "observed_at": "2026-09-08",
+      "source": "official_oem",
+      "source_ref": "https://www.omodajaecoo.co.th/en",
+      "notes": "Official English homepage explicitly labels this Estimated Price. Not canonical MSRP; retain language/page context."
     }
   ]
 }

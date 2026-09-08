@@ -11,6 +11,7 @@ import argparse
 import csv
 import json
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any, Optional
 
@@ -414,6 +415,30 @@ def cmd_coverage(args) -> int:
 
 
 # --------------------------------------------------------------------- parser
+def cmd_market(args) -> int:
+    from .product import ProductMaster, append_prices, import_trims
+    if args.market_cmd in ("import-trims", "append-prices"):
+        payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
+        operation = import_trims if args.market_cmd == "import-trims" else append_prices
+        result = operation(args.data_dir, args.year, payload, write=args.write)
+    else:
+        master = ProductMaster.load(args.data_dir, args.year)
+        as_of = date.fromisoformat(args.as_of) if getattr(args, "as_of", None) else None
+        if args.market_cmd == "validate":
+            problems = master.validate()
+            print(json.dumps({"valid": not problems, "problems": problems},
+                             ensure_ascii=False, indent=2))
+            return 1 if problems else 0
+        if args.market_cmd == "coverage":
+            result = master.coverage(as_of=as_of)
+        elif args.market_cmd == "show":
+            result = master.detail(args.trim_id, as_of=as_of)
+        else:
+            result = master.rows(model_id=args.model, powertrain=args.powertrain, as_of=as_of)
+    print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="vehreg",
@@ -424,6 +449,22 @@ def build_parser() -> argparse.ArgumentParser:
                         help=f"catalog year to work with (default {DEFAULT_YEAR}); "
                              "years are independent, nothing reads across them")
     sub = parser.add_subparsers(dest="cmd", required=True)
+
+    p = sub.add_parser("market", help="Vehicle Master retail products, specs and Price Ledger")
+    msub = p.add_subparsers(dest="market_cmd", required=True)
+    for name in ("list", "show", "coverage", "validate", "import-trims", "append-prices"):
+        m = msub.add_parser(name)
+        m.set_defaults(func=cmd_market)
+        if name in ("list", "show", "coverage"):
+            m.add_argument("--as-of", help="price date YYYY-MM-DD; specs are the selected catalog snapshot")
+        if name == "list":
+            m.add_argument("--model", help="exact model ID")
+            m.add_argument("--powertrain", choices=[p.value for p in Powertrain if p is not Powertrain.UNKNOWN])
+        if name == "show":
+            m.add_argument("trim_id")
+        if name in ("import-trims", "append-prices"):
+            m.add_argument("path", help="JSON input file")
+            m.add_argument("--write", action="store_true", help="apply after validation; default is dry run")
 
     p = sub.add_parser("facets", help="print every facet vocabulary")
     p.set_defaults(func=cmd_facets)

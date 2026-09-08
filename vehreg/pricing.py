@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 import json
+import re
 from pathlib import Path
 from typing import Iterable, Optional, TYPE_CHECKING
 
@@ -63,6 +64,8 @@ def _iso_date(raw: object, field_name: str) -> Optional[str]:
         return None
     value = str(raw)
     try:
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+            raise ValueError(value)
         date.fromisoformat(value)
     except ValueError as exc:
         raise PricingError(f"{field_name} must be YYYY-MM-DD, got {value!r}") from exc
@@ -85,17 +88,26 @@ class PriceRecord:
         problems: list[str] = []
         if not self.trim_id:
             problems.append("trim_id is required")
-        if self.amount_thb <= 0:
-            problems.append("amount_thb must be positive")
-        if self.price_type is PriceType.LIST_PRICE and not self.effective_from:
-            problems.append("LIST_PRICE requires effective_from")
+        if type(self.amount_thb) is not int or self.amount_thb <= 0:
+            problems.append("amount_thb must be a positive integer")
+        if not isinstance(self.price_type, PriceType):
+            problems.append("price_type must be a PriceType")
+        for field_name in ("effective_from", "effective_to", "observed_at"):
+            try:
+                _iso_date(getattr(self, field_name), field_name)
+            except PricingError as exc:
+                problems.append(str(exc))
+        if self.price_type is PriceType.LIST_PRICE and not (
+                self.effective_from or self.observed_at):
+            problems.append("LIST_PRICE requires effective_from or observed_at")
         if self.effective_from and self.effective_to and \
                 self.effective_from > self.effective_to:
             problems.append("effective_from is after effective_to")
         return problems
 
     def active_on(self, when: date) -> bool:
-        if self.effective_from and date.fromisoformat(self.effective_from) > when:
+        start = self.effective_from or self.observed_at
+        if start and date.fromisoformat(start) > when:
             return False
         if self.effective_to and date.fromisoformat(self.effective_to) < when:
             return False
@@ -128,12 +140,23 @@ class PriceLedger:
         return ledger
 
     def add_payload(self, payload: dict, *, source: str = "<memory>") -> None:
-        for raw in payload.get("prices", []):
+        if not isinstance(payload, dict) or not isinstance(payload.get("prices"), list):
+            raise PricingError(f"{source}: prices must be an array")
+        staged = []
+        for raw in payload["prices"]:
+            if not isinstance(raw, dict):
+                raise PricingError(f"{source}: price row must be an object")
+            unknown = set(raw) - set(PriceRecord.__dataclass_fields__)
+            if unknown:
+                raise PricingError(f"{source}: unknown price fields: {sorted(unknown)}")
             trim_id = str(raw.get("trim_id") or "").strip()
             if self.catalog is not None and trim_id not in self.catalog.trims:
                 raise PricingError(f"{source}: unknown trim_id {trim_id!r}")
             try:
-                amount = int(raw["amount_thb"])
+                value = raw["amount_thb"]
+                if isinstance(value, bool) or not re.fullmatch(r"[0-9]+", str(value)):
+                    raise ValueError(value)
+                amount = int(value)
             except (KeyError, TypeError, ValueError) as exc:
                 raise PricingError(f"{source}: invalid amount_thb for {trim_id!r}") from exc
             record = PriceRecord(
@@ -151,7 +174,10 @@ class PriceLedger:
             if problems:
                 raise PricingError(
                     f"{source}: price for {trim_id or '<missing>'}: " + "; ".join(problems))
-            self.records.append(record)
+            # A malformed last row must not leave earlier rows half-imported.
+            if record not in self.records and record not in staged:
+                staged.append(record)
+        self.records.extend(staged)
 
     def records_for(self, trim_id: str, *,
                     price_type: Optional[PriceType] = None) -> list[PriceRecord]:
@@ -163,7 +189,7 @@ class PriceLedger:
     @staticmethod
     def _sort_key(record: PriceRecord) -> tuple[str, str, int]:
         return (
-            record.effective_from or "0001-01-01",
+            record.effective_from or record.observed_at or "0001-01-01",
             record.observed_at or "0001-01-01",
             record.amount_thb,
         )
@@ -179,9 +205,18 @@ class PriceLedger:
         when = as_of or date.today()
         rows = [
             r for r in self.records_for(trim_id, price_type=PriceType.LIST_PRICE)
-            if r.active_on(when)
+            if (r.effective_from or r.observed_at or "9999-12-31") <= when.isoformat()
         ]
-        return rows[-1] if rows else None
+        if not rows:
+            return None
+        # A newer list supersedes an older open-ended list. Expiring the newer
+        # record must not resurrect an obsolete MSRP.
+        start = max(r.effective_from or r.observed_at for r in rows)
+        latest = [r for r in rows if (r.effective_from or r.observed_at) == start
+                  and r.active_on(when)]
+        if len({r.amount_thb for r in latest}) > 1:
+            raise PricingError(f"{trim_id}: conflicting LIST_PRICE at {start}; review required")
+        return latest[-1] if latest else None
 
     def current_list_amount(self, trim_id: str, *,
                             as_of: Optional[date] = None) -> Optional[int]:
@@ -195,15 +230,19 @@ class PriceLedger:
                 f"price {record.trim_id}: {problem}" for problem in record.validate())
             if self.catalog is not None and record.trim_id not in self.catalog.trims:
                 problems.append(f"price {record.trim_id}: trim does not exist in catalog")
+        for trim_id in {r.trim_id for r in self.records}:
+            for start in {r.effective_from or r.observed_at for r in self.records_for(
+                    trim_id, price_type=PriceType.LIST_PRICE)} - {None}:
+                try:
+                    self.current_list_price(trim_id, as_of=date.fromisoformat(start))
+                except (PricingError, ValueError) as exc:
+                    problems.append(str(exc))
         return problems
 
     def coverage(self, *, as_of: Optional[date] = None) -> dict[str, int]:
         trims_with_any = {r.trim_id for r in self.records}
-        current_list = {
-            r.trim_id for r in self.records
-            if r.price_type is PriceType.LIST_PRICE
-            and r.active_on(as_of or date.today())
-        }
+        current_list = {trim_id for trim_id in trims_with_any
+                        if self.current_list_price(trim_id, as_of=as_of) is not None}
         return {
             "records": len(self.records),
             "trims_with_any_price_evidence": len(trims_with_any),

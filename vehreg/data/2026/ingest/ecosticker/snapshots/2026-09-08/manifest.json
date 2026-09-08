@@ -1,0 +1,38 @@
+{
+  "catalog_models_matched": 260,
+  "catalog_year": 2026,
+  "counts_by_review_reason": {
+    "brand_alias_collision": 34,
+    "brand_unmatched": 46,
+    "generation_ambiguous": 3,
+    "model_ambiguous": 149,
+    "model_unmatched": 134,
+    "powertrain_not_explicit": 1271
+  },
+  "counts_by_review_status": {
+    "needs_model_review": 286,
+    "needs_powertrain_review": 1012,
+    "ready_for_review": 342
+  },
+  "files": {
+    "normalized": "normalized.jsonl.gz",
+    "raw": "raw.jsonl.gz",
+    "review_queue": "review_queue.jsonl.gz"
+  },
+  "normalized_sha256": "1e3c3a3edaa4576cc96b7ed1061e00e0bb539698f13dfc0b94ad52bbfc428476",
+  "pages": 55,
+  "raw_sha256": "e2cda82b10829cf1dfa796f40332696bcfd6c05188bc3535f8d1e9bd941d12b9",
+  "records": 1640,
+  "records_with_detail_evidence": 3,
+  "records_with_explicit_powertrain": 369,
+  "records_with_tyre_evidence": 3,
+  "records_with_unique_generation": 1354,
+  "records_with_unique_model": 1357,
+  "registration_rows_unchanged": 371,
+  "schema_version": 1,
+  "snapshot_date": "2026-09-08",
+  "source": "ecosticker",
+  "source_url": "https://car.ecosticker.go.th/landing-page",
+  "storage_encoding": "gzip",
+  "unique_source_ids": 1640
+}

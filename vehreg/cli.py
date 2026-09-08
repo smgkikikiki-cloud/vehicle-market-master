@@ -417,6 +417,25 @@ def cmd_coverage(args) -> int:
 # --------------------------------------------------------------------- parser
 def cmd_market(args) -> int:
     from .product import ProductMaster, append_prices, import_trims
+    from .ecosticker_ingest import build_snapshot, ingestion_status, save_decisions
+    if args.market_cmd == "eco-build":
+        result = build_snapshot(
+            args.path, data_dir=args.data_dir, year=args.year,
+            snapshot_date=args.snapshot_date,
+            expected_records=args.expected_records, write=args.write)
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd == "eco-review":
+        result = save_decisions(
+            args.path, data_dir=args.data_dir, year=args.year,
+            snapshot_date=args.snapshot_date, write=args.write)
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
+    if args.market_cmd == "eco-status":
+        result = ingestion_status(
+            args.data_dir, args.year, snapshot_date=args.snapshot_date)
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0
     if args.market_cmd in ("import-trims", "append-prices"):
         payload = json.loads(Path(args.path).read_text(encoding="utf-8"))
         operation = import_trims if args.market_cmd == "import-trims" else append_prices
@@ -452,7 +471,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("market", help="Vehicle Master retail products, specs and Price Ledger")
     msub = p.add_subparsers(dest="market_cmd", required=True)
-    for name in ("list", "show", "coverage", "validate", "import-trims", "append-prices"):
+    for name in ("list", "show", "coverage", "validate", "import-trims", "append-prices",
+                 "eco-build", "eco-review", "eco-status"):
         m = msub.add_parser(name)
         m.set_defaults(func=cmd_market)
         if name in ("list", "show", "coverage"):
@@ -465,6 +485,20 @@ def build_parser() -> argparse.ArgumentParser:
         if name in ("import-trims", "append-prices"):
             m.add_argument("path", help="JSON input file")
             m.add_argument("--write", action="store_true", help="apply after validation; default is dry run")
+        if name == "eco-build":
+            m.add_argument("path", help="browser-captured ECO inventory JSONL")
+            m.add_argument("--snapshot-date", required=True, help="observation date YYYY-MM-DD")
+            m.add_argument("--expected-records", type=int,
+                           help="fail unless the source snapshot has this exact row count")
+            m.add_argument("--write", action="store_true",
+                           help="write immutable staging snapshot; default is dry run")
+        if name == "eco-review":
+            m.add_argument("path", help="review decisions JSON")
+            m.add_argument("--snapshot-date", required=True, help="snapshot date YYYY-MM-DD")
+            m.add_argument("--write", action="store_true",
+                           help="write validated decisions; default is dry run")
+        if name == "eco-status":
+            m.add_argument("--snapshot-date", required=True, help="snapshot date YYYY-MM-DD")
 
     p = sub.add_parser("facets", help="print every facet vocabulary")
     p.set_defaults(func=cmd_facets)

@@ -50,7 +50,7 @@ from typing import Any, Optional
 
 from .taxonomy import (
     BodyType, BrandSegment, CabType, Drivetrain, ImportType, MarketPosition,
-    MarketScope, Powertrain, RegistrationType, Segment,
+    MarketScope, Powertrain, RegistrationType, RetailStatus, Segment,
     check_body_segment, check_origin, check_powertrain, check_registration,
     is_electrified, is_locally_assembled, is_plug_in, market_position_for_price,
     market_powertrain, normalize_country, powertrain_group,
@@ -155,6 +155,14 @@ class Model:
     #: confirmed "hybrid only" from a nameplate nobody has looked at yet, and
     #: both read the same on every chart.
     powertrain_checked: bool = False
+    #: Whether the model is on sale through the official Thai distributor now.
+    #: Separate from ``market_scope``, which says what kind of car it is. A
+    #: nameplate can have real registrations and no current retail listing --
+    #: the Kia EV6 has one unit and is not in Kia Thailand's lineup -- and the
+    #: honest answer there is ``UNVERIFIED``, not a claim that it was never
+    #: officially sold. Only ``CURRENT`` models belong in a comparison of what
+    #: a buyer can go and buy.
+    retail_status: RetailStatus = RetailStatus.CURRENT
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:

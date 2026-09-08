@@ -630,7 +630,7 @@
         "Q7 55 TFSI"
       ],
       "incomplete": true,
-      "notes": "เจ้าของยืนยันว่าเป็น ICE แต่ในไฟล์มี 'Q7 60 TFSI e' 58 คัน ซึ่งท้ายด้วย e = ปลั๊กอินตามการตั้งชื่อของ Audi เลยใส่ไว้ทั้งสองฝั่ง",
+      "notes": "Owner-reviewed 2026-09-08. Powertrain is settled per label, not per nameplate: Audi's plug-in hybrids carry a trailing e (60 TFSI e), and every other TFSI/TDI grade is combustion. See powertrain_rules.py.",
       "generations": [
         {
           "code": "gen1",
@@ -673,7 +673,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     },
     {
       "id": "a6",
@@ -691,7 +692,7 @@
         "A6 45 TFSI"
       ],
       "incomplete": true,
-      "notes": "เจ้าของยืนยันว่าเป็น PHEV แต่คันที่จดจริงปี 2021-2026 เป็น 40/45 TFSI เบนซิน เลยใส่ไว้ทั้งสองฝั่ง อ่านออกมาเป็น MIXED",
+      "notes": "Owner-reviewed 2026-09-08. Powertrain is settled per label, not per nameplate: Audi's plug-in hybrids carry a trailing e (60 TFSI e), and every other TFSI/TDI grade is combustion. See powertrain_rules.py.",
       "generations": [
         {
           "code": "gen1",
@@ -734,7 +735,8 @@
             }
           ]
         }
-      ]
+      ],
+      "powertrain_checked": true
     }
   ]
 }

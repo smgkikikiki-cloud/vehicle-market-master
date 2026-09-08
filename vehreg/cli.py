@@ -474,7 +474,7 @@ def cmd_market(args) -> int:
         result = pricefeed.run(documents, claims,
                                pricefeed.load_sources(args.data_dir, args.year),
                                catalog, campaigns=ledger.campaigns,
-                               decisions=decisions)
+                               decisions=decisions, ledger=ledger)
         rows = pricefeed.to_price_rows(
             result, observed_at=date.today().isoformat(),
             source_of=pricefeed.load_sources(args.data_dir, args.year))

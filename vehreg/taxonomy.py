@@ -355,6 +355,20 @@ def registration_type_for(body: BodyType, cab: CabType) -> RegistrationType:
     return RegistrationType.RY1
 
 
+class RetailStatus(Facet):
+    """Whether a buyer can walk in and order this model today.
+
+    ``market_scope`` says what kind of car it is; this says whether it is still
+    for sale.  They are different questions and a model can move on one without
+    moving on the other.
+    """
+
+    CURRENT = "CURRENT"          # in the official distributor's lineup now
+    HISTORICAL = "HISTORICAL"    # was officially sold, no longer listed
+    UNVERIFIED = "UNVERIFIED"    # not in the current lineup, and we have not
+                                 # established whether it ever officially was
+
+
 class MarketScope(Facet):
     """Whether a model belongs in the numbers the owner actually reads.
 

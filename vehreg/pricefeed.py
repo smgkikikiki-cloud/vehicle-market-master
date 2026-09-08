@@ -92,6 +92,8 @@ class ReviewReason(str, Enum):
     PRICE_TYPE_UNCLEAR = "price_type_unclear"
     IMPLAUSIBLE_AMOUNT = "implausible_amount"
     LOW_TIER_ONLY = "low_tier_only"
+    #: The manufacturer has closed this offer; the article has not caught up.
+    CONTRADICTED_BY_CLOSED_CAMPAIGN = "contradicted_by_closed_campaign"
 
 
 @dataclass(frozen=True, slots=True)
@@ -652,10 +654,37 @@ def load_decisions(path: Path | str) -> dict[str, dict]:
     return out
 
 
+def suppressed_by_closed_campaign(amount: int, campaigns: Optional[dict],
+                                  ledger_records: Iterable, when: date) -> bool:
+    """True when the manufacturer has already closed an offer at this price.
+
+    A capped campaign ends when the cars run out, and the motoring press does
+    not reissue last month's article when that happens. Suzuki closed the Fronx
+    GL cash price on 25 August; a Headlightmag piece dated 1 September still
+    listed it. The brand's own record of its own offer outranks a report of it,
+    so a claim matching a closed option is held for review rather than
+    published as a price somebody could go and pay today.
+    """
+    for record in ledger_records:
+        if record.amount_thb != amount or not record.campaign_id:
+            continue
+        campaign = (campaigns or {}).get(record.campaign_id)
+        if campaign is None:
+            continue
+        option = campaign.option(record.option_id or "")
+        if option is not None and not option.open_on(when):
+            return True
+        if option is None and not campaign.live_on(when):
+            return True
+    return False
+
+
 def run(documents: list[SourceDocument], claims: list[PriceClaim],
         sources: dict[str, Source], catalog: Catalog, *,
         campaigns: Optional[dict] = None,
-        decisions: Optional[dict[str, dict]] = None) -> RunResult:
+        decisions: Optional[dict[str, dict]] = None,
+        ledger: Optional[object] = None,
+        as_of: Optional[date] = None) -> RunResult:
     """Match, group, decide. Pure: no file or network access."""
     campaigns = campaigns or {}
     decisions = decisions or {}
@@ -706,6 +735,17 @@ def run(documents: list[SourceDocument], claims: list[PriceClaim],
             # One outlet, and a person who has looked at it and vouched.
             verdict = Verdict("canonical", (), verdict.independent_claims,
                               verdict.supporting_claim_ids)
+        if (first.trim_id and ledger is not None
+                and suppressed_by_closed_campaign(
+                    first.amount_thb, campaigns,
+                    ledger.records_for(first.trim_id,
+                                       price_type=PriceType.CAMPAIGN_PRICE),
+                    as_of or date.today())):
+            verdict = Verdict(
+                "review",
+                tuple(sorted(set(verdict.reasons) |
+                             {ReviewReason.CONTRADICTED_BY_CLOSED_CAMPAIGN.value})),
+                verdict.independent_claims, verdict.supporting_claim_ids)
         if (first.trim_id, first.price_type) in disputed:
             verdict = Verdict("review",
                               tuple(sorted(set(verdict.reasons) |

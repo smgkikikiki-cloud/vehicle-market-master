@@ -46,6 +46,33 @@ class PricingError(ValueError):
     pass
 
 
+class OfferStatus(str, Enum):
+    """Whether an option can still be taken, which the calendar cannot say.
+
+    A quota campaign ends when the cars run out, not when the month does. Suzuki
+    published the Fronx GL cash price to 30 September and closed it on 25 August
+    when the 200 cars were gone; a calendar-only model would have gone on
+    quoting a price nobody could buy.
+    """
+
+    ACTIVE = "ACTIVE"
+    SOLD_OUT = "SOLD_OUT"
+    WITHDRAWN = "WITHDRAWN"
+    SUPERSEDED = "SUPERSEDED"
+
+    @classmethod
+    def parse(cls, raw: object) -> "OfferStatus":
+        value = str(raw or "ACTIVE").strip().upper()
+        try:
+            return cls(value)
+        except ValueError as exc:
+            raise PricingError(f"unknown offer status {raw!r}") from exc
+
+    @property
+    def open(self) -> bool:
+        return self is OfferStatus.ACTIVE
+
+
 class PriceType(str, Enum):
     """Meaning of a quoted price, not the authority of its source."""
 
@@ -138,16 +165,57 @@ class Conditions:
 
 @dataclass(frozen=True, slots=True)
 class CampaignOption:
-    """One alternative inside a campaign. Options are OR, never combined."""
+    """One alternative inside a campaign. Options are OR, never combined.
+
+    An option carries its own window and status because alternatives inside one
+    campaign do not end together: a capped cash price sells out while the
+    finance option beside it runs to the published date.
+    """
 
     id: str
     label: str = ""
     conditions: Conditions = field(default_factory=Conditions)
+    starts: Optional[str] = None
+    #: The date the brand published. ``closed_at`` is the date it really ended.
+    ends: Optional[str] = None
+    status: OfferStatus = OfferStatus.ACTIVE
+    closed_at: Optional[str] = None
+    notes: str = ""
 
     def validate(self) -> list[str]:
         problems = ["option id is required"] if not self.id else []
+        for field_name in ("starts", "ends", "closed_at"):
+            try:
+                _iso_date(getattr(self, field_name), field_name)
+            except PricingError as exc:
+                problems.append(f"option {self.id}: {exc}")
+        if self.starts and self.ends and self.starts > self.ends:
+            problems.append(f"option {self.id}: starts is after ends")
+        if not self.status.open and not self.closed_at:
+            problems.append(
+                f"option {self.id}: {self.status.value} must say closed_at")
+        if self.closed_at and self.status.open:
+            problems.append(
+                f"option {self.id}: closed_at needs a closed status")
         return problems + [f"option {self.id}: {p}"
                            for p in self.conditions.validate()]
+
+    def open_on(self, when: date) -> bool:
+        """Live today. A sold-out option is shut on the day it sold out.
+
+        Not on the day its calendar ran out -- that is the whole point of
+        recording ``closed_at`` separately from ``ends``.
+        """
+        day = when.isoformat()
+        if self.closed_at and day > self.closed_at:
+            return False
+        if not self.status.open and not self.closed_at:
+            return False
+        if self.starts and day < self.starts:
+            return False
+        if self.ends and day > self.ends:
+            return False
+        return self.conditions.open_on(when)
 
 
 @dataclass(frozen=True, slots=True)
@@ -261,6 +329,11 @@ def _parse_campaign(raw: object, source: str) -> Campaign:
             id=str(option.get("id") or "").strip(),
             label=str(option.get("label") or "").strip(),
             conditions=_parse_conditions(option.get("conditions"), source),
+            starts=_iso_date(option.get("starts"), "starts"),
+            ends=_iso_date(option.get("ends"), "ends"),
+            status=OfferStatus.parse(option.get("status")),
+            closed_at=_iso_date(option.get("closed_at"), "closed_at"),
+            notes=str(option.get("notes") or ""),
         ))
     return Campaign(
         id=str(raw.get("id") or "").strip(),
@@ -526,7 +599,7 @@ class PriceLedger:
                 if not campaign.live_on(when):
                     continue
                 option = campaign.option(record.option_id or "")
-                if option is not None and not option.conditions.open_on(when):
+                if option is not None and not option.open_on(when):
                     continue
             live.append(record)
         return live
@@ -548,6 +621,8 @@ class PriceLedger:
                 "campaign_name": campaign.name if campaign else "",
                 "option_id": record.option_id,
                 "option_label": option.label if option else "",
+                "option_status": option.status.value if option else None,
+                "option_closed_at": option.closed_at if option else None,
                 "conditions": to_conditions_dict(option.conditions) if option else {},
                 "valid_to": record.effective_to,
                 "source": record.source,

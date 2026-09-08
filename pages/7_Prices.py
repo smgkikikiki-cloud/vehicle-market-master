@@ -64,11 +64,11 @@ def run_batch(name: str):
     decisions_path = FEED / "review" / "decisions.json"
     decisions = (pricefeed.load_decisions(decisions_path)
                  if decisions_path.exists() else {})
+    ledger = ProductMaster.load(DATA_DIR, YEAR).prices
     return pricefeed.run(
         documents, claims, pricefeed.load_sources(DATA_DIR, YEAR),
         Catalog.load(DATA_DIR, YEAR),
-        campaigns=ProductMaster.load(DATA_DIR, YEAR).prices.campaigns,
-        decisions=decisions)
+        campaigns=ledger.campaigns, decisions=decisions, ledger=ledger)
 
 
 try:

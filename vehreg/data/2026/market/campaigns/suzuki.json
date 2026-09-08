@@ -1,45 +1,99 @@
 {
   "campaigns": [
     {
-      "id": "campaign.suzuki.fronx_september_2026",
+      "id": "campaign.suzuki.fronx_gl_aug_2026",
       "brand_id": "suzuki",
-      "name": "ราคาพิเศษ Suzuki Fronx กันยายน 2026",
-      "starts": "2026-09-01",
-      "ends": null,
-      "source": "headlightmag",
-      "source_ref": "https://www.headlightmag.com/special-price-suzuki-fronx-september-2026/",
-      "notes": "End date is not stated in the source. Left open rather than guessed; recheck before quoting.",
+      "name": "ราคาพิเศษ Suzuki Fronx GL สิงหาคม 2026 (สิทธิ์เต็มแล้ว)",
+      "starts": "2026-08-01",
+      "ends": "2026-08-25",
+      "source": "official_oem",
+      "source_ref": "https://www.suzuki.co.th/news/articles/news-245",
+      "notes": "Published to 30 September 2026 and capped at 200 cars. Suzuki closed it on 25 August 2026 when the quota was taken, so the campaign ends on the day it really ended, not on the day the calendar said. Motoring articles published in September still carried the 599,000 figure; they are not the authority on whether an offer is still open.",
       "options": [
         {
           "id": "family_cash",
-          "label": "ลูกค้า SUZUKI FAMILY — ทางเลือกที่ 1 ราคาพิเศษ",
+          "label": "ลูกค้า SUZUKI FAMILY — ราคาพิเศษเงินสด GL",
+          "starts": "2026-08-01",
+          "ends": "2026-09-30",
+          "status": "SOLD_OUT",
+          "closed_at": "2026-08-25",
+          "notes": "จำกัด 200 คัน สิทธิ์เต็มและปิดจริง 25 สิงหาคม 2026",
           "conditions": {
+            "booking_from": "2026-08-01",
+            "booking_to": "2026-09-30",
+            "quota_units": 200,
             "finance_required": false,
-            "text": "สำหรับลูกค้า SUZUKI FAMILY ที่ลงทะเบียนแอปพลิเคชัน Hello Suzuki หรือให้สิทธิ์กับสมาชิกครอบครัว ตามเงื่อนไขที่บริษัทฯ กำหนด"
+            "text": "สำหรับลูกค้า SUZUKI FAMILY จำกัด 200 คัน ประกาศถึง 30 กันยายน 2026 แต่สิทธิ์เต็มและปิดจริงวันที่ 25 สิงหาคม 2026"
           }
-        },
+        }
+      ]
+    },
+    {
+      "id": "campaign.suzuki.fronx_sep_oct_2026",
+      "brand_id": "suzuki",
+      "name": "ข้อเสนอ Suzuki Fronx GLX / GLX Plus กันยายน–ตุลาคม 2026",
+      "starts": "2026-09-01",
+      "ends": "2026-10-31",
+      "source": "official_oem",
+      "source_ref": "https://www.suzuki.co.th/news/articles/news-246",
+      "notes": "จำกัดรวม 499 คันทั้งแคมเปญ ครอบคลุมเฉพาะ GLX และ GLX Plus — GL ไม่อยู่ในแคมเปญนี้ ทุกทางเลือกได้ประกันภัยชั้นหนึ่งปีแรกและบริการช่วยเหลือฉุกเฉิน 3 ปี เงินสดกับไฟแนนซ์เลือกได้ทางเดียว",
+      "options": [
         {
-          "id": "family_finance",
-          "label": "ลูกค้า SUZUKI FAMILY — ทางเลือกที่ 2 ดอกเบี้ยเริ่ม 0%",
+          "id": "family_cash",
+          "label": "ลูกค้า SUZUKI FAMILY — ราคาพิเศษเงินสด",
+          "starts": "2026-09-01",
+          "ends": "2026-10-31",
+          "status": "ACTIVE",
           "conditions": {
-            "finance_required": true,
-            "text": "ดอกเบี้ยพิเศษเริ่ม 0% สำหรับลูกค้าที่ทำสัญญาเช่าซื้อรถยนต์รุ่น SUZUKI FRONX พร้อมส่วนลดอุปกรณ์ตกแต่งสูงสุด 40,000 บาท (GL) / 50,000 บาท (GLX). ราคารถไม่ได้ลด จึงไม่มีตัวเลขราคาแคมเปญสำหรับทางเลือกนี้"
+            "booking_from": "2026-09-01",
+            "booking_to": "2026-10-31",
+            "quota_units": 499,
+            "finance_required": false,
+            "text": "สำหรับลูกค้า SUZUKI FAMILY จำกัดรวม 499 คันทั้งแคมเปญ พร้อมประกันภัยชั้นหนึ่งปีแรกและบริการช่วยเหลือฉุกเฉิน 3 ปี"
           }
         },
         {
           "id": "open_cash",
-          "label": "ลูกค้าทั่วไป — ทางเลือกที่ 1 ราคาพิเศษ",
+          "label": "ลูกค้าทั่วไป — ราคาพิเศษเงินสด",
+          "starts": "2026-09-01",
+          "ends": "2026-10-31",
+          "status": "ACTIVE",
           "conditions": {
+            "booking_from": "2026-09-01",
+            "booking_to": "2026-10-31",
+            "quota_units": 499,
             "finance_required": false,
-            "text": "สำหรับลูกค้าทุกท่านหรือลูกค้าเจ้าของรถยนต์ยี่ห้ออื่นๆ พร้อมฟรีประกันภัยชั้นหนึ่งและบริการช่วยเหลือฉุกเฉิน"
+            "text": "สำหรับลูกค้าทั่วไป จำกัดรวม 499 คันทั้งแคมเปญ พร้อมประกันภัยชั้นหนึ่งปีแรกและบริการช่วยเหลือฉุกเฉิน 3 ปี"
+          }
+        },
+        {
+          "id": "family_finance",
+          "label": "ลูกค้า SUZUKI FAMILY — ดอกเบี้ยเริ่ม 0%",
+          "starts": "2026-09-01",
+          "ends": "2026-10-31",
+          "status": "ACTIVE",
+          "notes": "ราคารถไม่ลด จึงไม่มีตัวเลขราคาแคมเปญสำหรับทางเลือกนี้",
+          "conditions": {
+            "booking_from": "2026-09-01",
+            "booking_to": "2026-10-31",
+            "quota_units": 499,
+            "finance_required": true,
+            "text": "ดอกเบี้ยเริ่มต้น 0% พร้อมส่วนลดอุปกรณ์ตกแต่งสูงสุด 50,000 บาท สำหรับลูกค้า SUZUKI FAMILY เลือกได้ทางเดียวกับราคาพิเศษเงินสด"
           }
         },
         {
           "id": "open_finance",
-          "label": "ลูกค้าทั่วไป — ทางเลือกที่ 2 ดอกเบี้ยเริ่ม 0%",
+          "label": "ลูกค้าทั่วไป — ดอกเบี้ยเริ่ม 0%",
+          "starts": "2026-09-01",
+          "ends": "2026-10-31",
+          "status": "ACTIVE",
+          "notes": "ราคารถไม่ลด จึงไม่มีตัวเลขราคาแคมเปญสำหรับทางเลือกนี้",
           "conditions": {
+            "booking_from": "2026-09-01",
+            "booking_to": "2026-10-31",
+            "quota_units": 499,
             "finance_required": true,
-            "text": "ดอกเบี้ยพิเศษเริ่ม 0% พร้อมส่วนลดอุปกรณ์ตกแต่งสูงสุด 20,000 บาท (GL) / 30,000 บาท (GLX). ราคารถไม่ได้ลด จึงไม่มีตัวเลขราคาแคมเปญสำหรับทางเลือกนี้"
+            "text": "ดอกเบี้ยเริ่มต้น 0% พร้อมส่วนลดอุปกรณ์ตกแต่งสูงสุด 30,000 บาท สำหรับลูกค้าทั่วไป เลือกได้ทางเดียวกับราคาพิเศษเงินสด"
           }
         }
       ]

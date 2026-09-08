@@ -486,41 +486,34 @@
       "name_en": "MG ES",
       "name_th": "เอ็มจี อีเอส",
       "nameplate": "",
-      "body_type": "CROSSOVER",
+      "body_type": "WAGON",
       "cab_type": "NOT_APPLICABLE",
       "registration_type": "",
       "market_scope": "CORE",
-      "aliases": [
-        "es5",
-        "mg es5",
-        "ES5",
-        "MG ES5"
-      ],
-      "notes": "",
+      "aliases": [],
+      "notes": "MG ES, a BEV wagon. Not the MG S5 EV, which is a separate crossover: the ES5 aliases and the 62 kWh / RWD / 999,000 specification here were the S5's. Official: https://www.mgcars.com/en/cars/mg-es",
       "generations": [
         {
-          "code": "ES5",
+          "code": "gen1",
           "segment": "C",
           "seats": 5,
           "launched": "2025-01-01",
           "ended": null,
           "variants": [
             {
-              "name": "62 kWh BEV",
+              "name": "51 kWh BEV",
               "powertrain": "BEV",
-              "drivetrain": "RWD",
+              "drivetrain": "UNKNOWN",
               "engine_cc": null,
-              "battery_kwh": 62.0,
-              "aliases": [
-                "Long Range"
-              ],
+              "battery_kwh": 51.0,
+              "aliases": [],
               "overrides": {},
-              "price_thb": 999000,
+              "price_thb": null,
               "import_type": "CBU",
               "origin_country": "CN",
-              "price_note": "seed-unverified",
-              "price_min_thb": 999000,
-              "price_max_thb": 999000
+              "price_note": "retail price lives in PriceLedger",
+              "price_min_thb": null,
+              "price_max_thb": null
             }
           ]
         }

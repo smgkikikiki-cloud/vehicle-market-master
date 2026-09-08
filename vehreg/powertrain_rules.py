@@ -160,8 +160,31 @@ RULES: tuple[Rule, ...] = (
 
     # Audi families the owner explicitly chose to keep mixed.
     R("Audi", "Q5", MIXED),
-    R("Audi", "Audi Q7", MIXED),
-    R("Audi", "Audi A6", MIXED),
+
+    # Q7 and A6, settled at the label rather than the nameplate. Audi's plug-in
+    # hybrids are the ones with a trailing "e": 60 TFSI e is a PHEV, 55 TFSI is
+    # not. Substring matching means "TFSI" is inside "TFSI e", so the explicit
+    # plug-in rules have to come first and the combustion rules have to say
+    # they are not looking at one -- otherwise a bare ICE rule swallows every
+    # plug-in in the file.
+    R("Audi", "Audi Q7", "PHEV",
+      raw_any=("TFSI E", "TFSIE", "PHEV", "PLUG-IN"),
+      note="Q7 60 TFSI e / TFSI e q S line: Audi's plug-in hybrid Q7."),
+    R("Audi", "Audi Q7", "ICE",
+      raw_any=("TFSI", "TDI"), raw_none=("TFSI E", "TFSIE"),
+      note="45 TDI, 55 TFSI, 3.0 TDI quattro and the rest: combustion only."),
+    R("Audi", "Audi Q7", "ICE",
+      note="A bare Q7 with no engine code is the combustion car."),
+
+    R("Audi", "Audi A6", "PHEV",
+      raw_any=("TFSI E", "TFSIE", "PHEV", "PLUG-IN"),
+      note="A6 50 TFSI e / 55 TFSI e. The A6 e-tron is a separate BEV model "
+           "and never reaches these rules."),
+    R("Audi", "Audi A6", "ICE",
+      raw_any=("TFSI", "TDI"), raw_none=("TFSI E", "TFSIE"),
+      note="40/45/50 TFSI and 2.0 TDI without the trailing e are combustion."),
+    R("Audi", "Audi A6", "ICE",
+      note="A bare A6 is combustion unless the label says plug-in."),
 
     # Owner batch 2: high-impact worklist decisions reviewed against the
     # DLT source through 2026-08. Explicit source labels beat generic defaults.

@@ -63,7 +63,7 @@
       "aliases": [
         "ev 6"
       ],
-      "notes": "",
+      "notes": "Not in Kia Thailand's current lineup (https://www.kia.com/th/en). The registration record stands and is attributed to this nameplate; whether the EV6 was ever sold here through the official distributor is not established, so this is UNVERIFIED rather than GREY. No MarketTrim or specification is authored from guesswork, and the absence of an ECO record is not evidence of an ingestion failure.",
       "generations": [
         {
           "code": "CV",
@@ -91,7 +91,8 @@
             }
           ]
         }
-      ]
+      ],
+      "retail_status": "UNVERIFIED"
     },
     {
       "id": "ev9",

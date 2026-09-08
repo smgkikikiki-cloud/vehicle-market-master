@@ -24,11 +24,8 @@ def test_jaecoo_5_has_retail_trim_catalog_without_changing_registration_grain():
     assert all(trim.height_mm == 1650 for trim in trims.values())
     assert all(trim.wheelbase_mm == 2620 for trim in trims.values())
 
-    assert trims["Long Range Dynamic"].price_thb == 629000
-    assert trims["Long Range Max"].price_thb == 679000
-    assert trims["MAX+"].price_thb == 699000
-    # Price is deliberately withheld until a sufficiently stable source agrees.
-    assert trims["ULTRA"].price_thb is None
+    # Retail price has one authority: the separate PriceLedger.
+    assert all(trim.price_thb is None for trim in trims.values())
 
     assert trims["Long Range Dynamic"].source_refs["ecosticker"] == (
         "d744d9f3-d393-4ac3-b441-17a022098fed",

@@ -183,7 +183,6 @@
               "name": "Long Range Dynamic",
               "variant": "58.9 kWh BEV CBU",
               "powertrain": "BEV",
-              "price_thb": 629000,
               "drivetrain": "FWD",
               "engine_code": "",
               "engine_cc": null,
@@ -207,17 +206,16 @@
                   "d744d9f3-d393-4ac3-b441-17a022098fed"
                 ],
                 "official_omodajaecoo": [
-                  "jaecoo-5-ev"
+                  "https://www.omodajaecoo.co.th/th/model/jaecoo-5-ev"
                 ]
               },
-              "notes": "ECO Sticker recommended retail price 629,000 THB; campaign discounts intentionally excluded. ECO record shows CBU China and 235/55R18 tyres."
+              "notes": "Specification carried forward from the existing Phase-1 seed. OEM product URL checked 2026-09-08. Prices are only in PriceLedger. ECO basic-spec evidence is linked by UUID."
             },
             {
               "id": "long_range_max_bev",
               "name": "Long Range Max",
               "variant": "58.9 kWh BEV CBU",
               "powertrain": "BEV",
-              "price_thb": 679000,
               "drivetrain": "FWD",
               "engine_code": "",
               "engine_cc": null,
@@ -241,17 +239,16 @@
                   "b4529bb4-d813-416b-b272-430b123cc06c"
                 ],
                 "official_omodajaecoo": [
-                  "jaecoo-5-ev"
+                  "https://www.omodajaecoo.co.th/th/model/jaecoo-5-ev"
                 ]
               },
-              "notes": "ECO Sticker recommended retail price 679,000 THB; campaign discounts intentionally excluded. ECO record shows CBU China and 235/55R18 tyres."
+              "notes": "Specification carried forward from the existing Phase-1 seed. OEM product URL checked 2026-09-08. Prices are only in PriceLedger. ECO basic-spec evidence is linked by UUID."
             },
             {
               "id": "max_plus_bev",
               "name": "MAX+",
               "variant": "50.6 kWh BEV CKD",
               "powertrain": "BEV",
-              "price_thb": 699000,
               "drivetrain": "FWD",
               "engine_code": "",
               "engine_cc": null,
@@ -275,17 +272,16 @@
                   "98c1d7de-79db-4581-b332-69abe657a532"
                 ],
                 "official_omodajaecoo": [
-                  "jaecoo-5-ev"
+                  "https://www.omodajaecoo.co.th/th/model/jaecoo-5-ev"
                 ]
               },
-              "notes": "ECO Sticker recommended retail price 699,000 THB; campaign discounts intentionally excluded. ECO record shows Thai factory and 235/55R18 tyres."
+              "notes": "Specification carried forward from the existing Phase-1 seed. OEM product URL checked 2026-09-08. Prices are only in PriceLedger. ECO basic-spec evidence is linked by UUID."
             },
             {
               "id": "ultra_bev",
               "name": "ULTRA",
               "variant": "60.93 kWh BEV",
               "powertrain": "BEV",
-              "price_thb": null,
               "drivetrain": "FWD",
               "engine_code": "",
               "engine_cc": null,
@@ -305,10 +301,10 @@
               ],
               "source_refs": {
                 "official_omodajaecoo": [
-                  "jaecoo-5-ev"
+                  "https://www.omodajaecoo.co.th/en/model/en-jaecoo-5-ev-ultra"
                 ]
               },
-              "notes": "Current official trim. No matching ECO Sticker UUID was observed in the 2026-09-07 public-site search, and conflicting current list/estimated prices were not promoted into canonical price_thb."
+              "notes": "Specification carried forward from the existing Phase-1 seed. OEM product URL checked 2026-09-08. Prices are only in PriceLedger. No matching ECO UUID in the 2026-09-07 probe; no ECO specifications inferred."
             }
           ]
         }

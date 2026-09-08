@@ -746,6 +746,8 @@ class Catalog:
                     }
                     if trim.notes:
                         trim_payload["notes"] = trim.notes
+                    if trim.price_thb is None:
+                        trim_payload.pop("price_thb")
                     gen_payload["trims"].append(trim_payload)
                 model_payload["generations"].append(gen_payload)
             payload["models"].append(model_payload)

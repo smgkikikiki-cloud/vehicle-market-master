@@ -80,3 +80,10 @@ The ledger records the quoted amount, the meaning of that amount (`LIST_PRICE`, 
 ## Analytics isolation
 
 `Catalog.iter_resolved()` still iterates only `Variant` objects. `Resolver`, facts and the cube are unchanged. Adding ten trims or one hundred price observations therefore creates zero additional registration rows and cannot redistribute volume.
+
+## Phase 1 operational delivery
+
+See [Vehicle Master 2.0 Phase 1](VEHICLE_MASTER_PHASE1.md) for product queries,
+validated trim authoring, append-only price observations and the JAECOO reference
+evidence matrix. The JAECOO seed no longer embeds any `price_thb` in its trims.
+The backward-compatible entity field remains for older external inputs only.

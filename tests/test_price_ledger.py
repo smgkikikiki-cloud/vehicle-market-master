@@ -129,7 +129,7 @@ def test_price_ledger_fails_closed_on_unknown_trim():
         }]})
 
 
-def test_2026_jaecoo_prices_are_evidence_not_current_msrp():
+def test_2026_jaecoo_eco_prices_do_not_override_official_list():
     catalog = Catalog.load(year=2026)
     ledger = PriceLedger.load(year=2026, catalog=catalog)
 
@@ -142,9 +142,15 @@ def test_2026_jaecoo_prices_are_evidence_not_current_msrp():
         row = ledger.latest(trim_id, price_type=PriceType.ECO_STICKER_PRICE)
         assert row is not None
         assert row.amount_thb == amount
-        assert ledger.current_list_price(trim_id, as_of=date(2026, 9, 8)) is None
+        if trim_id.endswith("max_plus_bev"):
+            current = ledger.current_list_price(trim_id, as_of=date(2026, 9, 8))
+            assert current.source == "official_oem"
+            assert current.amount_thb == 699000
+            assert ledger.current_list_price(trim_id, as_of=date(2026, 9, 7)) is None
+        else:
+            assert ledger.current_list_price(trim_id, as_of=date(2026, 9, 8)) is None
 
     coverage = ledger.coverage(as_of=date(2026, 9, 8))
     assert coverage["records"] >= 3
     assert coverage["eco_sticker_price_records"] >= 3
-    assert coverage["trims_with_current_list_price"] == 0
+    assert coverage["trims_with_current_list_price"] == 1

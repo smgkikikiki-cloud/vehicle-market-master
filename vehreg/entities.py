@@ -45,6 +45,7 @@ Why the layers exist:
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+import math
 from typing import Any, Optional
 
 from .taxonomy import (
@@ -292,7 +293,7 @@ class MarketTrim:
     ``Variant`` remains the analytical spec line used to classify DLT volume.
     A MarketTrim is the retail offering beneath the generation and may point to
     its parent analytical variant when that mapping is known. Its own exact
-    powertrain/price/specification is useful to market-offering and fitment
+    powertrain/specification is useful to market-offering and fitment
     products, but ``resolve()`` and the cube never iterate trims.
     """
 
@@ -303,7 +304,7 @@ class MarketTrim:
     # MarketTrim cannot represent an unresolved/aggregate UNKNOWN bucket.
     powertrain: Powertrain
     variant_id: Optional[str] = None           # analytical Variant, if known
-    price_thb: Optional[float] = None
+    price_thb: Optional[float] = None           # legacy input only; use PriceLedger
     drivetrain: Drivetrain = Drivetrain.UNKNOWN
     engine_code: str = ""
     engine_cc: Optional[int] = None
@@ -327,20 +328,24 @@ class MarketTrim:
         problems: list[str] = []
         # Loader already rejects UNKNOWN, but keep the entity itself honest too:
         # direct construction in tests/tools must not create an invalid retail SKU.
-        if self.powertrain is Powertrain.UNKNOWN:
+        if not isinstance(self.powertrain, Powertrain) or self.powertrain is Powertrain.UNKNOWN:
             problems.append("powertrain must be exact; UNKNOWN is not valid for MarketTrim")
-        if self.price_thb is not None and self.price_thb < 0:
-            problems.append("price_thb must not be negative")
-        if self.engine_cc is not None and self.engine_cc <= 0:
-            problems.append("engine_cc must be positive")
-        if self.battery_kwh is not None and self.battery_kwh < 0:
-            problems.append("battery_kwh must not be negative")
-        if self.seats is not None and self.seats <= 0:
-            problems.append("seats must be positive")
-        for field_name in ("length_mm", "width_mm", "height_mm", "wheelbase_mm"):
+        integer_fields = ("engine_cc", "seats", "length_mm", "width_mm",
+                          "height_mm", "wheelbase_mm")
+        for field_name in (*integer_fields, "battery_kwh", "price_thb"):
             value = getattr(self, field_name)
-            if value is not None and value <= 0:
-                problems.append(f"{field_name} must be positive")
+            if value is None:
+                continue
+            if (type(value) not in (int, float) or not math.isfinite(value)
+                    or value < 0 or (field_name != "price_thb" and value == 0)
+                    or (field_name in integer_fields and type(value) is not int)):
+                problems.append(f"{field_name} must be a positive finite "
+                                + ("integer" if field_name in integer_fields else "number"))
+        if (type(self.wheelbase_mm) is int and type(self.length_mm) is int
+                and self.wheelbase_mm >= self.length_mm):
+            problems.append("wheelbase_mm must be less than length_mm")
+        if self.powertrain is Powertrain.BEV and (self.engine_cc is not None or self.engine_code):
+            problems.append("BEV cannot have a combustion engine")
         return [f"trim {self.id}: {p}" for p in problems]
 
 

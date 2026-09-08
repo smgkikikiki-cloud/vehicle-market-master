@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+import collections
 import gzip
 import hashlib
 import json
@@ -34,6 +35,10 @@ REQUIRED_RAW_FIELDS = {
     "source_id", "source_url", "brand_raw", "model_raw", "price_thb",
     "importer_raw", "list_page",
 }
+# The detail page behind each list row: dimensions, wheel_size, declared engine
+# type, battery. Optional, because a harvest can run list-only, but a snapshot
+# without it cannot answer what powertrain or tyre a record has.
+OPTIONAL_RAW_FIELDS = {"detail", "detail_status"}
 # The live inventory currently carries both hyphenated UUIDs and 32-character
 # compact UUIDs. Preserve the source identifier exactly apart from case.
 UUID_RE = re.compile(
@@ -94,7 +99,7 @@ def load_raw_inventory(path: Path | str) -> list[dict]:
     validated: list[dict] = []
     for position, raw in enumerate(rows, 1):
         missing = REQUIRED_RAW_FIELDS - set(raw)
-        unknown = set(raw) - REQUIRED_RAW_FIELDS
+        unknown = set(raw) - REQUIRED_RAW_FIELDS - OPTIONAL_RAW_FIELDS
         if missing or unknown:
             raise ECOIngestError(
                 f"row {position}: missing={sorted(missing)} unknown={sorted(unknown)}")
@@ -119,6 +124,9 @@ def load_raw_inventory(path: Path | str) -> list[dict]:
         importer = str(raw["importer_raw"] or "").strip()
         if not brand or not model or not importer:
             raise ECOIngestError(f"row {position}: brand/model/importer cannot be blank")
+        detail = raw.get("detail") or {}
+        if not isinstance(detail, dict):
+            raise ECOIngestError(f"row {position}: detail must be an object")
         pages.add(page)
         validated.append({
             "source_id": source_id,
@@ -128,6 +136,8 @@ def load_raw_inventory(path: Path | str) -> list[dict]:
             "price_thb": price,
             "importer_raw": importer,
             "list_page": page,
+            "detail": detail,
+            "detail_status": "available" if detail else "unavailable",
         })
     if pages != set(range(1, max(pages) + 1)):
         raise ECOIngestError("inventory page sequence has gaps")
@@ -216,21 +226,80 @@ def _model_candidates(catalog: Catalog, brand_ids: Iterable[str], raw: str) -> l
                   key=lambda hit: hit.model_id)
 
 
-def infer_powertrain(label: str) -> tuple[Optional[str], str]:
-    """Return only explicit source-label evidence; do not guess plain ICE."""
+# The ECO Sticker record declares its own engine type in Thai. This is the
+# manufacturer's homologation answer, so it outranks anything read off a model
+# name. Mild hybrids fold into ICE: the owner's taxonomy has no MHEV bucket.
+ENGINE_NAME_POWERTRAIN = (
+    ("\u0e1b\u0e25\u0e31\u0e4a\u0e01\u0e2d\u0e34\u0e19\u0e44\u0e2e\u0e1a\u0e23\u0e34\u0e14", Powertrain.PHEV.value),   # plug-in hybrid
+    ("\u0e44\u0e21\u0e25\u0e4c\u0e14\u0e44\u0e2e\u0e1a\u0e23\u0e34\u0e14", Powertrain.ICE.value),                        # mild hybrid -> ICE
+    ("mhev", Powertrain.ICE.value),
+    ("\u0e44\u0e2e\u0e1a\u0e23\u0e34\u0e14", Powertrain.HEV.value),                                                            # hybrid
+    ("\u0e14\u0e35\u0e40\u0e0b\u0e25", Powertrain.ICE.value),                                                                   # diesel
+    ("\u0e41\u0e01\u0e4a\u0e2a\u0e42\u0e0b\u0e25\u0e35\u0e19", Powertrain.ICE.value),                                       # gasoline
+    ("\u0e40\u0e1a\u0e19\u0e0b\u0e34\u0e19", Powertrain.ICE.value),                                                            # benzine
+    ("\u0e44\u0e1f\u0e1f\u0e49\u0e32", Powertrain.BEV.value),                                                                   # electric
+)
+
+# Coarse ECO class, used only when the record leaves engine_name blank.
+CARTYPE_POWERTRAIN = {
+    "BEV": Powertrain.BEV.value,
+    "PHEV": Powertrain.PHEV.value,
+    "FCEV": Powertrain.FCEV.value,
+}
+
+# Words in a model name that state a powertrain without room for argument.
+# "HYBRID" is deliberately absent: on a Bentayga it means PHEV, on an AMG GLE 53
+# it means a 48V mild hybrid that belongs in ICE. Bare "HYBRID" goes to review.
+DECISIVE_LABEL_TOKENS = (
+    ((" phev ", " plug in hybrid ", " dm i "), Powertrain.PHEV.value),
+    ((" reev ", " erev "), Powertrain.REEV.value),
+    ((" fcev ", " fuel cell ", " hydrogen "), Powertrain.FCEV.value),
+    ((" bev ",), Powertrain.BEV.value),
+    ((" hev ", " e power "), Powertrain.HEV.value),
+)
+
+# Written on cars that are not electrified at all (mild hybrids included).
+MILD_HYBRID_TOKENS = (" mhev ", " mild hybrid ", " mild hev ", " eq boost ",
+                      " 48v ", " 48 v ")
+
+
+def infer_powertrain(label: str, detail: Optional[dict] = None
+                     ) -> tuple[Optional[str], str]:
+    """Prefer the record's declared engine type; never guess from bare 'hybrid'.
+
+    Returns ``(powertrain, basis)``.  A ``None`` powertrain means the record
+    carries no answer this function is willing to assert, and the row belongs in
+    the review queue rather than in a trim.
+    """
+    detail = detail or {}
+    engine_name = str(detail.get("engine_name") or "").strip().lower()
+    for needle, powertrain in ENGINE_NAME_POWERTRAIN:
+        if needle in engine_name:
+            # A declared plug-in hybrid whose name says REEV is a range
+            # extender: same socket, different drivetrain layout.
+            if powertrain == Powertrain.PHEV.value and _says_reev(label):
+                return Powertrain.REEV.value, "detail_engine_name"
+            return powertrain, "detail_engine_name"
+    # Reached when engine_name is blank or says only "other". The coarse class
+    # is trusted for BEV/PHEV/FCEV alone: its "ICE" bucket also holds hybrids.
+    cartype = CARTYPE_POWERTRAIN.get(str(detail.get("cartype_name") or "").strip().upper())
+    if cartype:
+        if cartype == Powertrain.PHEV.value and _says_reev(label):
+            return Powertrain.REEV.value, "detail_cartype"
+        return cartype, "detail_cartype"
+
     value = " " + fold(label) + " "
-    if any(token in value for token in (" phev ", " plug in hybrid ", " dm i ",
-                                        " e hybrid ", " super hybrid ", " shs ")):
-        return Powertrain.PHEV.value, "explicit_label"
-    if any(token in value for token in (" reev ", " erev ")):
-        return Powertrain.REEV.value, "explicit_label"
-    if any(token in value for token in (" fcev ", " fuel cell ", " hydrogen ")):
-        return Powertrain.FCEV.value, "explicit_label"
-    if any(token in value for token in (" bev ", " electric ", " ev ")):
-        return Powertrain.BEV.value, "explicit_label"
-    if any(token in value for token in (" hev ", " hybrid ", " e power ")):
-        return Powertrain.HEV.value, "explicit_label"
+    if any(token in value for token in MILD_HYBRID_TOKENS):
+        return Powertrain.ICE.value, "explicit_label"
+    for tokens, powertrain in DECISIVE_LABEL_TOKENS:
+        if any(token in value for token in tokens):
+            return powertrain, "explicit_label"
     return None, "not_explicit"
+
+
+def _says_reev(label: str) -> bool:
+    value = " " + fold(label) + " "
+    return " reev " in value or " erev " in value
 
 
 def normalize_inventory(rows: Iterable[dict], catalog: Catalog,
@@ -245,7 +314,9 @@ def normalize_inventory(rows: Iterable[dict], catalog: Catalog,
         generation_ids = ([g.id for g in catalog.generations_of(model_id)]
                           if model_id else [])
         generation_id = generation_ids[0] if len(generation_ids) == 1 else None
-        powertrain, powertrain_basis = infer_powertrain(raw["model_raw"])
+        detail = raw.get("detail") or {}
+        powertrain, powertrain_basis = infer_powertrain(
+            raw["model_raw"], detail)
         reasons: list[str] = []
         if not brand_ids:
             reasons.append("brand_unmatched")
@@ -296,8 +367,32 @@ def normalize_inventory(rows: Iterable[dict], catalog: Catalog,
             },
             "review_status": status,
             "review_reasons": reasons,
+            "detail_status": raw.get("detail_status") or "unavailable",
+            "wheel_size": detail.get("wheel_size") or None,
+            "length_mm": _millimetres(detail.get("car_length")),
+            "width_mm": _millimetres(detail.get("car_width")),
+            "height_mm": _millimetres(detail.get("car_height")),
+            "seats": _positive_int(detail.get("car_seats")),
+            "declared_total_weight_kg": _positive_int(detail.get("total_weight")),
+            "battery_chemistry": detail.get("battery_type") or None,
+            "battery_supplier": detail.get("battery_brand") or None,
+            "factory": detail.get("factory") or None,
+            "declared_engine_name": detail.get("engine_name") or None,
         })
     return normalized
+
+
+def _positive_int(raw: object) -> Optional[int]:
+    """ECO reports numbers as display strings; '-' and '' mean 'not stated'."""
+    value = str(raw or "").strip().replace(",", "")
+    if not re.fullmatch(r"\d+(?:\.0+)?", value):
+        return None
+    number = int(float(value))
+    return number if number > 0 else None
+
+
+def _millimetres(raw: object) -> Optional[int]:
+    return _positive_int(raw)
 
 
 def _jsonl_bytes(rows: Iterable[dict]) -> bytes:
@@ -334,10 +429,12 @@ def build_snapshot(raw_path: Path | str, *, data_dir: Path | str = DATA_DIR,
     specs = ECOStickerSpecStore.load(data_dir, year, catalog=catalog)
     known_detail = {record.source_ref: record for record in specs.records.values()}
     for row in normalized:
-        detail = known_detail.get(row["source_id"])
-        row["detail_status"] = "available" if detail else "unavailable"
-        row["spec_evidence_trim_id"] = detail.trim_id if detail else None
-        row["tyre_evidence"] = detail.tire_size if detail else None
+        # detail_status already says whether the ECO detail page was harvested.
+        # These two say whether that evidence is attached to a MarketTrim yet.
+        evidence = known_detail.get(row["source_id"])
+        row["spec_evidence_trim_id"] = evidence.trim_id if evidence else None
+        row["tyre_evidence"] = (evidence.tire_size if evidence
+                                else row.get("wheel_size"))
     if [row.as_row() for row in catalog.iter_resolved()] != before:
         raise ECOIngestError("ECO staging changed registration analytics")
     queue = [row for row in normalized if row["review_status"] != "ready_for_review"]
@@ -373,6 +470,21 @@ def build_snapshot(raw_path: Path | str, *, data_dir: Path | str = DATA_DIR,
         "records_with_detail_evidence": sum(
             row["detail_status"] == "available" for row in normalized),
         "records_with_tyre_evidence": sum(bool(row["tyre_evidence"]) for row in normalized),
+        # What a reader has to know before believing the snapshot is finished.
+        # A list-only harvest reports zeros here rather than looking complete.
+        "coverage": {
+            "detail_pages": f"{sum(row['detail_status'] == 'available' for row in normalized)}/{len(normalized)}",
+            "dimensions": sum(bool(row["length_mm"]) for row in normalized),
+            "wheel_size": sum(bool(row["wheel_size"]) for row in normalized),
+            "declared_engine_name": sum(
+                bool(row["declared_engine_name"]) for row in normalized),
+            "battery_chemistry": sum(
+                bool(row["battery_chemistry"]) for row in normalized),
+            "attached_to_market_trims": sum(
+                bool(row["spec_evidence_trim_id"]) for row in normalized),
+        },
+        "powertrain_basis": dict(sorted(collections.Counter(
+            row["powertrain_basis"] for row in normalized).items())),
         "raw_sha256": hashlib.sha256(raw_bytes).hexdigest(),
         "normalized_sha256": hashlib.sha256(normalized_bytes).hexdigest(),
         "registration_rows_unchanged": len(before),
@@ -421,6 +533,16 @@ def load_normalized_snapshot(data_dir: Path | str = DATA_DIR,
     return rows
 
 
+# A decision this code proposed is not a decision the owner made. Machine-written
+# rows must carry this reviewer, and nothing counts them as accepted; a person
+# replaces it with their own name when they have actually looked at the record.
+AGENT_REVIEWER = "agent-proposed"
+
+
+def decision_origin(reviewer: str) -> str:
+    return "agent" if reviewer.strip().lower() == AGENT_REVIEWER else "human"
+
+
 def validate_decisions(payload: dict, records: Iterable[dict], catalog: Catalog) -> list[dict]:
     if not isinstance(payload, dict) or set(payload) != {
             "schema_version", "snapshot_date", "decisions"}:
@@ -433,7 +555,8 @@ def validate_decisions(payload: dict, records: Iterable[dict], catalog: Catalog)
     by_source = {row["source_id"]: row for row in records}
     seen: set[str] = set()
     checked: list[dict] = []
-    allowed = {"source_id", "action", "trim_id", "reviewer", "reviewed_at", "notes"}
+    allowed = {"source_id", "action", "trim_id", "reviewer", "origin",
+               "reviewed_at", "notes"}
     for position, raw in enumerate(payload["decisions"], 1):
         if not isinstance(raw, dict) or set(raw) - allowed:
             raise ECOIngestError(f"decision {position}: invalid fields")
@@ -464,6 +587,7 @@ def validate_decisions(payload: dict, records: Iterable[dict], catalog: Catalog)
             "action": action,
             "trim_id": trim_id,
             "reviewer": reviewer,
+            "origin": decision_origin(reviewer),
             "reviewed_at": reviewed_at,
             "notes": str(raw.get("notes") or "").strip(),
         })
@@ -504,7 +628,11 @@ def ingestion_status(data_dir: Path | str = DATA_DIR, year: int = DEFAULT_YEAR,
         payload = json.loads(decisions_path.read_text(encoding="utf-8"))
         decisions = validate_decisions(payload, records, catalog)
     accepted = {d["source_id"]: d for d in decisions
-                if d["action"] == "accept_existing_trim"}
+                if d["action"] == "accept_existing_trim"
+                and d["origin"] == "human"}
+    proposed = {d["source_id"]: d for d in decisions
+                if d["action"] == "accept_existing_trim"
+                and d["origin"] == "agent"}
     from .homologation import ECOStickerSpecStore
     specs = ECOStickerSpecStore.load(data_dir, year, catalog=catalog)
     spec_by_source = {row.source_ref: row for row in specs.records.values()}
@@ -538,6 +666,7 @@ def ingestion_status(data_dir: Path | str = DATA_DIR, year: int = DEFAULT_YEAR,
             row["matched_model_id"] for row in records if row["matched_model_id"]}),
         "decisions": len(decisions),
         "accepted_existing_trims": len(accepted),
+        "agent_proposed_existing_trims": len(proposed),
         "accepted_with_spec_evidence": accepted_with_spec,
         "accepted_with_tyre_evidence": accepted_with_tyre,
         "source_ids_attached_to_market_trims": len(

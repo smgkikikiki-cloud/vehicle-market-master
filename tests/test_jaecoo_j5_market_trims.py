@@ -2,7 +2,7 @@ from vehreg.catalog import Catalog
 from vehreg.taxonomy import Powertrain
 
 
-MODEL_ID = "chery.jaecoo_j5"
+MODEL_ID = "jaecoo.jaecoo_5_ev"
 
 
 def test_jaecoo_5_has_retail_trim_catalog_without_changing_registration_grain():
@@ -50,10 +50,10 @@ def test_jaecoo_5_trim_ids_include_retail_identity_not_price_or_tyre():
     trims = {trim.name: trim for trim in catalog.trims_of(MODEL_ID)}
 
     assert trims["Long Range Dynamic"].id == (
-        "chery.jaecoo_j5.j5.trim.long_range_dynamic_bev"
+        "jaecoo.jaecoo_5_ev.j5.trim.long_range_dynamic_bev"
     )
     assert trims["Long Range Max"].id == (
-        "chery.jaecoo_j5.j5.trim.long_range_max_bev"
+        "jaecoo.jaecoo_5_ev.j5.trim.long_range_max_bev"
     )
-    assert trims["MAX+"].id == "chery.jaecoo_j5.j5.trim.max_plus_bev"
-    assert trims["ULTRA"].id == "chery.jaecoo_j5.j5.trim.ultra_bev"
+    assert trims["MAX+"].id == "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev"
+    assert trims["ULTRA"].id == "jaecoo.jaecoo_5_ev.j5.trim.ultra_bev"

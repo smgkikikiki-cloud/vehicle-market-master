@@ -30,8 +30,8 @@ classification inputs; retail consumers must use PriceLedger.
 ```bash
 python -m vehreg market validate
 python -m vehreg market coverage --as-of 2026-09-08
-python -m vehreg market list --model chery.jaecoo_j5 --powertrain BEV
-python -m vehreg market show chery.jaecoo_j5.j5.trim.max_plus_bev --as-of 2026-09-08
+python -m vehreg market list --model jaecoo.jaecoo_5_ev --powertrain BEV
+python -m vehreg market show jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev --as-of 2026-09-08
 python -m vehreg market list > vehicle-products.json
 ```
 
@@ -47,7 +47,7 @@ from datetime import date
 from vehreg.product import ProductMaster
 
 master = ProductMaster.load(year=2026)
-rows = master.rows(model_id="chery.jaecoo_j5", as_of=date(2026, 9, 8))
+rows = master.rows(model_id="jaecoo.jaecoo_5_ev", as_of=date(2026, 9, 8))
 assert master.validate() == []
 ```
 
@@ -131,12 +131,21 @@ separate evidence. Automated harvesting/classification is Phase 3.
 
 ## JAECOO 5 evidence and actual coverage
 
-Catalog year 2026 currently has **326 model rows**, but only **one researched
-MarketTrim reference model**. This is not 326 fully populated retail catalogs.
-The stable reference ID is `chery.jaecoo_j5`; the pre-existing
-`jaecoo.jaecoo_5_ev` model is not remapped by this phase, because that would touch
-registration identity. Phase 2 matching must present these competing identities
-for review before attaching an ECO candidate.
+Catalog year 2026 currently has **322 model rows**, but only **one researched
+MarketTrim reference model**. This is not 322 fully populated retail catalogs.
+The stable reference ID is `jaecoo.jaecoo_5_ev`.
+
+Phase 1 originally created a second JAECOO 5 under `chery.jaecoo_j5` rather than
+using the nameplate that already existed. That split the model in two: all 21,670
+registrations resolved to `jaecoo.jaecoo_5_ev` while every trim, price and ECO
+spec hung off a copy with no volume at all. Worse, its bare aliases `5 ev` and
+`j5` made **Omoda C5 EV** ambiguous, so the next re-ingest would have moved 1,464
+Omoda C5 units out of the model and into the review queue.
+
+The duplicate is gone and the product data lives on `jaecoo.jaecoo_5_ev`.
+`tests/test_catalog_no_shadow_nameplates.py` now fails on any nameplate claimed
+by two brands, on any brand alias naming a brand that has its own file, and on
+any model alias that is ambiguous across brands.
 
 | Retail trim | Battery kWh in existing seed | Tyres front/rear | ECO evidence | Price evidence at 2026-09-08 |
 |---|---:|---|---|---|

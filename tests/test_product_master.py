@@ -11,8 +11,8 @@ from vehreg.cli import main
 from vehreg.pricing import PriceLedger, PricingError
 from vehreg.product import ProductMaster, append_prices, import_trims
 
-TRIM = 'chery.jaecoo_j5.j5.trim.max_plus_bev'
-GEN = 'chery.jaecoo_j5.j5'
+TRIM = 'jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev'
+GEN = 'jaecoo.jaecoo_5_ev.j5'
 
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def local_data(tmp_path):
 
 def trim_payload(root):
     catalog = Catalog.load(root, 2026)
-    brand = catalog.brand_payload('chery')
+    brand = catalog.brand_payload('jaecoo')
     gen = next(g for m in brand['models'] for g in m['generations']
                if any(t['id'] == 'max_plus_bev' for t in g['trims']))
     raw = deepcopy(next(t for t in gen['trims'] if t['id'] == 'max_plus_bev'))
@@ -56,7 +56,7 @@ def test_product_query_separates_price_specs_and_source():
     assert ultra['price_history'][0]['price_type'] == 'ESTIMATED_PRICE'
     assert master.validate() == []
     assert [r.as_row() for r in master.catalog.iter_resolved()] == before
-    assert len(master.rows(model_id='chery.jaecoo_j5', powertrain='BEV')) == 4
+    assert len(master.rows(model_id='jaecoo.jaecoo_5_ev', powertrain='BEV')) == 4
     assert master.coverage()['legacy_embedded_prices'] == 0
 
 
@@ -73,7 +73,7 @@ def test_trim_authoring_dry_run_then_write_preserves_all_analytics(local_data):
     assert [r.as_row() for r in after.iter_resolved()] == before
     assert len(after.trims) == 4
     changed = [p for p, contents in file_bytes(local_data).items() if contents != original[p]]
-    assert changed == ['2026/models/chery.json']
+    assert changed == ['2026/models/jaecoo.json']
 
 
 def test_add_new_trim_requires_explicit_identity_and_preserves_siblings(local_data):

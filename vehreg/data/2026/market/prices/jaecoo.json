@@ -1,8 +1,8 @@
 {
-  "brand_id": "chery",
+  "brand_id": "jaecoo",
   "prices": [
     {
-      "trim_id": "chery.jaecoo_j5.j5.trim.long_range_dynamic_bev",
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.long_range_dynamic_bev",
       "amount_thb": 629000,
       "price_type": "ECO_STICKER_PRICE",
       "observed_at": "2026-09-07",
@@ -11,7 +11,7 @@
       "notes": "Recommended retail price shown on the ECO Sticker record. Kept as source evidence only; it is not promoted to current Thai MSRP."
     },
     {
-      "trim_id": "chery.jaecoo_j5.j5.trim.long_range_max_bev",
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.long_range_max_bev",
       "amount_thb": 679000,
       "price_type": "ECO_STICKER_PRICE",
       "observed_at": "2026-09-07",
@@ -20,7 +20,7 @@
       "notes": "Recommended retail price shown on the ECO Sticker record. Kept as source evidence only; it is not promoted to current Thai MSRP."
     },
     {
-      "trim_id": "chery.jaecoo_j5.j5.trim.max_plus_bev",
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev",
       "amount_thb": 699000,
       "price_type": "ECO_STICKER_PRICE",
       "observed_at": "2026-09-07",
@@ -29,7 +29,7 @@
       "notes": "Recommended retail price shown on the ECO Sticker record. Kept as source evidence only; it is not promoted to current Thai MSRP."
     },
     {
-      "trim_id": "chery.jaecoo_j5.j5.trim.max_plus_bev",
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.max_plus_bev",
       "amount_thb": 699000,
       "price_type": "LIST_PRICE",
       "observed_at": "2026-09-08",
@@ -38,7 +38,7 @@
       "notes": "Official homepage labels this Price. Effective start not published; available to queries from observation date only."
     },
     {
-      "trim_id": "chery.jaecoo_j5.j5.trim.ultra_bev",
+      "trim_id": "jaecoo.jaecoo_5_ev.j5.trim.ultra_bev",
       "amount_thb": 809000,
       "price_type": "ESTIMATED_PRICE",
       "observed_at": "2026-09-08",

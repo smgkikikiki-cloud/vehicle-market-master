@@ -8,14 +8,15 @@ See [Vehicle Master 2.0 — Phase 1](docs/VEHICLE_MASTER_PHASE1.md) for the deli
 contract, JAECOO 5 reference, product API, import/export commands and next choices.
 
 Phase 2 is documented in [ECO ingestion — Phase 2](docs/ECOSTICKER_PHASE2.md).
-The repository contains the verified 1,640-record public inventory snapshot,
-normalized Model/Generation and trim candidates, a human-review queue and the
-reviewed JAECOO 5 reference decisions. ECO staging never writes registration
-analytics.
+The repository contains the 1,640-record public inventory snapshot with all
+1,640 detail pages, the harvester that reproduces it (`tools/ecosticker_fetch.py`),
+normalized Model/Generation and trim candidates, and a human-review queue. The
+three JAECOO 5 reference mappings are agent proposals awaiting owner review, not
+acceptances. ECO staging never writes registration analytics.
 
 ```bash
 python -m vehreg market validate
-python -m vehreg market list --model chery.jaecoo_j5
+python -m vehreg market list --model jaecoo.jaecoo_5_ev
 ```
 
 This repository is the dedicated home for the vehicle-registration (`vehreg`) subsystem previously developed inside `Export-channel`.

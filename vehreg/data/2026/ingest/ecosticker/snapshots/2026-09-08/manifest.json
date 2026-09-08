@@ -1,34 +1,47 @@
 {
-  "catalog_models_matched": 260,
+  "catalog_models_matched": 263,
   "catalog_year": 2026,
   "counts_by_review_reason": {
-    "brand_alias_collision": 34,
     "brand_unmatched": 46,
     "generation_ambiguous": 3,
-    "model_ambiguous": 149,
-    "model_unmatched": 134,
-    "powertrain_not_explicit": 1271
+    "model_ambiguous": 136,
+    "model_unmatched": 135,
+    "powertrain_not_explicit": 32
   },
   "counts_by_review_status": {
-    "needs_model_review": 286,
-    "needs_powertrain_review": 1012,
-    "ready_for_review": 342
+    "needs_model_review": 274,
+    "needs_powertrain_review": 31,
+    "ready_for_review": 1335
+  },
+  "coverage": {
+    "attached_to_market_trims": 3,
+    "battery_chemistry": 758,
+    "declared_engine_name": 1320,
+    "detail_pages": "1640/1640",
+    "dimensions": 1640,
+    "wheel_size": 1384
   },
   "files": {
     "normalized": "normalized.jsonl.gz",
     "raw": "raw.jsonl.gz",
     "review_queue": "review_queue.jsonl.gz"
   },
-  "normalized_sha256": "1e3c3a3edaa4576cc96b7ed1061e00e0bb539698f13dfc0b94ad52bbfc428476",
-  "pages": 55,
-  "raw_sha256": "e2cda82b10829cf1dfa796f40332696bcfd6c05188bc3535f8d1e9bd941d12b9",
+  "normalized_sha256": "492f6fb3856bf4aceb0dedac704a661c787f424725e4732a27e99829f6392f85",
+  "pages": 137,
+  "powertrain_basis": {
+    "detail_cartype": 320,
+    "detail_engine_name": 1286,
+    "explicit_label": 2,
+    "not_explicit": 32
+  },
+  "raw_sha256": "5e9528aee311d3008e56930d630a6ba29025e37026365fff439720cdc398c58a",
   "records": 1640,
-  "records_with_detail_evidence": 3,
-  "records_with_explicit_powertrain": 369,
-  "records_with_tyre_evidence": 3,
-  "records_with_unique_generation": 1354,
-  "records_with_unique_model": 1357,
-  "registration_rows_unchanged": 371,
+  "records_with_detail_evidence": 1640,
+  "records_with_explicit_powertrain": 1608,
+  "records_with_tyre_evidence": 1384,
+  "records_with_unique_generation": 1366,
+  "records_with_unique_model": 1369,
+  "registration_rows_unchanged": 367,
   "schema_version": 1,
   "snapshot_date": "2026-09-08",
   "source": "ecosticker",

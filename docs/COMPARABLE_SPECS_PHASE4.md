@@ -100,6 +100,14 @@ the gearbox as Thai prose. `battery.chemistry` and `powertrain.transmission` are
 canonical enums; the source's own wording is kept beside them in
 `battery.chemistry_as_declared` and `powertrain.transmission_as_declared`.
 
+## The page
+
+`pages/8_Compare.py` — **เทียบสเปค**. Pick two to six cars from the cohort, pick
+a profile, and every cell carries its source. The comparison statuses above are
+shown in Thai, so a row that declines to rank says why in the reader's language
+rather than printing an enum at them. Models still waiting for a representative
+are listed in the sidebar, not hidden.
+
 ## Commands
 
 ```bash

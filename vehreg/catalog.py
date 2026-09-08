@@ -242,7 +242,9 @@ class Catalog:
             incomplete=bool(raw.get("incomplete", False)),
             powertrain_checked=bool(raw.get("powertrain_checked", False)),
             retail_status=_facet(RetailStatus, raw.get("retail_status"),
-                                 RetailStatus.CURRENT),
+                                 RetailStatus.UNVERIFIED),
+            retail_checked_at=raw.get("retail_checked_at") or None,
+            retail_source=raw.get("retail_source", ""),
             aliases=_tuple(raw.get("aliases")),
             notes=raw.get("notes", ""),
             overrides=_overrides(raw.get("overrides")),
@@ -686,6 +688,10 @@ class Catalog:
                 model_payload["incomplete"] = True
             if model.powertrain_checked:
                 model_payload["powertrain_checked"] = True
+            if model.retail_checked_at:
+                model_payload["retail_checked_at"] = model.retail_checked_at
+            if model.retail_source:
+                model_payload["retail_source"] = model.retail_source
             if model.notes:
                 model_payload["notes"] = model.notes
             for gen in self.generations_of(model.id):

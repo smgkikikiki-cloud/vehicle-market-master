@@ -134,6 +134,20 @@ with tab_now:
                 terms = {k: v for k, v in option["conditions"].items() if k != "text"}
                 if terms:
                     st.caption(" · ".join(f"{k}: {v}" for k, v in terms.items()))
+                if option["quota_units"]:
+                    st.caption(
+                        f"โควตา {option['quota_units']:,} คัน"
+                        + (" (รวมทั้งแคมเปญ ทุกทางเลือกนับรวมกัน)"
+                           if option["quota_scope"] == "CAMPAIGN"
+                           else " (เฉพาะทางเลือกนี้)"))
+                # The day being quoted, and today, are two different questions.
+                if option["current_status"] != option["status_as_of"]:
+                    st.warning(
+                        f"ณ {as_of:%d/%m/%Y} ข้อเสนอนี้ยังเปิดอยู่ "
+                        f"({option['status_as_of']}) — สถานะล่าสุดวันนี้คือ "
+                        f"{option['current_status']}"
+                        + (f" ปิดจริง {option['closed_at']}"
+                           if option["closed_at"] else ""))
                 st.caption(f"ที่มา: {option['source']} — {option['source_ref']}")
         st.caption("แคมเปญคือทางเลือก ไม่ใช่ราคาที่ดีที่สุด ระบบไม่เลือกให้")
 
@@ -264,13 +278,16 @@ def decide(claim_ids, *, action, trim_id=None, campaign_id=None, option_id=None,
     path.parent.mkdir(parents=True, exist_ok=True)
     for claim_id in claim_ids:
         entry = {"claim_id": claim_id, "action": action, "reviewer": reviewer,
+                 # Somebody typed their name in the sidebar and pressed a
+                 # button. That, and only that, is what HUMAN means here.
+                 "origin": pricefeed.DecisionOrigin.HUMAN.value,
                  "reviewed_at": date.today().isoformat(), "notes": notes}
         for name, value in (("trim_id", trim_id), ("campaign_id", campaign_id),
                             ("option_id", option_id)):
             if value:
                 entry[name] = value
         pricefeed.save_decision(path, entry, write=True,
-                                replace=action == "reject")
+                                replace=action in {"reject", "archive"})
     run_batch.clear()
 
 

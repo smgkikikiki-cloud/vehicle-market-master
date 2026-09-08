@@ -1,10 +1,19 @@
-"""Owner-reviewed fact-level powertrain rules.
+"""Fact-level powertrain rules, each resolved against evidence or an owner call.
+
+Every rule says in its own ``note`` what settles it.  A rule the owner decided
+says so; a rule read off the grade labels in the registration data says that
+instead.  The two are not interchangeable and the file does not blur them.
+
 
 DLT often reports only a nameplate.  The annual catalog is still the canonical
 vehicle definition, but a model-grain registration can need a more precise
 answer than annual variant consensus can provide: a mid-year powertrain
 changeover, a source label that explicitly says HEV/PHEV/REEV, or an owner
 reviewed market convention for a bare label.
+
+The Audi rules below are the second kind: the trailing "e" in "60 TFSI e" is
+Audi's own naming for its plug-in hybrids, read off the labels in the data.  No
+owner ruling was needed and none is claimed.
 
 These rules affect MODEL-grain analytical facts only.  Variant-grain facts keep
 their resolved variant powertrain.  First matching rule wins.  This is

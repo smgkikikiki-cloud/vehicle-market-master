@@ -3,16 +3,20 @@
     {
       "action": "reject",
       "claim_id": "45b1b1dbc600ffdc",
-      "notes": "Suzuki closed this offer on 2026-08-25 when the 200-car quota was taken (news-245). The Headlightmag article dated 2026-09-01 still lists 599,000; it is a report of the offer, not the offer. Kept as a closed campaign observation under campaign.suzuki.fronx_gl_aug_2026 instead.",
+      "notes": "Stale. Suzuki closed the GL cash price on 2026-08-25 when the 200-car quota was taken (news-245); this article was published 2026-09-01, after the offer had ended, and quotes 599,000 as if it were still available. Rejected by the closed-campaign rule against the brand's own page, not by a person.",
+      "origin": "SYSTEM_EVIDENCE",
       "reviewed_at": "2026-09-08",
-      "reviewer": "vehicle-master-owner"
+      "reviewer": "pricefeed.closed_campaign_echo",
+      "source_ref": "https://www.suzuki.co.th/news/articles/news-245"
     },
     {
-      "action": "reject",
+      "action": "archive",
       "claim_id": "63d4da6e34bb0e87",
-      "notes": "Suzuki closed this offer on 2026-08-25 when the 200-car quota was taken (news-245). The Headlightmag article dated 2026-09-01 still lists 599,000; it is a report of the offer, not the offer. Kept as a closed campaign observation under campaign.suzuki.fronx_gl_aug_2026 instead.",
+      "notes": "Historical, not stale. This article was published 2026-08-03, while the GL cash offer was open, so it was correct when written; it duplicates the observation already recorded from Suzuki's own page (news-245) and is kept as history rather than republished as a price anybody can pay today. Classified by the closed-campaign rule, not by a person.",
+      "origin": "SYSTEM_EVIDENCE",
       "reviewed_at": "2026-09-08",
-      "reviewer": "vehicle-master-owner"
+      "reviewer": "pricefeed.closed_campaign_echo",
+      "source_ref": "https://www.suzuki.co.th/news/articles/news-245"
     }
   ],
   "schema_version": 1

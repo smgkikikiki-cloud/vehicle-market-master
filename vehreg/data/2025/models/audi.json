@@ -630,7 +630,7 @@
         "Q7 55 TFSI"
       ],
       "incomplete": true,
-      "notes": "Owner-reviewed 2026-09-08. Powertrain is settled per label, not per nameplate: Audi's plug-in hybrids carry a trailing e (60 TFSI e), and every other TFSI/TDI grade is combustion. See powertrain_rules.py.",
+      "notes": "Evidence-reviewed 2026-09-08 against the grade labels in the registration data; not an owner ruling. Powertrain is settled per label, not per nameplate: Audi's plug-in hybrids carry a trailing e (60 TFSI e), and every other TFSI/TDI grade is combustion. See powertrain_rules.py.",
       "generations": [
         {
           "code": "gen1",
@@ -692,7 +692,7 @@
         "A6 45 TFSI"
       ],
       "incomplete": true,
-      "notes": "Owner-reviewed 2026-09-08. Powertrain is settled per label, not per nameplate: Audi's plug-in hybrids carry a trailing e (60 TFSI e), and every other TFSI/TDI grade is combustion. See powertrain_rules.py.",
+      "notes": "Evidence-reviewed 2026-09-08 against the grade labels in the registration data; not an owner ruling. Powertrain is settled per label, not per nameplate: Audi's plug-in hybrids carry a trailing e (60 TFSI e), and every other TFSI/TDI grade is combustion. See powertrain_rules.py.",
       "generations": [
         {
           "code": "gen1",

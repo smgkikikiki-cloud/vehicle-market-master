@@ -162,7 +162,17 @@ class Model:
     #: honest answer there is ``UNVERIFIED``, not a claim that it was never
     #: officially sold. Only ``CURRENT`` models belong in a comparison of what
     #: a buyer can go and buy.
-    retail_status: RetailStatus = RetailStatus.CURRENT
+    #:
+    #: The default is ``UNVERIFIED`` because "on sale today" is a claim about
+    #: the world that decays: a catalog written last year cannot assert it, and
+    #: a default of ``CURRENT`` would have every nameplate in the file asserting
+    #: it for free. ``CURRENT`` therefore requires the distributor page it was
+    #: read off and the date somebody read it.
+    retail_status: RetailStatus = RetailStatus.UNVERIFIED
+    #: ISO date the retail status was last checked against the OEM.
+    retail_checked_at: Optional[str] = None
+    #: The distributor page that check was made against.
+    retail_source: str = ""
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:
@@ -188,6 +198,12 @@ class Model:
                 self.cab_type is not CabType.NOT_APPLICABLE:
             problems.append(f"cab_type is only valid for PICKUP, got "
                             f"{self.body_type.value}")
+        if self.retail_status is RetailStatus.CURRENT and not (
+                self.retail_checked_at and self.retail_source):
+            problems.append(
+                "retail_status CURRENT is a claim about today: it needs "
+                "retail_source (the OEM listing) and retail_checked_at "
+                "(the date it was read)")
         return [f"model {self.id}: {p}" for p in problems]
 
 

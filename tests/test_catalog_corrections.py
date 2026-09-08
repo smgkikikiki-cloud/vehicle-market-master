@@ -8,6 +8,7 @@ specification pasted into it, and one is simply not on sale here.
 import gzip
 import json
 import unittest
+from dataclasses import replace
 
 from vehreg.catalog import Catalog, DATA_DIR
 from vehreg.powertrain_rules import RULES
@@ -98,12 +99,40 @@ class KiaEv6Tests(unittest.TestCase):
             matched = {json.loads(line)["matched_model_id"] for line in handle}
         self.assertNotIn("kia.ev6", matched)
 
-    def test_only_current_retail_models_belong_in_a_buyer_comparison(self):
+    def test_the_cohort_does_not_claim_to_be_the_current_retail_set(self):
+        """It is an ECO-derived pilot, and it says so rather than implying it.
+
+        The earlier version of this test asserted every cohort model was
+        ``CURRENT`` -- which passed only because ``CURRENT`` was the default
+        and no model had ever been checked against a distributor listing. It
+        was reading its own default back and calling it verification.
+        """
         catalog = Catalog.load(year=2026)
-        not_current = {model_id for model_id, model in catalog.models.items()
-                       if model.retail_status.value != "CURRENT"}
         from vehreg.comparable_specs import ComparableCohort
-        self.assertEqual(set(), not_current & set(ComparableCohort.load().model_ids))
+        cohort = ComparableCohort.load()
+        statuses = {catalog.models[m].retail_status.value for m in cohort.model_ids}
+        self.assertEqual({"UNVERIFIED"}, statuses)
+        # And it still loads and validates while saying so.
+        self.assertEqual([], cohort.validate(catalog))
+        self.assertTrue(cohort.model_ids)
+
+    def test_a_model_may_not_be_called_current_without_saying_who_checked(self):
+        from vehreg.entities import Model
+        from vehreg.taxonomy import BodyType, RetailStatus
+        bare = Model(id="x.y", brand_id="x", name_en="Y",
+                     body_type=BodyType.CROSSOVER,
+                     retail_status=RetailStatus.CURRENT)
+        self.assertTrue(any("retail_checked_at" in p for p in bare.validate()))
+        checked = replace(bare, retail_checked_at="2026-09-08",
+                          retail_source="https://www.example.co.th/models/y")
+        self.assertEqual([], checked.validate())
+
+    def test_nothing_in_the_catalog_asserts_current_retail_for_free(self):
+        catalog = Catalog.load(year=2026)
+        self.assertEqual([], [
+            model_id for model_id, model in catalog.models.items()
+            if model.retail_status.value == "CURRENT"
+            and not (model.retail_checked_at and model.retail_source)])
 
 
 class AudiLabelRuleTests(unittest.TestCase):

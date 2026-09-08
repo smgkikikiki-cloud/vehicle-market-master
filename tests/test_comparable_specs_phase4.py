@@ -56,29 +56,60 @@ def payload(*facts):
 
 def test_registry_and_c_crossover_cohort_are_closed_and_valid():
     registry = SpecRegistry.load()
-    assert len(registry.fields) == 48
+    assert len(registry.fields) == 50
     assert set(registry.profiles) == {
         "c_crossover_core", "c_crossover_safety", "c_crossover_comfort",
     }
     cohort = ComparableCohort.load()
     catalog = Catalog.load()
-    assert len(cohort.model_ids) == 20
-    assert len(cohort.representative_source_ids) == 20
     assert cohort.validate(catalog) == []
     for model_id in cohort.model_ids:
         assert catalog.models[model_id].body_type.value == "CROSSOVER"
         assert any(g.segment.value == "C" for g in catalog.generations_of(model_id))
 
 
-def test_eco_candidates_cover_twenty_models_but_publish_nothing():
+def test_the_cohort_is_the_rule_it_says_it_is():
+    """A hand-picked list described as a segment is not a segment.
+
+    Leaving the X1, the XC40 and the Q3 out of "C-crossover" while keeping cars
+    with a single ECO row would make every card in it quietly unrepresentative.
+    """
+    import gzip
+    import json as _json
+    cohort = ComparableCohort.load()
+    catalog = Catalog.load()
+    eligible = {
+        model_id for model_id, model in catalog.models.items()
+        if model.body_type.value == "CROSSOVER"
+        and any(g.segment.value == "C" for g in catalog.generations_of(model_id))}
+    path = (DATA_DIR / "2026/ingest/ecosticker/snapshots/2026-09-08"
+            / "normalized.jsonl.gz")
+    with gzip.open(path, "rt", encoding="utf-8") as handle:
+        rows = [_json.loads(line) for line in handle]
+    with_evidence = {
+        row["matched_model_id"] for row in rows
+        if row["detail_status"] == "available" and row.get("powertrain_candidate")}
+    assert set(cohort.model_ids) == eligible & with_evidence
+
+
+def test_a_model_without_a_representative_stays_in_the_segment():
+    """Dropping it would hide a whole car and still call the result the segment."""
+    cohort = ComparableCohort.load()
+    missing = cohort.models_without_representative
+    assert set(missing) <= set(cohort.model_ids)
+    assert cohort.validate(Catalog.load()) == []
+
+
+def test_eco_candidates_cover_the_cohort_but_publish_nothing():
     store = ECOCandidateSpecStore.load()
     coverage = store.coverage()
     assert coverage == {
-        "cohort_models": 20,
-        "models_with_candidates": 20,
-        "candidate_trims": 80,
+        "cohort_models": 31,
+        "models_with_candidates": 31,
+        "candidate_trims": 118,
         "representative_candidates": 20,
-        "candidate_spec_values": 1174,
+        "models_without_representative": 11,
+        "candidate_spec_values": 1842,
         "published_market_trims": 0,
     }
     representatives = store.list(representatives_only=True)
@@ -134,11 +165,11 @@ def test_unknown_is_not_rendered_as_false_and_mismatched_basis_is_not_compared()
     assert aeb["cells"]["b"]["display"] is None
     range_rows = [row for row in card["rows"]
                   if row["field_key"] == "ev.rated_range_km"]
-    assert {tuple(row["comparison_context"].items()) for row in range_rows} == {
-        (("measurement_basis", "NEDC"),),
-        (("measurement_basis", "WLTP"),),
-    }
-    assert all(row["comparison_status"] == "INSUFFICIENT_DATA"
+    assert {row["comparison_context"]["measurement_basis"] for row in range_rows} \
+        == {"NEDC", "WLTP"}
+    # Two cars measured on different cycles are two rows, and neither wins.
+    # This is a context split, not a hole in the research, and it says so.
+    assert all(row["comparison_status"] == "CONTEXT_NOT_SHARED"
                and not row["leaders"] for row in range_rows)
     registry.profiles = profile
 
@@ -155,17 +186,50 @@ def test_fact_ledger_is_temporal_and_never_resurrects_expired_new_fact():
     assert ledger.resolved(JAECOO_TRIM, as_of=date(2026, 7, 1)) == []
 
 
-def test_conflict_and_price_smuggling_fail_closed():
+def test_conflicting_values_at_one_start_fail_closed():
     registry = SpecRegistry.load()
     ledger = SpecLedger(registry)
     ledger.add_payload(payload(
         fact(fact_id="a"), fact(fact_id="b", value=999),
     ))
     assert any("conflicting" in problem for problem in ledger.validate())
-    with pytest.raises(ComparableSpecError, match="prices belong in PriceLedger"):
+
+
+def test_a_stray_field_on_a_fact_is_rejected():
+    ledger = SpecLedger(SpecRegistry.load())
+    with pytest.raises(ComparableSpecError, match="invalid/unknown fact fields"):
         ledger.add_payload({"schema_version": 1, "facts": [
             dict(fact(), price_thb=1)
         ]})
+
+
+@pytest.mark.parametrize(("field_key", "unit"), [
+    ("market.list_price_thb", "THB"),
+    ("retail.msrp", ""),
+    ("cost.total", ""),
+    ("vehicle.range", "THB"),
+])
+def test_a_price_shaped_fact_is_rejected(field_key, unit):
+    ledger = SpecLedger(SpecRegistry.load())
+    with pytest.raises(ComparableSpecError, match="prices belong in PriceLedger"):
+        ledger.add_payload({"schema_version": 1, "facts": [
+            dict(fact(), field_key=field_key, unit=unit)
+        ]})
+
+
+def test_a_price_field_cannot_be_registered_at_all():
+    """The only way a price gets into the spec store is by being registered.
+
+    Guarding the payload alone was not a guard: a fact naming an unregistered
+    key is refused anyway, and one naming a *registered* price key sailed
+    through. The registry itself now refuses to hold a price field.
+    """
+    from vehreg.comparable_specs import SpecFieldDefinition, ValueType, ComparisonRule
+    registry = SpecRegistry([SpecFieldDefinition(
+        key="market.list_price_thb", group="identity", label_th="ราคา",
+        label_en="List price", value_type=ValueType.NUMBER,
+        comparison_rule=ComparisonRule.LOWER_BETTER, canonical_unit="THB")])
+    assert any("PriceLedger" in problem for problem in registry.validate())
 
 
 def test_spec_import_is_dry_run_idempotent_and_registration_safe(local_data):
@@ -191,10 +255,120 @@ def test_spec_import_is_dry_run_idempotent_and_registration_safe(local_data):
 
 def test_cli_exposes_coverage_candidates_and_battle_card(capsys):
     assert main(["market", "spec-coverage"]) == 0
-    assert json.loads(capsys.readouterr().out)["candidates"]["cohort_models"] == 20
+    assert json.loads(capsys.readouterr().out)["candidates"]["cohort_models"] == 31
     assert main(["market", "battle-card", "--candidate", ATTO3,
                  "--candidate", MGS5]) == 0
     assert json.loads(capsys.readouterr().out)["mode"] == \
         "PROVISIONAL_ECO_CANDIDATES"
     assert main(["market", "battle-card", "--candidate", ATTO3]) == 2
     assert "2 to 6" in capsys.readouterr().err
+
+
+# ---------------------------------------------------------------------------
+# A comparison that ranks incomparable things is worse than no comparison.
+# ---------------------------------------------------------------------------
+
+def _subject(subject_id, powertrain, values):
+    return {"subject_id": subject_id, "label": subject_id,
+            "powertrain": powertrain, "values": values}
+
+
+def _range(value, scope, basis="ECO_STICKER_DECLARED"):
+    return {"field_key": "ev.rated_range_km", "value_state": "KNOWN",
+            "value": value, "unit": "km",
+            "qualifiers": {"measurement_basis": basis, "range_scope": scope},
+            "source": "ecosticker", "source_ref": "x",
+            "verification_status": "PROVISIONAL"}
+
+
+def _card(subjects, fields):
+    registry = SpecRegistry.load()
+    engine = BattleCardEngine(registry)
+    keep = deepcopy(registry.profiles)
+    registry.profiles["test"] = fields
+    try:
+        return engine._build(subjects, profile_id="test", mode="TEST")
+    finally:
+        registry.profiles = keep
+
+
+def test_a_plug_in_hybrid_does_not_lose_a_race_it_was_not_in():
+    """150 km of electric range is not a worse version of 500 km of range."""
+    card = _card([
+        _subject("bev", "BEV", [_range(500, "FULL")]),
+        _subject("phev", "PHEV", [_range(150, "ELECTRIC_ONLY")]),
+    ], ["ev.rated_range_km"])
+    rows = [r for r in card["rows"] if r["field_key"] == "ev.rated_range_km"]
+    assert len(rows) == 2, "the two quantities must not share a row"
+    assert all(not row["leaders"] for row in rows)
+    assert {row["comparison_status"] for row in rows} == {"CONTEXT_NOT_SHARED"}
+
+
+def test_two_bevs_are_still_ranked_on_range():
+    card = _card([
+        _subject("a", "BEV", [_range(500, "FULL")]),
+        _subject("b", "BEV", [_range(410, "FULL")]),
+    ], ["ev.rated_range_km"])
+    row = card["rows"][0]
+    assert (row["comparison_status"], row["leaders"]) == ("COMPARABLE", ["a"])
+
+
+def test_a_ranked_field_is_not_crowned_across_powertrains():
+    """A plug-in's smaller battery is not a smaller version of the same thing."""
+    def battery(value):
+        return {"field_key": "battery.gross_capacity_kwh", "value_state": "KNOWN",
+                "value": value, "unit": "kWh", "qualifiers": {},
+                "source": "oem", "source_ref": "x",
+                "verification_status": "VERIFIED"}
+    card = _card([_subject("bev", "BEV", [battery(82)]),
+                  _subject("phev", "PHEV", [battery(18)])],
+                 ["battery.gross_capacity_kwh"])
+    row = card["rows"][0]
+    assert row["comparison_status"] == "NOT_COMPARABLE_ACROSS_POWERTRAIN"
+    assert row["leaders"] == []
+    # Both numbers are still shown; refusing to rank is not refusing to report.
+    assert {c["value"] for c in row["cells"].values()} == {82, 18}
+
+
+def test_zero_tailpipe_co2_does_not_beat_a_hybrid():
+    """A BEV emits nothing at the tailpipe by definition, not by merit."""
+    def co2(value):
+        return {"field_key": "emissions.co2_g_km", "value_state": "KNOWN",
+                "value": value, "unit": "g/km",
+                "qualifiers": {"measurement_basis": "ECO_STICKER_DECLARED"},
+                "source": "ecosticker", "source_ref": "x",
+                "verification_status": "PROVISIONAL"}
+    card = _card([_subject("bev", "BEV", [co2(0)]),
+                  _subject("phev", "PHEV", [co2(10)])], ["emissions.co2_g_km"])
+    row = card["rows"][0]
+    assert (row["comparison_status"], row["leaders"]) == (
+        "NOT_COMPARABLE_ACROSS_POWERTRAIN", [])
+
+
+def test_a_car_without_an_engine_is_not_missing_research():
+    card = _card([
+        _subject("bev", "BEV", []),
+        _subject("phev", "PHEV", [{
+            "field_key": "engine.displacement_cc", "value_state": "KNOWN",
+            "value": 1498, "unit": "cc", "qualifiers": {}, "source": "ecosticker",
+            "source_ref": "x", "verification_status": "PROVISIONAL"}]),
+    ], ["engine.displacement_cc"])
+    row = card["rows"][0]
+    assert row["comparison_status"] == "NOT_APPLICABLE_TO_OTHERS"
+    assert row["cells"]["bev"]["value_state"] == "NOT_APPLICABLE"
+
+
+def test_one_battery_chemistry_is_written_one_way():
+    from vehreg.comparable_specs import battery_chemistry_family, transmission_family
+    for raw in ("LFP", "LiFePO4", "Lithium iron phosphate/graphite",
+                "lithium-phosphate (LFP)", "Lithium Iron Phosphate (LFP)"):
+        assert battery_chemistry_family(raw) == "LFP", raw
+    assert battery_chemistry_family("NCM/Graphite") == "NMC"
+    assert battery_chemistry_family("Li-Ion (NCA)") == "NCA"
+    assert battery_chemistry_family("Lithium-ion") == "LI_ION_UNSPECIFIED"
+    assert battery_chemistry_family("-") is None
+    # CVT rows also say "automatic"; the more specific answer has to win.
+    assert transmission_family("เกียร์อัตโนมัติ ประเภท CVT") == "CVT"
+    assert transmission_family("เกียร์อัตโนมัติ") == "AUTOMATIC"
+    assert transmission_family("เกียร์ธรรมดา") == "MANUAL"
+    assert transmission_family("-") is None

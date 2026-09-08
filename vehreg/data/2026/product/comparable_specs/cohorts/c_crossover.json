@@ -5,6 +5,10 @@
   "body_type": "CROSSOVER",
   "model_ids": [
     "aion.aion_v",
+    "audi.audi_q3",
+    "bmw.bmw_x1",
+    "bmw.ix1",
+    "bmw.ix2",
     "byd.atto3",
     "byd.sealion6",
     "deepal.deepal_s05",
@@ -16,14 +20,21 @@
     "jaecoo.jaecoo_6t_ev",
     "jaecoo.jaecoo_7",
     "leapmotor.leapmotor_c10",
+    "lexus.ux",
     "mazda.cx30",
+    "mercedes_benz.eqb",
+    "mercedes_benz.glb",
     "mg.mg_hs",
     "mg.mg_s5_ev",
+    "mini.countryman",
     "nissan.x_trail",
+    "peugeot.peugeot_3008",
     "subaru.forester",
     "toyota.bz4x",
     "toyota.corolla_cross",
-    "volvo.ex40"
+    "volvo.ec40",
+    "volvo.ex40",
+    "volvo.xc40"
   ],
   "representative_source_ids": {
     "aion.aion_v": "ba597ad2-802d-4b27-942b-33c1a69035a1",
@@ -47,5 +58,6 @@
     "toyota.corolla_cross": "45fb3f35-5428-43f5-b085-9b1f8b63682c",
     "volvo.ex40": "039d37fd-d95d-458a-957e-b78cbf759bc4"
   },
-  "notes": "Phase 4 pilot: 20 C-segment crossover models with ECO detail evidence. Representative rows are provisional comparison anchors, not claims of current retail availability or canonical MSRP."
+  "notes": "Representative rows are provisional comparison anchors, not claims of current retail availability or canonical MSRP. A model with no representative yet stays in the cohort and is reported as an open gap rather than dropped from the segment.",
+  "selection_rule": "Every 2026-catalog model whose body type is CROSSOVER and which has a Segment C generation, and which has at least one ECO Sticker detail record with a declared powertrain. Nothing is hand-picked. Three eligible models have no ECO detail evidence yet and are therefore out: geely.galaxy_e5, kia.ev6, mg.mg_es."
 }

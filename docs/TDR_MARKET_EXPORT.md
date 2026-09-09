@@ -64,6 +64,22 @@ locally with TDR's own environment: a `COPY`/upsert against Supabase, or a
 small script TDR's own repository would host. That script does not belong
 in this repository, and building it was explicitly not asked for here.
 
+## Hold this import until TDR's entitlement boundary is done
+
+`supabase/migration_v08_catalog_industry.sql` already grants anonymous
+`SELECT` on the whole `registrations` table (`create policy "public read
+registrations" ... using (true)`), predating this export and predating the
+[consolidation masterplan](consolidation/MASTERPLAN.md). The table reads
+empty today, so that policy currently guards nothing — but the masterplan
+now declares registration/sales visualizations paid content and explicitly
+forbids activating a market projection before its entitlement boundary
+(Phase D) exists. Importing this CSV now would be the first real data to
+flow through that open policy, on a page (`app/models/[slug]`) that today
+has no auth check at all. See
+[`consolidation/PHASE_A_BASELINE.md`](consolidation/PHASE_A_BASELINE.md) for
+the full finding. Hold the import until Phase D closes or replaces that
+policy.
+
 ## Refresh
 
 There is no schedule wired up. Re-run the export command and re-import

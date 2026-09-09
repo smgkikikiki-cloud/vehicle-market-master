@@ -104,13 +104,18 @@ def test_eco_candidates_cover_the_cohort_but_publish_nothing():
     store = ECOCandidateSpecStore.load()
     coverage = store.coverage()
     assert coverage == {
-        "cohort_models": 31,
+        # The universe the segment rule admits...
+        "eligible_models": 31,
+        # ...and what is actually published today.
+        "pilot_models": 20,
+        "expansion_backlog": 11,
         "models_with_candidates": 31,
         "candidate_trims": 118,
         "representative_candidates": 20,
-        "models_without_representative": 11,
         "candidate_spec_values": 1842,
+        # Nothing is promoted, and the reason is recorded rather than implied.
         "published_market_trims": 0,
+        "pilot_models_with_current_oem_evidence": 0,
     }
     representatives = store.list(representatives_only=True)
     assert len(representatives) == 20
@@ -255,7 +260,8 @@ def test_spec_import_is_dry_run_idempotent_and_registration_safe(local_data):
 
 def test_cli_exposes_coverage_candidates_and_battle_card(capsys):
     assert main(["market", "spec-coverage"]) == 0
-    assert json.loads(capsys.readouterr().out)["candidates"]["cohort_models"] == 31
+    candidates = json.loads(capsys.readouterr().out)["candidates"]
+    assert (candidates["eligible_models"], candidates["pilot_models"]) == (31, 20)
     assert main(["market", "battle-card", "--candidate", ATTO3,
                  "--candidate", MGS5]) == 0
     assert json.loads(capsys.readouterr().out)["mode"] == \
@@ -372,3 +378,93 @@ def test_one_battery_chemistry_is_written_one_way():
     assert transmission_family("เกียร์อัตโนมัติ") == "AUTOMATIC"
     assert transmission_family("เกียร์ธรรมดา") == "MANUAL"
     assert transmission_family("-") is None
+
+
+# ---------------------------------------------------------------------------
+# Eligibility is not the same question as what is published today.
+# ---------------------------------------------------------------------------
+
+def test_the_pilot_is_what_has_a_representative_and_nothing_else():
+    cohort = ComparableCohort.load()
+    self_check = set(cohort.model_ids) & set(cohort.representative_source_ids)
+    assert set(cohort.pilot_model_ids) == self_check
+    assert len(cohort.pilot_model_ids) == 20
+    assert set(cohort.pilot_model_ids) | set(cohort.expansion_backlog) \
+        == set(cohort.model_ids)
+
+
+def test_the_backlog_does_not_shrink_the_segment():
+    """Eleven models are eligible and unpublished. Both facts stay true."""
+    cohort = ComparableCohort.load()
+    assert len(cohort.expansion_backlog) == 11
+    assert len(cohort.model_ids) == 31
+    assert cohort.validate(Catalog.load()) == []
+
+
+def test_a_suggested_representative_is_not_a_chosen_one():
+    cohort = ComparableCohort.load()
+    assert set(cohort.expansion_candidates) <= set(cohort.expansion_backlog)
+    assert not set(cohort.expansion_candidates) & set(cohort.representative_source_ids)
+    store = ECOCandidateSpecStore.load()
+    published = {r["source_id"] for r in store.list(representatives_only=True)}
+    assert not published & set(cohort.expansion_candidates.values())
+
+
+def test_every_suggestion_points_at_a_real_row_for_that_model():
+    store = ECOCandidateSpecStore.load()
+    for model_id, source_id in ComparableCohort.load().expansion_candidates.items():
+        assert store.get(source_id)["model_id"] == model_id, model_id
+
+
+def test_the_volvo_xc40_has_no_suggestion_because_none_matches_the_car():
+    """Its ECO rows are older Recharge BEV/PHEV; the current car is a mild hybrid."""
+    cohort = ComparableCohort.load()
+    assert "volvo.xc40" in cohort.expansion_backlog
+    assert "volvo.xc40" not in cohort.expansion_candidates
+
+
+# ---------------------------------------------------------------------------
+# The promotion gate: an ECO record is not permission to publish a trim.
+# ---------------------------------------------------------------------------
+
+def test_no_pilot_model_has_a_trim_promoted_from_homologation_alone():
+    from vehreg.comparable_specs import load_oem_sources
+    catalog = Catalog.load(year=2026)
+    pilot = set(ComparableCohort.load().pilot_model_ids)
+    promoted = [t for t in catalog.trims
+                if catalog.model_for_trim(t).id in pilot]
+    with_evidence = [model_id for model_id, source in load_oem_sources().items()
+                     if source["current_evidence"] != "NONE"]
+    # Trims may only exist for models we actually have current OEM evidence for.
+    assert {catalog.model_for_trim(t).id for t in promoted} <= set(with_evidence)
+
+
+def test_the_gap_has_an_address_rather_than_being_a_silence():
+    from vehreg.comparable_specs import load_oem_sources
+    sources = load_oem_sources()
+    pilot = set(ComparableCohort.load().pilot_model_ids)
+    assert set(sources) == pilot
+    for model_id, source in sources.items():
+        assert source["official_url"].startswith("https://"), model_id
+        assert source["polling"] in ("ALLOWED", "REFUSED"), model_id
+        assert source["evidence_note"], model_id
+    # Two brands refuse automated agents outright; that is a fact about them,
+    # not a gap we can close by trying harder.
+    refused = {m for m, s in sources.items() if s["polling"] == "REFUSED"}
+    assert refused == {"mazda.cx30", "jaecoo.jaecoo_6t_ev", "jaecoo.jaecoo_7"}
+
+
+def test_eco_prices_never_reach_the_price_ledger():
+    from vehreg.product import ProductMaster
+    from vehreg.pricing import PriceType
+    master = ProductMaster.load()
+    pilot = set(ComparableCohort.load().pilot_model_ids)
+    for record in master.prices.records:
+        if record.price_type is not PriceType.ECO_STICKER_PRICE:
+            continue
+        model_id = master.catalog.model_for_trim(record.trim_id).id
+        assert model_id not in pilot, f"{record.trim_id}: ECO price on a pilot model"
+    for trim_id in {r.trim_id for r in master.prices.records}:
+        current = master.prices.current_list_price(trim_id)
+        if current is not None:
+            assert current.price_type is PriceType.LIST_PRICE

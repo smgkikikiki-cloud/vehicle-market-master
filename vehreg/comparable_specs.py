@@ -118,6 +118,26 @@ def comparable_spec_root(data_dir: Path | str, year: int) -> Path:
     return Path(data_dir) / str(year) / "product" / "comparable_specs"
 
 
+def load_oem_sources(data_dir: Path | str = DATA_DIR,
+                     year: int = DEFAULT_YEAR) -> dict[str, dict]:
+    """Where each pilot model's current specification would have to come from.
+
+    A MarketTrim is promoted from the manufacturer's own current listing, never
+    from an ECO record alone: homologation proves a configuration exists, not
+    that it is what the showroom sells today. This file says, per model, which
+    site is the authority, whether we may poll it, and whether we have anything
+    from it yet -- so "not promoted" is a stated gap with an address rather than
+    a silence.
+    """
+    path = comparable_spec_root(data_dir, year) / "oem_sources.json"
+    if not path.is_file():
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1:
+        raise ComparableSpecError(f"{path}: invalid oem_sources schema")
+    return dict(payload.get("sources") or {})
+
+
 def _parse_enum(enum_cls, raw: object, field_name: str):
     try:
         return enum_cls(str(raw))
@@ -457,12 +477,31 @@ class SpecLedger:
 
 @dataclass(frozen=True, slots=True)
 class ComparableCohort:
+    """Two different questions, kept apart.
+
+    ``model_ids`` is the eligibility universe: every model the segment rule
+    admits.  ``pilot_model_ids`` is what is published today -- the models that
+    have a chosen representative and can therefore appear on a card.
+
+    Conflating them cost something in both directions. Publishing the whole
+    universe would mean either dropping models that have no representative, so
+    a comparison of "C-crossovers" quietly omits the X1 and the XC40, or
+    blocking the pilot until somebody has chosen eleven more grades by hand.
+    Neither is necessary: the universe stays complete, the pilot ships, and the
+    difference between them is the backlog.
+    """
+
     id: str
     segment: str
     body_type: str
     model_ids: tuple[str, ...]
     representative_source_ids: dict[str, str]
     notes: str = ""
+    #: Suggested representatives for models not yet in the pilot. Verified
+    #: against the snapshot, but not published: choosing which grade speaks for
+    #: a model is a judgement, and an unreviewed suggestion is not one.
+    expansion_candidates: dict[str, str] = field(default_factory=dict)
+    selection_rule: str = ""
 
     @classmethod
     def load(cls, data_dir: Path | str = DATA_DIR, year: int = DEFAULT_YEAR,
@@ -475,15 +514,28 @@ class ComparableCohort:
             model_ids=tuple(payload["model_ids"]),
             representative_source_ids=dict(payload.get("representative_source_ids") or {}),
             notes=str(payload.get("notes") or ""),
+            expansion_candidates=dict(payload.get("expansion_candidates") or {}),
+            selection_rule=str(payload.get("selection_rule") or ""),
         )
+
+    @property
+    def pilot_model_ids(self) -> tuple[str, ...]:
+        """What is published: eligible, and with a representative chosen."""
+        return tuple(sorted(set(self.model_ids)
+                            & set(self.representative_source_ids)))
+
+    @property
+    def expansion_backlog(self) -> tuple[str, ...]:
+        """Eligible, not yet published. Not a fault, and not a blocker."""
+        return self.models_without_representative
 
     @property
     def models_without_representative(self) -> tuple[str, ...]:
         """In the segment, but nobody has chosen which grade speaks for it.
 
-        A model is not dropped from the cohort for want of a representative:
-        that would hide a whole car from the comparison and call the result the
-        segment. It stays, and the gap is reported.
+        A model is not dropped from the eligibility universe for want of a
+        representative: that would hide a whole car and still call the result
+        the segment. It stays, and the gap is reported as backlog.
         """
         return tuple(sorted(set(self.model_ids)
                             - set(self.representative_source_ids)))
@@ -497,6 +549,16 @@ class ComparableCohort:
             problems.append(
                 f"cohort {self.id}: representatives for models outside it: "
                 f"{sorted(stray)}")
+        both = set(self.expansion_candidates) & set(self.representative_source_ids)
+        if both:
+            problems.append(
+                f"cohort {self.id}: {sorted(both)} are both a chosen "
+                "representative and an unreviewed suggestion")
+        outside = set(self.expansion_candidates) - set(self.model_ids)
+        if outside:
+            problems.append(
+                f"cohort {self.id}: suggestions for models outside it: "
+                f"{sorted(outside)}")
         for model_id in self.model_ids:
             model = catalog.models.get(model_id)
             if model is None:
@@ -543,10 +605,12 @@ class ECOCandidateSpecStore:
     """Read-only comparable views over immutable Phase-2 ECO evidence."""
 
     def __init__(self, records: Iterable[dict], cohort: ComparableCohort,
-                 registry: SpecRegistry) -> None:
+                 registry: SpecRegistry,
+                 oem_sources: Optional[dict[str, dict]] = None) -> None:
         rows = list(records)
         self.records = {r["source_id"]: r for r in rows}
         self.cohort, self.registry = cohort, registry
+        self.oem_sources = oem_sources or {}
         if len(self.records) != len(rows):
             raise ComparableSpecError("duplicate ECO candidate source ids")
         for record in self.records.values():
@@ -648,7 +712,8 @@ class ECOCandidateSpecStore:
                 "representative": cohort.representative_source_ids.get(model_id)
                                   == row["source_id"],
             })
-        return cls(records, cohort, registry)
+        return cls(records, cohort, registry,
+                   load_oem_sources(data_dir, year))
 
     def list(self, *, model_id: Optional[str] = None,
              representatives_only: bool = False) -> list[dict]:
@@ -666,12 +731,17 @@ class ECOCandidateSpecStore:
     def coverage(self) -> dict[str, int]:
         rows = self.list()
         return {
-            "cohort_models": len(self.cohort.model_ids),
+            "eligible_models": len(self.cohort.model_ids),
+            "pilot_models": len(self.cohort.pilot_model_ids),
+            "expansion_backlog": len(self.cohort.expansion_backlog),
             "models_with_candidates": len({r["model_id"] for r in rows}),
             "candidate_trims": len(rows),
             "representative_candidates": sum(r["representative"] for r in rows),
-            "models_without_representative": len(
-                self.cohort.models_without_representative),
+
             "candidate_spec_values": sum(len(r["values"]) for r in rows),
             "published_market_trims": 0,
+            "pilot_models_with_current_oem_evidence": sum(
+                source.get("current_evidence") not in (None, "", "NONE")
+                for model_id, source in (self.oem_sources or {}).items()
+                if model_id in set(self.cohort.pilot_model_ids)),
         }

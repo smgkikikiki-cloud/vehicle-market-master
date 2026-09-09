@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-09-08",
+  "purpose": "Which site is the authority for each pilot model's current retail specification, whether we may poll it, and whether we have anything from it yet. A MarketTrim is promoted from this evidence, never from an ECO record alone: homologation proves a configuration exists, not that it is what the showroom sells.",
+  "sources": {
+    "aion.aion_v": {
+      "official_url": "https://www.aionauto.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "byd.atto3": {
+      "official_url": "https://www.bydauto.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "byd.sealion6": {
+      "official_url": "https://www.bydauto.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "deepal.deepal_s05": {
+      "official_url": "https://www.deepalthailand.com",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "deepal.deepal_s07": {
+      "official_url": "https://www.deepalthailand.com",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "geely.geely_ex5": {
+      "official_url": "https://www.geely.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "gwm.haval_h6": {
+      "official_url": "https://www.gwm.co.th/en/models/haval-h6",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "honda.crv": {
+      "official_url": "https://www.honda.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "hyundai.ioniq5": {
+      "official_url": "https://www.hyundai.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "jaecoo.jaecoo_6t_ev": {
+      "official_url": "https://www.omodajaecoo.co.th",
+      "polling": "REFUSED",
+      "polling_note": "disallows ClaudeBot, GPTBot and six more AI agents by name",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "jaecoo.jaecoo_7": {
+      "official_url": "https://www.omodajaecoo.co.th",
+      "polling": "REFUSED",
+      "polling_note": "disallows ClaudeBot, GPTBot and six more AI agents by name",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "leapmotor.leapmotor_c10": {
+      "official_url": "https://www.leapmotor.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "mazda.cx30": {
+      "official_url": "https://www.mazda.co.th",
+      "polling": "REFUSED",
+      "polling_note": "robots.txt disallows this agent",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "mg.mg_hs": {
+      "official_url": "https://www.mgcars.com",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "mg.mg_s5_ev": {
+      "official_url": "https://www.mgcars.com",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "nissan.x_trail": {
+      "official_url": "https://www.nissan.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "subaru.forester": {
+      "official_url": "https://www.subaru.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "toyota.bz4x": {
+      "official_url": "https://www.toyota.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "toyota.corolla_cross": {
+      "official_url": "https://www.toyota.co.th",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    },
+    "volvo.ex40": {
+      "official_url": "https://www.volvocars.com",
+      "polling": "ALLOWED",
+      "polling_note": "no robots.txt, or explicitly allowed",
+      "current_evidence": "NONE",
+      "evidence_note": "Marketing pages render their specification tables in JavaScript, so reading them needs a per-brand adapter. Until one exists this model's comparison cells stay provisional ECO homologation evidence."
+    }
+  }
+}

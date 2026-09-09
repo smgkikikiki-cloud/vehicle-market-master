@@ -86,45 +86,81 @@ class TdrRegistrationsExportTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
-# The CLI, against the real repository warehouse.
+# The CLI, against a scratch warehouse.
+#
+# ``data/vehreg.sqlite3`` is gitignored (``*.sqlite3``) and never shipped: it
+# is a large generated artifact a contributor rebuilds locally, not something
+# a fresh CI checkout has. Every other CLI test in this repository already
+# knows this and points ``--db`` at a temporary file
+# (tests/test_ecosticker_phase2.py does the same for ``market eco-build``);
+# these two do the same rather than reading the real warehouse's current
+# state, which would make them depend on however much DLT data happens to be
+# loaded on the day they run.
 # ---------------------------------------------------------------------------
+
+def _scratch_db(path):
+    from vehreg.db import connect
+    conn = connect(path)
+    conn.execute("INSERT INTO dim_source(name) VALUES ('test')")
+    source_id = conn.execute(
+        "SELECT source_id FROM dim_source WHERE name='test'").fetchone()["source_id"]
+    conn.execute(
+        "INSERT INTO dim_unit "
+        "(unit_id,catalog_year,grain,brand,model,segment,body_type,market_scope) "
+        "VALUES ('x.car',2026,'MODEL','X','Car','C','SEDAN','CORE')")
+    conn.execute(
+        "INSERT INTO fact_registration "
+        "(period,registration_type,province,unit_id,grain,units,source_id,raw_label) "
+        "VALUES "
+        "('2026-07','RY1','ALL','x.car','MODEL',10,?,'X Car'),"
+        "('2026-08','RY1','ALL','x.car','MODEL',26,?,'X Car'),"
+        "('2026-08','RY1','ALL','z.ghost','MODEL',3,?,'Z Ghost')",
+        (source_id, source_id, source_id))
+    conn.commit()
+    conn.close()
+
 
 def test_cli_writes_a_csv_in_tdrs_column_order_and_reports_the_unresolved_units(
         tmp_path, capsys):
     from vehreg.cli import main
+    db_path = tmp_path / "scratch.sqlite3"
+    _scratch_db(db_path)
     out = tmp_path / "tdr_registrations.csv"
-    assert main(["export-tdr-registrations", "--csv", str(out)]) == 0
+    assert main(["--db", str(db_path), "export-tdr-registrations",
+                 "--csv", str(out)]) == 0
     captured = capsys.readouterr()
     assert "wrote " in captured.out and str(out) in captured.out
-    assert "units excluded" in captured.err
+    assert "3 units excluded" in captured.err
 
     import csv as csv_mod
     with out.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv_mod.DictReader(handle))
-    assert rows
-    assert set(rows[0]) == {"period", "brand_name_raw", "model_name_raw",
-                            "registrations"}
-    for row in rows[:200]:
-        assert row["period"][4] == "-" and row["period"][7] == "-"
-        assert row["period"].endswith("-01")
-        assert row["brand_name_raw"]
-        assert row["model_name_raw"]
-        assert int(row["registrations"]) >= 0
+    assert rows == [
+        {"period": "2026-07-01", "brand_name_raw": "X",
+         "model_name_raw": "Car", "registrations": "10"},
+        {"period": "2026-08-01", "brand_name_raw": "X",
+         "model_name_raw": "Car", "registrations": "26"},
+    ]
 
 
-def test_cli_json_mode_prints_the_same_rows_the_export_function_returns(capsys):
-    from vehreg.cli import main, DEFAULT_DB
+def test_cli_json_mode_prints_the_same_rows_the_export_function_returns(
+        tmp_path, capsys):
+    from vehreg.cli import main
     from vehreg.db import connect
     import json as json_mod
 
-    assert main(["export-tdr-registrations", "--from", "2026-08",
-                 "--to", "2026-08"]) == 0
+    db_path = tmp_path / "scratch.sqlite3"
+    _scratch_db(db_path)
+    assert main(["--db", str(db_path), "export-tdr-registrations",
+                 "--from", "2026-08", "--to", "2026-08"]) == 0
     printed = json_mod.loads(capsys.readouterr().out)
 
     expected = cube.tdr_registrations_export(
-        connect(DEFAULT_DB), period_from="2026-08", period_to="2026-08")
-    assert printed == expected
-    assert printed and all(row["period"] == "2026-08-01" for row in printed)
+        connect(db_path), period_from="2026-08", period_to="2026-08")
+    assert printed == expected == [
+        {"period": "2026-08-01", "brand_name_raw": "X",
+         "model_name_raw": "Car", "registrations": 26},
+    ]
 
 
 if __name__ == "__main__":

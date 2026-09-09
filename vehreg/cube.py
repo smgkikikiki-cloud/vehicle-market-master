@@ -306,6 +306,72 @@ def pivot(result: CubeResult, column_dimension: str) -> tuple[list[str], list[di
     return row_dims + columns + ["total"], ordered
 
 
+#: TDR's own `registrations` table (a separate product, a separate database)
+#: is keyed on (period, brand_name_raw, model_name_raw) and expects a monthly
+#: SQL date, not vehreg's "YYYY-MM" period string.
+TDR_REGISTRATIONS_COLUMNS: tuple[str, ...] = (
+    "period", "brand_name_raw", "model_name_raw", "registrations")
+
+
+def tdr_registrations_export(conn: sqlite3.Connection, *,
+                             scopes: Optional[Sequence[str] | str] = None,
+                             period_from: Optional[str] = None,
+                             period_to: Optional[str] = None
+                             ) -> list[dict[str, Any]]:
+    """Monthly brand/model volume in the exact shape TDR's own schema expects.
+
+    This is an export, not an integration: it never talks to TDR's database
+    and carries no credential. TDR already has a ``registrations`` table
+    (``period date, brand_name_raw text, model_name_raw text, registrations
+    integer``) feeding a chart on its own model pages that has had nothing to
+    show it, and a "reports" page waiting on the same table. What TDR calls
+    "raw" is deliberately not vehreg's ``raw_label`` (a full trim-grain
+    nameplate DLT printed, e.g. "AUDI A4 AV 45 TFSI q S line BE") -- TDR does
+    its own brand/model matching downstream, the same way vehreg refuses to
+    guess a trim from a headline. What it needs is the clean brand/model pair
+    this warehouse has already resolved, which is strictly better evidence
+    than DLT's own noise: ``dim_unit.brand`` / ``dim_unit.model``, the same
+    text every other report in this project reads.
+
+    Counts CORE-scope MODEL/VARIANT volume by default (this project's own
+    default), one row per (period, brand, model), sorted for a stable diff --
+    never by units, which would reorder on every month's data.
+    """
+    result = run(conn, ["brand", "model", "period"], scopes=scopes,
+                period_from=period_from, period_to=period_to,
+                order_by="period", descending=False)
+    # TDR's own schema declares brand_name_raw/model_name_raw NOT NULL. Volume
+    # that has not resolved to a catalog brand and model (still sitting in
+    # this warehouse's own review queue) has no name to export it under, and
+    # inventing one would misattribute it to a real nameplate on TDR's side.
+    rows = [
+        {
+            "period": f"{row['period']}-01",
+            "brand_name_raw": row["brand"],
+            "model_name_raw": row["model"],
+            "registrations": int(round(row["units"])),
+        }
+        for row in result.rows if row["brand"] and row["model"]
+    ]
+    rows.sort(key=lambda r: (r["period"], r["brand_name_raw"], r["model_name_raw"]))
+    return rows
+
+
+def tdr_registrations_unresolved_units(
+        conn: sqlite3.Connection, *, scopes: Optional[Sequence[str] | str] = None,
+        period_from: Optional[str] = None, period_to: Optional[str] = None) -> float:
+    """Volume :func:`tdr_registrations_export` dropped for having no brand/model.
+
+    Visibility, not a value to hide: the export is silent about this by
+    necessity (there is no name to put on the row), so a caller that wants to
+    know how much was left out has to ask separately.
+    """
+    result = run(conn, ["brand", "model"], scopes=scopes,
+                period_from=period_from, period_to=period_to)
+    return sum(row["units"] for row in result.rows
+              if not (row["brand"] and row["model"]))
+
+
 def coverage_report(conn: sqlite3.Connection) -> dict[str, Any]:
     by_grain = {r["grain"]: r["units"] for r in conn.execute(
         "SELECT grain, SUM(units) AS units FROM fact_registration GROUP BY grain")}

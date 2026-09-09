@@ -286,7 +286,8 @@ def harvest(sources, *, since: str, catalog, limit_per_source: int = 100,
     documents: list[SourceDocument] = []
     claims: list[PriceClaim] = []
     skipped = {"no_brand": 0, "foreign_market": 0, "no_claims": 0,
-               "refused_by_robots": 0}
+               "refused_by_robots": 0, "source_unreachable": 0}
+    failed_sources: list[str] = []
     now = datetime.now(timezone.utc).isoformat()
     for source in sources:
         if not source.base_url:
@@ -297,10 +298,19 @@ def harvest(sources, *, since: str, catalog, limit_per_source: int = 100,
             log(f"{source.id}: {robots_check.verdict(permission)} -- skipping")
             skipped["refused_by_robots"] = skipped.get("refused_by_robots", 0) + 1
             continue
-        log(f"{source.id}: listing posts modified since {since}")
-        posts = list_posts(source.base_url, since=since, limit=limit_per_source,
-                           delay=delay, log=log)
-        log(f"{source.id}: {len(posts)} posts")
+        # One flaky outlet (a dead TLS cert, a timeout) must not throw away
+        # everything already harvested from every other source this run --
+        # the batch that got written was, until this, all or nothing.
+        try:
+            log(f"{source.id}: listing posts modified since {since}")
+            posts = list_posts(source.base_url, since=since,
+                               limit=limit_per_source, delay=delay, log=log)
+            log(f"{source.id}: {len(posts)} posts")
+        except HarvestError as exc:
+            log(f"{source.id}: unreachable ({exc}) -- skipping this source")
+            skipped["source_unreachable"] += 1
+            failed_sources.append(source.id)
+            continue
         for post in posts:
             title = strip_html((post.get("title") or {}).get("rendered", ""))
             brand_raw, model_raw = identify(title, catalog)
@@ -313,7 +323,12 @@ def harvest(sources, *, since: str, catalog, limit_per_source: int = 100,
             if not want_content:
                 continue
             time.sleep(delay)
-            full = fetch_content(source.base_url, post["id"])
+            try:
+                full = fetch_content(source.base_url, post["id"])
+            except HarvestError as exc:
+                log(f"{source.id}: {post.get('id')} unreachable ({exc}) -- skipping post")
+                skipped["source_unreachable"] += 1
+                continue
             body = (full.get("content") or {}).get("rendered", "")
             document = SourceDocument(
                 document_id=content_id(body),
@@ -342,6 +357,7 @@ def harvest(sources, *, since: str, catalog, limit_per_source: int = 100,
         "documents": [to_dict(d) for d in documents],
         "claims": [to_dict(c) for c in claims],
         "skipped": skipped,
+        "failed_sources": failed_sources,
     }
 
 
@@ -390,6 +406,7 @@ def main(argv: list[str] | None = None) -> int:
     print(json.dumps({"documents": len(batch["documents"]),
                       "claims": len(batch["claims"]),
                       "skipped": batch["skipped"],
+                      "failed_sources": batch["failed_sources"],
                       "out": str(args.out) if args.out else None},
                      ensure_ascii=False, indent=2))
     return 0

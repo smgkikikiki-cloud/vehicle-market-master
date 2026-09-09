@@ -2,6 +2,7 @@
 
 import json
 import unittest
+import unittest.mock
 from datetime import date
 from pathlib import Path
 
@@ -324,6 +325,124 @@ class ExtractionTests(unittest.TestCase):
             "Toyota LAND CRUISER FJ เปิดตัวในอินโดนีเซีย", "https://x/y"))
         self.assertFalse(foreign_market("ราคาอย่างเป็นทางการ Toyota Land Cruiser FJ",
                                         "https://x/official-price"))
+
+
+class HarvestOrchestrationTests(unittest.TestCase):
+    """One outlet's dead TLS certificate must not erase every other outlet's post.
+
+    ``harvest()`` used to let ``list_posts`` raise straight out of the loop:
+    a working source processed first (documents already appended) was thrown
+    away along with the batch the moment a later source's connection failed.
+    On GitHub the whole 20-minute cron run then reported nothing at all,
+    every time, for as long as the one outlet stayed unreachable.
+    """
+
+    def setUp(self):
+        import tools.pricefeed_harvest as harvest_mod
+        self.harvest_mod = harvest_mod
+        self.catalog = Catalog.load()
+        self.enterContext(unittest.mock.patch.object(
+            harvest_mod.robots_check, "audit", return_value={}))
+        self.enterContext(unittest.mock.patch.object(
+            harvest_mod.robots_check, "verdict", return_value="allowed"))
+        # extract_claims's own regex behaviour is covered above; this suite is
+        # about the orchestration around it, so it always finds one claim.
+        self.enterContext(unittest.mock.patch.object(
+            harvest_mod, "extract_claims",
+            return_value=[claim("c1", "outlet_a")]))
+
+    def sources(self):
+        return [source("outlet_a", "B", adapter="wordpress",
+                       base_url="https://good.example.test"),
+               source("outlet_b", "B", adapter="wordpress",
+                      base_url="https://dead-cert.example.test")]
+
+    def run_harvest(self, list_posts, fetch_content=None):
+        with unittest.mock.patch.object(self.harvest_mod, "list_posts", list_posts), \
+             unittest.mock.patch.object(
+                 self.harvest_mod, "fetch_content",
+                 fetch_content or (lambda base_url, post_id: {
+                     "content": {"rendered": ""}, "link": "https://x/y",
+                     "date_gmt": "2026-09-09T00:00:00", "modified_gmt": "2026-09-09T00:00:00"})):
+            return self.harvest_mod.harvest(
+                self.sources(), since="2026-09-01", catalog=self.catalog)
+
+    def test_a_source_that_cannot_be_reached_is_skipped_not_fatal(self):
+        from tools.pricefeed_harvest import HarvestError
+
+        def list_posts(base_url, *, since, limit, delay, log):
+            if "dead-cert" in base_url:
+                raise HarvestError(f"{base_url}: certificate verify failed")
+            return [{"id": 1, "title": {"rendered": "Suzuki Fronx ราคา 599,000"},
+                     "date_gmt": "2026-09-09T00:00:00",
+                     "modified_gmt": "2026-09-09T00:00:00",
+                     "link": "https://good.example.test/1"}]
+
+        batch = self.run_harvest(list_posts)
+        self.assertEqual(1, len(batch["documents"]),
+                         "outlet_a's post must survive outlet_b's failure")
+        self.assertEqual(["outlet_b"], batch["failed_sources"])
+        self.assertEqual(1, batch["skipped"]["source_unreachable"])
+
+    def test_the_order_of_a_dead_source_does_not_matter(self):
+        """Failing first is the harder case: nothing has been appended yet."""
+        from tools.pricefeed_harvest import HarvestError
+
+        def list_posts(base_url, *, since, limit, delay, log):
+            if "dead-cert" in base_url:
+                raise HarvestError(f"{base_url}: certificate verify failed")
+            return [{"id": 1, "title": {"rendered": "Suzuki Fronx ราคา 599,000"},
+                     "date_gmt": "2026-09-09T00:00:00",
+                     "modified_gmt": "2026-09-09T00:00:00",
+                     "link": "https://good.example.test/1"}]
+
+        sources_first_dead = list(reversed(self.sources()))
+        with unittest.mock.patch.object(self.harvest_mod, "list_posts", list_posts), \
+             unittest.mock.patch.object(
+                 self.harvest_mod, "fetch_content",
+                 lambda base_url, post_id: {
+                     "content": {"rendered": ""}, "link": "https://x/y",
+                     "date_gmt": "2026-09-09T00:00:00",
+                     "modified_gmt": "2026-09-09T00:00:00"}):
+            batch = self.harvest_mod.harvest(
+                sources_first_dead, since="2026-09-01", catalog=self.catalog)
+        self.assertEqual(1, len(batch["documents"]))
+        self.assertEqual(["outlet_b"], batch["failed_sources"])
+
+    def test_every_source_reachable_reports_no_failures(self):
+        def list_posts(base_url, *, since, limit, delay, log):
+            return [{"id": 1, "title": {"rendered": "Suzuki Fronx ราคา 599,000"},
+                     "date_gmt": "2026-09-09T00:00:00",
+                     "modified_gmt": "2026-09-09T00:00:00",
+                     "link": f"{base_url}/1"}]
+
+        batch = self.run_harvest(list_posts)
+        self.assertEqual([], batch["failed_sources"])
+        self.assertEqual(0, batch["skipped"]["source_unreachable"])
+        self.assertEqual(2, len(batch["documents"]))
+
+    def test_a_post_that_fails_only_at_fetch_content_is_skipped_alone(self):
+        from tools.pricefeed_harvest import HarvestError
+
+        def list_posts(base_url, *, since, limit, delay, log):
+            return [{"id": 1, "title": {"rendered": "Suzuki Fronx ราคา 599,000"},
+                     "date_gmt": "2026-09-09T00:00:00",
+                     "modified_gmt": "2026-09-09T00:00:00",
+                     "link": f"{base_url}/1"}]
+
+        def fetch_content(base_url, post_id):
+            if "dead-cert" in base_url:
+                raise HarvestError(f"{base_url}: certificate verify failed")
+            return {"content": {"rendered": ""}, "link": "https://x/y",
+                    "date_gmt": "2026-09-09T00:00:00",
+                    "modified_gmt": "2026-09-09T00:00:00"}
+
+        batch = self.run_harvest(list_posts, fetch_content)
+        self.assertEqual(1, len(batch["documents"]))
+        # list_posts succeeded for both, so this source is not "unreachable" --
+        # only this one post's body could not be fetched.
+        self.assertEqual([], batch["failed_sources"])
+        self.assertEqual(1, batch["skipped"]["source_unreachable"])
 
 
 class ReviewDecisionWritingTests(unittest.TestCase):

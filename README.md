@@ -1,3 +1,13 @@
+# Vehicle Market Master — RETIRED
+
+> **Historical repository only.** Active development and data operations moved to [`smgkikikiki-cloud/TDR`](https://github.com/smgkikikiki-cloud/TDR) under `automotive/vehicle_master/`.
+>
+> Do not open new implementation work, data PRs, scheduled jobs, fixes, or agent tasks here. The canonical vehicle engine, price feed, release publishing, and TDR web integration now live in TDR.
+
+The content below is retained as historical documentation of the standalone repository before consolidation.
+
+---
+
 # Vehicle Market Master
 
 Thai vehicle product master and registration intelligence workspace.

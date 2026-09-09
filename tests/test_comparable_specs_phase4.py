@@ -11,7 +11,7 @@ from vehreg.catalog import Catalog, CatalogError, DATA_DIR
 from vehreg.cli import main
 from vehreg.comparable_specs import (
     ComparableCohort, ComparableSpecError, ECOCandidateSpecStore, SpecLedger,
-    SpecRegistry,
+    SpecRegistry, ValueState,
 )
 from vehreg.product import ProductMaster, import_spec_facts
 
@@ -56,9 +56,10 @@ def payload(*facts):
 
 def test_registry_and_c_crossover_cohort_are_closed_and_valid():
     registry = SpecRegistry.load()
-    assert len(registry.fields) == 50
+    assert len(registry.fields) == 60
     assert set(registry.profiles) == {
         "c_crossover_core", "c_crossover_safety", "c_crossover_comfort",
+        "c_crossover_fitment",
     }
     cohort = ComparableCohort.load()
     catalog = Catalog.load()
@@ -468,3 +469,64 @@ def test_eco_prices_never_reach_the_price_ledger():
         current = master.prices.current_list_price(trim_id)
         if current is not None:
             assert current.price_type is PriceType.LIST_PRICE
+
+
+# --------------------------------------------------------------------------
+# Phase 6 -- fitment expansion: the schema exists, no value has been invented
+# --------------------------------------------------------------------------
+
+FITMENT_FIELDS = (
+    "fitment.wheel_rim_width_front_in", "fitment.wheel_rim_width_rear_in",
+    "fitment.wheel_pcd", "fitment.wheel_offset_mm",
+    "fitment.tyre_load_index_front", "fitment.tyre_load_index_rear",
+    "fitment.tyre_speed_rating_front", "fitment.tyre_speed_rating_rear",
+    "fitment.battery_12v_group_size", "fitment.battery_12v_capacity_ah",
+)
+
+
+def test_the_fitment_fields_are_registered_and_grouped_with_the_rest_of_chassis():
+    registry = SpecRegistry.load()
+    for key in FITMENT_FIELDS:
+        assert key in registry.fields, key
+        assert registry.fields[key].group == "chassis", key
+    assert registry.profiles["c_crossover_fitment"] == list(FITMENT_FIELDS)
+    assert registry.validate() == []
+
+
+def test_a_rim_width_or_offset_field_is_a_number_with_a_unit():
+    registry = SpecRegistry.load()
+    for key in ("fitment.wheel_rim_width_front_in", "fitment.wheel_rim_width_rear_in",
+                "fitment.wheel_offset_mm", "fitment.tyre_load_index_front",
+                "fitment.tyre_load_index_rear", "fitment.battery_12v_capacity_ah"):
+        definition = registry.fields[key]
+        assert definition.value_type == "NUMBER", key
+        assert definition.canonical_unit, key
+        assert definition.validate_value(ValueState.KNOWN, 42, definition.canonical_unit) == []
+        assert definition.validate_value(ValueState.KNOWN, -1, definition.canonical_unit), key
+
+
+def test_pcd_and_battery_group_are_free_form_codes_not_numbers():
+    """"5x114.3" and "55D23L" are not measurements; a NUMBER field would refuse them."""
+    registry = SpecRegistry.load()
+    for key in ("fitment.wheel_pcd", "fitment.battery_12v_group_size"):
+        definition = registry.fields[key]
+        assert definition.value_type == "TEXT", key
+        assert definition.validate_value(ValueState.KNOWN, "5x114.3", "") == []
+
+
+def test_no_fitment_value_has_been_invented_for_any_pilot_trim():
+    """The schema exists; the evidence to populate it does not yet.
+
+    Phase 6 was asked for as a fitment database, not a set of numbers this code
+    made up to fill the new columns. No source in this pipeline has ever
+    reported a PCD, an offset, a load index, a speed rating or a 12V battery
+    group -- only a tyre size string -- so every fact ledger in the repository
+    must carry zero facts against these keys until a real source is wired in.
+    """
+    for path in (DATA_DIR / "2026" / "product" / "comparable_specs").rglob("*.json"):
+        if path.name in ("registry.json", "profiles.json", "oem_sources.json"):
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for fact_row in payload.get("facts", []):
+            assert fact_row.get("field_key") not in FITMENT_FIELDS, (
+                f"{path}: invented a value for {fact_row.get('field_key')}")

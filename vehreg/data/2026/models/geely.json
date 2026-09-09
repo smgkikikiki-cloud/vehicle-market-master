@@ -20,7 +20,10 @@
       "registration_type": "",
       "market_scope": "CORE",
       "aliases": [
-        "ex5"
+        "e5",
+        "ex5",
+        "galaxy e5",
+        "geely galaxy e5"
       ],
       "generations": [
         {
@@ -46,7 +49,8 @@
             }
           ]
         }
-      ]
+      ],
+      "notes": "Sold in China as the Geely Galaxy E5; DLT writes both names. One nameplate, so the Chinese name is an alias."
     },
     {
       "id": "geely_ex2",
@@ -89,48 +93,6 @@
         }
       ],
       "powertrain_checked": true
-    },
-    {
-      "id": "galaxy_e5",
-      "name_en": "Geely Galaxy E5",
-      "name_th": "จีลี่ กาแล็กซี่ อี5",
-      "nameplate": "",
-      "body_type": "CROSSOVER",
-      "cab_type": "NOT_APPLICABLE",
-      "registration_type": "",
-      "market_scope": "CORE",
-      "aliases": [
-        "Galaxy E5",
-        "GALAXY E5",
-        "E5"
-      ],
-      "incomplete": true,
-      "notes": "รุ่นที่ค้างอยู่ในคิวรอตรวจ สเปกยังไม่ได้ตรวจ",
-      "generations": [
-        {
-          "code": "gen1",
-          "segment": "C",
-          "seats": 5,
-          "launched": "2025-05-01",
-          "ended": null,
-          "variants": [
-            {
-              "name": "spec",
-              "powertrain": "BEV",
-              "drivetrain": "FWD",
-              "engine_cc": null,
-              "battery_kwh": null,
-              "price_thb": null,
-              "price_min_thb": null,
-              "price_max_thb": null,
-              "import_type": "CBU",
-              "origin_country": "CN",
-              "price_note": "ยังไม่ได้ตรวจราคา",
-              "aliases": []
-            }
-          ]
-        }
-      ]
     }
   ]
 }

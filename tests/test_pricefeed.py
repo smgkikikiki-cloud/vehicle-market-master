@@ -133,20 +133,47 @@ class DecisionTests(unittest.TestCase):
         self.path = Path(self.enterContext(
             __import__("tempfile").TemporaryDirectory())) / "decisions.json"
 
-    def write(self, reviewer):
-        self.path.write_text(json.dumps({"decisions": [{
+    def write(self, reviewer, origin=None, **extra):
+        entry = {
             "claim_id": "c1", "trim_id": "t.m.g.trim.x",
             "campaign_id": "campaign.x", "option_id": "cash",
             "action": "accept", "reviewer": reviewer,
-        }]}), encoding="utf-8")
+        }
+        if origin is not None:
+            entry["origin"] = origin
+        entry.update(extra)
+        self.path.write_text(json.dumps({"decisions": [entry]}), encoding="utf-8")
 
     def test_a_decision_this_code_wrote_does_not_move_a_price(self):
-        self.write("agent-proposed")
-        self.assertEqual("agent", pf.load_decisions(self.path)["c1"]["origin"])
+        self.write("agent-proposed", "AGENT")
+        self.assertEqual("AGENT", pf.load_decisions(self.path)["c1"]["origin"])
 
     def test_a_person_outranks_the_matcher(self):
+        self.write("vehicle-master-owner", "HUMAN")
+        self.assertEqual("HUMAN", pf.load_decisions(self.path)["c1"]["origin"])
+
+    def test_who_decided_is_stated_and_never_read_off_the_reviewer_name(self):
+        """The whole defect in one test: a name is not a provenance claim."""
         self.write("vehicle-master-owner")
-        self.assertEqual("human", pf.load_decisions(self.path)["c1"]["origin"])
+        with self.assertRaises(pf.PriceFeedError) as caught:
+            pf.load_decisions(self.path)
+        self.assertIn("origin is required", str(caught.exception))
+
+    def test_a_rule_may_decide_but_has_to_cite_the_document_it_read(self):
+        self.write("pricefeed.closed_campaign_echo", "SYSTEM_EVIDENCE")
+        with self.assertRaises(pf.PriceFeedError):
+            pf.load_decisions(self.path)
+        self.write("pricefeed.closed_campaign_echo", "SYSTEM_EVIDENCE",
+                   source_ref="https://www.suzuki.co.th/news/articles/news-245")
+        self.assertEqual("SYSTEM_EVIDENCE",
+                         pf.load_decisions(self.path)["c1"]["origin"])
+
+    def test_only_a_person_can_vouch_for_a_single_source(self):
+        for origin in ("AGENT", "SYSTEM_EVIDENCE"):
+            self.write("whoever", origin, action="publish",
+                       source_ref="https://example.com/x")
+            with self.assertRaises(pf.PriceFeedError):
+                pf.load_decisions(self.path)
 
     def test_a_decision_without_a_reviewer_is_rejected(self):
         self.path.write_text(json.dumps({"decisions": [{"claim_id": "c1"}]}),
@@ -307,7 +334,8 @@ class ReviewDecisionWritingTests(unittest.TestCase):
         self.path = Path(self.enterContext(TemporaryDirectory())) / "decisions.json"
 
     def save(self, **changes):
-        entry = {"claim_id": "c1", "reviewer": "owner", "action": "accept"}
+        entry = {"claim_id": "c1", "reviewer": "owner", "action": "accept",
+                 "origin": "HUMAN"}
         entry.update(changes)
         return pf.save_decision(self.path, entry, write=True,
                                 replace=entry["action"] == "reject")
@@ -335,13 +363,19 @@ class ReviewDecisionWritingTests(unittest.TestCase):
         with self.assertRaises(pf.PriceFeedError):
             pf.save_decision(self.path,
                              {"claim_id": "c2", "reviewer": "owner",
+                              "origin": "HUMAN",
                               "action": "not-an-action"}, write=True)
         self.assertEqual("campaign.x", self.stored()["campaign_id"])
 
     def test_a_decision_without_a_reviewer_is_refused(self):
         with self.assertRaises(pf.PriceFeedError):
-            pf.save_decision(self.path, {"claim_id": "c1", "action": "accept"},
-                             write=True)
+            pf.save_decision(self.path, {"claim_id": "c1", "action": "accept",
+                                         "origin": "HUMAN"}, write=True)
+
+    def test_a_decision_without_an_origin_is_refused(self):
+        with self.assertRaises(pf.PriceFeedError):
+            pf.save_decision(self.path, {"claim_id": "c1", "action": "accept",
+                                         "reviewer": "owner"}, write=True)
 
 
 class PublishOverrideTests(unittest.TestCase):
@@ -386,7 +420,8 @@ class PublishPromotionTests(unittest.TestCase):
 
     def decision(self, action, reviewer):
         return {"c1": {"claim_id": "c1", "action": action, "reviewer": reviewer,
-                       "origin": "agent" if reviewer == pf.AGENT_REVIEWER else "human",
+                       "origin": ("AGENT" if reviewer == pf.AGENT_REVIEWER
+                                  else "HUMAN"), "source_ref": "",
                        "trim_id": None, "campaign_id": None, "option_id": None,
                        "reviewed_at": None, "notes": ""}}
 

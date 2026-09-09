@@ -92,6 +92,17 @@ class ReviewReason(str, Enum):
     PRICE_TYPE_UNCLEAR = "price_type_unclear"
     IMPLAUSIBLE_AMOUNT = "implausible_amount"
     LOW_TIER_ONLY = "low_tier_only"
+    #: The manufacturer closed this offer *before* the article ran. The piece
+    #: is quoting a price nobody could buy on the day it was published.
+    CONTRADICTED_BY_CLOSED_CAMPAIGN = "contradicted_by_closed_campaign"
+    #: The article ran while the offer was open, and the offer has since closed.
+    #: True when written and a duplicate of what the brand already told us --
+    #: history, not a contradiction, and not a live price either.
+    HISTORICAL_CAMPAIGN_OBSERVATION = "historical_campaign_observation"
+    #: A campaign price whose document carries no publication date, matching an
+    #: offer that has closed. Whether it is a stale reprint or a contemporary
+    #: report cannot be told apart without the date, so neither is asserted.
+    CAMPAIGN_DATE_UNKNOWN = "campaign_date_unknown"
 
 
 @dataclass(frozen=True, slots=True)
@@ -603,6 +614,40 @@ def measure_latency(documents: Iterable[SourceDocument]) -> dict:
 AGENT_REVIEWER = "agent-proposed"
 
 
+class DecisionOrigin(str, Enum):
+    """Who actually made a decision. Stated, never inferred from a name.
+
+    The inference this replaces -- any reviewer that is not ``agent-proposed``
+    is a person -- turns every decision this code writes into a human one by
+    choosing a reviewer string, which is the opposite of an audit trail.
+    """
+
+    #: This code's own proposal. Never moves a price on its own.
+    AGENT = "AGENT"
+    #: A person, who is answerable for it.
+    HUMAN = "HUMAN"
+    #: A rule that resolved against a document, not against a judgement: the
+    #: brand's own page says the offer closed on the 25th. It may act, and it
+    #: has to name the document it acted on. It is not a person, and it may
+    #: never stand in for one.
+    SYSTEM_EVIDENCE = "SYSTEM_EVIDENCE"
+
+    @classmethod
+    def parse(cls, raw: object) -> "DecisionOrigin":
+        value = str(raw or "").strip().upper()
+        try:
+            return cls(value)
+        except ValueError as exc:
+            raise PriceFeedError(
+                f"decision origin must be one of "
+                f"{[o.value for o in cls]}, got {raw!r}") from exc
+
+
+#: Origins whose answer actually removes or rebinds a claim. ``AGENT`` proposes.
+_DECIDING = frozenset({DecisionOrigin.HUMAN.value,
+                       DecisionOrigin.SYSTEM_EVIDENCE.value})
+
+
 def load_decisions(path: Path | str) -> dict[str, dict]:
     """Reviewer answers, keyed by claim id.
 
@@ -621,7 +666,7 @@ def load_decisions(path: Path | str) -> dict[str, dict]:
     if not isinstance(payload.get("decisions"), list):
         raise PriceFeedError(f"{path}: decisions must be an array")
     allowed = {"claim_id", "trim_id", "campaign_id", "option_id", "action",
-               "reviewer", "reviewed_at", "notes"}
+               "reviewer", "origin", "source_ref", "reviewed_at", "notes"}
     out: dict[str, dict] = {}
     for raw in payload["decisions"]:
         unknown = set(raw) - allowed
@@ -636,8 +681,23 @@ def load_decisions(path: Path | str) -> dict[str, dict]:
         if not reviewer:
             raise PriceFeedError(f"{path}: {claim_id}: reviewer is required")
         action = str(raw.get("action") or "accept").strip()
-        if action not in {"accept", "reject", "publish"}:
+        if action not in {"accept", "reject", "publish", "archive"}:
             raise PriceFeedError(f"{path}: {claim_id}: invalid action {action!r}")
+        if "origin" not in raw:
+            raise PriceFeedError(
+                f"{path}: {claim_id}: origin is required; say who decided "
+                f"({[o.value for o in DecisionOrigin]}) rather than leaving it "
+                f"to be guessed from the reviewer name")
+        origin = DecisionOrigin.parse(raw.get("origin"))
+        source_ref = str(raw.get("source_ref") or "").strip()
+        if origin is DecisionOrigin.SYSTEM_EVIDENCE and not source_ref:
+            raise PriceFeedError(
+                f"{path}: {claim_id}: a SYSTEM_EVIDENCE decision must cite the "
+                f"document it resolved against in source_ref")
+        if origin is not DecisionOrigin.HUMAN and action == "publish":
+            raise PriceFeedError(
+                f"{path}: {claim_id}: only a person can publish a price on one "
+                f"source; {origin.value} cannot vouch for it")
         out[claim_id] = {
             "claim_id": claim_id,
             "trim_id": raw.get("trim_id") or None,
@@ -645,17 +705,119 @@ def load_decisions(path: Path | str) -> dict[str, dict]:
             "option_id": raw.get("option_id") or None,
             "action": action,
             "reviewer": reviewer,
-            "origin": "agent" if reviewer.lower() == AGENT_REVIEWER else "human",
+            "origin": origin.value,
+            "source_ref": source_ref,
             "reviewed_at": raw.get("reviewed_at") or None,
             "notes": str(raw.get("notes") or ""),
         }
     return out
 
 
+def closed_offers_matching(amount: int, campaigns: Optional[dict],
+                           ledger_records: Iterable, when: date) -> list[dict]:
+    """Offers at this price that the brand has already shut, as of ``when``.
+
+    Each entry carries the day the offer opened and the day it really ended, so
+    a claim can be placed against the offer's life rather than merely matched
+    to it by amount.
+    """
+    found: list[dict] = []
+    for record in ledger_records:
+        if record.amount_thb != amount or not record.campaign_id:
+            continue
+        campaign = (campaigns or {}).get(record.campaign_id)
+        if campaign is None:
+            continue
+        option = campaign.option(record.option_id or "")
+        if option is not None:
+            if option.open_on(when):
+                continue
+            closed_on = option.closed_at or option.ends or campaign.ends
+            opened_on = option.starts or campaign.starts
+        else:
+            if campaign.live_on(when):
+                continue
+            closed_on, opened_on = campaign.ends, campaign.starts
+        if not closed_on:
+            # Shut, but with no date to place an article against. Treated as
+            # closed-with-unknown-date rather than silently skipped.
+            closed_on = None
+        found.append({"campaign_id": campaign.id,
+                      "option_id": option.id if option else None,
+                      "opened_on": opened_on, "closed_on": closed_on})
+    return found
+
+
+def closed_campaign_echo(group: list[PriceClaim], *,
+                         campaigns: Optional[dict],
+                         ledger_records: Iterable,
+                         documents: dict[str, SourceDocument],
+                         sources: dict[str, Source],
+                         when: date) -> Optional[str]:
+    """Place a campaign-price claim against an offer the brand has closed.
+
+    A capped campaign ends when the cars run out, and the motoring press does
+    not reissue last month's article when that happens.  Suzuki closed the Fronx
+    GL cash price on 25 August; a Headlightmag piece dated 1 September still
+    listed it.  The brand's own record of its own offer outranks a report of it.
+
+    But "matches a closed offer" is not by itself a contradiction, and the
+    earlier rule -- same trim, same amount, some closed campaign somewhere --
+    said it was.  On that rule an official list price, or next quarter's
+    campaign that happens to land on the same round number, was filed as
+    contradicted by an offer it had nothing to do with.  So:
+
+    * only an incoming ``CAMPAIGN_PRICE`` is placed against a campaign at all;
+    * a Tier-A claim is the manufacturer talking about its own offer, and is
+      never held back by a rule about what the manufacturer said earlier;
+    * the article's ``published_at`` decides the rest.  Published after the
+      offer closed, it is stale.  Published while the offer was open, it was
+      true when written -- history and a duplicate of what the brand already
+      told us, which is not the same accusation.
+    * no ``published_at`` at all, and neither can be established: it goes to
+      review as an open question rather than being called either one.
+
+    Returns the :class:`ReviewReason` value, or ``None`` when nothing applies.
+    """
+    first = group[0]
+    if first.price_type is not PriceType.CAMPAIGN_PRICE:
+        return None
+    if any((sources.get(claim.source_id) or Source("", "", Tier.D)).tier is Tier.A
+           for claim in group):
+        return None
+    closed = closed_offers_matching(first.amount_thb, campaigns,
+                                    ledger_records, when)
+    if not closed:
+        return None
+    #: The offer stayed open longest; an article beating that is not stale.
+    last_close = max((entry["closed_on"] for entry in closed
+                      if entry["closed_on"]), default=None)
+    first_open = min((entry["opened_on"] for entry in closed
+                      if entry["opened_on"]), default=None)
+
+    published: list[Optional[str]] = []
+    for claim in group:
+        document = documents.get(claim.document_id)
+        stamp = _timestamp(document.published_at) if document else None
+        published.append(stamp.date().isoformat() if stamp else None)
+
+    if last_close is None or any(day is None for day in published):
+        return ReviewReason.CAMPAIGN_DATE_UNKNOWN.value
+    if any(day > last_close for day in published):
+        return ReviewReason.CONTRADICTED_BY_CLOSED_CAMPAIGN.value
+    if first_open and any(day < first_open for day in published):
+        # Written before the offer existed: it is not a report of this offer,
+        # and the amount matching is a coincidence this rule may not resolve.
+        return None
+    return ReviewReason.HISTORICAL_CAMPAIGN_OBSERVATION.value
+
+
 def run(documents: list[SourceDocument], claims: list[PriceClaim],
         sources: dict[str, Source], catalog: Catalog, *,
         campaigns: Optional[dict] = None,
-        decisions: Optional[dict[str, dict]] = None) -> RunResult:
+        decisions: Optional[dict[str, dict]] = None,
+        ledger: Optional[object] = None,
+        as_of: Optional[date] = None) -> RunResult:
     """Match, group, decide. Pure: no file or network access."""
     campaigns = campaigns or {}
     decisions = decisions or {}
@@ -664,13 +826,17 @@ def run(documents: list[SourceDocument], claims: list[PriceClaim],
     matched: list[PriceClaim] = []
     for claim in claims:
         answer = decisions.get(claim.claim_id)
-        if answer and answer["origin"] == "human" and answer["action"] == "reject":
+        # A person withdraws a claim; so does a rule that resolved against the
+        # brand's own page, which is why it has to cite it. This code's own
+        # proposals never do.
+        if answer and answer["origin"] in _DECIDING and \
+                answer["action"] in {"reject", "archive"}:
             continue
         trim_id, candidates = match_trim(
             catalog, claim, siblings_by_model=siblings_by_model,
             model_memo=model_memo)
         changes = {"trim_id": trim_id, "trim_candidates": candidates}
-        if answer and answer["origin"] == "human":
+        if answer and answer["origin"] == DecisionOrigin.HUMAN.value:
             # A person outranks the matcher, and is the only way a campaign
             # price ever learns which campaign it belongs to.
             if answer["trim_id"]:
@@ -700,12 +866,23 @@ def run(documents: list[SourceDocument], claims: list[PriceClaim],
         published_by = {
             decisions[claim.claim_id]["reviewer"] for claim in group
             if claim.claim_id in decisions
-            and decisions[claim.claim_id]["origin"] == "human"
+            and decisions[claim.claim_id]["origin"] == DecisionOrigin.HUMAN.value
             and decisions[claim.claim_id]["action"] == "publish"}
         if published_by and verdict.state == "provisional":
             # One outlet, and a person who has looked at it and vouched.
             verdict = Verdict("canonical", (), verdict.independent_claims,
                               verdict.supporting_claim_ids)
+        echo = (closed_campaign_echo(
+            group, campaigns=campaigns,
+            ledger_records=ledger.records_for(
+                first.trim_id, price_type=PriceType.CAMPAIGN_PRICE),
+            documents=by_document, sources=sources,
+            when=as_of or date.today())
+            if first.trim_id and ledger is not None else None)
+        if echo:
+            verdict = Verdict(
+                "review", tuple(sorted(set(verdict.reasons) | {echo})),
+                verdict.independent_claims, verdict.supporting_claim_ids)
         if (first.trim_id, first.price_type) in disputed:
             verdict = Verdict("review",
                               tuple(sorted(set(verdict.reasons) |
@@ -807,6 +984,9 @@ def save_decision(path: Path | str, entry: dict, *, write: bool = False,
                   replace: bool = False) -> dict:
     """Record one reviewer answer, keyed by claim id.
 
+    ``origin`` is required and is never derived from ``reviewer``: a caller
+    that picks a reviewer string does not thereby become a person.
+
     A second answer about the same claim **merges** into the first.  Reviewing
     is not one question: a person binds a campaign price to its campaign, then
     later vouches for the single source that reported it, and the second answer
@@ -824,6 +1004,10 @@ def save_decision(path: Path | str, entry: dict, *, write: bool = False,
     reviewer = str(entry.get("reviewer") or "").strip()
     if not reviewer:
         raise PriceFeedError(f"{claim_id}: a decision needs a reviewer")
+    if "origin" not in entry:
+        raise PriceFeedError(
+            f"{claim_id}: a decision needs an explicit origin "
+            f"({[o.value for o in DecisionOrigin]})")
     payload = (json.loads(path.read_text(encoding="utf-8"))
                if path.exists() else {"schema_version": SCHEMA_VERSION,
                                       "decisions": []})

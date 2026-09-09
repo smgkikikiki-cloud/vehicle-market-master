@@ -46,6 +46,33 @@ class PricingError(ValueError):
     pass
 
 
+class OfferStatus(str, Enum):
+    """Whether an option can still be taken, which the calendar cannot say.
+
+    A quota campaign ends when the cars run out, not when the month does. Suzuki
+    published the Fronx GL cash price to 30 September and closed it on 25 August
+    when the 200 cars were gone; a calendar-only model would have gone on
+    quoting a price nobody could buy.
+    """
+
+    ACTIVE = "ACTIVE"
+    SOLD_OUT = "SOLD_OUT"
+    WITHDRAWN = "WITHDRAWN"
+    SUPERSEDED = "SUPERSEDED"
+
+    @classmethod
+    def parse(cls, raw: object) -> "OfferStatus":
+        value = str(raw or "ACTIVE").strip().upper()
+        try:
+            return cls(value)
+        except ValueError as exc:
+            raise PricingError(f"unknown offer status {raw!r}") from exc
+
+    @property
+    def open(self) -> bool:
+        return self is OfferStatus.ACTIVE
+
+
 class PriceType(str, Enum):
     """Meaning of a quoted price, not the authority of its source."""
 
@@ -138,16 +165,77 @@ class Conditions:
 
 @dataclass(frozen=True, slots=True)
 class CampaignOption:
-    """One alternative inside a campaign. Options are OR, never combined."""
+    """One alternative inside a campaign. Options are OR, never combined.
+
+    An option carries its own window and status because alternatives inside one
+    campaign do not end together: a capped cash price sells out while the
+    finance option beside it runs to the published date.
+    """
 
     id: str
     label: str = ""
     conditions: Conditions = field(default_factory=Conditions)
+    starts: Optional[str] = None
+    #: The date the brand published. ``closed_at`` is the date it really ended.
+    ends: Optional[str] = None
+    status: OfferStatus = OfferStatus.ACTIVE
+    closed_at: Optional[str] = None
+    notes: str = ""
 
     def validate(self) -> list[str]:
         problems = ["option id is required"] if not self.id else []
+        for field_name in ("starts", "ends", "closed_at"):
+            try:
+                _iso_date(getattr(self, field_name), field_name)
+            except PricingError as exc:
+                problems.append(f"option {self.id}: {exc}")
+        if self.starts and self.ends and self.starts > self.ends:
+            problems.append(f"option {self.id}: starts is after ends")
+        if not self.status.open and not self.closed_at:
+            problems.append(
+                f"option {self.id}: {self.status.value} must say closed_at")
+        if self.closed_at and self.status.open:
+            problems.append(
+                f"option {self.id}: closed_at needs a closed status")
         return problems + [f"option {self.id}: {p}"
                            for p in self.conditions.validate()]
+
+    def open_on(self, when: date) -> bool:
+        """Live today. A sold-out option is shut on the day it sold out.
+
+        Not on the day its calendar ran out -- that is the whole point of
+        recording ``closed_at`` separately from ``ends``.
+        """
+        day = when.isoformat()
+        if self.closed_at and day > self.closed_at:
+            return False
+        if not self.status.open and not self.closed_at:
+            return False
+        if self.starts and day < self.starts:
+            return False
+        if self.ends and day > self.ends:
+            return False
+        return self.conditions.open_on(when)
+
+    def status_on(self, when: date) -> OfferStatus:
+        """What this option *was* on ``when`` -- never what it is now.
+
+        ``status`` is today's record of how the option ended.  Reading it into
+        a quote dated while the offer was still running backdates the ending:
+        on 20 August the Fronx cash price was ACTIVE, and it became SOLD_OUT on
+        the 25th.  A quote for the 20th that says SOLD_OUT is telling the reader
+        something that was not true on the day it claims to describe.
+
+        Deliberately blind to ``starts``/``ends``/conditions.  Those say whether
+        an offer was *bookable* on a given day, which is :meth:`open_on`'s
+        question; this one answers only "had it closed yet".
+        """
+        day = when.isoformat()
+        if self.closed_at:
+            return self.status if day > self.closed_at else OfferStatus.ACTIVE
+        # Closed with no date recorded: validation forbids it, so this is only
+        # reachable on an unvalidated object. Say closed rather than guess a day.
+        return self.status
 
 
 @dataclass(frozen=True, slots=True)
@@ -162,12 +250,22 @@ class Campaign:
     source: str = ""
     source_ref: str = ""
     options: tuple[CampaignOption, ...] = ()
+    #: One cap shared by every option, when the brand caps the promotion rather
+    #: than each alternative inside it. Suzuki's September offer is 499 cars for
+    #: the whole campaign; writing 499 on each of its four options would read as
+    #: 1,996. A cap that really is per-option belongs on the option instead, and
+    #: an option may not restate a campaign-level cap as its own.
+    quota_units: Optional[int] = None
     notes: str = ""
 
     def validate(self) -> list[str]:
         problems: list[str] = []
         if not self.id:
             problems.append("campaign id is required")
+        if self.quota_units is not None and (
+                type(self.quota_units) is not int or self.quota_units <= 0):
+            problems.append(
+                f"campaign {self.id}: quota_units must be a positive integer")
         if not self.brand_id:
             problems.append(f"campaign {self.id}: brand_id is required")
         for field_name in ("starts", "ends"):
@@ -184,6 +282,11 @@ class Campaign:
             if option.id in seen:
                 problems.append(f"campaign {self.id}: duplicate option {option.id}")
             seen.add(option.id)
+            if self.quota_units is not None and \
+                    option.conditions.quota_units is not None:
+                problems.append(
+                    f"campaign {self.id}: option {option.id} restates the "
+                    f"campaign quota; a shared pool is counted once")
             problems.extend(f"campaign {self.id}: {p}" for p in option.validate())
         return problems
 
@@ -219,6 +322,14 @@ def _read_json(path: Path) -> dict:
         raise PricingError(f"{path}: invalid JSON: {exc}") from exc
 
 
+def _quota(raw: object, source: str) -> Optional[int]:
+    if raw is None:
+        return None
+    if isinstance(raw, bool) or not re.fullmatch(r"[0-9]+", str(raw)):
+        raise PricingError(f"{source}: quota_units must be a positive integer")
+    return int(raw)
+
+
 def _parse_conditions(raw: object, source: str) -> Conditions:
     if raw in (None, {}):
         return Conditions()
@@ -227,15 +338,11 @@ def _parse_conditions(raw: object, source: str) -> Conditions:
     unknown = set(raw) - set(Conditions.__dataclass_fields__)
     if unknown:
         raise PricingError(f"{source}: unknown condition fields: {sorted(unknown)}")
-    quota = raw.get("quota_units")
-    if quota is not None and (isinstance(quota, bool)
-                              or not re.fullmatch(r"[0-9]+", str(quota))):
-        raise PricingError(f"{source}: quota_units must be a positive integer")
     return Conditions(
         booking_from=_iso_date(raw.get("booking_from"), "booking_from"),
         booking_to=_iso_date(raw.get("booking_to"), "booking_to"),
         delivery_by=_iso_date(raw.get("delivery_by"), "delivery_by"),
-        quota_units=int(quota) if quota is not None else None,
+        quota_units=_quota(raw.get("quota_units"), source),
         finance_required=bool(raw.get("finance_required", False)),
         text=str(raw.get("text") or "").strip(),
     )
@@ -261,6 +368,11 @@ def _parse_campaign(raw: object, source: str) -> Campaign:
             id=str(option.get("id") or "").strip(),
             label=str(option.get("label") or "").strip(),
             conditions=_parse_conditions(option.get("conditions"), source),
+            starts=_iso_date(option.get("starts"), "starts"),
+            ends=_iso_date(option.get("ends"), "ends"),
+            status=OfferStatus.parse(option.get("status")),
+            closed_at=_iso_date(option.get("closed_at"), "closed_at"),
+            notes=str(option.get("notes") or ""),
         ))
     return Campaign(
         id=str(raw.get("id") or "").strip(),
@@ -271,6 +383,7 @@ def _parse_campaign(raw: object, source: str) -> Campaign:
         source=str(raw.get("source") or "").strip(),
         source_ref=str(raw.get("source_ref") or "").strip(),
         options=tuple(parsed),
+        quota_units=_quota(raw.get("quota_units"), source),
         notes=str(raw.get("notes") or ""),
     )
 
@@ -526,14 +639,21 @@ class PriceLedger:
                 if not campaign.live_on(when):
                     continue
                 option = campaign.option(record.option_id or "")
-                if option is not None and not option.conditions.open_on(when):
+                if option is not None and not option.open_on(when):
                     continue
             live.append(record)
         return live
 
     def campaign_quote(self, trim_id: str, *,
                        as_of: Optional[date] = None) -> dict:
-        """What a page needs to show: the list price and every live option."""
+        """What a page needs to show: the list price and every live option.
+
+        Every option carries both ``status_as_of`` -- true on ``as_of`` -- and
+        ``current_status``/``closed_at``, which are what is known today.  A
+        quote dated inside a campaign that has since sold out reads ACTIVE for
+        the day it describes and SOLD_OUT for now, and neither field is allowed
+        to answer for the other.
+        """
         when = as_of or date.today()
         listed = self.current_list_price(trim_id, as_of=when)
         offers = []
@@ -548,7 +668,20 @@ class PriceLedger:
                 "campaign_name": campaign.name if campaign else "",
                 "option_id": record.option_id,
                 "option_label": option.label if option else "",
+                # Two different questions, and merging them backdates the
+                # ending: what the offer was on the quoted day, and what the
+                # record says about it today.
+                "status_as_of": option.status_on(when).value if option else None,
+                "current_status": option.status.value if option else None,
+                "closed_at": option.closed_at if option else None,
                 "conditions": to_conditions_dict(option.conditions) if option else {},
+                # The cap, and whether it is this option's own or shared with
+                # every other option in the campaign.
+                "quota_units": (option.conditions.quota_units if option else None)
+                               or (campaign.quota_units if campaign else None),
+                "quota_scope": ("OPTION" if option and option.conditions.quota_units
+                                else "CAMPAIGN" if campaign and campaign.quota_units
+                                else None),
                 "valid_to": record.effective_to,
                 "source": record.source,
                 "source_ref": record.source_ref,

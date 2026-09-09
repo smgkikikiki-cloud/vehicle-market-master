@@ -136,12 +136,31 @@ price by more than 25%, or removes a price a trim already had.
 
 - **The campaign path is proven but unpublished.** The real Suzuki Fronx
   September campaign is authored with its four genuine options (SUZUKI FAMILY
-  cash / 0% finance, open-customer cash / 0% finance). Its 599,000 claim is
-  attached to `family_cash` by an `agent-proposed` decision, which by design
-  does **not** move a price: with that decision marked agent it stays in review;
-  marked human it becomes provisional. The owner has to sign it.
+  cash / 0% finance, open-customer cash / 0% finance), sharing one 499-car
+  campaign quota rather than 499 per option. Publishing a campaign price still
+  needs a `HUMAN` decision; nothing this code writes can supply one.
 - The campaign has no end date because the source states none. It was left open
   rather than guessed.
+
+## Placing a claim against a closed offer
+
+A campaign that closed early is not evidence that every later mention of the
+same number is wrong. `closed_campaign_echo` looks at four things before it
+holds anything:
+
+1. the incoming claim must be a `CAMPAIGN_PRICE` — a list price is not
+   answerable to an expired promotion, and neither is a new campaign that
+   happens to reuse the same round number;
+2. a Tier-A claim is the manufacturer talking about its own offer and is never
+   held back by a rule about what the manufacturer said earlier;
+3. the article's `published_at` against the day the offer really closed:
+   published after it, the piece is **stale**
+   (`contradicted_by_closed_campaign`); published while it was open, the piece
+   was true when written and is filed as
+   `historical_campaign_observation` — a duplicate of what the brand already
+   told us, not an accusation;
+4. no `published_at` at all: `campaign_date_unknown`, and it goes to review
+   rather than being called either one.
 - 93 review items are prices for cars with no trim yet, each carrying a bundled
   trim proposal. Land Cruiser FJ, IONIQ 5 N Line, BYD Sealion 7, Xpeng L03 and
   Mazda 6e are the volume there.

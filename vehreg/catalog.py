@@ -35,6 +35,7 @@ from .entities import (
 from .normalize import MatchIndex, base_nameplate, slug
 from .taxonomy import (
     BodyType, BrandSegment, CabType, Drivetrain, ImportType, MarketScope,
+    RetailStatus,
     Powertrain, RegistrationType, Segment, registration_type_for,
 )
 
@@ -240,6 +241,10 @@ class Catalog:
                                 MarketScope.CORE),
             incomplete=bool(raw.get("incomplete", False)),
             powertrain_checked=bool(raw.get("powertrain_checked", False)),
+            retail_status=_facet(RetailStatus, raw.get("retail_status"),
+                                 RetailStatus.UNVERIFIED),
+            retail_checked_at=raw.get("retail_checked_at") or None,
+            retail_source=raw.get("retail_source", ""),
             aliases=_tuple(raw.get("aliases")),
             notes=raw.get("notes", ""),
             overrides=_overrides(raw.get("overrides")),
@@ -672,6 +677,7 @@ class Catalog:
                 "cab_type": model.cab_type.value,
                 "registration_type": model.registration_type.value,
                 "market_scope": model.market_scope.value,
+                "retail_status": model.retail_status.value,
                 "aliases": list(model.aliases), "generations": [],
             }
             if model.overrides:
@@ -682,6 +688,10 @@ class Catalog:
                 model_payload["incomplete"] = True
             if model.powertrain_checked:
                 model_payload["powertrain_checked"] = True
+            if model.retail_checked_at:
+                model_payload["retail_checked_at"] = model.retail_checked_at
+            if model.retail_source:
+                model_payload["retail_source"] = model.retail_source
             if model.notes:
                 model_payload["notes"] = model.notes
             for gen in self.generations_of(model.id):

@@ -270,51 +270,121 @@
       "registration_type": "",
       "market_scope": "CORE",
       "aliases": [],
-      "notes": "",
+      "notes": "CBU Indonesia. GL uses the K15B; GLX and GLX Plus use the K15C with Suzuki's SHVS mild-hybrid system, which the taxonomy files as ICE -- a 12V belt starter is not an electrified powertrain. The SHVS fitment is recorded as declared technology on the trim, not as a powertrain.",
       "generations": [
         {
           "code": "FRX",
           "segment": "B",
           "seats": 5,
-          "launched": "2024-06-01",
+          "launched": "2025-09-25",
           "ended": null,
           "variants": [
             {
-              "name": "1.5L ICE",
+              "name": "1.5L K15B 4AT",
               "powertrain": "ICE",
               "drivetrain": "FWD",
               "engine_cc": 1462,
               "battery_kwh": null,
               "aliases": [
-                "1.5 GLX"
+                "1.5 GL",
+                "GL"
               ],
               "overrides": {},
-              "price_thb": 659000,
+              "price_thb": null,
               "import_type": "CBU",
-              "origin_country": "IN",
-              "price_note": "seed-unverified",
-              "price_min_thb": 659000,
-              "price_max_thb": 659000
+              "origin_country": "ID",
+              "price_note": "retail price lives on MarketTrim and PriceLedger",
+              "price_min_thb": null,
+              "price_max_thb": null
+            },
+            {
+              "name": "1.5L K15C SHVS 6AT",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_cc": 1462,
+              "battery_kwh": null,
+              "aliases": [
+                "1.5 GLX",
+                "GLX",
+                "GLX Plus",
+                "1.5 GLX Plus"
+              ],
+              "overrides": {},
+              "price_thb": null,
+              "import_type": "CBU",
+              "origin_country": "ID",
+              "price_note": "retail price lives on MarketTrim and PriceLedger",
+              "price_min_thb": null,
+              "price_max_thb": null
             }
           ],
           "trims": [
             {
               "id": "gl_1_5l_4at",
               "name": "GL 1.5L 4AT",
+              "variant": "1.5L K15B 4AT",
               "powertrain": "ICE",
-              "drivetrain": "UNKNOWN",
-              "source_refs": {
-                "ecosticker": [
-                  "784000e3-160f-47da-968e-d22f1e5e8ee8"
-                ]
-              },
-              "notes": "Proposed from the 2026-09-08 ECO Sticker snapshot. Specification is the manufacturer's homologation record.",
+              "drivetrain": "FWD",
+              "engine_code": "K15B",
+              "engine_cc": 1462,
+              "transmission": "4AT",
               "seats": 5,
               "length_mm": 3995,
               "width_mm": 1765,
               "height_mm": 1550,
               "tire_front": "195/60R16",
-              "tire_rear": "195/60R16"
+              "tire_rear": "195/60R16",
+              "source_refs": {
+                "ecosticker": [
+                  "784000e3-160f-47da-968e-d22f1e5e8ee8"
+                ],
+                "official_suzuki": [
+                  "https://www.suzuki.co.th/model/fronx/overview"
+                ]
+              },
+              "notes": "No SHVS on this grade."
+            },
+            {
+              "id": "glx_1_5l_mhev_6at",
+              "name": "GLX 1.5L MHEV 6AT",
+              "variant": "1.5L K15C SHVS 6AT",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_code": "K15C",
+              "engine_cc": 1462,
+              "transmission": "6AT",
+              "seats": 5,
+              "aliases": [
+                "Fronx 1.5 MHEV GLX 6AT",
+                "GLX"
+              ],
+              "source_refs": {
+                "official_suzuki": [
+                  "https://www.suzuki.co.th/model/fronx/overview"
+                ]
+              },
+              "notes": "K15C with Suzuki SHVS 12V mild hybrid. Declared technology only: the taxonomy has no MHEV bucket and a belt starter does not make the car electrified, so powertrain is ICE."
+            },
+            {
+              "id": "glx_plus_1_5l_mhev_6at",
+              "name": "GLX Plus 1.5L MHEV 6AT",
+              "variant": "1.5L K15C SHVS 6AT",
+              "powertrain": "ICE",
+              "drivetrain": "FWD",
+              "engine_code": "K15C",
+              "engine_cc": 1462,
+              "transmission": "6AT",
+              "seats": 5,
+              "aliases": [
+                "Fronx 1.5 MHEV GLX Plus 6AT",
+                "GLX Plus"
+              ],
+              "source_refs": {
+                "official_suzuki": [
+                  "https://www.suzuki.co.th/model/fronx/overview"
+                ]
+              },
+              "notes": "K15C with Suzuki SHVS 12V mild hybrid, recorded as declared technology rather than a powertrain."
             }
           ]
         }

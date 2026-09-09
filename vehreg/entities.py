@@ -50,7 +50,7 @@ from typing import Any, Optional
 
 from .taxonomy import (
     BodyType, BrandSegment, CabType, Drivetrain, ImportType, MarketPosition,
-    MarketScope, Powertrain, RegistrationType, Segment,
+    MarketScope, Powertrain, RegistrationType, RetailStatus, Segment,
     check_body_segment, check_origin, check_powertrain, check_registration,
     is_electrified, is_locally_assembled, is_plug_in, market_position_for_price,
     market_powertrain, normalize_country, powertrain_group,
@@ -155,6 +155,24 @@ class Model:
     #: confirmed "hybrid only" from a nameplate nobody has looked at yet, and
     #: both read the same on every chart.
     powertrain_checked: bool = False
+    #: Whether the model is on sale through the official Thai distributor now.
+    #: Separate from ``market_scope``, which says what kind of car it is. A
+    #: nameplate can have real registrations and no current retail listing --
+    #: the Kia EV6 has one unit and is not in Kia Thailand's lineup -- and the
+    #: honest answer there is ``UNVERIFIED``, not a claim that it was never
+    #: officially sold. Only ``CURRENT`` models belong in a comparison of what
+    #: a buyer can go and buy.
+    #:
+    #: The default is ``UNVERIFIED`` because "on sale today" is a claim about
+    #: the world that decays: a catalog written last year cannot assert it, and
+    #: a default of ``CURRENT`` would have every nameplate in the file asserting
+    #: it for free. ``CURRENT`` therefore requires the distributor page it was
+    #: read off and the date somebody read it.
+    retail_status: RetailStatus = RetailStatus.UNVERIFIED
+    #: ISO date the retail status was last checked against the OEM.
+    retail_checked_at: Optional[str] = None
+    #: The distributor page that check was made against.
+    retail_source: str = ""
     overrides: dict[str, Any] = field(default_factory=dict)
 
     def facets(self) -> dict[str, Any]:
@@ -180,6 +198,12 @@ class Model:
                 self.cab_type is not CabType.NOT_APPLICABLE:
             problems.append(f"cab_type is only valid for PICKUP, got "
                             f"{self.body_type.value}")
+        if self.retail_status is RetailStatus.CURRENT and not (
+                self.retail_checked_at and self.retail_source):
+            problems.append(
+                "retail_status CURRENT is a claim about today: it needs "
+                "retail_source (the OEM listing) and retail_checked_at "
+                "(the date it was read)")
         return [f"model {self.id}: {p}" for p in problems]
 
 

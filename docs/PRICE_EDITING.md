@@ -82,8 +82,20 @@ option of a campaign rather than the list price.
 ## Clearing the review queue from the page
 
 The **คิวรอตรวจ** tab acts on what the harvester found. Every button writes the
-owner's name into `pricefeed/review/decisions.json`; a decision the harvester
-wrote carries `reviewer: "agent-proposed"` and by design moves nothing.
+name typed in the sidebar into `pricefeed/review/decisions.json`, together with
+an explicit `origin`.
+
+`origin` is required on every decision and is never inferred from the reviewer
+name — a caller that picks a name string does not thereby become a person:
+
+| `origin` | who | what it may do |
+|---|---|---|
+| `AGENT` | a proposal this code wrote | nothing; it is a suggestion |
+| `HUMAN` | somebody typed their name and pressed a button | anything, including vouching for a single source |
+| `SYSTEM_EVIDENCE` | a rule that resolved against a document | reject or archive, and it must cite the document in `source_ref` |
+
+`SYSTEM_EVIDENCE` exists so the closed-campaign rule can act on Suzuki's own
+page without signing the owner's name to it. Only `HUMAN` can `publish`.
 
 | The queue says | You do |
 |---|---|
@@ -91,6 +103,10 @@ wrote carries `reviewer: "agent-proposed"` and by design moves nothing.
 | a campaign price with no campaign | pick the campaign and the option; it becomes provisional, then you vouch |
 | the car has no trim yet | open the proposal, confirm model/generation/powertrain, **สร้าง trim แล้วรับราคา** — the trim and the price are one decision |
 | wrong, or not a price at all | **ปฏิเสธ** |
+
+`archive` is a fourth action, written by the closed-campaign rule rather than by
+a button: the claim was true when it was published and has since been overtaken.
+It is kept as history and never republished as a price anybody can pay today.
 
 **Publish only promotes a provisional price.** The review reasons — no trim, an
 implausible amount, a campaign with no conditions, two sources disagreeing —

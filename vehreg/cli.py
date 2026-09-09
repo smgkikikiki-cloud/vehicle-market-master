@@ -415,6 +415,23 @@ def cmd_coverage(args) -> int:
     return 0
 
 
+def cmd_export_tdr_registrations(args) -> int:
+    conn = _conn(args)
+    kwargs = dict(scopes=_scopes(args.scope), period_from=getattr(args, "from"),
+                 period_to=args.to)
+    rows = cube_mod.tdr_registrations_export(conn, **kwargs)
+    unresolved = cube_mod.tdr_registrations_unresolved_units(conn, **kwargs)
+    if args.csv:
+        _write_csv(args.csv, list(cube_mod.TDR_REGISTRATIONS_COLUMNS), rows)
+        print(f"wrote {len(rows)} rows to {args.csv}")
+    else:
+        print(json.dumps(rows, ensure_ascii=False, indent=2))
+    if unresolved:
+        print(f"note: {unresolved:,.0f} units excluded -- no brand/model has "
+              f"resolved for them yet in this warehouse", file=sys.stderr)
+    return 0
+
+
 # --------------------------------------------------------------------- parser
 def cmd_market(args) -> int:
     from .product import (ProductMaster, append_prices, import_spec_facts,
@@ -815,6 +832,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("coverage", help="how much volume is classified how deeply")
     p.set_defaults(func=cmd_coverage)
+
+    p = sub.add_parser(
+        "export-tdr-registrations",
+        help="monthly brand/model volume in TDR's own registrations schema "
+             "(a file, not a connection -- see docs/TDR_MARKET_EXPORT.md)")
+    p.add_argument("--from", dest="from", help="YYYY-MM")
+    p.add_argument("--to", help="YYYY-MM")
+    p.add_argument("--scope", default=None,
+                   help="market scopes to count: CORE (default), NICHE, GREY, "
+                        "a comma-separated list, or 'all'")
+    p.add_argument("--csv", help="write here instead of printing JSON")
+    p.set_defaults(func=cmd_export_tdr_registrations)
     return parser
 
 

@@ -592,6 +592,98 @@
         "REEV",
         "BEV"
       ]
+    },
+    {
+      "key": "fitment.wheel_rim_width_front_in",
+      "group": "chassis",
+      "label_th": "ความกว้างขอบล้อหน้า",
+      "label_en": "Front rim width",
+      "value_type": "NUMBER",
+      "comparison_rule": "INFORMATION_ONLY",
+      "canonical_unit": "in",
+      "display_precision": 1
+    },
+    {
+      "key": "fitment.wheel_rim_width_rear_in",
+      "group": "chassis",
+      "label_th": "ความกว้างขอบล้อหลัง",
+      "label_en": "Rear rim width",
+      "value_type": "NUMBER",
+      "comparison_rule": "INFORMATION_ONLY",
+      "canonical_unit": "in",
+      "display_precision": 1
+    },
+    {
+      "key": "fitment.wheel_pcd",
+      "group": "chassis",
+      "label_th": "รูปแบบน็อตล้อ (PCD)",
+      "label_en": "Bolt pattern (PCD)",
+      "value_type": "TEXT",
+      "comparison_rule": "INFORMATION_ONLY"
+    },
+    {
+      "key": "fitment.wheel_offset_mm",
+      "group": "chassis",
+      "label_th": "ออฟเซ็ตล้อ",
+      "label_en": "Wheel offset (ET)",
+      "value_type": "NUMBER",
+      "comparison_rule": "INFORMATION_ONLY",
+      "canonical_unit": "mm",
+      "display_precision": 0
+    },
+    {
+      "key": "fitment.tyre_load_index_front",
+      "group": "chassis",
+      "label_th": "ดัชนีรับน้ำหนักยางหน้า",
+      "label_en": "Front tyre load index",
+      "value_type": "NUMBER",
+      "comparison_rule": "INFORMATION_ONLY",
+      "canonical_unit": "index",
+      "display_precision": 0
+    },
+    {
+      "key": "fitment.tyre_load_index_rear",
+      "group": "chassis",
+      "label_th": "ดัชนีรับน้ำหนักยางหลัง",
+      "label_en": "Rear tyre load index",
+      "value_type": "NUMBER",
+      "comparison_rule": "INFORMATION_ONLY",
+      "canonical_unit": "index",
+      "display_precision": 0
+    },
+    {
+      "key": "fitment.tyre_speed_rating_front",
+      "group": "chassis",
+      "label_th": "รหัสความเร็วยางหน้า",
+      "label_en": "Front tyre speed rating",
+      "value_type": "ENUM",
+      "comparison_rule": "INFORMATION_ONLY"
+    },
+    {
+      "key": "fitment.tyre_speed_rating_rear",
+      "group": "chassis",
+      "label_th": "รหัสความเร็วยางหลัง",
+      "label_en": "Rear tyre speed rating",
+      "value_type": "ENUM",
+      "comparison_rule": "INFORMATION_ONLY"
+    },
+    {
+      "key": "fitment.battery_12v_group_size",
+      "group": "chassis",
+      "label_th": "ขนาดแบตเตอรี่ 12V (Group Size)",
+      "label_en": "12V battery group size",
+      "value_type": "TEXT",
+      "comparison_rule": "INFORMATION_ONLY"
+    },
+    {
+      "key": "fitment.battery_12v_capacity_ah",
+      "group": "chassis",
+      "label_th": "ความจุแบตเตอรี่ 12V",
+      "label_en": "12V battery capacity",
+      "value_type": "NUMBER",
+      "comparison_rule": "INFORMATION_ONLY",
+      "canonical_unit": "Ah",
+      "display_precision": 0
     }
   ]
 }

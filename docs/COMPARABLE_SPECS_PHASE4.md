@@ -21,7 +21,7 @@ Three eligible models have no ECO detail evidence yet and are therefore out:
 | `SpecLedger` | field-level, dated facts attached to an exact `MarketTrim.id` |
 | `BattleCardEngine` | generated comparison output; never edited as master data |
 
-The registry contains 50 typed fields and core, safety and comfort profiles.
+The registry contains 60 typed fields and core, safety, comfort and fitment profiles (the fitment ten are Phase 6's schema, added with zero facts against them -- see [FITMENT_PHASE6.md](FITMENT_PHASE6.md)).
 Every numeric field has one canonical unit. Fields which need context also name
 comparison qualifiers: rated range requires the same measurement basis, NCAP
 requires the same programme/protocol/market/tested variant, and DC charging time

@@ -34,6 +34,16 @@
         "comfort.ventilated_front_seats", "comfort.panoramic_roof",
         "technology.head_up_display"
       ]
+    },
+    {
+      "id": "c_crossover_fitment",
+      "fields": [
+        "fitment.wheel_rim_width_front_in", "fitment.wheel_rim_width_rear_in",
+        "fitment.wheel_pcd", "fitment.wheel_offset_mm",
+        "fitment.tyre_load_index_front", "fitment.tyre_load_index_rear",
+        "fitment.tyre_speed_rating_front", "fitment.tyre_speed_rating_rear",
+        "fitment.battery_12v_group_size", "fitment.battery_12v_capacity_ah"
+      ]
     }
   ]
 }
